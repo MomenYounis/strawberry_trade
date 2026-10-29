@@ -1,0 +1,64 @@
+{
+  "checkedAtUtc": "2026-10-23T09:01:46.106214+00:00",
+  "artifact": "/home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry-trade-employee-invitations-v9.apk",
+  "bytes": 77119012,
+  "sha256": "7bfaf821d141960a8a49e8ef88921406dca0dd684b5cb3b1a12bee38aae0ee83",
+  "package": "com.strawberrytrade.strawberry_trade",
+  "versionCode": 9,
+  "versionName": "1.0.0",
+  "releaseCertificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+  "matchesHistoricalReleaseCertificate": true,
+  "signatureVerified": true,
+  "debuggable": false,
+  "usesCleartextTraffic": false,
+  "allowBackup": false,
+  "emulatorMode": false,
+  "gatewayUrl": "https://strawberry-tenant-gateway.momenfarghaly4.workers.dev",
+  "firebaseProjectId": "strawberry-trade-261017-6a49b",
+  "firebaseAndroidAppId": "1:713439663809:android:c0565e7ada543b0e2b6640",
+  "issuerKeyId": "issuer-v1",
+  "issuerPublicKeySha256": "285b95ac8d119b3546c2bbc06f58b29fb318d31c5f24a47f79c7e97f3801cdb9",
+  "nativeAbiExpectedPublicConfiguration": {
+    "arm64-v8a": {
+      "gatewayUrl": true,
+      "projectId": true,
+      "androidAppId": true,
+      "senderId": true,
+      "firebasePublicApiKey": true,
+      "issuerKeyId": true,
+      "issuerPublicKey": true
+    },
+    "armeabi-v7a": {
+      "gatewayUrl": true,
+      "projectId": true,
+      "androidAppId": true,
+      "senderId": true,
+      "firebasePublicApiKey": true,
+      "issuerKeyId": true,
+      "issuerPublicKey": true
+    },
+    "x86_64": {
+      "gatewayUrl": true,
+      "projectId": true,
+      "androidAppId": true,
+      "senderId": true,
+      "firebasePublicApiKey": true,
+      "issuerKeyId": true,
+      "issuerPublicKey": true
+    }
+  },
+  "actualPrivateMaterialScanMatches": [],
+  "credentialFileNameMatches": [],
+  "integrationTestDexMatches": [],
+  "releaseGeneratedRegistrantHasNoIntegrationTestPlugin": true,
+  "privateScanScope": "All ZIP entry contents checked against exact existing signing password, release keystore file and encrypted issuer private file; sensitive filenames also checked. No decrypted issuer or Google runtime private material was read for this client inspection.",
+  "productionAcceptance": false,
+  "physicalAppCheckTested": false,
+  "androidInstalled": false,
+  "logs": {
+    "signature": "/home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/work/employee-invitations/android-v9-signature.log",
+    "manifest": "/home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/work/employee-invitations/android-v9-manifest.xml",
+    "badging": "/home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/work/employee-invitations/android-v9-badging.log",
+    "registrant": "/home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/work/employee-invitations/android-v9-release-plugin-registrant.java"
+  }
+}

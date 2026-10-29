@@ -1,0 +1,73 @@
+[
+  {
+    "route": "eval-guard",
+    "status": 200,
+    "outerWallMs": 213,
+    "arbitraryEvalRejected": true
+  },
+  {
+    "route": "initialize",
+    "status": 200,
+    "outerWallMs": 16,
+    "initialized": true,
+    "preferRest": true,
+    "warmedTypes": 774,
+    "wallMs": 0
+  },
+  {
+    "route": "typed-firestore",
+    "status": 200,
+    "outerWallMs": 5201,
+    "preferRest": true,
+    "transactionValue": 4,
+    "transactionQueryCount": 1,
+    "createPreserved": true,
+    "mergePreserved": true,
+    "updatePreserved": true,
+    "typedRoundTrip": true,
+    "duplicateCreateRejected": true,
+    "rollbackRejected": true,
+    "rollbackPreserved": true,
+    "page1": 500,
+    "page2": 100,
+    "hasMore": true,
+    "uniqueSequences": 600,
+    "lastSequence": 600,
+    "wallMs": 4552
+  },
+  {
+    "route": "gateway",
+    "status": 200,
+    "outerWallMs": 3681,
+    "bootstrapSigned": true,
+    "first": {
+      "id": "op_party_probe",
+      "status": "accepted",
+      "sequence": 1,
+      "serverTimeMs": 1792422138316
+    },
+    "duplicate": {
+      "id": "op_party_probe",
+      "status": "accepted",
+      "sequence": 1,
+      "serverTimeMs": 1792422138316
+    },
+    "financial": {
+      "id": "op_invoice_probe",
+      "status": "accepted",
+      "sequence": 2,
+      "serverTimeMs": 1792422139088
+    },
+    "financialDuplicate": {
+      "id": "op_invoice_probe",
+      "status": "accepted",
+      "sequence": 2,
+      "serverTimeMs": 1792422139088
+    },
+    "financialTotal": 20000,
+    "financialParty": "Synthetic merchant",
+    "financialCreator": "worker_gateway_manager",
+    "pullCount": 2,
+    "wallMs": 3648
+  }
+]

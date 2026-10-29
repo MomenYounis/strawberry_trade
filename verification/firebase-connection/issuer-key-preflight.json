@@ -1,0 +1,8 @@
+{
+  "keyId": "issuer-v1",
+  "privateKeyEncrypted": true,
+  "publicKeyMatches": true,
+  "signatureCheck": true,
+  "challenge": "synthetic build preflight, no tenant/license issued",
+  "publicKeySha256": "4625400c10491eb866841e2bd769e9c13ec2814a2921f7fc60f4085884f03b72"
+}

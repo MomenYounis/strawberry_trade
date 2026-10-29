@@ -1,0 +1,99 @@
+(node:158929) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{
+  "status": "success",
+  "result": {
+    "indexes": [
+      {
+        "collectionGroup": "submissions",
+        "queryScope": "COLLECTION",
+        "fields": [
+          {
+            "fieldPath": "recordedByUid",
+            "order": "ASCENDING"
+          },
+          {
+            "fieldPath": "clientCreatedAt",
+            "order": "DESCENDING"
+          },
+          {
+            "fieldPath": "__name__",
+            "order": "DESCENDING"
+          }
+        ],
+        "density": "SPARSE_ALL"
+      }
+    ],
+    "fieldOverrides": [
+      {
+        "collectionGroup": "audit",
+        "fieldPath": "*",
+        "ttl": false,
+        "indexes": []
+      },
+      {
+        "collectionGroup": "audit",
+        "fieldPath": "at",
+        "ttl": false,
+        "indexes": [
+          {
+            "order": "DESCENDING",
+            "queryScope": "COLLECTION"
+          }
+        ]
+      },
+      {
+        "collectionGroup": "employeeAccounts",
+        "fieldPath": "*",
+        "ttl": false,
+        "indexes": []
+      },
+      {
+        "collectionGroup": "items",
+        "fieldPath": "*",
+        "ttl": false,
+        "indexes": []
+      },
+      {
+        "collectionGroup": "items",
+        "fieldPath": "updatedAt",
+        "ttl": false,
+        "indexes": [
+          {
+            "order": "ASCENDING",
+            "queryScope": "COLLECTION"
+          }
+        ]
+      },
+      {
+        "collectionGroup": "members",
+        "fieldPath": "*",
+        "ttl": false,
+        "indexes": []
+      },
+      {
+        "collectionGroup": "reviews",
+        "fieldPath": "*",
+        "ttl": false,
+        "indexes": []
+      },
+      {
+        "collectionGroup": "submissions",
+        "fieldPath": "*",
+        "ttl": false,
+        "indexes": []
+      },
+      {
+        "collectionGroup": "submissions",
+        "fieldPath": "status",
+        "ttl": false,
+        "indexes": [
+          {
+            "order": "ASCENDING",
+            "queryScope": "COLLECTION"
+          }
+        ]
+      }
+    ]
+  }
+}

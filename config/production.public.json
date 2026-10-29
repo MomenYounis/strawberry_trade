@@ -1,0 +1,9 @@
+{
+  "USE_EMULATORS": "false",
+  "FIREBASE_PROJECT_ID": "strawberry-trade-261017-6a49b",
+  "FIREBASE_ANDROID_APP_ID": "1:713439663809:android:c0565e7ada543b0e2b6640",
+  "FIREBASE_API_KEY": "AIzaSyAMbiQsNu4SI3ihIUz_nNEfjIItUJRNVs8",
+  "FIREBASE_SENDER_ID": "713439663809",
+  "LICENSE_PUBLIC_KEYS": "{\"issuer-v1\":\"QNDBfRDNF66daCTejbfdJKiOoXYhp-w4zP6cxP675vw\"}",
+  "GATEWAY_BASE_URL": "https://strawberry-tenant-gateway.momenfarghaly4.workers.dev"
+}

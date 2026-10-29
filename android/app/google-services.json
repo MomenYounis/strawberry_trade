@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "713439663809",
+    "project_id": "strawberry-trade-261017-6a49b",
+    "storage_bucket": "strawberry-trade-261017-6a49b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713439663809:android:c0565e7ada543b0e2b6640",
+        "android_client_info": {
+          "package_name": "com.strawberrytrade.strawberry_trade"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMbiQsNu4SI3ihIUz_nNEfjIItUJRNVs8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

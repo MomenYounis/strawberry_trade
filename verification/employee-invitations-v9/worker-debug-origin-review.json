@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-23",
+  "cloudflareSource": "https://raw.githubusercontent.com/cloudflare/workerd/main/src/node/internal/debuglog.ts",
+  "lines": "30-41,74-76",
+  "finding": "workerd native util.debuglog always enables requested sections regardless of NODE_DEBUG; readable-stream obtains util.debuglog(stream) during SDK module initialization.",
+  "comparison": [
+    {
+      "file": "worker-workerd.log",
+      "bytes": 860826,
+      "lines": 46241,
+      "streamDebugCalls": 15529,
+      "readableAddChunkCalls": 1270,
+      "unenvBracketStyleCalls": 0
+    },
+    {
+      "file": "worker-after-startup-fix.log",
+      "bytes": 860626,
+      "lines": 46227,
+      "streamDebugCalls": 15524,
+      "readableAddChunkCalls": 1270,
+      "unenvBracketStyleCalls": 0
+    }
+  ],
+  "privateDataPrintedInReport": false,
+  "suggestion": "Install a stream-only disabled debuglog wrapper on node:util default object before compatibility imports; preserve console and operational errors. Rerun minified HTTP54 and assert no stream debug/document marker logs.",
+  "productionChangeMade": false
+}

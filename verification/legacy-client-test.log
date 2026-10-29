@@ -1,0 +1,47 @@
+TAP version 13
+# PASS Sanitized directories omit prices, opening balances and salaries
+# PASS Cloud metadata cleanup retains canonical creator attribution
+# PASS Document merge preserves unrelated concurrent records and applies only queued documents
+# PASS Expense submissions cannot create payroll and cannot have nonpositive/nonfinite values
+# PASS Delivery and return submissions reject financial fields
+# PASS Employee submission summaries never contain manager sales values
+# PASS Approved expenses attribute their creator separately from payroll recipient
+# PASS Delivery approval adds manager price while purchase approval keeps submitted purchase costs
+# PASS Return approval cumulative rounding completes at the exact original invoice total
+# PASS Return approvals reject wrong party, wrong unit/grade, earlier date and excess quantity
+# PASS Tiny return that rounds to zero cannot enter the financial ledger
+# PASS Canonical recordedAt uses server-confirmed submission time rather than forged device time
+# PASS Offline manager saves create per-document outbox operations and retain unrelated records
+# PASS Repeated offline edits preserve the original creator attribution
+# PASS Acknowledged manager operation remains visible before the server listener delivers its echo
+# PASS Local storage failure rolls back the attempted queue mutation
+# PASS Stale document revisions fail without overwriting remote changes
+# PASS Retrying an already committed operation is idempotent
+# PASS Atomic return counter rejects overshoot without creating any canonical transaction
+# PASS Return creation and deletion update the same atomic quantity and amount counter
+# PASS An invoice with accounted returns cannot be deleted or repriced
+# PASS Employee submission is queued once without waiting for network acknowledgement
+# PASS Unacknowledged staff details survive reload, rejection and retry until server confirmation
+# PASS Staff storage failure prevents sending an operation without a recovery copy
+# PASS Repeated staff retries share one write, and closed sessions cannot recreate discarded journals
+# PASS Manager approval/rejection require connectivity and cannot bypass unresolved local changes
+# PASS A review creates one canonical record and cannot be decided twice
+# PASS Client shell contains each required binding once and hides all protected workspaces initially
+# PASS Manager restart queries only documents changed since the durable device cursor
+# PASS Stopped manager engine never applies stale cached private data to another session
+# 30 passed; 0 failed. /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/work/legacy-baseline/web
+# Subtest: work/legacy-baseline/tests/client-tests.cjs
+ok 1 - work/legacy-baseline/tests/client-tests.cjs
+  ---
+  duration_ms: 281.270824
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 309.248089

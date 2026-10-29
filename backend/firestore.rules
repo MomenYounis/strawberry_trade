@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // All access uses authenticated callable gateway. In particular, managers
+    // cannot bypass financial validation and mandatory transactional audit.
+    // Admin SDK gateway independently validates membership, tenant and device.
+    match /{document=**} { allow read, write: if false; }
+  }
+}

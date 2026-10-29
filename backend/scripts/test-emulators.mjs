@@ -1,0 +1,4 @@
+import {generateKeyPairSync} from 'node:crypto';import {writeFile,unlink} from 'node:fs/promises';import {spawn} from 'node:child_process';
+const {privateKey,publicKey}=generateKeyPairSync('ed25519'),pem=privateKey.export({type:'pkcs8',format:'pem'});const path='.secret.local';await writeFile(path,'LICENSE_PRIVATE_KEY_PEM='+JSON.stringify(pem)+'\n',{mode:0o600});
+const env={...process.env,LICENSE_PRIVATE_KEY_PEM:pem,LICENSE_PUBLIC_KEY_PEM:publicKey.export({type:'spki',format:'pem'}),LICENSE_KEY_ID:'emulator-session-only'};
+const p=spawn('./node_modules/.bin/firebase',['emulators:exec','--project','demo-strawberry-flutter','--only','auth,firestore,functions','node --test --test-concurrency=1 test/integration.test.mjs test/shipment.test.mjs'],{env,stdio:'inherit'});p.on('exit',async code=>{await unlink(path).catch(()=>{});process.exitCode=code??1;});

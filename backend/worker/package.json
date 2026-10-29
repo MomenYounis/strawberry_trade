@@ -1,0 +1,16 @@
+{
+  "name": "strawberry-tenant-gateway-worker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {"node": ">=22"},
+  "scripts": {
+    "test": "node --test test/config.test.mjs",
+    "dry-run": "wrangler deploy --env= --dry-run --outdir dist",
+    "prepare:emulator": "node scripts/prepare-emulator.mjs",
+    "dev:emulator": "wrangler dev --env emulator --local --ip 127.0.0.1 --port 8788",
+    "test:emulator": "node test/http-emulator.mjs"
+  },
+  "dependencies": {"firebase-admin": "14.5.0"},
+  "devDependencies": {"wrangler": "4.151.2"}
+}

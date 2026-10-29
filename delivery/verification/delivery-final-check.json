@@ -1,0 +1,13 @@
+{
+  "deliveryVerified": true,
+  "sourceMatchesDeployedDigests": true,
+  "signedApkAndDownloadsCopyMatch": true,
+  "sourceZipIntegrityPassed": true,
+  "versionCode": 9,
+  "activeWorkerVersion": "5a519a2a-bcfc-4d6a-b20d-6585e1a37bbc",
+  "publicChecksPassed": 9,
+  "sourceZipSha256": "10dc781089cf37a0b9e5ef0279c400a0e3f2cfcbb47dac13a8de52e0860adeee",
+  "apkSha256": "7bfaf821d141960a8a49e8ef88921406dca0dd684b5cb3b1a12bee38aae0ee83",
+  "physicalPhonesUpdated": false,
+  "productionEmployeeSignupTested": false
+}

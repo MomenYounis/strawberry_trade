@@ -1,0 +1,12 @@
+Installed package: com.strawberrytrade.strawberry_trade
+Installed versionCode: 6
+Installed versionName: 1.0.0
+Android API: 35 (existing Google APIs x86_64 emulator)
+System configuration observed: [en_US], ldltr, 1080x2400 portrait, 420dpi
+Airplane mode before and after: enabled
+Initial accelerometer_rotation: 1
+Initial user_rotation: 0
+Restored accelerometer_rotation: 1
+Restored user_rotation: 0
+Draft baseline observed before rotation: amount 23.45; note AFT-ROTATE-12345
+Final app view: Arabic Home, portrait; one queued operation; synthetic unfinished draft retained

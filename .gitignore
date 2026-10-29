@@ -1,0 +1,33 @@
+.dart_tool/
+.flutter-plugins*
+build/
+android/local.properties
+android/key.properties
+*.jks
+*.keystore
+*.pem
+*.private.json
+*.apk
+*.aab
+*.zip
+node_modules
+node_modules/
+**/node_modules
+**/node_modules/
+backend/*debug.log
+backend/.runtimeconfig.json
+.env*
+!.env.example
+
+# Session fixtures and local Android cache
+backend/.secret.local
+integration-test-defines.json
+android/.gradle/
+
+# External no-card runtime: local credentials and generated Workers state.
+.wrangler/
+.dev.vars*
+!.dev.vars.example
+backend/worker/.wrangler/
+backend/worker/dist/
+backend/worker/.dev.vars*

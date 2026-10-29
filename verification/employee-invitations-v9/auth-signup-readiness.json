@@ -1,0 +1,14 @@
+{
+  "checkedAtUtc": "2026-10-23T09:01:07.359Z",
+  "projectId": "strawberry-trade-261017-6a49b",
+  "method": "GET",
+  "httpStatus": 200,
+  "configurationChanged": false,
+  "realAccountCreated": false,
+  "emailSent": false,
+  "emailAuthEnabled": true,
+  "passwordRequired": true,
+  "disabledUserSignup": false,
+  "configuredBlockingTriggerCount": 0,
+  "clientSignupConfigurationReady": true
+}

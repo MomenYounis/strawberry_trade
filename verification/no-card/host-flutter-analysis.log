@@ -1,0 +1,3 @@
+{"check": "flutter-analyze", "exit_code": 0, "elapsed_seconds": 11.56, "finished_utc": "2026-10-19T21:04:17.279589+00:00", "output_truncated": false, "command": ["/home/younis/flutter/bin/flutter", "analyze", "--no-pub"]}
+Analyzing strawberry_trade...                                   
+No issues found! (ran in 9.8s)

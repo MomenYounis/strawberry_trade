@@ -1,0 +1,19 @@
+{
+  "reviewedAtUtc": "2026-10-19T11:23:59Z",
+  "projectId": "strawberry-trade-261017-6a49b",
+  "database": "(default)",
+  "source": "Firebase MCP firebase_get_security_rules(type=firestore)",
+  "environmentCheck": "Firebase MCP firebase_get_environment confirmed the active project before reading rules; the environment was not changed.",
+  "snapshot": "deployed-firestore-default.rules",
+  "snapshotNormalization": "Unix LF with exactly one final newline",
+  "snapshotSha256": "96fb39261cecf72d08fb6c14249a1d79e800cc32ec1141b8ade5cb37b152cba5",
+  "localLegacySourceComparison": "Byte-identical to the local legacy backend/firestore.rules snapshot after snapshot normalization.",
+  "tenantClientAccess": "Denied for unauthenticated, employee and manager client identities by path matching and final recursive deny. This conclusion does not cover privileged Admin SDK operations.",
+  "legacyImpact": "No rules changed. Deploying the new backend's deny-all rules on this default database would remove the explicit legacy website allowances and interrupt its client access.",
+  "billingStateAtEnvironmentRead": "Not enabled",
+  "recordsRead": false,
+  "rulesDeployed": false,
+  "productionWrites": false,
+  "runtimeAttackTestsPerformed": false,
+  "limits": "MCP returned source text, not a ruleset/release version identifier. No real memberships, financial records, function inventory, Admin endpoint behavior or live user authorization paths were queried. No other databases or service rules were inspected."
+}

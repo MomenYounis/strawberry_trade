@@ -1,0 +1,5 @@
+{
+  "kid": "issuer-v1",
+  "publicKey": "QNDBfRDNF66daCTejbfdJKiOoXYhp-w4zP6cxP675vw",
+  "spkiPem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAQNDBfRDNF66daCTejbfdJKiOoXYhp+w4zP6cxP675vw=\n-----END PUBLIC KEY-----\n"
+}

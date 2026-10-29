@@ -1,0 +1,19 @@
+{
+  "notice": "TEST ONLY: random issuer private key discarded; never a production trust anchor",
+  "publicKeys": {
+    "test-only": "c351KDvFQPI3NscosscfcBFoR0w2VSIJIj63i2niEZ8"
+  },
+  "package": {
+    "version": 1,
+    "entitlement": {
+      "kid": "test-only",
+      "payload": "eyJlcG9jaCI6MSwiZXhwaXJlc0F0TXMiOjE3MDI1OTIwMDAwMDAsImlzc3VlZEF0TXMiOjE3MDAwMDAwMDAwMDAsImxpY2Vuc2VJZCI6ImxpY2Vuc2UtdGVzdC1vbmx5IiwibWF4RGV2aWNlcyI6Miwibm90QmVmb3JlTXMiOjE3MDAwMDAwMDAwMDAsInRlbmFudElkIjoidGVuYW50LXRlc3Qtb25seSIsInRyaWFsIjp0cnVlLCJ0cmlhbFN0YXJ0TXMiOjE3MDAwMDAwMDAwMDAsInR5cGUiOiJlbnRpdGxlbWVudCIsInZlcnNpb24iOjF9",
+      "signature": "XnPT2RxDMfwbcrcUC84dqptFU4vogPb886pCoxOhClG8vV1p2c-G0SAuJGt0R6VILcEqd_FrFlJFud8e3MNKDg"
+    },
+    "membership": {
+      "kid": "test-only",
+      "payload": "eyJkZXZpY2VJZCI6ImRldmljZS10ZXN0LW9ubHkiLCJlbmFibGVkIjp0cnVlLCJlbnRpdGxlbWVudEVwb2NoIjoxLCJlcG9jaCI6MSwiZXhwaXJlc0F0TXMiOm51bGwsImlzc3VlZEF0TXMiOjE3MDAwMDAwMDAwMDAsInJvbGUiOiJtYW5hZ2VyIiwidGVuYW50SWQiOiJ0ZW5hbnQtdGVzdC1vbmx5IiwidHlwZSI6Im1lbWJlcnNoaXAiLCJ1aWQiOiJtYW5hZ2VyLXRlc3Qtb25seSIsInZlcnNpb24iOjF9",
+      "signature": "HkDWg6-e4zOmLto7gxMdEWYFxkJOFQQOcn8eDwN4aTF1RnAn7l3xDS-bWQ-_fcFcjE5pwihU22uFCgN6qs27Aw"
+    }
+  }
+}

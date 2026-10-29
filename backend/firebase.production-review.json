@@ -1,0 +1,20 @@
+{
+  "functions": [
+    {
+      "source": ".",
+      "codebase": "tenant-gateway",
+      "runtime": "nodejs22",
+      "ignore": [
+        "test",
+        "scripts",
+        "worker",
+        "node_modules",
+        "*-debug.log",
+        ".secret.local",
+        "firebase*.json",
+        "firestore.rules",
+        "firestore.indexes.json"
+      ]
+    }
+  ]
+}

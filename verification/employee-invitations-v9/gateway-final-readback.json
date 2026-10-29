@@ -1,0 +1,22 @@
+{
+  "readbackAtUtc": "2026-10-23T09:13:44.457Z",
+  "worker": "strawberry-tenant-gateway",
+  "endpoint": "https://strawberry-tenant-gateway.momenfarghaly4.workers.dev",
+  "deploymentId": "4f311208-0d63-4938-89a3-39af96007368",
+  "createdAtUtc": "2026-10-23T09:12:51.14299Z",
+  "versions": [
+    {
+      "version_id": "5a519a2a-bcfc-4d6a-b20d-6585e1a37bbc",
+      "percentage": 100
+    }
+  ],
+  "softwareUpdateDeployed": true,
+  "fixedConfigurationSha256": "0e3c87c8e84ea978fb7c8f29f16bc4ed899d2a15934b5f92ea15ceb3c01aed66",
+  "publicNegativeAndHealthChecks": 9,
+  "allPublicChecksPassed": true,
+  "productionEmployeeSignupTested": false,
+  "realAuthAccountsCreatedDuringImplementation": 0,
+  "realEmailsSentDuringImplementation": 0,
+  "financialWrites": 0,
+  "billingOrIAMOrSecretsOrRulesChanged": false
+}

@@ -1,0 +1,242 @@
+
+> strawberry-trade-tenant-gateway@1.0.0 test:integration
+> node scripts/test-emulators.mjs
+
+(node:14125) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+i  emulators: Starting emulators: auth, functions, firestore
+i  emulators: Detected demo project ID "demo-strawberry-flutter", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 9150.
+i  functions: Watching "/home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/backend" for Cloud Functions...
+✔  functions: Using node@22 from host.
+Serving at port 8253
+
+✔  functions: Loaded functions definitions from source: acceptInvitation, activateLicense, bootstrap, createEmployeeInvitation, pullChanges, setMemberActive, syncOperation.
+✔  functions[europe-west1-acceptInvitation]: http function initialized (http://127.0.0.1:5001/demo-strawberry-flutter/europe-west1/acceptInvitation).
+✔  functions[europe-west1-activateLicense]: http function initialized (http://127.0.0.1:5001/demo-strawberry-flutter/europe-west1/activateLicense).
+✔  functions[europe-west1-bootstrap]: http function initialized (http://127.0.0.1:5001/demo-strawberry-flutter/europe-west1/bootstrap).
+✔  functions[europe-west1-createEmployeeInvitation]: http function initialized (http://127.0.0.1:5001/demo-strawberry-flutter/europe-west1/createEmployeeInvitation).
+✔  functions[europe-west1-pullChanges]: http function initialized (http://127.0.0.1:5001/demo-strawberry-flutter/europe-west1/pullChanges).
+✔  functions[europe-west1-setMemberActive]: http function initialized (http://127.0.0.1:5001/demo-strawberry-flutter/europe-west1/setMemberActive).
+✔  functions[europe-west1-syncOperation]: http function initialized (http://127.0.0.1:5001/demo-strawberry-flutter/europe-west1/syncOperation).
+i  Running script: node --test --test-concurrency=1 test/integration.test.mjs test/shipment.test.mjs
+TAP version 13
+# (node:14961) MetadataLookupWarning: received unexpected error = All promises were rejected code = ETIMEDOUT, ENOTFOUND
+# (Use `node-22 --trace-warnings ...` to show where the warning was created)
+# [2026-10-18T21:18:04.466Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1daa1f19 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+# false for 'create' @ L7, false for 'update' @ L7
+# [2026-10-18T21:18:04.515Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1daa1f1a error. Code: 7 Message: 7 PERMISSION_DENIED: 
+# false for 'create' @ L7, false for 'update' @ L7
+# [2026-10-18T21:18:04.559Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1daa1f1b error. Code: 7 Message: 7 PERMISSION_DENIED: 
+# false for 'create' @ L7, false for 'update' @ L7
+# [2026-10-18T21:18:04.600Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1daa1f1c error. Code: 7 Message: 7 PERMISSION_DENIED: 
+# false for 'create' @ L7, false for 'update' @ L7
+# [2026-10-18T21:18:04.744Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1daa1f1e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+# false for 'create' @ L7, false for 'update' @ L7
+# [2026-10-18T21:18:04.782Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1daa1f1f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+# false for 'create' @ L7, false for 'update' @ L7
+# [2026-10-18T21:18:04.815Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1daa1f20 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+# false for 'create' @ L7, false for 'update' @ L7
+# [2026-10-18T21:18:04.856Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1daa1f21 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+# false for 'create' @ L7, false for 'update' @ L7
+# [2026-10-18T21:18:04.954Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1daa1f23 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+# false for 'create' @ L7, false for 'update' @ L7
+# [2026-10-18T21:18:04.986Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1daa1f24 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+# false for 'create' @ L7, false for 'update' @ L7
+# [2026-10-18T21:18:05.017Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1daa1f25 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+# false for 'create' @ L7, false for 'update' @ L7
+# [2026-10-18T21:18:05.072Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1daa1f26 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+# false for 'create' @ L7, false for 'update' @ L7
+# Subtest: direct access denied: two tenants, manager, employee, global legacy paths
+ok 1 - direct access denied: two tenants, manager, employee, global legacy paths
+  ---
+  duration_ms: 8019.082778
+  type: 'test'
+  ...
+# Subtest: trusted setup exact30d and refuses unverified existing account or trial restart
+ok 2 - trusted setup exact30d and refuses unverified existing account or trial restart
+  ---
+  duration_ms: 43.606926
+  type: 'test'
+  ...
+# Subtest: device proof rejects substituted tenant, wrong key, replay and session swap
+ok 3 - device proof rejects substituted tenant, wrong key, replay and session swap
+  ---
+  duration_ms: 310.082969
+  type: 'test'
+  ...
+# Subtest: ledger audit and operation acknowledgment exactly once under concurrent duplicate delivery
+ok 4 - ledger audit and operation acknowledgment exactly once under concurrent duplicate delivery
+  ---
+  duration_ms: 3624.16339
+  type: 'test'
+  ...
+# Subtest: forged party/tenant and invalid accounting cannot cross trust boundary
+ok 5 - forged party/tenant and invalid accounting cannot cross trust boundary
+  ---
+  duration_ms: 240.065285
+  type: 'test'
+  ...
+# Subtest: concurrent immutable edits preserve local change, remote original and reason
+ok 6 - concurrent immutable edits preserve local change, remote original and reason
+  ---
+  duration_ms: 139.444086
+  type: 'test'
+  ...
+# Subtest: atomic concurrent returns reject combined over-return and wrong grade/unit
+ok 7 - atomic concurrent returns reject combined over-return and wrong grade/unit
+  ---
+  duration_ms: 3451.87235
+  type: 'test'
+  ...
+# Subtest: employee joining day29 inherits trial; caches get sanitized directories only
+ok 8 - employee joining day29 inherits trial; caches get sanitized directories only
+  ---
+  duration_ms: 338.543058
+  type: 'test'
+  ...
+# Subtest: employee impersonation or manager financial payload denied; submission accepted separately
+ok 9 - employee impersonation or manager financial payload denied; submission accepted separately
+  ---
+  duration_ms: 239.938107
+  type: 'test'
+  ...
+# Subtest: concurrent approval exactly once preserves creator and employee cannot download prices
+ok 10 - concurrent approval exactly once preserves creator and employee cannot download prices
+  ---
+  duration_ms: 2979.126614
+  type: 'test'
+  ...
+# Subtest: partial cumulative rounding then final residual equals exact original amount
+ok 11 - partial cumulative rounding then final residual equals exact original amount
+  ---
+  duration_ms: 341.87524
+  type: 'test'
+  ...
+# Subtest: Dart zero-marker reversal preserves immutable history and releases reversed return capacity
+ok 12 - Dart zero-marker reversal preserves immutable history and releases reversed return capacity
+  ---
+  duration_ms: 481.986067
+  type: 'test'
+  ...
+# Subtest: payroll requires historical term, immutable effective month and separate employee attribution
+ok 13 - payroll requires historical term, immutable effective month and separate employee attribution
+  ---
+  duration_ms: 397.212659
+  type: 'test'
+  ...
+# Subtest: expense categories, invoice shipment references and immutable debt adjustments validate end to end
+ok 14 - expense categories, invoice shipment references and immutable debt adjustments validate end to end
+  ---
+  duration_ms: 669.854079
+  type: 'test'
+  ...
+# Subtest: employee submissions enforce party kinds and preserve expense categories at review
+ok 15 - employee submissions enforce party kinds and preserve expense categories at review
+  ---
+  duration_ms: 395.234584
+  type: 'test'
+  ...
+# Subtest: exact expiry stops manager and staff; renewal resumes same operation IDs; activation wrong-device denied
+ok 16 - exact expiry stops manager and staff; renewal resumes same operation IDs; activation wrong-device denied
+  ---
+  duration_ms: 440.003398
+  type: 'test'
+  ...
+# Subtest: employee disabling separate; pagination retains every increment without duplication
+ok 17 - employee disabling separate; pagination retains every increment without duplication
+  ---
+  duration_ms: 510.75103
+  type: 'test'
+  ...
+# Subtest: revoked member receives signed disabled certificate while data remains denied
+ok 18 - revoked member receives signed disabled certificate while data remains denied
+  ---
+  duration_ms: 139.643133
+  type: 'test'
+  ...
+>  (node:15810) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+>  (Use `node-22 --trace-deprecation ...` to show where the warning was created)
+i  functions: Beginning execution of "europe-west1-bootstrap"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "europe-west1-bootstrap" in 47.613909ms
+i  functions: Beginning execution of "europe-west1-bootstrap"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "europe-west1-bootstrap" in 475.508128ms
+i  functions: Beginning execution of "europe-west1-bootstrap"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "europe-west1-bootstrap" in 147.340356ms
+# Subtest: actual Cloud Functions emulator callable authenticates and completes device proof
+ok 19 - actual Cloud Functions emulator callable authenticates and completes device proof
+  ---
+  duration_ms: 4322.752721
+  type: 'test'
+  ...
+# (node:15838) MetadataLookupWarning: received unexpected error = All promises were rejected code = ETIMEDOUT, ENOTFOUND
+# (Use `node-22 --trace-warnings ...` to show where the warning was created)
+# Subtest: shipment appends audited metadata without changing invoice financial facts
+ok 20 - shipment appends audited metadata without changing invoice financial facts
+  ---
+  duration_ms: 4535.570253
+  type: 'test'
+  ...
+✔  functions: Using node@22 from host.
+# Subtest: concurrent duplicate shipment delivery creates one effect
+ok 21 - concurrent duplicate shipment delivery creates one effect
+  ---
+  duration_ms: 4720.308878
+  type: 'test'
+  ...
+# Subtest: shipment cannot smuggle financial, counterparty or payroll effects
+ok 22 - shipment cannot smuggle financial, counterparty or payroll effects
+  ---
+  duration_ms: 448.319888
+  type: 'test'
+  ...
+Serving at port 8362
+
+# Subtest: shipment invoice and active assignee are tenant scoped
+ok 23 - shipment invoice and active assignee are tenant scoped
+  ---
+  duration_ms: 602.654991
+  type: 'test'
+  ...
+# Subtest: employee cannot forge shipment entry
+ok 24 - employee cannot forge shipment entry
+  ---
+  duration_ms: 41.114962
+  type: 'test'
+  ...
+# Subtest: reversed invoices deny shipment updates; metadata corrections append another event
+ok 25 - reversed invoices deny shipment updates; metadata corrections append another event
+  ---
+  duration_ms: 483.339628
+  type: 'test'
+  ...
+✔  functions: Loaded functions definitions from source: acceptInvitation, activateLicense, bootstrap, createEmployeeInvitation, pullChanges, setMemberActive, syncOperation.
+# Subtest: concurrent distinct same-order updates preserve conflict and advance once
+ok 26 - concurrent distinct same-order updates preserve conflict and advance once
+  ---
+  duration_ms: 3699.359653
+  type: 'test'
+  ...
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 45637.570549
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  functions: Stopping Functions Emulator
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  eventarc: Stopping Eventarc Emulator
+i  tasks: Stopping Cloud Tasks Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

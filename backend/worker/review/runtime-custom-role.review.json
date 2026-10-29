@@ -1,0 +1,14 @@
+{
+  "title": "Strawberry gateway runtime",
+  "description": "Reviewed candidate only. Firestore transactions and Firebase Auth user lookup/session revocation; no IAM, index management, deletes or account creation.",
+  "stage": "GA",
+  "includedPermissions": [
+    "datastore.databases.get",
+    "datastore.entities.get",
+    "datastore.entities.list",
+    "datastore.entities.create",
+    "datastore.entities.update",
+    "firebaseauth.users.get",
+    "firebaseauth.users.update"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-23",
+  "productionChanges": false,
+  "unitTests": {
+    "passed": 43,
+    "failed": 0,
+    "log": "backend-unit-43.log"
+  },
+  "isolatedEmulatorTests": {
+    "passed": 38,
+    "failed": 0,
+    "legacyRegressions": 26,
+    "newInvitationCases": 12,
+    "log": "backend-emulators-38.log"
+  },
+  "emulatorProject": "demo-strawberry-flutter",
+  "ports": {
+    "auth": 19199,
+    "firestore": 18180,
+    "functions": 15101
+  },
+  "temporarySourceAndSyntheticIssuerCleaned": true,
+  "limits": [
+    "Worker HTTP and Android tests are separate evidence.",
+    "38 includes the earlier standalone 12; do not add those 12 again.",
+    "No real Auth accounts, verification emails, production Firestore writes, credentials or deployment were performed by this suite."
+  ]
+}

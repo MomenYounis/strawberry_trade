@@ -1,0 +1,60 @@
+{
+  "reviewDateCairo": "2026-10-20",
+  "cloudWrites": false,
+  "tests": {
+    "backend": {
+      "passed": 31,
+      "exitCode": 0
+    },
+    "firebaseConfig": {
+      "passed": 14,
+      "exitCode": 0
+    },
+    "workerConfig": {
+      "passed": 4,
+      "exitCode": 0
+    },
+    "flutter": {
+      "passed": 115,
+      "exitCode": 0,
+      "fullLogRetained": false
+    },
+    "flutterAnalysis": {
+      "issues": 0,
+      "exitCode": 0
+    },
+    "onboardingPlanner": {
+      "passed": 8,
+      "exitCode": 0,
+      "networkAndWrites": "denied-in-default-CLI-test"
+    }
+  },
+  "workerBuild": {
+    "dryRun": true,
+    "exitCode": 0,
+    "uploadKiB": 8574.23,
+    "gzipKiB": 1188.57
+  },
+  "liveReads": {
+    "projectId": "strawberry-trade-261017-6a49b",
+    "defaultDatabase": {
+      "location": "europe-west1",
+      "freeTier": true,
+      "deleteProtection": "ENABLED"
+    },
+    "missingCompositeIndex": {
+      "collectionGroup": "employeeChanges",
+      "fields": [
+        "uid ASC",
+        "sequence ASC"
+      ]
+    },
+    "rulesetSha256": "96fb39261cecf72d08fb6c14249a1d79e800cc32ec1141b8ade5cb37b152cba5",
+    "tenantPaths": "No explicit allow; covered by deny-all catchall. Source inspected; no live client write attempted.",
+    "cloudFunctionsApi": "DISABLED",
+    "functionInventory": "Unavailable; list command failed. No API enabled."
+  },
+  "connectedAndroidDevices": 0,
+  "productionApkBuilt": false,
+  "cloudflareAccountConfirmed": false
+}

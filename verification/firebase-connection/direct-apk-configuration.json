@@ -1,0 +1,40 @@
+{
+  "projectId": "strawberry-trade-261017-6a49b",
+  "appId": "1:713439663809:android:c0565e7ada543b0e2b6640",
+  "services": {
+    "playintegrity.googleapis.com": {
+      "state": "ENABLED",
+      "operation": "operations/acat.p2-713439663809-bf9e8d06-3714-4f8c-b972-1a9d29bd2016"
+    },
+    "firebaseappcheck.googleapis.com": {
+      "state": "ENABLED",
+      "operation": "operations/acat.p2-713439663809-a7c7881c-d5ef-4674-9bf8-c3e71b1e86cd"
+    }
+  },
+  "productionDeviceTestPassed": false,
+  "billingEnabledByThisTool": false,
+  "deployedByThisTool": false,
+  "productionRecordsTouched": false,
+  "globalEnforcementChanged": false,
+  "updatedAtUtc": "2026-10-19T14:37:56.722Z",
+  "policyBeforeFirstApply": {
+    "name": "projects/713439663809/apps/1:713439663809:android:c0565e7ada543b0e2b6640/playIntegrityConfig",
+    "tokenTtl": "3600s",
+    "deviceIntegrity": {
+      "minDeviceRecognitionLevel": "NO_INTEGRITY"
+    }
+  },
+  "policyReadback": {
+    "name": "projects/713439663809/apps/1:713439663809:android:c0565e7ada543b0e2b6640/playIntegrityConfig",
+    "tokenTtl": "3600s",
+    "appIntegrity": {
+      "allowUnrecognizedVersion": true
+    },
+    "deviceIntegrity": {
+      "minDeviceRecognitionLevel": "MEETS_DEVICE_INTEGRITY"
+    },
+    "accountDetails": {}
+  },
+  "offPlayPolicyConfigured": true,
+  "setupConfigured": true
+}

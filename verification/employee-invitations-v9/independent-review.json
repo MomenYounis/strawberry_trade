@@ -1,0 +1,11 @@
+{
+  "reviewedAt": "2026-10-23",
+  "scope": "New employee self-registration, one-time invitation claim, reissue, employeeId activation, legacy compatibility and Flutter flow",
+  "result": "No high-confidence P1/P2 introduced defect found in independent source review",
+  "testsNotRerunByReviewer": true,
+  "observations": [
+    "Three local workerd unread-stream errors corresponded to intentionally early401 Auth rejection. All54 HTTP checks passed including later valid requests and pagination.",
+    "Existing Auth refresh-token revocation may require sign-in before Android obtains a signed disabled membership. Server requests and used-invitation replay remain denied. Offline revocation cannot be immediate."
+  ],
+  "productionEmployeeAccountCreated": false
+}

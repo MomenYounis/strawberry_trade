@@ -1,0 +1,12 @@
+{
+  "atUtc": "2026-10-23T09:24:56.295239+00:00",
+  "authorization": "User explicitly asked to install on the phone connected by USB.",
+  "installedApkSha256": "7bfaf821d141960a8a49e8ef88921406dca0dd684b5cb3b1a12bee38aae0ee83",
+  "package": "com.strawberrytrade.strawberry_trade",
+  "previousVersionCode": 8,
+  "installationCommandResult": "Success",
+  "method": "Android package update (-r), no uninstall or data clear",
+  "businessDataRead": false,
+  "realAccountCreated": false,
+  "newEmployeeSignupTested": false
+}

@@ -1,0 +1,36 @@
+{
+  "name": "strawberry-tenant-gateway",
+  "account_id": "c9e7af798c5f97976ecdb07e3fc086f6",
+  "main": "../backend/worker/index.mjs",
+  "compatibility_date": "2026-10-19",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "define": {
+    "__dirname": "\"/\""
+  },
+  "workers_dev": true,
+  "preview_urls": false,
+  "vars": {
+    "FIREBASE_PROJECT_ID": "strawberry-trade-261017-6a49b",
+    "FIREBASE_ANDROID_APP_ID": "1:713439663809:android:c0565e7ada543b0e2b6640",
+    "LICENSE_KEY_ID": "issuer-v1"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "GATEWAY",
+        "class_name": "TradingGateway"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "TradingGateway"
+      ]
+    }
+  ],
+  "minify": true
+}

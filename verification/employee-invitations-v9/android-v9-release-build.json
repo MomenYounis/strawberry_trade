@@ -1,0 +1,25 @@
+{
+  "startedAtUtc": "2026-10-23T08:58:56.282829+00:00",
+  "finishedAtUtc": "2026-10-23T09:01:26.798760+00:00",
+  "command": [
+    "/home/younis/flutter/bin/flutter",
+    "build",
+    "apk",
+    "--release",
+    "--dart-define-from-file=/home/younis/.local/share/strawberry-trade-operator/firebase-production/cloudflare-setup-v8-defines.json"
+  ],
+  "exitCode": 0,
+  "log": "/home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/work/employee-invitations/android-v9-release-build.log",
+  "versionName": "1.0.0",
+  "versionCode": 9,
+  "approvedGateway": "https://strawberry-tenant-gateway.momenfarghaly4.workers.dev",
+  "publicDefinitions": "/home/younis/.local/share/strawberry-trade-operator/firebase-production/cloudflare-setup-v8-defines.json",
+  "publicDefinitionsSha256": "bfc10fa87f36844a992f67d87d73f510dbdad6e8d56b50e975a53103df88e2b0",
+  "samePreviousFirebaseAndIssuerConfiguration": true,
+  "credentialHandling": "Secret Service captured in process memory; Java Properties via anonymous memfd; no plaintext password file or password arguments",
+  "productionAcceptance": false,
+  "androidInstalled": false,
+  "artifact": "/home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry-trade-employee-invitations-v9.apk",
+  "bytes": 77119012,
+  "sha256": "7bfaf821d141960a8a49e8ef88921406dca0dd684b5cb3b1a12bee38aae0ee83"
+}

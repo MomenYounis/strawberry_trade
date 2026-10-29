@@ -1,0 +1,11 @@
+00:00 +0: loading /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/remote_batch_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: A remote page validates dependencies from earlier events and notifies once after commit
+00:00 +1: Invalid last event or cross-tenant event rolls back the entire page and its audit
+00:00 +2: Revocation arriving after the last batch audit still rolls the complete page back before commit
+00:00 +3: Employee page cannot partly import a directory before forbidden financial data
+00:00 +4: Batch duplicate and immutable conflict handling preserve the original ledger and queue IDs
+00:00 +5: A 500-event page reads validation projections once and causes one complete UI snapshot
+REMOTE_PAGE_VERIFICATION {"individual":{"milliseconds":7381,"completeEntryScans":1000,"allQueryCalls":6000,"uiRefreshCalls":500,"events":500},"batch":{"milliseconds":403,"completeEntryScans":2,"allQueryCalls":511,"uiRefreshCalls":1,"events":500}}
+00:08 +6: (tearDownAll)
+00:08 +6: All tests passed!

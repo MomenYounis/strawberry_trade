@@ -1,0 +1,38 @@
+
+> strawberry-tenant-gateway-worker@1.0.0 test
+> node --test test/config.test.mjs
+
+TAP version 13
+# Subtest: valid matching production bindings are checked locally without credential requests
+ok 1 - valid matching production bindings are checked locally without credential requests
+  ---
+  duration_ms: 7.642135
+  type: 'test'
+  ...
+# Subtest: wrong-project service account, wrong APK registration and mismatched issuer keys fail closed
+ok 2 - wrong-project service account, wrong APK registration and mismatched issuer keys fail closed
+  ---
+  duration_ms: 3.446773
+  type: 'test'
+  ...
+# Subtest: missing or oversized secret binding is rejected before SDK initialization
+ok 3 - missing or oversized secret binding is rejected before SDK initialization
+  ---
+  duration_ms: 3.052626
+  type: 'test'
+  ...
+# Subtest: emulator exemption requires the exact demo project and both loopback services
+ok 4 - emulator exemption requires the exact demo project and both loopback services
+  ---
+  duration_ms: 2.080447
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 536.458297

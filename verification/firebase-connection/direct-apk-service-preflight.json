@@ -1,0 +1,29 @@
+[
+  {
+    "operation": "playIntegrityService",
+    "status": "read",
+    "result": {
+      "name": "projects/713439663809/services/playintegrity.googleapis.com",
+      "state": "DISABLED"
+    }
+  },
+  {
+    "operation": "appCheckService",
+    "status": "read",
+    "result": {
+      "name": "projects/713439663809/services/firebaseappcheck.googleapis.com",
+      "state": "DISABLED"
+    }
+  },
+  {
+    "operation": "androidAppCheckPolicy",
+    "status": "read",
+    "result": {
+      "name": "projects/713439663809/apps/1:713439663809:android:c0565e7ada543b0e2b6640/playIntegrityConfig",
+      "tokenTtl": "3600s",
+      "deviceIntegrity": {
+        "minDeviceRecognitionLevel": "NO_INTEGRITY"
+      }
+    }
+  }
+]

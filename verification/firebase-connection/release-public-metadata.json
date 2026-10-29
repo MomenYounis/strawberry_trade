@@ -1,0 +1,9 @@
+{
+  "packageName": "com.strawberrytrade.strawberry_trade",
+  "keyAlias": "strawberry-release-v1",
+  "SHA1": "4C:AD:0A:88:B5:CC:B9:DD:AC:66:3D:1D:42:C4:64:B6:57:36:5E:68",
+  "SHA256": "BF:1C:B6:37:7B:E0:C3:7C:AD:31:81:1B:55:7A:C3:2B:68:6F:FD:C7:57:30:77:8E:DB:84:88:D2:BD:B3:D8:2B",
+  "issuerKeyId": "issuer-v1",
+  "credentialStorage": "desktop Secret Service keyring",
+  "privateKeyDirectory": "/home/younis/.local/share/strawberry-trade-operator"
+}

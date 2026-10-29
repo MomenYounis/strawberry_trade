@@ -1,0 +1,16 @@
+{
+  "projectId": "demo-strawberry-flutter",
+  "externalPort": 18787,
+  "verifiedAuthHeaders": 6,
+  "requests": {
+    "bootstrap": 2,
+    "syncOperation": 3,
+    "pullChanges": 1
+  },
+  "taggedLargeInteger": true,
+  "decodedLargeInteger": true,
+  "largeIntegerWireRequests": 2,
+  "largeIntegerWireKinds": [
+    "int64-tag"
+  ]
+}

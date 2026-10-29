@@ -1,0 +1,16 @@
+{
+  "backend/src/demo-operator.mjs": "3cc24f1772db47f81d87774ee6654b0f6b6907b4c3267ed9c3a6f05e75c6aa3e",
+  "backend/src/enrollment.mjs": "77c6fbbf4898607410cba6b6628aabe3cbacccea52baa2f5d6a11b66cdea7420",
+  "backend/src/gateway.mjs": "cecc2f2faeb2f259dfb29b82d939a1dee00fb932d05f251d80f60bef15151dc7",
+  "backend/src/http-gateway.mjs": "e715d75830ea5f6581b852504e41a70f6d06cce2474fcfd274781e216cb0f8c7",
+  "backend/src/index.mjs": "d0d6f4bf28ce6d6d858cbd0817bed3db05e8cbd787ff8f0570193be899ad49c0",
+  "backend/src/issuer.mjs": "9d6ebc9e8765fad1e8d73d4151d9e412ec81f32f65c876e502e372ef3dd061f3",
+  "backend/src/validation.mjs": "611299f09c811fc626a690e618f057c313ea55cddfdc6a4de0886ba114950c20",
+  "backend/worker/compatibility.mjs": "5bd005f0f313d09178c9f2b1954814f303dcc18a80760fca8d318260e3a63507",
+  "backend/worker/index.mjs": "be0d88af8110162b769431944d32474c38084c059bcaeee8be8abaa868b19ce7",
+  "backend/worker/package-lock.json": "c28ce772cf6e00b671552517e1efb931778673577d6af5b242fd6587d2df19c3",
+  "backend/worker/package.json": "d47db1c15af16c0f7bdee9e6f4eb56a989585e6b9cb1041817fd52d05d2262f3",
+  "backend/worker/private-stream-debug.mjs": "9eb76ed66e736c75dc3e0d747cbb49a9354739f21bea9eb1317c0ea2c603fc36",
+  "backend/worker/runtime-config.mjs": "2eb69290b04e884171143aaab85ecda0e333d66b3f3d78d5ab78638c6f0967eb",
+  "backend/worker/runtime.mjs": "67260bcdfaa8489fb44161b56fe6e8825422fb3e616f070d6066114c91c8e10f"
+}

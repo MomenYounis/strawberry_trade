@@ -1,0 +1,11 @@
+{
+  "artifact": "strawberry-trade-employee-invitations-v9-source.zip",
+  "sha256": "10dc781089cf37a0b9e5ef0279c400a0e3f2cfcbb47dac13a8de52e0860adeee",
+  "bytes": 3597344,
+  "files": 320,
+  "scope": "Employee self-registration source, tests, guides and public verification evidence; signed APK delivered separately.",
+  "older_artifacts_preserved": true,
+  "operator_keys_included": false,
+  "runtime_secrets_included": false,
+  "cloud_deployment_status": "See docs/current-status-ar.md and dated public deployment receipt"
+}

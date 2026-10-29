@@ -1,0 +1,225 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // One shop per Firebase project. The first manager is provisioned through
+    // the trusted Admin SDK script; client Auth claims never grant shop roles.
+    // members/{uid}: {role, name, active, employeeId?}; self get or manager read.
+    // employeeAccounts/{employeeId}: manager-private immutable login link.
+    // managerData/{kind}/items/{id}: manager-private canonical business records.
+    // directory/{kind}/items/{id}: sanitized id/name/phone/role/active only.
+    // submissions/{id}: immutable employee-authored record with strict payload.
+    // reviews/{submissionId}: immutable manager decision; same id as submission.
+    // audit/{id}: immutable manager audit record.
+
+    function signedIn() { return request.auth != null; }
+    function memberPath() { return /databases/$(database)/documents/members/$(request.auth.uid); }
+    function activeMember() {
+      return signedIn() && exists(memberPath()) && get(memberPath()).data.active == true
+        && get(memberPath()).data.role in ['manager', 'employee'];
+    }
+    function manager() { return activeMember() && get(memberPath()).data.role == 'manager'; }
+    function employee() { return activeMember() && get(memberPath()).data.role == 'employee'; }
+    function employeeCanSubmit() {
+      let employeeId = get(memberPath()).data.employeeId;
+      let path = /databases/$(database)/documents/managerData/employees/items/$(employeeId);
+      return employee() && exists(path) && get(path).data.get('active', true) != false
+        && get(path).data.get('_deleted', false) != true;
+    }
+    function boundedString(value, min, max) { return value is string && value.size() >= min && value.size() <= max; }
+    function identifier(value) { return boundedString(value, 1, 160) && value.matches('^[A-Za-z0-9_-]+$'); }
+    function optionalString(data, key, max) { return !(key in data) || boundedString(data[key], 0, max); }
+    function keys(data, required, allowed) { return data is map && data.keys().hasAll(required) && data.keys().hasOnly(allowed); }
+    function positive(value, max) { return value is number && value > 0 && value <= max; }
+    function nonNegative(value, max) { return value is number && value >= 0 && value <= max; }
+    function dateString(value) {
+      // Calendar-day validity is also checked in the client; this enforces the
+      // YYYY-MM-DD representation and valid month/day ranges at the boundary.
+      return value is string && value.matches('^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$');
+    }
+    function validMember(data) {
+      return keys(data, ['role', 'name', 'active'], ['role', 'name', 'active', 'employeeId'])
+        && data.role in ['manager', 'employee'] && boundedString(data.name, 1, 120) && data.active is bool
+        && ((data.role == 'employee' && identifier(data.employeeId))
+          || (data.role == 'manager' && optionalString(data, 'employeeId', 160)));
+    }
+    function employeeAccountShape(id, data) {
+      return identifier(id) && keys(data,
+          ['employeeId', 'uid', 'email', 'name', 'active', 'createdByUid', 'createdAt', 'updatedAt'],
+          ['employeeId', 'uid', 'email', 'name', 'active', 'createdByUid', 'createdAt', 'updatedAt'])
+        && data.employeeId == id && boundedString(data.uid, 1, 128)
+        && boundedString(data.email, 3, 320) && data.email.matches('^[^\\s@]+@[^\\s@]+[.][^\\s@]+$')
+        && boundedString(data.name, 1, 120) && data.active is bool
+        && boundedString(data.createdByUid, 1, 128)
+        && data.createdAt is timestamp && data.updatedAt is timestamp;
+    }
+    function activeAccountEmployee(id, data) {
+      let path = /databases/$(database)/documents/managerData/employees/items/$(id);
+      return exists(path) && get(path).data.get('active', true) == true
+        && get(path).data.get('_deleted', false) != true
+        && get(path).data.name == data.name;
+    }
+    function safeAccountMemberTarget(data) {
+      let path = /databases/$(database)/documents/members/$(data.uid);
+      // Inspect the current member as well as the post-write member: a batch
+      // cannot demote a manager, then claim that manager's UID for a worker.
+      return data.uid != request.auth.uid
+        && (!exists(path) || (get(path).data.role == 'employee'
+          && get(path).data.employeeId == data.employeeId));
+    }
+    function pairedAccountMember(data) {
+      let path = /databases/$(database)/documents/members/$(data.uid);
+      return getAfter(path).data.role == 'employee'
+        && getAfter(path).data.employeeId == data.employeeId
+        && getAfter(path).data.name == data.name
+        && getAfter(path).data.active == data.active;
+    }
+    function validEmployeeAccountCreate(id, data) {
+      return employeeAccountShape(id, data) && activeAccountEmployee(id, data)
+        && data.createdByUid == request.auth.uid
+        && data.createdAt == request.time && data.updatedAt == request.time
+        && safeAccountMemberTarget(data) && pairedAccountMember(data);
+    }
+    function validEmployeeAccountUpdate(id, data) {
+      let member = /databases/$(database)/documents/members/$(resource.data.uid);
+      let employeeRecord = /databases/$(database)/documents/managerData/employees/items/$(id);
+      return employeeAccountShape(id, data)
+        && data.diff(resource.data).affectedKeys().hasOnly(['active', 'name', 'updatedAt'])
+        && data.updatedAt == request.time && safeAccountMemberTarget(data)
+        && exists(member) && get(member).data.role == 'employee'
+        && get(member).data.employeeId == id && pairedAccountMember(data)
+        // Disabling remains possible after the employee was stopped or
+        // removed. Enabling always needs a current active employee record.
+        && (!data.active || activeAccountEmployee(id, data))
+        && (data.name == resource.data.name || (exists(employeeRecord)
+          && get(employeeRecord).data.name == data.name));
+    }
+    function privateKind(kind) { return kind in ['merchants', 'suppliers', 'employees', 'transactions', 'settings', 'returnCounters']; }
+    function validPrivateRecord(kind, id, data) {
+      // Managers are trusted to maintain their own private schema. This path
+      // is never readable or writable by employee accounts, even with claims.
+      return privateKind(kind) && identifier(id) && data is map && data.size() <= 100;
+    }
+    function directoryKind(kind) { return kind in ['merchants', 'suppliers', 'employees']; }
+    function validDirectory(kind, id, data) {
+      return directoryKind(kind) && identifier(id)
+        && keys(data, ['id', 'name'], ['id', 'name', 'phone', 'role', 'active'])
+        && data.id == id && boundedString(data.name, 1, 120)
+        && optionalString(data, 'phone', 160) && optionalString(data, 'role', 120)
+        && (!('active' in data) || data.active is bool);
+    }
+    function businessCategory(category) {
+      return category in ['شحن ونقل ونولون', 'عمالة تحميل وتفريغ', 'بوكسات وكراتين وتعبئة',
+        'شاي وضيافة وأكل', 'وقود ومواصلات', 'إيجار وفواتير', 'صيانة ومستلزمات', 'مصاريف أخرى'];
+    }
+    function validExpense(p) {
+      return keys(p, ['category', 'amount'], ['category', 'amount', 'note'])
+        && businessCategory(p.category) && positive(p.amount, 1000000000000) && optionalString(p, 'note', 2000);
+    }
+    function goodsBase(p) {
+      return identifier(p.partyId) && p.grade in ['فراولة طازة (سوق محلي)', 'فراولة تصدير (فرز أول)', 'فراولة مصانع / تجميد', 'فراولة فرز تاني', 'كرتونة عربي', 'كرتونة اوروبي', 'عربي محسن', 'برنيكة فرزة', 'برنيكة خرط']
+        && boundedString(p.unit, 1, 50) && positive(p.qty, 1000000000)
+        && optionalString(p, 'note', 2000);
+    }
+    function validPurchase(p) {
+      return keys(p, ['partyId', 'grade', 'unit', 'qty', 'unitPrice', 'paidAmount'],
+          ['partyId', 'grade', 'unit', 'qty', 'unitPrice', 'paidAmount', 'shipmentRef', 'note'])
+        && goodsBase(p) && positive(p.unitPrice, 1000000000) && p.qty * p.unitPrice <= 1000000000000000000
+        && nonNegative(p.paidAmount, 1000000000000000000) && p.paidAmount <= p.qty * p.unitPrice + 0.01
+        && optionalString(p, 'shipmentRef', 120);
+    }
+    function validDelivery(p) {
+      return keys(p, ['partyId', 'grade', 'unit', 'qty'], ['partyId', 'grade', 'unit', 'qty', 'shipmentRef', 'note'])
+        && goodsBase(p) && optionalString(p, 'shipmentRef', 120);
+    }
+    function validReturn(p) {
+      return keys(p, ['partyId', 'grade', 'unit', 'qty'], ['partyId', 'grade', 'unit', 'qty', 'originalRef', 'note'])
+        && goodsBase(p) && optionalString(p, 'originalRef', 120);
+    }
+    function validSubmission(id, data) {
+      return identifier(id) && keys(data,
+          ['id', 'kind', 'recordedByUid', 'recordedByEmployeeId', 'recordedByName', 'date', 'createdAt', 'clientCreatedAt', 'payload', 'status'],
+          ['id', 'kind', 'recordedByUid', 'recordedByEmployeeId', 'recordedByName', 'date', 'createdAt', 'clientCreatedAt', 'payload', 'status'])
+        && data.status == 'pending' && data.id == id && data.recordedByUid == request.auth.uid
+        && data.recordedByEmployeeId == get(memberPath()).data.employeeId
+        && data.recordedByName == get(memberPath()).data.name
+        && boundedString(data.recordedByUid, 1, 128) && identifier(data.recordedByEmployeeId)
+        && boundedString(data.recordedByName, 1, 120) && dateString(data.date)
+        && data.createdAt is timestamp && data.createdAt == request.time
+        && nonNegative(data.clientCreatedAt, 9999999999999) && data.payload is map
+        && ((data.kind == 'expense' && validExpense(data.payload))
+          || (data.kind == 'purchase' && validPurchase(data.payload))
+          || (data.kind == 'delivery' && validDelivery(data.payload))
+          || (data.kind in ['sale_return', 'purchase_return'] && validReturn(data.payload)));
+    }
+    function submissionOwner(id) {
+      return activeMember() && exists(/databases/$(database)/documents/submissions/$(id))
+        && get(/databases/$(database)/documents/submissions/$(id)).data.recordedByUid == request.auth.uid;
+    }
+    function validReview(id, data) {
+      return identifier(id) && keys(data, ['status', 'note', 'reviewedByUid', 'reviewedAt'],
+          ['status', 'transactionId', 'note', 'reviewedByUid', 'reviewedAt'])
+        && exists(/databases/$(database)/documents/submissions/$(id))
+        && data.status in ['approved', 'rejected'] && getAfter(/databases/$(database)/documents/submissions/$(id)).data.status == data.status && boundedString(data.note, 0, 1000)
+        && data.reviewedByUid == request.auth.uid
+        && data.reviewedAt is timestamp && data.reviewedAt == request.time
+        && ((data.status == 'rejected' && !('transactionId' in data))
+          || (data.status == 'approved' && data.transactionId == 'review_' + id
+            && existsAfter(/databases/$(database)/documents/managerData/transactions/items/$(data.transactionId))));
+    }
+    function validAudit(id, data) {
+      return identifier(id) && keys(data, ['actorUid', 'action', 'kind', 'recordId', 'at'],
+          ['actorUid', 'action', 'kind', 'recordId', 'before', 'after', 'at'])
+        && data.actorUid == request.auth.uid
+        && data.action in ['create', 'edit', 'delete', 'approve', 'reject']
+        && data.kind in ['merchants', 'suppliers', 'employees', 'transactions', 'settings', 'submissions']
+        && identifier(data.recordId) && data.at is timestamp && data.at == request.time
+        && (!('before' in data) || data.before == null || (data.before is map && data.before.size() <= 100))
+        && (!('after' in data) || data.after == null || (data.after is map && data.after.size() <= 100));
+    }
+
+    match /members/{uid} {
+      allow get: if signedIn() && (request.auth.uid == uid || manager());
+      allow list: if manager();
+      allow create, update: if manager() && validMember(request.resource.data);
+      allow delete: if manager();
+    }
+    match /employeeAccounts/{employeeId} {
+      allow get, list: if manager();
+      allow create: if manager() && validEmployeeAccountCreate(employeeId, request.resource.data);
+      allow update: if manager() && validEmployeeAccountUpdate(employeeId, request.resource.data);
+      allow delete: if false;
+    }
+    match /managerData/{kind}/items/{id} {
+      allow read: if manager() && privateKind(kind);
+      allow create, update: if manager() && validPrivateRecord(kind, id, request.resource.data);
+      allow delete: if manager() && privateKind(kind);
+    }
+    match /directory/{kind}/items/{id} {
+      allow read: if activeMember() && directoryKind(kind);
+      allow create, update: if manager() && validDirectory(kind, id, request.resource.data);
+      allow delete: if manager() && directoryKind(kind);
+    }
+    match /submissions/{id} {
+      allow read: if manager() || (employee() && resource.data.recordedByUid == request.auth.uid);
+      allow create: if employeeCanSubmit() && validSubmission(id, request.resource.data);
+      // Original facts stay immutable. Only the decision marker may change,
+      // atomically with its immutable review. Employees can never update it.
+      allow update: if manager() && resource.data.status == 'pending'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
+        && request.resource.data.status in ['approved', 'rejected']
+        && getAfter(/databases/$(database)/documents/reviews/$(id)).data.status == request.resource.data.status;
+      allow delete: if false;
+    }
+    match /reviews/{id} {
+      allow read: if manager() || (employee() && submissionOwner(id));
+      allow create: if manager() && validReview(id, request.resource.data);
+      allow update, delete: if false;
+    }
+    match /audit/{id} {
+      allow read: if manager();
+      allow create: if manager() && validAudit(id, request.resource.data);
+      allow update, delete: if false;
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

@@ -1,0 +1,122 @@
+
+> strawberry-trade-tenant-gateway@1.0.0 test
+> node --test test/validation.test.mjs test/seed-helper.test.mjs
+
+TAP version 13
+# Subtest: fresh wrapper namespace allocates a different tenant while preserving identity and same-session stability
+ok 1 - fresh wrapper namespace allocates a different tenant while preserving identity and same-session stability
+  ---
+  duration_ms: 6.731993
+  type: 'test'
+  ...
+# Subtest: helper refuses missing or malformed namespace before accessing emulators
+ok 2 - helper refuses missing or malformed namespace before accessing emulators
+  ---
+  duration_ms: 1.355545
+  type: 'test'
+  ...
+# Subtest: helper refuses production project, public bind hosts and non-loopback emulator endpoints
+ok 3 - helper refuses production project, public bind hosts and non-loopback emulator endpoints
+  ---
+  duration_ms: 0.396313
+  type: 'test'
+  ...
+# Subtest: integer half-up quantity and money reference
+ok 4 - integer half-up quantity and money reference
+  ---
+  duration_ms: 3.538263
+  type: 'test'
+  ...
+# Subtest: invalid imports cannot disagree total or overpay
+ok 5 - invalid imports cannot disagree total or overpay
+  ---
+  duration_ms: 2.546022
+  type: 'test'
+  ...
+# Subtest: all financial boundaries reject NaN infinity strings negative and fractional
+ok 6 - all financial boundaries reject NaN infinity strings negative and fractional
+  ---
+  duration_ms: 0.962377
+  type: 'test'
+  ...
+# Subtest: real ISO date validation
+ok 7 - real ISO date validation
+  ---
+  duration_ms: 0.744768
+  type: 'test'
+  ...
+# Subtest: directory signed opening and tenant checks
+ok 8 - directory signed opening and tenant checks
+  ---
+  duration_ms: 0.698898
+  type: 'test'
+  ...
+# Subtest: 30x24 trial with exact shared boundary independent of employee join time
+ok 9 - 30x24 trial with exact shared boundary independent of employee join time
+  ---
+  duration_ms: 0.321109
+  type: 'test'
+  ...
+# Subtest: signed canonical UTF8 package detects tampering
+ok 10 - signed canonical UTF8 package detects tampering
+  ---
+  duration_ms: 14.799075
+  type: 'test'
+  ...
+# Subtest: paid expiry overrides remaining original trial
+ok 11 - paid expiry overrides remaining original trial
+  ---
+  duration_ms: 0.456431
+  type: 'test'
+  ...
+# Subtest: migration dry-run quarantines legacy inconsistent totals, grade mismatch, non-lossless price
+ok 12 - migration dry-run quarantines legacy inconsistent totals, grade mismatch, non-lossless price
+  ---
+  duration_ms: 19.113956
+  type: 'test'
+  ...
+# Subtest: documented debt adjustment has no cash effect and explicit direction
+ok 13 - documented debt adjustment has no cash effect and explicit direction
+  ---
+  duration_ms: 1.702616
+  type: 'test'
+  ...
+# Subtest: expense category defaults and unrelated kinds cannot carry an expense category
+ok 14 - expense category defaults and unrelated kinds cannot carry an expense category
+  ---
+  duration_ms: 1.152252
+  type: 'test'
+  ...
+# Subtest: migration keeps identifiers, same-day relationships, provenance and known control balances
+ok 15 - migration keeps identifiers, same-day relationships, provenance and known control balances
+  ---
+  duration_ms: 2.507212
+  type: 'test'
+  ...
+# Subtest: migration quarantines unit and grade mismatches, unknown shipping employees and wrong party kind
+ok 16 - migration quarantines unit and grade mismatches, unknown shipping employees and wrong party kind
+  ---
+  duration_ms: 1.999892
+  type: 'test'
+  ...
+# Subtest: migration preserves payroll payment but blocks readiness until historical salary is evidenced
+ok 17 - migration preserves payroll payment but blocks readiness until historical salary is evidenced
+  ---
+  duration_ms: 0.989633
+  type: 'test'
+  ...
+# Subtest: shipment metadata events require zero financial fields, active-invoice reference, status and documented reason
+ok 18 - shipment metadata events require zero financial fields, active-invoice reference, status and documented reason
+  ---
+  duration_ms: 3.389169
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1503.949134

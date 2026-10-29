@@ -1,0 +1,99 @@
+{"check": "firebase-config-unit", "exit_code": 0, "elapsed_seconds": 2.83, "finished_utc": "2026-10-19T21:04:08.555749+00:00", "output_truncated": false, "command": ["npm", "test"]}
+
+> strawberry-firebase-public-config@1.0.0 test
+> node --test config.test.mjs
+
+TAP version 13
+# Subtest: matching Android download creates production definitions without changing its input
+ok 1 - matching Android download creates production definitions without changing its input
+  ---
+  duration_ms: 11.007635
+  type: 'test'
+  ...
+# Subtest: package matching selects its client and refuses wrong or ambiguous Android registrations
+ok 2 - package matching selects its client and refuses wrong or ambiguous Android registrations
+  ---
+  duration_ms: 2.147575
+  type: 'test'
+  ...
+# Subtest: sender mismatch and a web app ID cannot become Android production configuration
+ok 3 - sender mismatch and a web app ID cannot become Android production configuration
+  ---
+  duration_ms: 0.876561
+  type: 'test'
+  ...
+# Subtest: production mode refuses demo projects, wrong expected project and missing API keys
+ok 4 - production mode refuses demo projects, wrong expected project and missing API keys
+  ---
+  duration_ms: 1.1654
+  type: 'test'
+  ...
+# Subtest: trust map must be nonempty with canonical 32-byte public keys and valid IDs
+ok 5 - trust map must be nonempty with canonical 32-byte public keys and valid IDs
+  ---
+  duration_ms: 25.896765
+  type: 'test'
+  ...
+# Subtest: issuer keygen public output is accepted only if SPKI and raw Ed25519 keys agree
+ok 6 - issuer keygen public output is accepted only if SPKI and raw Ed25519 keys agree
+  ---
+  duration_ms: 3.227719
+  type: 'test'
+  ...
+# Subtest: existing output and output symlinks are refused without changing their targets
+ok 7 - existing output and output symlinks are refused without changing their targets
+  ---
+  duration_ms: 12.557015
+  type: 'test'
+  ...
+# Subtest: output stays outside source even when an external parent symlink redirects inside
+ok 8 - output stays outside source even when an external parent symlink redirects inside
+  ---
+  duration_ms: 6.635828
+  type: 'test'
+  ...
+# Subtest: CLI creates consumable external JSON, prints no API key, and refuses a second write
+ok 9 - CLI creates consumable external JSON, prints no API key, and refuses a second write
+  ---
+  duration_ms: 642.930834
+  type: 'test'
+  ...
+# Subtest: malformed JSON diagnostics do not echo file contents and unknown CLI flags fail
+ok 10 - malformed JSON diagnostics do not echo file contents and unknown CLI flags fail
+  ---
+  duration_ms: 252.907055
+  type: 'test'
+  ...
+# Subtest: public HTTPS gateway bases use the shared Dart/client canonical cases
+ok 11 - public HTTPS gateway bases use the shared Dart/client canonical cases
+  ---
+  duration_ms: 2.132193
+  type: 'test'
+  ...
+# Subtest: gateway configuration rejects insecure, local, credential-bearing and ambiguous URLs
+ok 12 - gateway configuration rejects insecure, local, credential-bearing and ambiguous URLs
+  ---
+  duration_ms: 2.892737
+  type: 'test'
+  ...
+# Subtest: external routing is opt-in and never alters existing Functions definitions by default
+ok 13 - external routing is opt-in and never alters existing Functions definitions by default
+  ---
+  duration_ms: 1.150692
+  type: 'test'
+  ...
+# Subtest: CLI accepts optional gateway URL and rejects unsafe overrides before writing
+ok 14 - CLI accepts optional gateway URL and rejects unsafe overrides before writing
+  ---
+  duration_ms: 520.504937
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1893.130367

@@ -1,0 +1,9 @@
+{
+  "versionCode": 7,
+  "apkSha256": "9512f40cd4dc80092b960fbdfaf14081c766d7259afb4a0d8b1a875527dacc3d",
+  "releaseCertificateVerified": true,
+  "threeAbiAppLibrariesHaveIntendedProjectAndIssuer": true,
+  "privateKeysAndPasswordsAbsentFromApk": true,
+  "liveDeviceAttestation": "NOT_TESTED",
+  "productionBackendAcceptance": "NOT_TESTED"
+}

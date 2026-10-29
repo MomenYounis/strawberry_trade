@@ -1,0 +1,23 @@
+00:00 +0: loading /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/employee_registration_test.dart
+00:00 +0: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/employee_registration_test.dart: v2 invitation derives only its canonical bounded tenant route
+00:00 +1: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/employee_registration_test.dart: legacy invitation requires an explicit valid tenant
+00:00 +2: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/employee_registration_test.dart: verification delivery failure retains created account and retries only delivery
+00:00 +3: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/employee_registration_test.dart: existing verified account signs in without a second create or mail
+00:00 +4: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/employee_registration_test.dart: failed creation never silently falls back to signing in or changes password
+00:00 +5: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:01 +6: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:03 +7: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/widget_test.dart: English device still opens Arabic RTL setup and Arabic validation
+00:04 +8: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/widget_test.dart: English device still opens Arabic RTL setup and Arabic validation
+00:04 +9: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/employee_onboarding_widget_test.dart: existing verified employee reuses account and invitation after reopening
+00:04 +10: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/employee_onboarding_widget_test.dart: existing verified employee reuses account and invitation after reopening
+00:04 +11: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/widget_test.dart: Ending the account removes its open private statement route
+00:04 +12: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/widget_test.dart: Ending the account removes its open private statement route
+00:05 +13: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/widget_test.dart: Real SQLite backed entry forms Reports reject a reversed date range without exposing metrics or exporting
+00:06 +14: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/widget_test.dart: Real SQLite backed entry forms Statement period keeps prior invoice balance and blocks reversed-range sharing
+00:06 +15: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/widget_test.dart: Real SQLite backed entry forms Shipment editor keeps invoice immutable and orders repeated same-day updates
+00:07 +16: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/widget_test.dart: Real SQLite backed entry forms Arabic numeric validation prevents NaN and negative amounts with no write
+00:08 +17: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/widget_test.dart: Real SQLite backed entry forms Failed durable save retains input and draft and never announces success
+00:09 +18: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/widget_test.dart: Real SQLite backed entry forms Repeated taps commit one operation and save-another clears amounts with a fresh ID
+00:10 +19: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/widget_test.dart: Real SQLite backed entry forms Direct form access still enforces entitlement and employee delivery omits financial fields
+00:10 +20: /home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade/test/widget_test.dart: (tearDownAll)
+00:10 +20: All tests passed!

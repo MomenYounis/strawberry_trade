@@ -1,0 +1,18 @@
+{
+  "score": 4,
+  "summary": "Read-only review of the deployed default Firestore rules for strawberry-trade-261017-6a49b. Direct client access to /tenants and every descendant is denied: none of the explicit legacy allow paths matches it, and the recursive fallback denies all reads and writes. Existing legacy manager/employee paths remain available under their scoped conditions. No unauthorized cross-role escalation or employee update bypass was identified by source review. This is a source audit, not a production penetration test or an assessment of Admin SDK endpoints. The source exactly matches the previously delivered local legacy rules. Two bounded legacy validation limitations remain; they do not grant access to the new tenant paths.",
+  "findings": [
+    {
+      "check": "Storage Abuse / Type Safety",
+      "severity": "minor",
+      "issue": "Legacy managerData records and audit before/after maps limit the number of map keys but do not recursively bound string, array, nested-map lengths or validate the private business schema. Only a currently active legacy manager can write these records, so this is manager-controlled legacy data corruption/storage abuse rather than employee privilege escalation. It does not expose /tenants.",
+      "recommendation": "Keep the current website rules unchanged for the connection step. Treat legacy managers as the existing trusted writers, monitor usage, and use the separately reviewed immutable validated gateway/migration for new tenant records. Any narrowing of existing legacy shapes needs a compatibility review and an approved rules deployment."
+    },
+    {
+      "check": "Business Logic vs. Rules / Type Safety",
+      "severity": "minor",
+      "issue": "Legacy employee submissions use a YYYY-MM-DD regex that admits impossible calendar dates such as 2026-02-31, and monetary quantities are bounded numeric values rather than integer minor units. Those submissions remain provisional and manager-reviewed, but client-only validation cannot be considered a trusted accounting boundary. No such values can be written directly into /tenants through these rules.",
+      "recommendation": "Retain manager review for the existing website and avoid representing its rules as equivalent to the new gateway's validated integer ledger. The new gateway must continue checking valid calendar dates, exact integer amounts, relationships, receipt identities and atomic audit independently of Firestore rules. Migrate through the documented reconciliation process rather than hot-replacing rules while the website remains active."
+    }
+  ]
+}

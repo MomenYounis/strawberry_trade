@@ -1,0 +1,30 @@
+{
+  "name": "strawberry-tenant-gateway-review",
+  "main": "index.mjs",
+  "compatibility_date": "2026-10-19",
+  "compatibility_flags": ["nodejs_compat"],
+  "define": {"__dirname": "\"/\""},
+  "workers_dev": false,
+  "durable_objects": {
+    "bindings": [{"name": "GATEWAY", "class_name": "TradingGateway"}]
+  },
+  "migrations": [{"tag": "v1", "new_sqlite_classes": ["TradingGateway"]}],
+  "env": {
+    "emulator": {
+      "name": "strawberry-tenant-gateway-local",
+      "workers_dev": false,
+      "define": {"__dirname": "\"/\""},
+      "vars": {
+        "WORKER_EMULATOR_ONLY": "true",
+        "FIREBASE_PROJECT_ID": "demo-strawberry-flutter",
+        "FIREBASE_ANDROID_APP_ID": "1:123456789:android:1234567890abcdef",
+        "FIRESTORE_EMULATOR_HOST": "127.0.0.1:18080",
+        "FIREBASE_AUTH_EMULATOR_HOST": "127.0.0.1:19099",
+        "LICENSE_KEY_ID": "worker-emulator-only"
+      },
+      "durable_objects": {
+        "bindings": [{"name": "GATEWAY", "class_name": "TradingGateway"}]
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+
+> strawberry-trusted-license-issuer@1.0.0 test
+> node --test issuer.test.mjs
+
+TAP version 13
+# Subtest: canonical JSON sorts nested keys and rejects unsafe/fractional numbers
+ok 1 - canonical JSON sorts nested keys and rejects unsafe/fractional numbers
+  ---
+  duration_ms: 10.876781
+  type: 'test'
+  ...
+# Subtest: Ed25519 round trip uses raw32 public key and canonical signed bytes
+ok 2 - Ed25519 round trip uses raw32 public key and canonical signed bytes
+  ---
+  duration_ms: 25.247986
+  type: 'test'
+  ...
+# Subtest: modified payload, signature, unknown key and envelope fields are rejected
+ok 3 - modified payload, signature, unknown key and envelope fields are rejected
+  ---
+  duration_ms: 10.374817
+  type: 'test'
+  ...
+# Subtest: trial exact boundary, schema, tenant and entitlement mismatch are rejected
+ok 4 - trial exact boundary, schema, tenant and entitlement mismatch are rejected
+  ---
+  duration_ms: 3.205061
+  type: 'test'
+  ...
+# Subtest: paid perpetual or chosen expiry does not invent trial/renewal policy
+ok 5 - paid perpetual or chosen expiry does not invent trial/renewal policy
+  ---
+  duration_ms: 11.609913
+  type: 'test'
+  ...
+# Subtest: CLI encrypted keygen/sign/verify enforces external registry, device cap and transfer
+ok 6 - CLI encrypted keygen/sign/verify enforces external registry, device cap and transfer
+  ---
+  duration_ms: 2910.9626
+  type: 'test'
+  ...
+# Subtest: CLI registry cannot restart a tenant trial or replace paid authority with a trial
+ok 7 - CLI registry cannot restart a tenant trial or replace paid authority with a trial
+  ---
+  duration_ms: 2025.527816
+  type: 'test'
+  ...
+# Subtest: CLI refuses an external-looking symlink that would create a private key in client files
+ok 8 - CLI refuses an external-looking symlink that would create a private key in client files
+  ---
+  duration_ms: 493.359714
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6170.511627

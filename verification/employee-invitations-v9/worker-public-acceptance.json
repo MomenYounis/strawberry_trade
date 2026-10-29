@@ -1,0 +1,83 @@
+{
+  "endpoint": "https://strawberry-tenant-gateway.momenfarghaly4.workers.dev",
+  "at": "2026-10-23T09:13:46.993Z",
+  "checks": [
+    {
+      "name": "health",
+      "status": 200,
+      "reason": null,
+      "passed": true,
+      "durationMs": 2548,
+      "cacheControl": "no-store"
+    },
+    {
+      "name": "unknown-route",
+      "status": 404,
+      "reason": "endpoint-not-found",
+      "passed": true,
+      "durationMs": 862,
+      "cacheControl": "no-store"
+    },
+    {
+      "name": "reject-route-query",
+      "status": 404,
+      "reason": "endpoint-not-found",
+      "passed": true,
+      "durationMs": 651,
+      "cacheControl": "no-store"
+    },
+    {
+      "name": "require-post",
+      "status": 400,
+      "reason": "post-required",
+      "passed": true,
+      "durationMs": 792,
+      "cacheControl": "no-store"
+    },
+    {
+      "name": "require-json",
+      "status": 400,
+      "reason": "json-required",
+      "passed": true,
+      "durationMs": 2813,
+      "cacheControl": "no-store"
+    },
+    {
+      "name": "require-auth",
+      "status": 401,
+      "reason": "authentication-required",
+      "passed": true,
+      "durationMs": 284,
+      "cacheControl": "no-store"
+    },
+    {
+      "name": "require-appcheck",
+      "status": 401,
+      "reason": "app-check-required",
+      "passed": true,
+      "durationMs": 301,
+      "cacheControl": "no-store"
+    },
+    {
+      "name": "reject-forged-appcheck",
+      "status": 401,
+      "reason": "app-check-invalid",
+      "passed": true,
+      "durationMs": 511,
+      "cacheControl": "no-store"
+    },
+    {
+      "name": "bounded-request-body",
+      "status": 400,
+      "reason": "request-too-large",
+      "passed": true,
+      "durationMs": 1310,
+      "cacheControl": "no-store"
+    }
+  ],
+  "allPassed": true,
+  "syntheticRequestsOnly": true,
+  "realAuthenticationTested": false,
+  "physicalAppCheckTested": false,
+  "financialWrites": 0
+}

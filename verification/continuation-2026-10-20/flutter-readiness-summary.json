@@ -1,0 +1,84 @@
+{
+  "savedAtUtc": "2026-10-19T21:59:33.946506+00:00",
+  "project": "/home/younis/Documents/Codex/2026-10-18/files-pasted-by-the-user-build/outputs/strawberry_trade",
+  "sourceModified": false,
+  "checks": [
+    {
+      "command": "/home/younis/flutter/bin/flutter analyze",
+      "exitCode": 0,
+      "issues": 0,
+      "reportedDurationSeconds": 9.0,
+      "fullLogPath": null,
+      "observedFinalOutput": "No issues found! (ran in 9.0s)"
+    },
+    {
+      "command": "/home/younis/flutter/bin/flutter test --reporter compact",
+      "exitCode": 0,
+      "testsPassed": 115,
+      "testsFailed": 0,
+      "reportedDurationSeconds": 45,
+      "fullLogPath": null,
+      "observedFinalOutput": "00:45 +115: All tests passed!"
+    },
+    {
+      "command": "/home/younis/Android/Sdk/platform-tools/adb devices -l",
+      "exitCode": 0,
+      "attachedDevices": [],
+      "fullLogPath": "/home/younis/Documents/Codex/2026-10-20/https-chatgpt-com-s-cx-6ad68f35e39c81919dd852deda65d492/work/continuation-2026-10-20/adb-devices.log"
+    }
+  ],
+  "logRetentionNote": "Original Flutter command outputs were observed in tool terminal result chunks but were not written to files. Some compact-reporter output was tool-truncated. Full original logs are unavailable. Commands were not rerun to create logs; final outcomes and exit codes above were observed directly.",
+  "observedHostMetrics": {
+    "scale": {
+      "entryCount": 10000,
+      "partyCount": 20,
+      "seasons": 10,
+      "validatedImportMs": 38007,
+      "reopenMs": 2,
+      "read10000Ms": 210,
+      "historicalPaginationMs": 78,
+      "accountSearchAndStatementMs": 13,
+      "fileBytes": 7401472
+    },
+    "sqliteFull": {
+      "resultCode": 13,
+      "pageLimit": 128,
+      "pageSize": 1024,
+      "fileBytes": 131072,
+      "pressureRows": 83,
+      "recoverySucceeded": true
+    },
+    "remotePage": {
+      "individual": {
+        "milliseconds": 7494,
+        "completeEntryScans": 1000,
+        "allQueryCalls": 6000,
+        "uiRefreshCalls": 500,
+        "events": 500
+      },
+      "batch": {
+        "milliseconds": 439,
+        "completeEntryScans": 2,
+        "allQueryCalls": 511,
+        "uiRefreshCalls": 1,
+        "events": 500
+      }
+    }
+  },
+  "physicalPhoneDocs": {
+    "developerGuideLines": [
+      90,
+      92,
+      131,
+      225,
+      252
+    ],
+    "notes": [
+      "USB physical test instructions exist for local emulator services: reverse ports 9099, 5001 and 8008 and set EMULATOR_HOST=127.0.0.1; use disposable synthetic phone/account fixtures.",
+      "External HTTP native integration test is hard-coded to 10.0.2.2:18787, so current test is Android-emulator-specific; a future physical local-HTTP run needs explicit reviewed fixture adaptations and forwarding of 18787.",
+      "Preserve signing identity and device data. Do not uninstall or clear app data to bypass update rejection.",
+      "Physical production App Check token exchange and protected bootstrap remain unverified.",
+      "Read-only adb inventory returned no connected device. No installation, device settings, or application changes were made."
+    ]
+  }
+}

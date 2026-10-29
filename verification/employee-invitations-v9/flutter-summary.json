@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-23",
+  "focusedTests": {
+    "passed": 20,
+    "failed": 0,
+    "includedInFullSuite": true
+  },
+  "fullHostTests": {
+    "passed": 124,
+    "failed": 0,
+    "runBeforeFinalErrorTextChange": true
+  },
+  "finalErrorTextRegression": {
+    "passed": 2,
+    "failed": 0,
+    "includesOnePreviouslyExistingProofTest": true
+  },
+  "finalStaticAnalysis": "No issues found",
+  "nativeAndroidEmployeeSignup": {
+    "passed": 1,
+    "realAndroidKeystoreAndSQLCipher": true,
+    "firebaseAuthAndFirestore": "local emulators with synthetic users only",
+    "emailVerifiedVia": "local Auth Emulator OOB action",
+    "productionMailboxOrPhoneTested": false
+  },
+  "fixedDuringVerification": "Removed recursive Form.reset in entry mode switch; widget regression passes."
+}

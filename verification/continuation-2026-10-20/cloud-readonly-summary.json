@@ -1,0 +1,17 @@
+{
+  "projectId": "strawberry-trade-261017-6a49b",
+  "readOnly": true,
+  "observedAt": "2026-10-19T22:00:39.519Z",
+  "ruleset": "projects/strawberry-trade-261017-6a49b/rulesets/eef0eb82-9371-4dd1-b0ae-8bc540a37cc7",
+  "rules": [
+    {
+      "name": "backend/firestore.rules",
+      "sha256": "96fb39261cecf72d08fb6c14249a1d79e800cc32ec1141b8ade5cb37b152cba5"
+    }
+  ],
+  "services": {
+    "cloudfunctions.googleapis.com": "DISABLED",
+    "firestore.googleapis.com": "ENABLED",
+    "identitytoolkit.googleapis.com": "ENABLED"
+  }
+}
