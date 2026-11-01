@@ -338,7 +338,7 @@ void main() {
     );
     expect((await store.listParties()).length, 2);
   });
-  test('Migration v1 to v2 preserves ledger, queue identifier and attempts on disk', () async {
+  test('Migration v1 to v3 preserves ledger, queue identifier and attempts on disk', () async {
     final entry = reference.invoice();
     await store.saveEntry(entry);
     await store.fail(entry.id, 'unavailable', nowMs: 1000);
@@ -346,6 +346,13 @@ void main() {
     final raw = await databaseFactoryFfi.openDatabase(
       path,
       options: OpenDatabaseOptions(singleInstance: false),
+    );
+    await raw.execute(
+      'ALTER TABLE outbox DROP COLUMN correction_of_operation_id',
+    );
+    await raw.execute('ALTER TABLE entries DROP COLUMN original_business_date');
+    await raw.execute(
+      'ALTER TABLE entries DROP COLUMN correction_of_operation_id',
     );
     await raw.execute('DROP INDEX outbox_schedule');
     await raw.execute('ALTER TABLE outbox DROP COLUMN next_attempt_ms');
@@ -364,7 +371,7 @@ void main() {
       path,
       options: OpenDatabaseOptions(singleInstance: false),
     );
-    expect(await check.getVersion(), 2);
+    expect(await check.getVersion(), LedgerStore.schemaVersion);
     await check.close();
   });
   test('Optional field defaults after an APK upgrade do not alter pending wire payloads', () async {
@@ -895,5 +902,96 @@ void main() {
       120,
     );
     expect(await store.listEntries(from: '2026-01-01'), isEmpty);
+  });
+  test('closed-period correction is linked, durable, unique and never retries original', () async {
+    final original = reference.invoice(date: '2027-08-31');
+    await store.saveEntry(original);
+    await store.fail(original.id, 'closed-period');
+    final correctionId = await store.saveClosedPeriodCorrection(
+      original.id,
+      date: '2027-09-01',
+      note: 'مراجعة تأخر الاتصال',
+    );
+    await expectLater(
+      store.saveClosedPeriodCorrection(
+        original.id,
+        date: '2027-09-02',
+        note: 'تكرار',
+      ),
+      throwsA(isA<LedgerException>()),
+    );
+    await store.close();
+    store = await open();
+    final queued = (await store.listOutbox()).singleWhere(
+      (e) => e.id == correctionId,
+    );
+    expect(queued.correctionOfOperationId, original.id);
+    expect(queued.payload['date'], '2027-09-01');
+    expect(queued.payload['totalMinor'], original.totalMinor);
+    expect(queued.toOperation()['correctionOfOperationId'], original.id);
+    await store.acknowledge(correctionId);
+    expect(
+      (await store.listOutbox()).singleWhere((e) => e.id == original.id).error,
+      'closed-period-corrected',
+    );
+    await expectLater(
+      store.retry(original.id),
+      throwsA(isA<LedgerException>()),
+    );
+    await expectLater(
+      store.saveClosedPeriodCorrection(
+        original.id,
+        date: '2027-09-02',
+        note: 'تكرار بعد القبول',
+      ),
+      throwsA(isA<LedgerException>()),
+    );
+  });
+
+  test('trusted correction provenance survives remote replay, backup and replacement store', () async {
+    final corrected = reference.invoice(
+      id: 'server-correction',
+      date: '2027-09-02',
+    );
+    final remote = {
+      ...corrected.toJson(),
+      'originalBusinessDate': '2027-08-31',
+      'correctionOfOperationId': 'original-offline-operation',
+    };
+    await store.applyRemote('entry', remote);
+    await store.applyRemote('entry', remote);
+    final saved = (await store.listEntries()).single;
+    expect(saved.originalBusinessDate, '2027-08-31');
+    expect(saved.correctionOfOperationId, 'original-offline-operation');
+    expect(saved.toJson().containsKey('originalBusinessDate'), false);
+    final backup = await store.exportBackup();
+    final replacement = await open(at: '${folder.path}/replacement.db');
+    try {
+      await replacement.restoreBackup(backup);
+      await replacement.restoreBackup(backup);
+      final restored = (await replacement.listEntries()).single;
+      expect(restored.originalBusinessDate, saved.originalBusinessDate);
+      expect(restored.correctionOfOperationId, saved.correctionOfOperationId);
+      expect(restored.totalMinor, saved.totalMinor);
+    } finally {
+      await replacement.close();
+    }
+    await expectLater(
+      store.applyRemote('entry', {
+        ...remote,
+        'originalBusinessDate': '2027-08-30',
+      }),
+      throwsA(isA<LedgerException>()),
+    );
+    expect(
+      (await store.listEntries()).single.originalBusinessDate,
+      '2027-08-31',
+    );
+    await expectLater(
+      store.saveEntry(
+        LedgerEntry.fromJson({...remote, 'id': 'forged-local-provenance'}),
+      ),
+      throwsA(isA<LedgerException>()),
+    );
   });
 }

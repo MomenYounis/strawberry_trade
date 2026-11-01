@@ -11,6 +11,8 @@ import '../security/device_security.dart';
 import 'employee_registration.dart';
 import 'gateway_endpoint.dart';
 import 'invitation_code.dart';
+import 'sync_protocol.dart';
+import 'archive_reader.dart';
 
 abstract interface class SyncGateway {
   Future<Map<String, dynamic>> bootstrap(
@@ -34,7 +36,8 @@ abstract interface class SyncGateway {
   );
 }
 
-class FirebaseGateway implements SyncGateway, EmployeeRegistrationAuth {
+class FirebaseGateway
+    implements SyncGateway, EmployeeRegistrationAuth, ArchiveGateway {
   FirebaseGateway(this.security);
   final DeviceSecurity security;
   static const emulator = bool.fromEnvironment(
@@ -454,6 +457,31 @@ class FirebaseGateway implements SyncGateway, EmployeeRegistrationAuth {
   }
 
   @override
+  Future<Map<String, dynamic>> listArchives(
+    String tenantId,
+    String deviceId, {
+    int? afterYear,
+  }) => _call('listArchives', {
+    ..._scope(tenantId, deviceId),
+    'limit': 20,
+    'afterYear': ?afterYear,
+  });
+
+  @override
+  Future<Map<String, dynamic>> readArchiveRecord(
+    String tenantId,
+    String deviceId, {
+    required int year,
+    required String recordId,
+    int nextChunk = 0,
+  }) => _call('readArchiveRecord', {
+    ..._scope(tenantId, deviceId),
+    'year': year,
+    'recordId': recordId,
+    'nextChunk': nextChunk,
+  });
+
+  @override
   Future<Map<String, dynamic>> send(
     String tenantId,
     String deviceId,
@@ -461,6 +489,7 @@ class FirebaseGateway implements SyncGateway, EmployeeRegistrationAuth {
   ) => _call('syncOperation', {
     ..._scope(tenantId, deviceId),
     'operation': operation,
+    'syncProtocolVersion': syncProtocolVersion,
   });
   @override
   Future<Map<String, dynamic>> pull(
@@ -470,6 +499,7 @@ class FirebaseGateway implements SyncGateway, EmployeeRegistrationAuth {
   ) => _call('pullChanges', {
     ..._scope(tenantId, deviceId),
     'afterSequence': afterSequence,
+    'syncProtocolVersion': syncProtocolVersion,
     'limit': 200,
   });
 }
@@ -501,6 +531,15 @@ String arabicError(Object error) {
     final reason = error.details is Map
         ? (error.details as Map)['reason']
         : null;
+    if (reason == 'archive-storage-unavailable') {
+      return 'خدمة الأرشيف الدائم غير مهيأة أو غير متاحة؛ لم يُستورد أو يُحذف أي سجل. راجع المسؤول.';
+    }
+    if (reason == 'resync-required' || reason == 'upgrade-required') {
+      return 'يلزم تحديث التطبيق واستعادة آمنة بإشراف المسؤول؛ لا تحذف التطبيق أو بياناته، فالعمليات المحلية محفوظة';
+    }
+    if (reason == 'closed-period') {
+      return 'تخص العملية فترة مغلقة؛ الدليل محفوظ ويحتاج مراجعة المدير وتسوية مرتبطة في الفترة المفتوحة';
+    }
     if (reason == 'employee-account-already-linked') {
       return 'هذا الموظف لديه حساب مرتبط بالفعل؛ يمكنك تفعيل أو إيقاف حسابه من سجل الموظف';
     }

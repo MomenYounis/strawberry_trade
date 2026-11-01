@@ -15,15 +15,19 @@ class OutboxItem {
     required this.attempts,
     required this.nextAttemptMs,
     required this.error,
+    this.correctionOfOperationId,
   });
   final String id, entity, status, error;
   final int attempts, nextAttemptMs;
+  final String? correctionOfOperationId;
   final Map<String, dynamic> payload;
   Map<String, dynamic> toOperation() => {
     'id': id,
     'entity': entity,
     'payload': payload,
     'expectedRevision': 0,
+    if (correctionOfOperationId != null)
+      'correctionOfOperationId': correctionOfOperationId,
   };
   factory OutboxItem.fromRow(Map<String, Object?> row) => OutboxItem(
     id: row['id']! as String,
@@ -35,6 +39,7 @@ class OutboxItem {
     attempts: row['attempts']! as int,
     nextAttemptMs: row['next_attempt_ms']! as int,
     error: row['error']! as String,
+    correctionOfOperationId: row['correction_of_operation_id'] as String?,
   );
 }
 
@@ -58,7 +63,7 @@ class LedgerStore {
     this.role,
     this.employeeId,
   );
-  static const schemaVersion = 2;
+  static const schemaVersion = 3;
   final Database _db;
   final String tenantId, userId, role;
   final String? employeeId;
@@ -198,6 +203,17 @@ class LedgerStore {
         'CREATE TABLE conflicts(id TEXT PRIMARY KEY, entity TEXT NOT NULL, local_payload TEXT NOT NULL, remote_payload TEXT NOT NULL, reason TEXT NOT NULL, created_ms INTEGER NOT NULL, resolution TEXT)',
       );
     }
+    if (oldVersion < 3 && newVersion >= 3) {
+      await db.execute(
+        'ALTER TABLE outbox ADD COLUMN correction_of_operation_id TEXT',
+      );
+      await db.execute(
+        'ALTER TABLE entries ADD COLUMN original_business_date TEXT',
+      );
+      await db.execute(
+        'ALTER TABLE entries ADD COLUMN correction_of_operation_id TEXT',
+      );
+    }
   }
 
   void _ready() {
@@ -236,6 +252,53 @@ class LedgerStore {
 
   static Map<String, dynamic> _payload(Map<String, Object?> row) =>
       Map<String, dynamic>.from(jsonDecode(row['payload']! as String) as Map);
+  static LedgerEntry _entryFromRow(Map<String, Object?> row) =>
+      LedgerEntry.fromJson({
+        ..._payload(row),
+        'originalBusinessDate': row['original_business_date'] ?? '',
+        'correctionOfOperationId': row['correction_of_operation_id'] ?? '',
+      });
+
+  static void _validateProvenance(LedgerEntry entry) {
+    if (entry.originalBusinessDate.isEmpty &&
+        entry.correctionOfOperationId.isEmpty) {
+      return;
+    }
+    safeId(entry.correctionOfOperationId);
+    if (!validDate(entry.originalBusinessDate) ||
+        entry.originalBusinessDate.compareTo(entry.date) >= 0) {
+      invalid('correction_provenance', 'تاريخ أصل التسوية أو رابطها غير صالح.');
+    }
+  }
+
+  Future<void> _confirmProvenance(Transaction tx, LedgerEntry entry) async {
+    _validateProvenance(entry);
+    if (entry.correctionOfOperationId.isEmpty) return;
+    final existing = (await tx.query(
+      'entries',
+      where: 'id=?',
+      whereArgs: [entry.id],
+    )).single;
+    final prior = _entryFromRow(existing);
+    if (prior.correctionOfOperationId.isNotEmpty &&
+        (prior.correctionOfOperationId != entry.correctionOfOperationId ||
+            prior.originalBusinessDate != entry.originalBusinessDate)) {
+      invalid(
+        'correction_provenance',
+        'تعارض في أصل التسوية؛ احتُفظ بالدليل المحلي.',
+      );
+    }
+    await tx.update(
+      'entries',
+      {
+        'original_business_date': entry.originalBusinessDate,
+        'correction_of_operation_id': entry.correctionOfOperationId,
+      },
+      where: 'id=?',
+      whereArgs: [entry.id],
+    );
+  }
+
   static Map<String, dynamic> _normalized(
     String table,
     Map<String, dynamic> payload,
@@ -275,7 +338,7 @@ class LedgerStore {
       (await db.query(
         'entries',
         orderBy: 'date ASC,id ASC',
-      )).map((r) => LedgerEntry.fromJson(_payload(r))).toList();
+      )).map(_entryFromRow).toList();
   Future<List<Party>> _parties(DatabaseExecutor db) async => (await db.query(
     'parties',
     orderBy: 'name ASC',
@@ -319,7 +382,7 @@ class LedgerStore {
       orderBy: limit == null ? 'date ASC,rowid ASC,id ASC' : 'date ASC,id ASC',
       limit: limit,
       offset: offset,
-    )).map((r) => LedgerEntry.fromJson(_payload(r))).toList();
+    )).map(_entryFromRow).toList();
   }
 
   Future<List<LedgerEntry>> listRecentEntries({int limit = 10}) async {
@@ -328,7 +391,7 @@ class LedgerStore {
       'entries',
       orderBy: 'rowid DESC',
       limit: limit,
-    )).map((r) => LedgerEntry.fromJson(_payload(r))).toList();
+    )).map(_entryFromRow).toList();
   }
 
   Future<List<Party>> listParties({String? kind, String search = ''}) async {
@@ -484,6 +547,7 @@ class LedgerStore {
     bool enqueue = true,
     String state = 'pending',
   }) async {
+    _validateProvenance(entry);
     await tx.insert('entries', {
       'id': entry.id,
       'kind': entry.kind,
@@ -491,6 +555,12 @@ class LedgerStore {
       'party_id': entry.partyId.isEmpty ? null : entry.partyId,
       'employee_id': entry.employeeId.isEmpty ? null : entry.employeeId,
       'original_id': entry.originalId.isEmpty ? null : entry.originalId,
+      'original_business_date': entry.originalBusinessDate.isEmpty
+          ? null
+          : entry.originalBusinessDate,
+      'correction_of_operation_id': entry.correctionOfOperationId.isEmpty
+          ? null
+          : entry.correctionOfOperationId,
       'payload': jsonEncode(entry.toJson()),
       'state': state,
     });
@@ -500,6 +570,10 @@ class LedgerStore {
   Future<void> saveEntry(LedgerEntry entry) async {
     _manager();
     _scope(entry.tenantId);
+    if (entry.originalBusinessDate.isNotEmpty ||
+        entry.correctionOfOperationId.isNotEmpty) {
+      invalid('correction_provenance', 'مصدر التسوية يثبته الخادم فقط.');
+    }
     if (entry.creatorUid != userId) {
       invalid('creator', 'لا يمكن تسجيل عملية باسم حساب آخر');
     }
@@ -518,6 +592,95 @@ class LedgerStore {
       await tx.delete('drafts', where: 'id=?', whereArgs: [entry.id]);
     });
     _notify();
+  }
+
+  /// Queue an explicit current-period correction, preserving original evidence.
+  /// The server determines the current Cairo year and atomically locks the source
+  /// operation; no local clock or transport acknowledgement authorizes posting.
+  Future<String> saveClosedPeriodCorrection(
+    String originalOperationId, {
+    required String date,
+    required String note,
+  }) async {
+    _manager();
+    safeId(originalOperationId);
+    if (!validDate(date) || note.trim().isEmpty || note.length > 1000) {
+      invalid(
+        'late_correction',
+        'حدد تاريخ القيد في الفترة المفتوحة وسبب التسوية.',
+      );
+    }
+    final id = newId();
+    await _transaction((tx) async {
+      final sources = await tx.query(
+        'outbox',
+        where: 'id=?',
+        whereArgs: [originalOperationId],
+      );
+      if (sources.length != 1) {
+        invalid('late_correction', 'دليل العملية الأصلية غير متاح محلياً.');
+      }
+      final source = OutboxItem.fromRow(sources.single);
+      if (source.status != 'blocked' ||
+          source.error != 'closed-period' ||
+          !{'entry', 'review'}.contains(source.entity)) {
+        invalid('late_correction', 'العملية ليست بحاجة إلى تسوية فترة مغلقة.');
+      }
+      final queued = await tx.query(
+        'outbox',
+        where: 'correction_of_operation_id=?',
+        whereArgs: [originalOperationId],
+      );
+      if (queued.isNotEmpty) {
+        invalid(
+          'late_correction_pending',
+          'توجد تسوية محفوظة لهذه العملية؛ استكمل مزامنتها.',
+        );
+      }
+      final original = source.entity == 'entry'
+          ? source.payload
+          : Map<String, dynamic>.from(source.payload['entry'] as Map);
+      if (source.entity == 'review' &&
+          source.payload['decision'] != 'approved') {
+        invalid('late_correction', 'قرار المراجعة غير صالح للتسوية.');
+      }
+      final corrected = LedgerEntry.fromJson({
+        ...original,
+        'id': id,
+        'date': date,
+        'note': note.trim(),
+        if (source.entity == 'entry') 'creatorUid': userId,
+      });
+      _scope(corrected.tenantId);
+      final all = await _entries(tx);
+      LedgerRules.validateEntry(
+        corrected,
+        all.where((e) => e.id != source.id).toList(),
+        await _parties(tx),
+        await _employees(tx),
+        await _terms(tx),
+      );
+      final payload = source.entity == 'entry'
+          ? corrected.toJson()
+          : <String, dynamic>{
+              ...source.payload,
+              'entry': corrected.toJson(),
+              'note': note.trim(),
+            };
+      if (source.entity == 'entry') {
+        await _insertEntry(tx, corrected, enqueue: false, state: 'pending');
+      }
+      await _enqueue(tx, id, source.entity, payload);
+      await tx.update(
+        'outbox',
+        {'correction_of_operation_id': originalOperationId},
+        where: 'id=?',
+        whereArgs: [id],
+      );
+      await _audit(tx, originalOperationId, 'late_correction_queued:$id');
+    });
+    _notify();
+    return id;
   }
 
   Future<void> saveSubmission(EmployeeSubmission submission) async {
@@ -781,6 +944,15 @@ class LedgerStore {
           whereArgs: [item.payload['submissionId']],
         );
       }
+      if (item.correctionOfOperationId case final String originalId) {
+        await tx.update(
+          'outbox',
+          {'error': 'closed-period-corrected', 'status': 'blocked'},
+          where: 'id=?',
+          whereArgs: [originalId],
+        );
+        await _audit(tx, originalId, 'late_correction_accepted:$id');
+      }
       await tx.delete('outbox', where: 'id=?', whereArgs: [id]);
       await _audit(tx, id, 'server_accepted');
     });
@@ -807,6 +979,9 @@ class LedgerStore {
                   'unauthenticated',
                   'license_expired',
                   'license-expired',
+                  'closed-period',
+                  'resync-required',
+                  'upgrade-required',
                 }.contains(code)
                 ? 'blocked'
                 : 'retry');
@@ -849,6 +1024,12 @@ class LedgerStore {
     await _transaction((tx) async {
       final rows = await tx.query('outbox', where: 'id=?', whereArgs: [id]);
       if (rows.isEmpty) return;
+      if ((rows.single['error'] as String).startsWith('closed-period')) {
+        invalid(
+          'closed-period',
+          'الفترة مغلقة؛ راجع الدليل وأنشئ تسوية مرتبطة في الفترة المفتوحة بدلاً من إعادة الإرسال.',
+        );
+      }
       if (rows.single['status'] == 'conflict') {
         invalid('resolve_conflict', 'راجع التعارض قبل إعادة الإرسال');
       }
@@ -1019,6 +1200,8 @@ class LedgerStore {
     _scope(strictString(payload, 'tenantId'));
     final id = strictString(payload, 'id');
     safeId(id);
+    final provenance = entity == 'entry' ? LedgerEntry.fromJson(payload) : null;
+    if (provenance != null) _validateProvenance(provenance);
     String? submissionState;
     String? submissionReviewJson;
     if (entity == 'submission') {
@@ -1150,6 +1333,7 @@ class LedgerStore {
       if (canonicalJson(_normalized(table, _payload(existing.single))) ==
           canonicalJson(payload)) {
         if (entity == 'entry') {
+          await _confirmProvenance(tx, provenance!);
           await tx.update(
             'entries',
             {'state': 'server_accepted'},
@@ -1166,10 +1350,7 @@ class LedgerStore {
                 }.contains(existing.single['state']))) {
           await tx.update(
             'submissions',
-            {
-              'state': submissionState,
-              if (submissionReviewJson != null) 'review': submissionReviewJson,
-            },
+            {'state': submissionState, 'review': ?submissionReviewJson},
             where: 'id=?',
             whereArgs: [id],
           );
@@ -1231,7 +1412,7 @@ class LedgerStore {
         });
         projection.terms.add(t);
       case 'entry':
-        final e = LedgerEntry.fromJson(payload);
+        final e = provenance!;
         LedgerRules.validateEntry(
           e,
           projection.entries,
@@ -1249,7 +1430,7 @@ class LedgerStore {
           'creator_uid': s.creatorUid,
           'payload': jsonEncode(s.toJson()),
           'state': submissionState ?? 'awaiting_approval',
-          if (submissionReviewJson != null) 'review': submissionReviewJson,
+          'review': ?submissionReviewJson,
         });
     }
     await _audit(tx, id, 'remote_$entity');
@@ -1397,7 +1578,15 @@ class LedgerStore {
         'parties': (await _parties(tx)).map((p) => p.toJson()).toList(),
         'employees': (await _employees(tx)).map((e) => e.toJson()).toList(),
         'salaryTerms': (await _terms(tx)).map((t) => t.toJson()).toList(),
-        'entries': await tx.query('entries', columns: ['payload', 'state']),
+        'entries': await tx.query(
+          'entries',
+          columns: [
+            'payload',
+            'state',
+            'original_business_date',
+            'correction_of_operation_id',
+          ],
+        ),
         'submissions': await tx.query(
           'submissions',
           columns: ['payload', 'state', 'review'],
@@ -1495,7 +1684,13 @@ class LedgerStore {
     }
 
     final entries = entryRows
-        .map((r) => LedgerEntry.fromJson(decodePayload(r)))
+        .map(
+          (r) => LedgerEntry.fromJson({
+            ...decodePayload(r),
+            'originalBusinessDate': r['original_business_date'] ?? '',
+            'correctionOfOperationId': r['correction_of_operation_id'] ?? '',
+          }),
+        )
         .toList();
     final submissions = submissionRows
         .map((r) => EmployeeSubmission.fromJson(decodePayload(r)))
@@ -1542,6 +1737,7 @@ class LedgerStore {
       if (!allIds.add(e.id)) {
         invalid('backup_duplicate', 'معرّفات مكررة في النسخة');
       }
+      _validateProvenance(e);
       LedgerRules.validateEntry(e, validated, parties, employees, terms);
       validated.add(e);
     }
@@ -1557,6 +1753,13 @@ class LedgerStore {
       final id = strictString(o, 'id');
       safeId(id);
       final entity = strictString(o, 'entity');
+      final correction = o['correction_of_operation_id'];
+      if (correction != null) {
+        if (correction is! String || !{'entry', 'review'}.contains(entity)) {
+          invalid('backup_queue', 'رابط التسوية غير صالح');
+        }
+        safeId(correction);
+      }
       final payload = decodePayload(o);
       if (!queueIds.add(id) ||
           !{'pending', 'retry', 'blocked', 'conflict'}.contains(o['status']) ||
@@ -1681,7 +1884,10 @@ class LedgerStore {
       }
       final combined = await _entries(tx);
       for (final e in validated) {
-        if (await _identicalOrAbsent(tx, 'entries', e.id, e.toJson())) continue;
+        if (await _identicalOrAbsent(tx, 'entries', e.id, e.toJson())) {
+          await _confirmProvenance(tx, e);
+          continue;
+        }
         LedgerRules.validateEntry(
           e,
           combined,
@@ -1714,7 +1920,9 @@ class LedgerStore {
                     jsonDecode(existing.single['payload']! as String),
                   ) !=
                   canonicalJson(jsonDecode(o['payload'] as String)) ||
-              existing.single['entity'] != o['entity']) {
+              existing.single['entity'] != o['entity'] ||
+              existing.single['correction_of_operation_id'] !=
+                  o['correction_of_operation_id']) {
             invalid('backup_conflict', 'طابور موجود بمحتوى مختلف');
           }
           continue;
@@ -1728,6 +1936,7 @@ class LedgerStore {
           'error': o['error'],
           'created_ms': o['created_ms'],
           'next_attempt_ms': 0,
+          'correction_of_operation_id': o['correction_of_operation_id'],
         });
       }
       for (final d in drafts) {

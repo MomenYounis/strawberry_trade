@@ -7,9 +7,14 @@ import 'package:share_plus/share_plus.dart';
 
 import '../domain/ledger.dart';
 
-String entryDescription(LedgerEntry e) => e.kind == 'balance_adjustment'
-    ? 'تسوية رصيد - ${e.adjustmentDirection == 'increase' ? 'زيادة المديونية' : 'تخفيض المديونية'}'
-    : kindLabels[e.kind] ?? 'عملية';
+String entryDescription(LedgerEntry e) {
+  final label = e.kind == 'balance_adjustment'
+      ? 'تسوية رصيد - ${e.adjustmentDirection == 'increase' ? 'زيادة المديونية' : 'تخفيض المديونية'}'
+      : kindLabels[e.kind] ?? 'عملية';
+  return e.originalBusinessDate.isEmpty
+      ? label
+      : '$label · تسوية فترة مغلقة\nتاريخ العمل الأصلي: ${e.originalBusinessDate}\nالعملية الأصلية: ${e.correctionOfOperationId}';
+}
 
 class ArabicExports {
   static Future<Uint8List> statement({
@@ -19,6 +24,7 @@ class ArabicExports {
     Party? party,
     String? from,
     String? to,
+    bool readOnlyArchive = false,
   }) async {
     final regular = await rootBundle.load(
       'assets/fonts/NotoNaskhArabic-Regular.ttf',
@@ -35,6 +41,7 @@ class ArabicExports {
       party: party,
       from: from,
       to: to,
+      readOnlyArchive: readOnlyArchive,
     );
   }
 
@@ -48,6 +55,7 @@ class ArabicExports {
     Party? party,
     String? from,
     String? to,
+    bool readOnlyArchive = false,
   }) async {
     final font = pw.Font.ttf(regular), fontBold = pw.Font.ttf(bold);
     final doc = pw.Document(title: title, author: business);
@@ -160,7 +168,9 @@ class ArabicExports {
               style: const pw.TextStyle(fontSize: 9),
             ),
             pw.Text(
-              'نسخة من السجل المحلي - قد توجد عمليات لم يقبلها الخادم بعد',
+              readOnlyArchive
+                  ? 'نسخة مؤرشفة للقراءة فقط - لا تُضاف إلى الأرصدة النشطة'
+                  : 'نسخة من السجل المحلي - قد توجد عمليات لم يقبلها الخادم بعد',
               style: const pw.TextStyle(fontSize: 8),
             ),
           ],
@@ -239,6 +249,8 @@ class ArabicExports {
         'ترتيب تحديث الشحنة',
         'معرف المنشئ',
         'ملاحظات',
+        'تاريخ العمل الأصلي للتسوية',
+        'معرف العملية الأصلية للتسوية',
       ],
       ...entries.map(
         (e) => [
@@ -273,6 +285,8 @@ class ArabicExports {
           e.shipmentOrder == 0 ? '' : e.shipmentOrder.toString(),
           e.creatorUid,
           e.note,
+          e.originalBusinessDate,
+          e.correctionOfOperationId,
         ],
       ),
     ];

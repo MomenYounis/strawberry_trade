@@ -16,6 +16,7 @@ import '../services/invitation_code.dart';
 import 'enrollment.dart';
 import 'shipments.dart';
 import 'reports_extra.dart';
+import 'archive_screen.dart';
 
 const grades = [
   'فراولة طازة (سوق محلي)',
@@ -37,7 +38,7 @@ String stateLabel(String? value) => switch (value) {
   'rejected' => 'مرفوض',
   'review_pending' => 'قرار اعتماد مبدئي',
   'conflict' => 'تعارض يحتاج مراجعة',
-  'blocked' => 'متوقف لحين تجديد الصلاحية',
+  'blocked' => 'متوقف ويحتاج مراجعة',
   'retry' => 'محفوظ محلياً - إعادة محاولة',
   _ => 'محفوظ محلياً - بانتظار الإرسال',
 };
@@ -792,8 +793,7 @@ class HomeScreen extends StatelessWidget {
               ),
               subtitle: const Text('اضغط للمراجعة والاعتماد فوراً'),
               trailing: const Icon(Icons.chevron_left),
-              onTap: () =>
-                  openPage('مراجعة الطلبات', ReviewScreen(app: app)),
+              onTap: () => openPage('مراجعة الطلبات', ReviewScreen(app: app)),
             ),
           ),
         ],
@@ -1282,11 +1282,10 @@ class _EntryFormState extends State<EntryForm> with WidgetsBindingObserver {
         'supplier_payment',
         'balance_adjustment',
       }.contains(kind);
-  LedgerEntry? get original =>
-      originalId == null || originalId!.isEmpty
-          ? null
-          : (app.entries.where((e) => e.id == originalId).firstOrNull ??
-                (widget.original?.id == originalId ? widget.original : null));
+  LedgerEntry? get original => originalId == null || originalId!.isEmpty
+      ? null
+      : (app.entries.where((e) => e.id == originalId).firstOrNull ??
+            (widget.original?.id == originalId ? widget.original : null));
   Party? get party => app.parties.where((p) => p.id == partyId).firstOrNull;
   @override
   void initState() {
@@ -1816,7 +1815,14 @@ class _EntryFormState extends State<EntryForm> with WidgetsBindingObserver {
                     spacing: 8,
                     runSpacing: 6,
                     children: [
-                      for (final q in const ['10', '25', '50', '100', '250', '500'])
+                      for (final q in const [
+                        '10',
+                        '25',
+                        '50',
+                        '100',
+                        '250',
+                        '500',
+                      ])
                         ActionChip(
                           label: Text('$q $unit'),
                           onPressed: () => qty.text = q,
@@ -2238,7 +2244,9 @@ class _AccountsScreenState extends State<AccountsScreen> {
               children: [
                 ListTile(
                   minVerticalPadding: 14,
-                  leading: const CircleAvatar(child: Icon(Icons.person_outline)),
+                  leading: const CircleAvatar(
+                    child: Icon(Icons.person_outline),
+                  ),
                   title: Text(p.name),
                   subtitle: Text(
                     p.phone.isEmpty ? 'كشف الحساب والعمليات' : p.phone,
@@ -2669,6 +2677,13 @@ class MoreScreen extends StatelessWidget {
             ),
             if (app.manager) ...[
               ListTile(
+                leading: const Icon(Icons.archive_outlined),
+                title: const Text('الأرشيف السنوي للقراءة فقط'),
+                onTap: () =>
+                    open(context, 'الأرشيف السنوي', ArchiveScreen(app: app)),
+              ),
+
+              ListTile(
                 minVerticalPadding: 14,
                 leading: const Icon(Icons.fact_check_outlined),
                 title: const Text('مراجعة طلبات الموظفين'),
@@ -2756,17 +2771,34 @@ class SyncScreen extends ConsumerWidget {
           (p) => Card(
             child: ListTile(
               isThreeLine: true,
-              title: Text(stateLabel(p['state'] as String?)),
+              title: Text(
+                p['error'] == 'closed-period'
+                    ? 'فترة مغلقة: يحتاج مراجعة المدير'
+                    : stateLabel(p['state'] as String?),
+              ),
               subtitle: Text(
                 '${p['id']}\nالمحاولات: ${p['attempts'] ?? 0}${(p['error'] as String? ?? '').isEmpty ? '' : ' · ${syncErrorArabic(p['error'] as String? ?? '')}'}',
               ),
-              trailing: IconButton(
-                tooltip: 'إعادة المحاولة',
-                onPressed: p['state'] == 'conflict'
-                    ? null
-                    : () => guard(context, () => app.retry(p['id'] as String)),
-                icon: const Icon(Icons.refresh),
-              ),
+              trailing: p['error'] == 'closed-period' && app.manager
+                  ? IconButton(
+                      tooltip: 'مراجعة وتسوية مرتبطة',
+                      icon: const Icon(Icons.rule),
+                      onPressed: () => _lateCorrection(context, p),
+                    )
+                  : IconButton(
+                      tooltip: 'إعادة المحاولة',
+                      onPressed:
+                          p['state'] == 'conflict' ||
+                              (p['error'] as String? ?? '').startsWith(
+                                'closed-period',
+                              )
+                          ? null
+                          : () => guard(
+                              context,
+                              () => app.retry(p['id'] as String),
+                            ),
+                      icon: const Icon(Icons.refresh),
+                    ),
             ),
           ),
         ),
@@ -2797,6 +2829,76 @@ class SyncScreen extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  Future<void> _lateCorrection(
+    BuildContext context,
+    Map<String, dynamic> operation,
+  ) async {
+    final date = TextEditingController(text: today());
+    final note = TextEditingController();
+    try {
+      await completedDialog<void>(
+        context: context,
+        builder: (dialog) => AlertDialog(
+          title: const Text('تسوية عملية فترة مغلقة'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'لم تُقبل العملية مالياً. تحفظ التسوية المبالغ والكمية والأصل وتضيف قيداً مرتبطاً بتاريخ في السنة المفتوحة. يتحقق الخادم من السنة بتوقيت القاهرة. لا يغيّر هذا الإجراء رصيد الإغلاق المنشور.',
+                ),
+                const SizedBox(height: 12),
+                SelectableText(
+                  describeConflict(
+                    jsonEncode(
+                      operation['entity'] == 'review'
+                          ? (operation['payload'] as Map)['entry']
+                          : operation['payload'],
+                    ),
+                  ),
+                ),
+                TextField(
+                  controller: date,
+                  textDirection: TextDirection.ltr,
+                  decoration: const InputDecoration(
+                    labelText: 'تاريخ القيد الجديد YYYY-MM-DD',
+                  ),
+                ),
+                TextField(
+                  controller: note,
+                  maxLength: 1000,
+                  decoration: const InputDecoration(
+                    labelText: 'سبب التسوية المطلوبة',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialog),
+              child: const Text('إلغاء'),
+            ),
+            FilledButton(
+              onPressed: () => guard(dialog, () async {
+                await app.correctClosedPeriod(
+                  operation['id'] as String,
+                  date: date.text.trim(),
+                  note: note.text,
+                );
+                if (dialog.mounted) Navigator.pop(dialog);
+              }),
+              child: const Text('حفظ تسوية مرتبطة للمراجعة والإرسال'),
+            ),
+          ],
+        ),
+      );
+    } finally {
+      date.dispose();
+      note.dispose();
+    }
   }
 
   Future<void> _conflict(
@@ -2883,8 +2985,7 @@ class SubmissionTile extends StatelessWidget {
     final actorPrefix = app != null && app!.manager
         ? 'الموظف: ${app!.submissionEmployeeName(value)} · '
         : '';
-    final detailLine =
-        value['qtyMilli'] is int && value['qtyMilli'] != 0
+    final detailLine = value['qtyMilli'] is int && value['qtyMilli'] != 0
         ? '${formatQuantity(value['qtyMilli'] as int)} ${value['unit']} · ${value['grade']}'
         : (kind == 'expense_business' &&
               value['amountMinor'] is int &&
@@ -3243,7 +3344,10 @@ class EmployeesScreen extends ConsumerWidget {
                     children: [
                       TextButton.icon(
                         onPressed: app.allowed ? () => _term(context, e) : null,
-                        icon: const Icon(Icons.edit_calendar_outlined, size: 18),
+                        icon: const Icon(
+                          Icons.edit_calendar_outlined,
+                          size: 18,
+                        ),
                         label: const Text('إضافة راتب بتاريخ سريان'),
                       ),
                       TextButton.icon(
@@ -3932,6 +4036,11 @@ class AccountLockedScreen extends StatelessWidget {
 }
 
 String syncErrorArabic(String code) => switch (code) {
+  'closed-period' => 'الدليل محفوظ؛ يلزم قرار المدير وقيد مرتبط في الفترة المفتوحة، دون إعادة تأريخ الأصل',
+  'closed-period-corrected' =>
+    'قُبلت تسوية مرتبطة؛ الأصل محفوظ كدليل ولا يضاف للأرصدة',
+  'resync-required' ||
+  'upgrade-required' => 'يلزم تحديث واستعادة آمنة؛ لا تحذف البيانات المحلية',
   'permission-denied' => 'الصلاحية الحالية لا تسمح بالإرسال',
   'unauthenticated' => 'يلزم تجديد تسجيل الدخول عند الاتصال',
   'license-expired' ||

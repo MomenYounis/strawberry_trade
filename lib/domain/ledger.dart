@@ -55,7 +55,9 @@ bool validMonth(String value) => validDate('$value-01');
 int strictInt(Map<String, dynamic> json, String key, [int fallback = 0]) {
   final value = json[key];
   if (value == null) return fallback;
-  if (value is! int) invalid('invalid_number', 'قيمة رقمية غير صالحة');
+  if (value is! int || value < -9007199254740991 || value > 9007199254740991) {
+    invalid('invalid_number', 'قيمة رقمية غير صالحة أو تتجاوز الدقة الآمنة');
+  }
   return value;
 }
 
@@ -118,7 +120,8 @@ int invoiceTotal(int qtyMilli, int priceMinor) {
       qtyMilli * priceMinor > 9007199254740991) {
     invalid('invalid_amount', 'الكمية والسعر يجب أن يكونا موجبين وضمن الحدود');
   }
-  return (qtyMilli * priceMinor + 500) ~/ 1000;
+  final product = qtyMilli * priceMinor;
+  return product ~/ 1000 + (product % 1000 >= 500 ? 1 : 0);
 }
 
 const entryKinds = <String>{
@@ -171,7 +174,8 @@ class Party {
         name.length > 160 ||
         phone.length > 40 ||
         !{'merchant', 'supplier'}.contains(kind) ||
-        openingMinor.abs() > 1000000000000 ||
+        openingMinor < -1000000000000 ||
+        openingMinor > 1000000000000 ||
         revision != 1) {
       invalid('invalid_party', 'بيانات العميل أو المورد غير صالحة');
     }
@@ -316,6 +320,8 @@ class LedgerEntry {
     this.shipmentStatus = '',
     this.adjustmentDirection = '',
     this.shipmentOrder = 0,
+    this.originalBusinessDate = '',
+    this.correctionOfOperationId = '',
     String? category,
   }) : category =
            category ??
@@ -339,6 +345,9 @@ class LedgerEntry {
       shipmentRef,
       shipmentStatus,
       category;
+  // Trusted provenance is stored separately and deliberately omitted from
+  // toJson(), which is the immutable client operation payload.
+  final String originalBusinessDate, correctionOfOperationId;
   final String adjustmentDirection;
   final int qtyMilli,
       priceMinor,
@@ -399,6 +408,8 @@ class LedgerEntry {
     category: j['category'] == null ? null : strictString(j, 'category'),
     adjustmentDirection: strictString(j, 'adjustmentDirection'),
     shipmentOrder: strictInt(j, 'shipmentOrder'),
+    originalBusinessDate: strictString(j, 'originalBusinessDate'),
+    correctionOfOperationId: strictString(j, 'correctionOfOperationId'),
   );
 }
 

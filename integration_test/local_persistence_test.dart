@@ -382,6 +382,15 @@ void main() {
           singleInstance: false,
         );
         try {
+          await raw.execute(
+            'ALTER TABLE outbox DROP COLUMN correction_of_operation_id',
+          );
+          await raw.execute(
+            'ALTER TABLE entries DROP COLUMN original_business_date',
+          );
+          await raw.execute(
+            'ALTER TABLE entries DROP COLUMN correction_of_operation_id',
+          );
           await raw.execute('DROP INDEX outbox_schedule');
           await raw.execute('ALTER TABLE outbox DROP COLUMN next_attempt_ms');
           await raw.execute('DROP TABLE conflicts');

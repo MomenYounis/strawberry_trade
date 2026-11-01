@@ -48,6 +48,7 @@ class ControlledGateway implements SyncGateway {
   ControlledGateway(this.package);
   final Future<String> Function() package;
   Future<Map<String, dynamic>> Function(Map<String, dynamic>)? onSend;
+  Future<Map<String, dynamic>> Function(int)? onPull;
   final sent = <Map<String, dynamic>>[];
   int bootstrapCalls = 0, pullCalls = 0, activations = 0;
   @override
@@ -92,6 +93,7 @@ class ControlledGateway implements SyncGateway {
     int afterSequence,
   ) async {
     pullCalls++;
+    if (onPull != null) return onPull!(afterSequence);
     return {
       'changes': <dynamic>[],
       'lastSequence': afterSequence,
@@ -526,4 +528,109 @@ void main() {
       await retained.close();
     }
   });
+  test('closed-period staging is retained across reopen and excluded from financial reports', () async {
+    final entry = expense('closed-old-expense');
+    await app.store!.saveEntry(entry);
+    gateway.onSend = (_) async => {
+      'id': entry.id,
+      'status': 'needs_review',
+      'reason': 'closed-period',
+    };
+    await app.synchronize();
+    expect((await app.store!.listOutbox()).single.status, 'blocked');
+    expect((await app.store!.listOutbox()).single.payload, entry.toJson());
+    expect(app.entries, isEmpty);
+    expect(app.recentEntries.single.id, entry.id);
+    expect(app.syncMessage, contains('لم تُقبل مالياً'));
+    await app.store!.close();
+    app.store = await open('t1', 'u1');
+    await app.refresh();
+    await app.synchronize();
+    expect(app.entries, isEmpty);
+    expect(gateway.sent.length, 1);
+    await expectLater(
+      app.store!.retry(entry.id),
+      throwsA(isA<LedgerException>()),
+    );
+  });
+
+  test('held historical salary evidence stays durable without changing active obligations', () async {
+    await app.store!.applyRemote(
+      'employee',
+      const Employee(id: 'staff', tenantId: 't1', name: 'Synthetic').toJson(),
+    );
+    const term = SalaryTerm(
+      id: 'held-term',
+      tenantId: 't1',
+      employeeId: 'staff',
+      effectiveMonth: '2026-08',
+      monthlyMinor: 100000,
+    );
+    await app.store!.saveSalaryTerm(term);
+    gateway.onSend = (_) async => {
+      'id': term.id,
+      'status': 'needs_review',
+      'reason': 'closed-period',
+    };
+    await app.synchronize();
+    expect(app.terms, isEmpty);
+    expect((await app.store!.listSalaryTerms()).single.toJson(), term.toJson());
+    expect((await app.store!.listOutbox()).single.status, 'blocked');
+    await app.synchronize();
+    expect(gateway.sent.length, 1);
+  });
+
+  test(
+    'malformed and history-floor pages preserve cursor and unsent work',
+    () async {
+      await app.store!.setPreference('cursor', 20);
+      final entry = expense('retained-outbox');
+      await app.store!.saveEntry(entry);
+      await app.store!.fail(entry.id, 'permission-denied');
+      for (final response in [
+        {'changes': <dynamic>[], 'lastSequence': 19, 'hasMore': false},
+        {
+          'changes': <dynamic>[],
+          'lastSequence': 20,
+          'hasMore': false,
+          'historyFloor': 21,
+        },
+        {'status': 'resync_required'},
+      ]) {
+        gateway.onPull = (_) async => response;
+        await app.synchronize();
+        expect(await app.store!.preference('cursor'), 20);
+        expect(await app.store!.preference('lastSyncMs'), isNull);
+        expect((await app.store!.listOutbox()).single.id, entry.id);
+        expect(app.syncMessage, isNot('اكتملت المزامنة مع الخادم'));
+      }
+    },
+  );
+
+  test(
+    'bounded paging does not label unfinished history as synchronized',
+    () async {
+      gateway.onPull = (cursor) async => {
+        'changes': [
+          {
+            'sequence': cursor + 1,
+            'entity': 'party',
+            'payload': Party(
+              id: 'paged-${cursor + 1}',
+              tenantId: 't1',
+              name: 'طرف مرجعي',
+              kind: 'merchant',
+            ).toJson(),
+          },
+        ],
+        'lastSequence': cursor + 1,
+        'hasMore': true,
+      };
+      await app.synchronize();
+      expect(gateway.pullCalls, 200);
+      expect(await app.store!.preference('cursor'), 200);
+      expect(await app.store!.preference('lastSyncMs'), isNull);
+      expect(app.syncMessage, contains('توجد سجلات أخرى'));
+    },
+  );
 }

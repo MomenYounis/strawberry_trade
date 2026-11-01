@@ -18,6 +18,7 @@ import '../security/licensing.dart';
 import '../security/license_sync.dart';
 import '../services/employee_registration.dart';
 import '../services/gateway.dart';
+import '../services/sync_protocol.dart';
 import '../services/invitation_code.dart';
 
 final appProvider = ChangeNotifierProvider<AppController>((ref) {
@@ -371,7 +372,7 @@ class AppController extends ChangeNotifier {
       db.preference('lastSyncMs'),
     ]);
     if (epoch != _generation || !hasDataAccess) return;
-    entries = List<LedgerEntry>.from(data[0] as List);
+    final storedEntries = List<LedgerEntry>.from(data[0] as List);
     parties = List<Party>.from(data[1] as List);
     employees = List<Employee>.from(data[2] as List);
     terms = List<SalaryTerm>.from(data[3] as List);
@@ -398,7 +399,24 @@ class AppController extends ChangeNotifier {
     lastSync = data[6] is int
         ? DateTime.fromMillisecondsSinceEpoch(data[6] as int).toIso8601String()
         : null;
-    recentEntries = entries.reversed.toList();
+    final excluded = <String>{
+      for (final p in pending)
+        if ((p['error'] as String? ?? '').startsWith('closed-period') ||
+            p['correctionOfOperationId'] != null)
+          p['id'] as String,
+    };
+    var changed = true;
+    while (changed) {
+      changed = false;
+      for (final entry in storedEntries) {
+        if (excluded.contains(entry.originalId) && excluded.add(entry.id)) {
+          changed = true;
+        }
+      }
+    }
+    entries = storedEntries.where((e) => !excluded.contains(e.id)).toList();
+    terms = terms.where((term) => !excluded.contains(term.id)).toList();
+    recentEntries = storedEntries.reversed.toList();
     notifyListeners();
   }
 
@@ -456,6 +474,17 @@ class AppController extends ChangeNotifier {
     } catch (_) {
       syncMessage = 'حُفظت العملية محلياً؛ تعذر تحديث العرض مؤقتاً';
     }
+    unawaited(synchronize());
+  }
+
+  Future<void> correctClosedPeriod(
+    String id, {
+    required String date,
+    required String note,
+  }) async {
+    await requireAllowed();
+    await store!.saveClosedPeriodCorrection(id, date: date, note: note);
+    await refresh();
     unawaited(synchronize());
   }
 
@@ -618,6 +647,8 @@ class AppController extends ChangeNotifier {
             'entity': item['entity'],
             'payload': item['payload'],
             'expectedRevision': item['expectedRevision'] ?? 0,
+            if (item['correctionOfOperationId'] != null)
+              'correctionOfOperationId': item['correctionOfOperationId'],
           });
           if (epoch != _generation) return;
           final expectedStatus = item['entity'] == 'submission'
@@ -625,13 +656,22 @@ class AppController extends ChangeNotifier {
               : 'accepted';
           if (response['id'] != item['id'] ||
               (response['status'] != 'conflict' &&
+                  response['status'] != 'needs_review' &&
                   response['status'] != expectedStatus)) {
             throw const LedgerException(
               'sync_response',
               'تعذر تأكيد قبول العملية؛ حُفظت لإعادة المحاولة دون تكرار.',
             );
           }
-          if (response['status'] == 'conflict') {
+          if (response['status'] == 'needs_review') {
+            if (response['reason'] != 'closed-period') {
+              throw const LedgerException(
+                'sync_response',
+                'سبب مراجعة العملية غير صالح؛ الدليل محفوظ.',
+              );
+            }
+            await db.fail(item['id'] as String, 'closed-period');
+          } else if (response['status'] == 'conflict') {
             await db.fail(
               item['id'] as String,
               response['reason'] as String? ?? 'server_conflict',
@@ -662,6 +702,7 @@ class AppController extends ChangeNotifier {
       }
       var cursor = (await db.preference('cursor') as int?) ?? 0;
       var pages = 0;
+      var moreRemaining = false;
       do {
         final response = await gateway.pull(
           tenantId,
@@ -669,17 +710,12 @@ class AppController extends ChangeNotifier {
           cursor,
         );
         if (epoch != _generation) return;
+        final page = SyncPage.parse(response, cursor);
         _remoteApplyEpoch = epoch;
         try {
-          await db.applyRemoteBatch([
-            for (final change in (response['changes'] as List).cast<Map>())
-              {
-                'entity': change['entity'],
-                'payload': Map<String, dynamic>.from(change['payload'] as Map),
-              },
-          ]);
+          await db.applyRemoteBatch(page.changes);
           if (epoch != _generation) return;
-          cursor = response['lastSequence'] as int;
+          cursor = page.lastSequence;
           await db.setPreference('cursor', cursor);
         } finally {
           if (_remoteApplyEpoch == epoch) _remoteApplyEpoch = null;
@@ -688,13 +724,24 @@ class AppController extends ChangeNotifier {
         // Show each committed page once instead of materializing the entire
         // ledger again for every remote row during multi-season initial sync.
         await refresh();
-        if (response['hasMore'] != true) break;
+        moreRemaining = page.hasMore;
+        if (!moreRemaining) break;
       } while (++pages < 200);
+      if (moreRemaining) {
+        syncMessage =
+            'حُفظ تقدم المزامنة؛ توجد سجلات أخرى. اضغط المزامنة لاستكمالها.';
+        return;
+      }
       await db.setPreference(
         'lastSyncMs',
         DateTime.now().millisecondsSinceEpoch,
       );
-      syncMessage = 'اكتملت المزامنة مع الخادم';
+      final unresolved = (await db.listOutbox()).any(
+        (item) => item.error == 'closed-period',
+      );
+      syncMessage = unresolved
+          ? 'اكتمل تنزيل السجل؛ توجد عمليات لفترة مغلقة تحتاج مراجعة المدير ولم تُقبل مالياً.'
+          : 'اكتملت المزامنة مع الخادم';
       error = null;
     } catch (e) {
       if (epoch == _generation &&

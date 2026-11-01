@@ -105,6 +105,34 @@ void validate(LedgerEntry e, List<LedgerEntry> existing) =>
 
 void main() {
   test(
+    'signed minimum and unsafe JSON integers cannot bypass amount limits',
+    () {
+      const invalidParty = Party(
+        id: 'bad',
+        tenantId: 't1',
+        name: 'bad',
+        kind: 'merchant',
+        openingMinor: -9223372036854775808,
+      );
+      expect(invalidParty.validate, throwsA(isA<LedgerException>()));
+      expect(
+        () => Party.fromJson({
+          ...merchant.toJson(),
+          'openingMinor': 9007199254740992,
+        }),
+        throwsA(isA<LedgerException>()),
+      );
+      expect(
+        () => Party.fromJson({
+          ...merchant.toJson(),
+          'openingMinor': -9007199254740992,
+        }),
+        throwsA(isA<LedgerException>()),
+      );
+    },
+  );
+
+  test(
     'Documented balance adjustments change debt but never create cash movement',
     () {
       const up = LedgerEntry(
