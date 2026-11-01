@@ -58,3 +58,32 @@ test('exact expiry stops manager and staff; renewal resumes same operation IDs; 
 test('employee disabling separate; pagination retains every increment without duplication',async()=>{await gateway.setMemberActive(req(a,{uid:'employee_a',active:false}));await assert.rejects(gateway.pullChanges(req(e,{afterSequence:0})),/permission-denied|reauthentication-required/);let cursor=0,seen=[];for(let i=0;i<30;i++){const r=await gateway.pullChanges(req(a,{afterSequence:cursor,limit:2}));seen.push(...r.changes.map(x=>x.sequence));cursor=r.lastSequence;if(!r.hasMore)break;}assert.equal(new Set(seen).size,seen.length);assert.ok(seen.length>5);});
 test('revoked member receives signed disabled certificate while data remains denied',async()=>{const disabled=await session('employee_a','tenant_a',de);const payload=JSON.parse(Buffer.from(disabled.bootstrap.licensePackage.membership.payload,'base64url').toString());assert.equal(payload.enabled,false);await assert.rejects(gateway.pullChanges(req(disabled,{afterSequence:0})),/permission-denied/);});
 test('actual Cloud Functions emulator callable authenticates and completes device proof',async()=>{const base='http://127.0.0.1:'+functionsPort+'/'+projectId+'/europe-west1/bootstrap';let r=await fetch(base,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({data:{tenantId:'tenant_a',deviceId:da.deviceId}})});assert.equal(r.status,401);const custom=await auth.createCustomToken('manager_a'),tr=await fetch('http://'+process.env.FIREBASE_AUTH_EMULATOR_HOST+'/identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=demo',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token:custom,returnSecureToken:true})}),token=(await tr.json()).idToken;assert.ok(token);const call=async data=>{const rr=await fetch(base,{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+token},body:JSON.stringify({data})});const json=await rr.json();assert.equal(rr.status,200,JSON.stringify(json));return json.result;};const c=await call({tenantId:'tenant_a',deviceId:da.deviceId});const result=await call({tenantId:'tenant_a',deviceId:da.deviceId,challengeId:c.challengeId,signature:sign('sha256',Buffer.from(c.challenge),da.privateKey).toString('base64url')});assert.ok(result.licensePackage.entitlement.signature);});
+
+test('closed checkpoint keeps late evidence, concurrent new-year trade, duplicate receipts and explicit correction in real Firestore',async()=>{
+ time=Date.UTC(2027,8,3,12);a=await session('manager_a','tenant_a',da);
+ const root=db.doc('tenants/tenant_a'),before=(await root.get()).data().sequence;
+ await root.set({archivePolicy:{closedThroughDate:'2027-09-01',closeVersion:1,checkpointSequence:before}},{merge:true});
+ const late=sale('closed_old',{date:'2027-08-31'}),current=sale('open_current',{date:'2027-09-03'});
+ const [staged,accepted]=await Promise.all([send(a,'closed_old','entry',late),send(a,'open_current','entry',current)]);
+ assert.equal(staged.status,'needs_review');assert.equal(accepted.status,'accepted');
+ assert.equal((await root.collection('entries').doc('closed_old').get()).exists,false);
+ assert.deepEqual((await root.collection('lateOperations').doc('closed_old').get()).data().operation.payload,late);
+ assert.deepEqual(await send(a,'closed_old','entry',late),staged);
+ const correction={id:'closed_fixed',entity:'entry',expectedRevision:0,payload:{...late,id:'closed_fixed',date:'2027-09-03'},correctionOfOperationId:'closed_old'};
+ const corrected=await gateway.syncOperation(req(a,{operation:correction,syncProtocolVersion:1}));assert.equal(corrected.status,'accepted');
+ assert.deepEqual(await gateway.syncOperation(req(a,{operation:correction,syncProtocolVersion:1})),corrected);
+ const saved=(await root.collection('entries').doc('closed_fixed').get()).data();assert.equal(saved.originalBusinessDate,'2027-08-31');assert.equal(saved.correctionOfOperationId,'closed_old');
+ assert.equal((await root.get()).data().sequence,before+2);
+ const lateTerm={id:'closed_term',entity:'salary_term',expectedRevision:0,payload:{id:'closed_term',employeeId:'staff_a',effectiveMonth:'2027-08',monthlyMinor:100000,revision:1}};
+ assert.equal((await gateway.syncOperation(req(a,{operation:lateTerm}))).status,'needs_review');
+ assert.equal((await root.collection('salaryTerms').doc('closed_term').get()).exists,false);
+ assert.equal((await root.collection('salaryLocks').doc('staff_a_2027-08').get()).exists,false);
+ assert.equal((await root.get()).data().sequence,before+2);
+ const history=(await root.collection('changes').where('sequence','<=',before).orderBy('sequence').get()).docs;
+ assert.equal(history.some(row=>['closed_old','closed_fixed','open_current'].includes(row.data().id)),false);
+ await root.set({historyFloor:before},{merge:true});
+ await assert.rejects(gateway.pullChanges(req(a,{afterSequence:0,syncProtocolVersion:1})),/resync-required/);
+ // No records were pruned: exercise only the explicit protocol guard, then
+ // return the synthetic tenant to its real complete-history floor.
+ await root.set({historyFloor:0},{merge:true});
+});

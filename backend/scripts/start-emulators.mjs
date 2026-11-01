@@ -1,7 +1,10 @@
 import {generateKeyPairSync,randomBytes} from 'node:crypto';import {writeFile,unlink} from 'node:fs/promises';import {spawn} from 'node:child_process';
 import {startSeedHelper} from './seed-helper.mjs';
+import {assertRunnerEnvironment,assertPortsAvailable} from './emulator-test-runner.mjs';
+assertRunnerEnvironment(process.env);
+await assertPortsAvailable([9099,8080,5001,4400,4500,9150,8008]);
 const {privateKey,publicKey}=generateKeyPairSync('ed25519'),pem=privateKey.export({type:'pkcs8',format:'pem'}),publicPem=publicKey.export({type:'spki',format:'pem'}),kid='emulator-session-only',publicKeys={[kid]:publicKey.export({format:'jwk'}).x};
-const secret='.secret.local';await writeFile(secret,'LICENSE_PRIVATE_KEY_PEM='+JSON.stringify(pem)+'\n',{mode:0o600});
+const secret='.secret.local';await writeFile(secret,'LICENSE_PRIVATE_KEY_PEM='+JSON.stringify(pem)+'\n',{mode:0o600,flag:'wx'});
 // A restarted in-memory server is a new synthetic tenant even on the same phone.
 // Existing on-device ledgers/queues are retained in their previous tenant scope.
 Object.assign(process.env,{GCLOUD_PROJECT:'demo-strawberry-flutter',FIRESTORE_EMULATOR_HOST:'127.0.0.1:8080',FIREBASE_AUTH_EMULATOR_HOST:'127.0.0.1:9099',TEST_FIXTURE_NAMESPACE:randomBytes(12).toString('hex'),LICENSE_PRIVATE_KEY_PEM:pem,LICENSE_PUBLIC_KEY_PEM:publicPem,LICENSE_KEY_ID:kid});

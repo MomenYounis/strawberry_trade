@@ -9,8 +9,8 @@ import {canonical,hash} from '../src/validation.mjs';
 // An injected MVCC store models Firestore's read-version conflict/retry
 // behavior. It lets deletion happen exactly between authority and transaction,
 // or after transactional reads, without network access or timing sleeps.
-function fixture({role='manager',disabled=false}={}) {
- const time=1_790_000_000_000,tenantId='race_tenant',uid='race_owner';
+function fixture({role='manager',disabled=false,time=1_790_000_000_000,archiveViewer=null}={}) {
+ const tenantId='race_tenant',uid='race_owner';
  const key=generateKeyPairSync('ec',{namedCurve:'prime256v1'}),publicKeySpki=key.publicKey.export({format:'der',type:'spki'}).toString('base64url');
  const deviceId=createHash('sha256').update(Buffer.from(publicKeySpki,'base64url')).digest('base64url');
  const issuer=generateKeyPairSync('ed25519'),root='tenants/'+tenantId,rows=new Map(),versions=new Map();
@@ -20,18 +20,22 @@ function fixture({role='manager',disabled=false}={}) {
  const snap=path=>({exists:rows.has(path),data:()=>structuredClone(rows.get(path))});
  // Separate names in this reference factory avoid confusing collection/doc IDs.
  const query=(path,field,value,limit=Infinity)=>({path,field,value,limit});
- const collection=path=>({doc:id=>reference(path+'/'+id),where:(field,operator,value)=>{assert.equal(operator,'==');return {limit:count=>query(path,field,value,count)};}});
+ const feedQuery=(path,field,value)=>({orderBy:()=>({limit:count=>({async get(){
+  const docs=[...rows].filter(([key,row])=>key.startsWith(path+'/')&&row[field]>value).sort((a,b)=>a[1][field]-b[1][field]).slice(0,count).map(([key])=>({id:key.split('/').at(-1),...snap(key)}));
+  if(state.afterFeedRead){const hook=state.afterFeedRead;state.afterFeedRead=null;hook();}return {docs};
+ }})})});
+ const collection=path=>({doc:id=>reference(path+'/'+id),where:(field,operator,value)=>{if(operator==='>')return feedQuery(path,field,value);assert.equal(operator,'==');return {limit:count=>query(path,field,value,count)};}});
  const reference=path=>({path,id:path.split('/').at(-1),collection:name=>collection(path+'/'+name),async get(){events.push(['read',path]);return snap(path);},async set(value){events.push(['unconditional-write',path]);put(path,value);}});
  const db={doc:reference,async runTransaction(callback){
   if(state.beforeTransaction){const hook=state.beforeTransaction;state.beforeTransaction=null;hook();}
   for(let retry=0;retry<4;retry++){
    state.attempts++;const reads=new Map(),writes=[];
-   const tx={async get(ref){assert.equal(writes.length,0,'all transaction reads precede writes');events.push(['transaction-read',ref.path]);if(ref.field){const matches=[...rows].filter(([path,value])=>path.startsWith(ref.path+'/')&&path.split('/').length===ref.path.split('/').length+1&&value[ref.field]===ref.value).slice(0,ref.limit);for(const [path]of matches)reads.set(path,versions.get(path)||0);return {docs:matches.map(([path])=>({id:path.split('/').at(-1),...snap(path)}))};}reads.set(ref.path,versions.get(ref.path)||0);return snap(ref.path);},create(ref,value){writes.push({kind:'create',path:ref.path,value});},set(ref,value){writes.push({kind:'set',path:ref.path,value});},update(ref,value){writes.push({kind:'update',path:ref.path,value});}};
+   const tx={async get(ref){assert.equal(writes.length,0,'all transaction reads precede writes');events.push(['transaction-read',ref.path]);if(ref.field){const matches=[...rows].filter(([path,value])=>path.startsWith(ref.path+'/')&&path.split('/').length===ref.path.split('/').length+1&&value[ref.field]===ref.value).slice(0,ref.limit);for(const [path]of matches)reads.set(path,versions.get(path)||0);return {docs:matches.map(([path])=>({id:path.split('/').at(-1),...snap(path)}))};}reads.set(ref.path,versions.get(ref.path)||0);return snap(ref.path);},create(ref,value){writes.push({kind:'create',path:ref.path,value});},set(ref,value,options){writes.push({kind:'set',path:ref.path,value,merge:options?.merge===true});},update(ref,value){writes.push({kind:'update',path:ref.path,value});}};
    const result=await callback(tx);
    if(state.beforeCommit){const hook=state.beforeCommit;state.beforeCommit=null;hook();}
    if([...reads].some(([path,version])=>(versions.get(path)||0)!==version)){events.push(['transaction-retry']);continue;}
    for(const write of writes){if(write.kind==='create')assert.equal(rows.has(write.path),false);if(write.kind==='update')assert.equal(rows.has(write.path),true);}
-   for(const write of writes){put(write.path,write.kind==='update'?{...rows.get(write.path),...write.value}:write.value);events.push(['transaction-write',write.path]);}
+   for(const write of writes){put(write.path,write.kind==='update'||write.merge?{...rows.get(write.path),...write.value}:write.value);events.push(['transaction-write',write.path]);}
    return result;
   }
   throw Error('test-transaction-retry-limit');
@@ -42,7 +46,7 @@ function fixture({role='manager',disabled=false}={}) {
  if(role==='employee')put(root+'/employees/employee_a',{name:'موظف اختبار',active:!disabled});
  put(root+'/sessions/'+hash('test-device-session'),{uid,deviceId,expiresAtMs:time+3600000});
  const auth={getUser:async requestedUid=>({uid:requestedUid,emailVerified:true,disabled:false}),revokeRefreshTokens:async target=>events.push(['auth-revoke',target])};
- const gateway=createGateway({db,auth,now:()=>time,privateKey:()=>issuer.privateKey.export({format:'pem',type:'pkcs8'}),publicKey:()=>issuer.publicKey.export({format:'pem',type:'spki'}),kid:()=> 'test-race-v1'});
+ const gateway=createGateway({db,auth,archiveViewer,now:()=>time,privateKey:()=>issuer.privateKey.export({format:'pem',type:'pkcs8'}),publicKey:()=>issuer.publicKey.export({format:'pem',type:'spki'}),kid:()=> 'test-race-v1'});
  const request=extra=>({auth:{uid,token:{auth_time:Math.floor(time/1000)}},data:{tenantId,deviceId,...extra}});
  const authorized=extra=>request({sessionToken:'test-device-session',...extra});
  const proof=challenge=>({challengeId:challenge.challengeId,signature:sign('sha256',Buffer.from(challenge.challenge),key.privateKey).toString('base64url')});
@@ -177,4 +181,85 @@ test('invitation acceptance conflicts with deletion and marker and retains norma
   if(stage==='normal'){assert.deepEqual(await action,{status:'accepted',tenantId:f.tenantId,businessName:'اختبار'});assert.equal(f.rows.get(f.root+'/members/'+newUid).active,true);}
   else{await assert.rejects(action,/permission-denied/);assert.equal(f.rows.has(f.root+'/members/'+newUid),false);assert.equal(f.events.some(e=>e[0]==='transaction-write'),false);}
  }
+});
+
+const safetySale=(id,date='2027-08-30')=>({id,kind:'sale',date,partyId:'customer_a',qtyMilli:1000,priceMinor:2000000,totalMinor:2000000,paidMinor:0,unit:'كجم',grade:'أول',note:''});
+function closingFixture(options={}){
+ const f=fixture({time:Date.UTC(2027,8,3,12),...options});
+ f.put(f.root,{...f.rows.get(f.root),sequence:4,archivePolicy:{closedThroughDate:'2027-09-01',closeVersion:1,checkpointSequence:4}});
+ f.put(f.root+'/parties/customer_a',{id:'customer_a',kind:'merchant',name:'عميل',openingMinor:0,revision:1});return f;
+}
+const operation=(id,payload,extra={})=>({id,entity:'entry',payload,expectedRevision:0,...extra});
+
+test('session revocation during transaction conflicts and cannot commit a financial effect',async()=>{
+ for(const phase of ['beforeTransaction','beforeCommit']){
+  const f=closingFixture();f.state[phase]=()=>f.remove(f.root+'/sessions/'+hash('test-device-session'));
+  await assert.rejects(f.gateway.syncOperation(f.authorized({operation:operation('session_write',safetySale('session_write','2027-09-03'))})),/device-session-expired/);
+  assert.equal(f.rows.has(f.root+'/entries/session_write'),false);assert.equal(f.rows.has(f.root+'/operations/session_write'),false);
+ }
+});
+
+test('closed-period entry retains original evidence exactly once without accepting money or advancing sequence',async()=>{
+ const f=closingFixture(),op=operation('late_a',safetySale('late_a'));
+ const first=await f.gateway.syncOperation(f.authorized({operation:op}));assert.equal(first.status,'needs_review');assert.equal(first.reason,'closed-period');
+ assert.deepEqual(await f.gateway.syncOperation(f.authorized({operation:op})),first);assert.deepEqual(f.rows.get(f.root+'/lateOperations/late_a').operation,op);
+ assert.equal(f.rows.get(f.root).sequence,4);assert.equal(f.rows.has(f.root+'/entries/late_a'),false);
+ assert.equal((await f.gateway.syncOperation(f.authorized({operation:{...op,payload:{...op.payload,note:'changed'}}}))).reason,'operation-id-reused');
+ const current=await f.gateway.syncOperation(f.authorized({operation:operation('current_a',safetySale('current_a','2027-09-03'))}));assert.equal(current.status,'accepted');assert.equal(current.sequence,5);
+ const change=f.rows.get(f.root+'/changes/0000000000000005');assert.equal(change.acceptedAtMs,f.time);assert.equal(change.closeVersion,1);
+});
+
+test('manager correction posts preserved facts in open period and links original evidence once',async()=>{
+ const f=closingFixture(),original=operation('late_correction',safetySale('late_correction'));await f.gateway.syncOperation(f.authorized({operation:original}));
+ const corrected=operation('corrected',safetySale('corrected','2027-09-03'),{correctionOfOperationId:original.id});const result=await f.gateway.syncOperation(f.authorized({operation:corrected}));assert.equal(result.status,'accepted');
+ assert.deepEqual(await f.gateway.syncOperation(f.authorized({operation:corrected})),result);
+ const saved=f.rows.get(f.root+'/entries/corrected');assert.equal(saved.originalBusinessDate,'2027-08-30');assert.equal(saved.correctionOfOperationId,original.id);assert.equal(saved.totalMinor,2000000);
+ assert.equal(f.rows.get(f.root+'/lateOperations/'+original.id).status,'corrected');
+ await assert.rejects(f.gateway.syncOperation(f.authorized({operation:{...corrected,id:'double',payload:{...corrected.payload,id:'double'}}})),/invalid-late-correction/);assert.equal(f.rows.has(f.root+'/entries/double'),false);
+});
+
+test('correction refuses altered financial facts, old/future posting dates and employees',async()=>{
+ for(const extra of [{paidMinor:1},{date:'2027-08-31'},{date:'2027-09-04'}]){
+  const f=closingFixture();await f.gateway.syncOperation(f.authorized({operation:operation('late',safetySale('late'))}));
+  await assert.rejects(f.gateway.syncOperation(f.authorized({operation:operation('fixed',{...safetySale('fixed','2027-09-03'),...extra},{correctionOfOperationId:'late'})})),/correction-facts-changed|correction-period-not-open/);
+  assert.equal(f.rows.has(f.root+'/entries/fixed'),false);assert.equal(f.rows.get(f.root+'/lateOperations/late').status,'needs_review');
+ }
+ const employee=closingFixture({role:'employee'});await assert.rejects(employee.gateway.syncOperation(employee.authorized({operation:operation('fixed',safetySale('fixed','2027-09-03'),{correctionOfOperationId:'late'})})),/permission-denied/);
+});
+
+test('unapproved employee submission survives close and manager approval requires explicit current-period correction',async()=>{
+ const f=closingFixture(),submission={id:'pending',tenantId:f.tenantId,creatorUid:'employee_author',employeeId:'staff_a',kind:'delivery',date:'2027-08-30',partyId:'customer_a',partyName:'عميل',qtyMilli:1000,grade:'أول',unit:'كجم',originalId:'',amountMinor:0,note:'',status:'pending'};f.put(f.root+'/submissions/pending',submission);
+ const review={id:'review_late',entity:'review',expectedRevision:0,payload:{id:'review_late',submissionId:'pending',decision:'approved',entry:{...safetySale('approved'),originalId:''},note:''}};
+ assert.equal((await f.gateway.syncOperation(f.authorized({operation:review}))).status,'needs_review');assert.equal(f.rows.get(f.root+'/submissions/pending').status,'pending');assert.equal(f.rows.has(f.root+'/reviewLocks/pending'),false);
+ const correction={...review,id:'review_fixed',correctionOfOperationId:review.id,payload:{...review.payload,id:'review_fixed',entry:{...review.payload.entry,id:'approved_fixed',date:'2027-09-03'}}};
+ assert.equal((await f.gateway.syncOperation(f.authorized({operation:correction}))).status,'accepted');assert.equal(f.rows.get(f.root+'/submissions/pending').status,'approved');
+ assert.equal(f.rows.get(f.root+'/entries/approved_fixed').creatorUid,'employee_author');assert.equal(f.rows.get(f.root+'/entries/approved_fixed').originalBusinessDate,'2027-08-30');
+});
+
+test('protocol floor explicitly refuses lost history and sequence exhaustion cannot create unsafe numbers',async()=>{
+ const f=closingFixture();f.put(f.root,{...f.rows.get(f.root),historyFloor:4});await assert.rejects(f.gateway.pullChanges(f.authorized({afterSequence:3,syncProtocolVersion:1})),/resync-required/);
+ await assert.rejects(f.gateway.pullChanges(f.authorized({afterSequence:4,syncProtocolVersion:2})),/sync-upgrade-required/);f.put(f.root,{...f.rows.get(f.root),sequence:Number.MAX_SAFE_INTEGER});
+ await assert.rejects(f.gateway.syncOperation(f.authorized({operation:operation('overflow',safetySale('overflow','2027-09-03'))})),/sequence-exhausted/);assert.equal(f.rows.has(f.root+'/entries/overflow'),false);
+});
+
+test('archive access is manager-only, unavailable without adapter, rechecks revocation after read, and never posts finance',async()=>{
+ const f=fixture(),e=fixture({role:'employee'});await assert.rejects(f.gateway.listArchives(f.authorized({})),/archive-storage-unavailable/);await assert.rejects(e.gateway.listArchives(e.authorized({})),/permission-denied/);
+ let accessed=0,active;active=fixture({archiveViewer:{list:async args=>{accessed++;assert.equal(args.tenantId,active.tenantId);active.put(active.root+'/members/'+active.uid,{...active.rows.get(active.root+'/members/'+active.uid),active:false});return {archives:[]};}}});
+ await assert.rejects(active.gateway.listArchives(active.authorized({})),/permission-denied/);assert.equal(accessed,1);assert.equal(active.events.some(event=>event[0]==='transaction-write'),false);
+});
+
+
+test('manager feed is not disclosed after membership is revoked or downgraded during the query',async()=>{
+ for(const change of [f=>f.put(f.root+'/members/'+f.uid,{...f.rows.get(f.root+'/members/'+f.uid),active:false}),f=>{f.put(f.root+'/employees/staff',{active:true});f.put(f.root+'/members/'+f.uid,{...f.rows.get(f.root+'/members/'+f.uid),role:'employee',employeeId:'staff'});}]){
+  const f=fixture();f.put(f.root+'/changes/0000000000000001',{entity:'entry',id:'private',sequence:1,payload:{totalMinor:10000}});f.state.afterFeedRead=()=>change(f);
+  await assert.rejects(f.gateway.pullChanges(f.authorized({afterSequence:0})),/permission-denied/);
+ }
+});
+
+test('historical salary terms are held separately instead of changing closed payroll obligations',async()=>{
+ const f=closingFixture();f.put(f.root+'/employees/staff_a',{id:'staff_a',name:'Synthetic',active:true});
+ const op={id:'late_term',entity:'salary_term',expectedRevision:0,payload:{id:'late_term',employeeId:'staff_a',effectiveMonth:'2027-08',monthlyMinor:100000,revision:1}};
+ const result=await f.gateway.syncOperation(f.authorized({operation:op}));assert.equal(result.status,'needs_review');assert.equal(result.originalBusinessDate,'2027-08-01');
+ assert.equal(f.rows.has(f.root+'/salaryTerms/late_term'),false);assert.equal(f.rows.has(f.root+'/salaryLocks/staff_a_2027-08'),false);assert.equal(f.rows.get(f.root).sequence,4);
+ assert.deepEqual(f.rows.get(f.root+'/lateOperations/late_term').operation,op);
 });

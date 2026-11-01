@@ -26,3 +26,7 @@ export const setMemberActive=callable('setMemberActive');
 export const acceptInvitation=onCall(options,async request=>{try{return await accept({db:getFirestore(),auth:getAuth(),request});}catch(e){throw new HttpsError('failed-precondition',e instanceof GatewayError?e.code:'enrollment-failed');}});
 
 export const createEmployeeInvitation=callable('createEmployeeInvitation');
+
+// Storage adapter is intentionally absent until approved private storage is configured.
+export const listArchives=callable('listArchives');
+export const readArchiveRecord=callable('readArchiveRecord');

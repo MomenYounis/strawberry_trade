@@ -6,7 +6,7 @@ export const TRIAL_MS=30*24*60*60*1000;
 const collections={entry:'entries',party:'parties',employee:'employees',salary_term:'salaryTerms',submission:'submissions',review:'reviews'};
 const random=()=>randomBytes(32).toString('base64url');
 export function entitled(t,now){if(!t||t.adminDeleting||t.enabled!==true)return false;if(t.entitlementPayload)return t.entitlementPayload.expiresAtMs===null||now<t.entitlementPayload.expiresAtMs;return Number.isSafeInteger(t.trialEndMs)&&now<t.trialEndMs;}
-export function createGateway({db,auth,now=Date.now,privateKey=()=>process.env.LICENSE_PRIVATE_KEY_PEM,publicKey=()=>process.env.LICENSE_PUBLIC_KEY_PEM,kid=()=>process.env.LICENSE_KEY_ID||'local-test-v1'}){
+export function createGateway({db,auth,now=Date.now,privateKey=()=>process.env.LICENSE_PRIVATE_KEY_PEM,publicKey=()=>process.env.LICENSE_PUBLIC_KEY_PEM,kid=()=>process.env.LICENSE_KEY_ID||'local-test-v1',archiveViewer=null}){
  const tenantRef=t=>db.doc(`tenants/${id(t)}`);
  async function identity(request){
   if(!request.auth?.uid)fail('unauthenticated');const u=await auth.getUser(request.auth.uid);
@@ -26,12 +26,13 @@ export function createGateway({db,auth,now=Date.now,privateKey=()=>process.env.L
   if(session){text(d.sessionToken,100);const ss=await root.collection('sessions').doc(hash(d.sessionToken)).get();const s=ss.data();if(!s||s.uid!==u.uid||s.deviceId!==d.deviceId||s.expiresAtMs<=now())fail('device-session-expired');}
   if(license&&!entitled(t,now()))fail('license-expired');return {u,t,m,device,root};
  }
- async function transactionAuthority(tx,c,d,{license=true,manager=false,allowDisabled=false}={}){
+ async function transactionAuthority(tx,c,d,{license=true,manager=false,allowDisabled=false,session=true}={}){
   const [ts,ms,ds]=await Promise.all([tx.get(c.root),tx.get(c.root.collection('members').doc(c.u.uid)),tx.get(c.root.collection('devices').doc(d.deviceId))]);
   const t=ts.data(),m=ms.data(),device=ds.data();
   if(!t||t.adminDeleting||!m||!['manager','employee'].includes(m.role)||m.role!==c.m.role||m.employeeId!==c.m.employeeId||(!allowDisabled&&!m.active)||!device||(!allowDisabled&&!device.active)||device.uid!==c.u.uid||device.tenantId!==c.root.id)fail('permission-denied');
   if(manager&&m.role!=='manager')fail('permission-denied');
   if(m.role==='employee'){const employee=(await tx.get(c.root.collection('employees').doc(m.employeeId))).data();if(!employee||(!allowDisabled&&employee.active!==true))fail('permission-denied');m.employeeEnabled=employee.active===true;}else m.employeeEnabled=true;
+  if(session){text(d.sessionToken,100);const s=(await tx.get(c.root.collection('sessions').doc(hash(d.sessionToken)))).data();if(!s||s.uid!==c.u.uid||s.deviceId!==d.deviceId||s.expiresAtMs<=now())fail('device-session-expired');}
   if(license&&!entitled(t,now()))fail('license-expired');
   return {t,m,device};
  }
@@ -49,14 +50,14 @@ export function createGateway({db,auth,now=Date.now,privateKey=()=>process.env.L
    // recreating a subcollection after an operator deletes the tenant. Disabled
    // members/devices may still prove possession to receive a disabled package.
    await db.runTransaction(async tx=>{
-    await transactionAuthority(tx,c,request.data,{license:false,allowDisabled:true});
+    await transactionAuthority(tx,c,request.data,{license:false,allowDisabled:true,session:false});
     tx.create(c.root.collection('challenges').doc(challengeId),{challenge,uid:c.u.uid,deviceId:request.data.deviceId,expiresAtMs:time+300000,used:false});
    });
    return {requiresDeviceProof:true,challengeId,challenge,serverTimeMs:time};
   }
   text(request.data.challengeId,100);text(request.data.signature,200);const ref=c.root.collection('challenges').doc(request.data.challengeId);const token=random();
   await db.runTransaction(async tx=>{
-   const challengeSnap=await tx.get(ref),latest=await transactionAuthority(tx,c,request.data,{license:false,allowDisabled:true});Object.assign(c,latest);const latestMember=c.m,s=challengeSnap.data();c.businessName=await tenantBusinessName(tx,c.root,c.t);if(!s||s.used||s.uid!==c.u.uid||s.deviceId!==request.data.deviceId||s.expiresAtMs<=time)fail('invalid-device-proof');
+   const challengeSnap=await tx.get(ref),latest=await transactionAuthority(tx,c,request.data,{license:false,allowDisabled:true,session:false});Object.assign(c,latest);const latestMember=c.m,s=challengeSnap.data();c.businessName=await tenantBusinessName(tx,c.root,c.t);if(!s||s.used||s.uid!==c.u.uid||s.deviceId!==request.data.deviceId||s.expiresAtMs<=time)fail('invalid-device-proof');
    let good=false;try{good=cryptoVerify('sha256',Buffer.from(s.challenge),createPublicKey({key:Buffer.from(c.device.publicKeySpki,'base64url'),format:'der',type:'spki'}),Buffer.from(request.data.signature,'base64url'));}catch{}
    if(!good)fail('invalid-device-proof');c.m={...latestMember,employeeEnabled:c.m.employeeEnabled,epoch:(latestMember.epoch||1)+1};tx.update(c.root.collection('members').doc(c.u.uid),{epoch:c.m.epoch});tx.update(ref,{used:true});tx.set(c.root.collection('sessions').doc(hash(token)),{uid:c.u.uid,deviceId:request.data.deviceId,expiresAtMs:time+3600000});
   });
@@ -72,8 +73,8 @@ export function createGateway({db,auth,now=Date.now,privateKey=()=>process.env.L
   if(returnKinds.includes(v.kind)){if(v.originalId)id(v.originalId);}else if(v.originalId)fail('invalid-argument');if(v.kind!=='expense_business'&&v.category)fail('invalid-category');if(v.kind==='expense_business'&&(v.partyId||v.partyName||v.grade||v.unit))fail('invalid-argument');return {...v,status:'pending',recordedByUid:c.u.uid,recordedAtMs:now()};
  }
  async function syncOperation(request){
-  keys(request.data,['tenantId','deviceId','sessionToken','operation']);const c=await authority(request);const op=object(request.data.operation);
-  keys(op,['id','entity','payload','expectedRevision']);id(op.id);if(!collections[op.entity])fail('invalid-argument');integer(op.expectedRevision??0,0,100000);object(op.payload);
+  keys(request.data,['tenantId','deviceId','sessionToken','operation','syncProtocolVersion']);if((request.data.syncProtocolVersion??1)!==1)fail('sync-upgrade-required');const c=await authority(request);const op=object(request.data.operation);
+  keys(op,['id','entity','payload','expectedRevision','correctionOfOperationId']);if(op.correctionOfOperationId!==undefined){id(op.correctionOfOperationId);if(c.m.role!=='manager'||!['entry','review'].includes(op.entity))fail('permission-denied');}id(op.id);if(!collections[op.entity])fail('invalid-argument');integer(op.expectedRevision??0,0,100000);object(op.payload);
   if(c.m.role==='employee'&&op.entity!=='submission')fail('permission-denied');
   if(c.m.role==='manager'&&op.entity==='submission')fail('permission-denied');
   if(op.payload.tenantId!==undefined&&op.payload.tenantId!==c.root.id)fail('permission-denied');
@@ -85,7 +86,13 @@ export function createGateway({db,auth,now=Date.now,privateKey=()=>process.env.L
    const windowStart=Math.floor(time/60000)*60000,rate=nt.rateWindowMs===windowStart?(nt.rateCount||0):0;
    if(oldOp.exists){if(oldOp.data().digest!==digest){if(rate>=600)fail('resource-exhausted');const conflict={id:op.id,status:'conflict',reason:'operation-id-reused',serverTimeMs:time};tx.set(c.root.collection('conflicts').doc(hash(op.id+digest)),{...conflict,local:op,actorUid:c.u.uid});tx.set(c.root,{rateWindowMs:windowStart,rateCount:rate+1},{merge:true});return conflict;}return oldOp.data().result;}
    if(rate>=600)fail('resource-exhausted');
-   const recordRef=c.root.collection(collections[op.entity]).doc(recordId);let current=await tx.get(recordRef),payload,extra=[],reason=null,submissionSource=null;
+   const recordRef=c.root.collection(collections[op.entity]).doc(recordId);let current=await tx.get(recordRef),payload,extra=[],reason=null,submissionSource=null,correctionSource=null,correctionRef=null;
+   if(op.correctionOfOperationId){
+    correctionRef=c.root.collection('lateOperations').doc(op.correctionOfOperationId);
+    correctionSource=(await tx.get(correctionRef)).data();
+    const lock=await tx.get(c.root.collection('lateCorrectionLocks').doc(op.correctionOfOperationId));
+    if(!correctionSource||correctionSource.tenantId!==c.root.id||correctionSource.status!=='needs_review'||lock.exists||correctionSource.operation.entity!==op.entity)fail('invalid-late-correction');
+   }
    if(current.exists||op.expectedRevision!==0)reason='immutable-record-conflict';
    try{
     if(op.entity==='entry')payload=entry(op.payload,{allowReturnResidual:returnKinds.includes(op.payload.kind)});
@@ -100,7 +107,7 @@ export function createGateway({db,auth,now=Date.now,privateKey=()=>process.env.L
      if(op.payload.decision==='approved'){
       const e=entry(op.payload.entry,{allowReturnResidual:returnKinds.includes(op.payload.entry.kind)});
       if(submissionSource){const s=submissionSource,expected=s.kind==='delivery'?'sale':s.kind==='purchase_delivery'?'purchase':s.kind;
-       if(e.kind!==expected||e.date!==s.date||e.partyId!==(s.partyId||'')||e.qtyMilli!==(s.qtyMilli||0)||e.grade!==(s.grade||'')||e.unit!==(s.unit||'')||e.originalId!==(s.originalId||''))reason='submission-facts-changed';
+       if(e.kind!==expected||(!correctionSource&&e.date!==s.date)||e.partyId!==(s.partyId||'')||e.qtyMilli!==(s.qtyMilli||0)||e.grade!==(s.grade||'')||e.unit!==(s.unit||'')||e.originalId!==(s.originalId||''))reason='submission-facts-changed';
        if(s.kind==='expense_business'&&(e.totalMinor!==s.amountMinor||e.category!==s.category))reason='submission-facts-changed';
        e.creatorUid=s.creatorUid;e.employeeId='';e.submittedByEmployeeId=s.employeeId;
       }
@@ -138,9 +145,46 @@ export function createGateway({db,auth,now=Date.now,privateKey=()=>process.env.L
     }
    }catch(e){if(e instanceof GatewayError)reason=e.code;else throw e;}
    if(reason){const result={id:op.id,status:'conflict',reason,serverTimeMs:time};tx.set(c.root.collection('conflicts').doc(op.id),{...result,actorUid:c.u.uid,local:op,remote:current.exists?current.data():null});tx.set(opRef,{digest,result,actorUid:c.u.uid});tx.set(c.root,{rateWindowMs:windowStart,rateCount:rate+1},{merge:true});tx.set(c.root.collection('audit').doc(op.id),{action:'conflict',actorUid:c.u.uid,operationId:op.id,atMs:time,reason});return result;}
-   let sequence=nt.sequence||0;
+   if(correctionSource){
+    const original=correctionSource.operation;
+    const oldEntry=original.entity==='entry'?original.payload:original.payload.entry;
+    const financial=op.entity==='entry'?payload:extra.find(x=>x.entity==='entry')?.payload;
+    if(!financial||!oldEntry||(op.entity==='review'&&(op.payload.submissionId!==original.payload.submissionId||op.payload.decision!=='approved')))fail('invalid-late-correction');
+    const financialFacts=v=>{const validated=entry(v,{allowReturnResidual:returnKinds.includes(v.kind)});return Object.fromEntries(Object.entries(validated).filter(([k])=>!['id','date','note','partyName','creatorUid','tenantId'].includes(k)));};
+    // Compare request fields, before server provenance fields were attached.
+    const supplied=op.entity==='entry'?op.payload:op.payload.entry;
+    if(canonical(financialFacts(oldEntry))!==canonical(financialFacts(supplied)))fail('correction-facts-changed');
+    const cairoToday=new Intl.DateTimeFormat('en-CA',{timeZone:'Africa/Cairo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(time));
+    const currentStart=(Number(cairoToday.slice(0,4))-(cairoToday.slice(5,7)<'09'?1:0))+'-09-01';
+    if(financial.date<currentStart||financial.date>cairoToday||!nt.archivePolicy?.closedThroughDate||financial.date<nt.archivePolicy.closedThroughDate)fail('correction-period-not-open');
+    financial.originalBusinessDate=correctionSource.originalBusinessDate;
+    financial.correctionOfOperationId=op.correctionOfOperationId;
+    extra.push({ref:correctionRef,payload:{...correctionSource,status:'corrected',correctionOperationId:op.id,correctionEntryId:financial.id,resolvedAtMs:time,resolvedByUid:c.u.uid},noChange:true});
+    extra.push({ref:c.root.collection('lateCorrectionLocks').doc(op.correctionOfOperationId),payload:{operationId:op.id,entryId:financial.id},noChange:true});
+   }
+   const closing=nt.archivePolicy;
+   if(closing?.closedThroughDate){
+    isoDate(closing.closedThroughDate);integer(closing.closeVersion,1,Number.MAX_SAFE_INTEGER);
+    const financial=op.entity==='entry'?payload:extra.find(x=>x.entity==='entry')?.payload;
+    // A historical salary term changes an obligation even without creating a
+    // cash entry. Hold it for review rather than restating a closed checkpoint.
+    const businessDate=op.entity==='salary_term'?payload.effectiveMonth+'-01':financial?.date;
+    if(businessDate&&businessDate<closing.closedThroughDate){
+     // The transport receipt is deliberately NOT financial acceptance. Keep the
+     // complete original operation for recovery, with its immutable digest.
+     const result={id:op.id,status:'needs_review',reason:'closed-period',originalBusinessDate:businessDate,closedThroughDate:closing.closedThroughDate,closeVersion:closing.closeVersion,serverTimeMs:time};
+     tx.create(c.root.collection('lateOperations').doc(op.id),{id:op.id,tenantId:c.root.id,operation:op,digest,actorUid:c.u.uid,originalBusinessDate:businessDate,receivedAtMs:time,reason:'closed-period',status:'needs_review',closeVersion:closing.closeVersion});
+     tx.set(opRef,{digest,result,actorUid:c.u.uid});
+     tx.set(c.root.collection('audit').doc(op.id),{action:'needs-review',reason:'closed-period',operationId:op.id,actorUid:c.u.uid,atMs:time});
+     tx.set(c.root,{rateWindowMs:windowStart,rateCount:rate+1},{merge:true});
+     return result;
+    }
+   }
+   let sequence=integer(nt.sequence??0,0,Number.MAX_SAFE_INTEGER);
+   const changeCount=1+extra.filter(x=>!x.noChange).length;
+   if(sequence>Number.MAX_SAFE_INTEGER-changeCount)fail('sequence-exhausted');
    const publish=(entity,rid,data,employeeUid)=>{
-    const change={entity,id:rid,payload:data,sequence:++sequence};tx.set(c.root.collection('changes').doc(String(sequence).padStart(16,'0')),change);
+    const change={entity,id:rid,payload:data,sequence:++sequence,acceptedAtMs:time,closeVersion:nt.archivePolicy?.closeVersion??0};tx.set(c.root.collection('changes').doc(String(sequence).padStart(16,'0')),change);
     if(entity==='party'){const safe={id:data.id,tenantId:c.root.id,name:data.name,kind:data.kind,phone:data.phone||'',favorite:!!data.favorite,revision:data.revision};tx.set(c.root.collection('employeeChanges').doc(String(sequence).padStart(16,'0')),{...change,payload:safe,uid:'all'});}
     if(entity==='submission'){const uid=employeeUid||data.creatorUid;tx.set(c.root.collection('employeeChanges').doc(String(sequence).padStart(16,'0')),{...change,uid});}
    };
@@ -151,7 +195,11 @@ export function createGateway({db,auth,now=Date.now,privateKey=()=>process.env.L
   });
  }
  async function pullChanges(request){
-  keys(request.data,['tenantId','deviceId','sessionToken','afterSequence','limit']);const c=await authority(request,{license:false});const after=integer(request.data.afterSequence??0),limit=integer(request.data.limit??200,1,500);
+  keys(request.data,['tenantId','deviceId','sessionToken','afterSequence','limit','syncProtocolVersion']);if((request.data.syncProtocolVersion??1)!==1)fail('sync-upgrade-required');const c=await authority(request,{license:false});const after=integer(request.data.afterSequence??0,0,Number.MAX_SAFE_INTEGER),limit=integer(request.data.limit??200,1,500);
+  const historyFloor=integer(c.t.historyFloor??0,0,Number.MAX_SAFE_INTEGER);
+  // Protocol v1 cannot install an archive-aware snapshot. Never interpret a
+  // missing historical feed as caught up; retain the client's outbox/cursor.
+  if(after<historyFloor)fail('resync-required');
   // Employee feed contains only sanitized directories and their own submissions.
   // Fetch each allowed uid separately; never download manager payload then filter.
   let docs;
@@ -160,7 +208,8 @@ export function createGateway({db,auth,now=Date.now,privateKey=()=>process.env.L
    const [a,b]=await Promise.all(['all',c.u.uid].map(uid=>c.root.collection('employeeChanges').where('uid','==',uid).where('sequence','>',after).orderBy('sequence').limit(limit+1).get()));docs=[...a.docs,...b.docs].sort((x,y)=>x.data().sequence-y.data().sequence).slice(0,limit+1);
   }
   const hasMore=docs.length>limit,changes=docs.slice(0,limit).map(x=>{const {uid,...v}=x.data();return v;});
-  return {changes,lastSequence:changes.length?changes.at(-1).sequence:after,hasMore,serverTimeMs:now()};
+  const latest=await authority(request,{license:false});if(latest.m.role!==c.m.role||latest.m.employeeId!==c.m.employeeId)fail('permission-denied');
+  return {changes,lastSequence:changes.length?changes.at(-1).sequence:after,hasMore,serverTimeMs:now(),syncProtocolVersion:1,historyFloor};
  }
  async function activateLicense(request){
   keys(request.data,['tenantId','deviceId','sessionToken','licensePackage']);const c=await authority(request,{license:false,manager:true}),pkg=object(request.data.licensePackage);keys(pkg,['version','entitlement','membership']);if(pkg.version!==1)fail('invalid-license');
@@ -192,5 +241,21 @@ export function createGateway({db,auth,now=Date.now,privateKey=()=>process.env.L
   const invitationToken=await issueEmployeeInvitation({db,auth,tenantId:c.root.id,uid:request.data.uid,employeeId:request.data.employeeId,actor:{uid:c.u.uid,deviceId:request.data.deviceId},now:time});
   return {invitationToken,tenantId:c.root.id,...(request.data.uid!==undefined?{uid:request.data.uid}:{}),employeeId:request.data.employeeId,expiresAtMs:time+7*86400000};
  }
- return {bootstrap,syncOperation,pullChanges,activateLicense,setMemberActive,createEmployeeInvitation,authority,identity};
+ async function listArchives(request){
+  keys(request.data,['tenantId','deviceId','sessionToken','limit','afterYear']);
+  const c=await authority(request,{license:false,manager:true});
+  const limit=integer(request.data.limit??20,1,20);const afterYear=request.data.afterYear==null?null:integer(request.data.afterYear,2026,9998);
+  if(!archiveViewer)fail('archive-storage-unavailable');
+  const result=await archiveViewer.list({tenantId:c.root.id,limit,afterYear});
+  await authority(request,{license:false,manager:true});return result;
+ }
+ async function readArchiveRecord(request){
+  keys(request.data,['tenantId','deviceId','sessionToken','year','recordId','nextChunk']);
+  const c=await authority(request,{license:false,manager:true});
+  const year=integer(request.data.year,2026,9998),recordId=id(request.data.recordId),nextChunk=integer(request.data.nextChunk??0,0,1000000);
+  if(!archiveViewer)fail('archive-storage-unavailable');
+  const result=await archiveViewer.readRecord({tenantId:c.root.id,year,recordId,nextChunk});
+  await authority(request,{license:false,manager:true});return result;
+ }
+ return {bootstrap,syncOperation,pullChanges,activateLicense,setMemberActive,createEmployeeInvitation,listArchives,readArchiveRecord,authority,identity};
 }
