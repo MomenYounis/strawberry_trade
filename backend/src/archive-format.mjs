@@ -72,7 +72,13 @@ export async function exportArchive({storage,masterKey,context,records,trustedCo
       validateChunkDescriptor(descriptor,index,context);
       if(descriptor.plainSha256!==plainSha256||descriptor.plainBytes!==plain.length||descriptor.records!==batch.length)throw new Error('resume-source-mismatch');
       const stored=await storage.read(descriptor.key,{maxBytes:descriptor.cipherBytes});
-      if(sha(stored)!==descriptor.cipherSha256)throw new Error('resume-chunk-mismatch');
+      if(stored.byteLength!==descriptor.cipherBytes||sha(stored)!==descriptor.cipherSha256)throw new Error('resume-chunk-mismatch');
+      // A matching ciphertext hash does not prove that this attempt still has
+      // the original key/context. Reject key rotation before appending chunks
+      // or publishing a manifest that neither the old nor new key can restore.
+      const restored=unseal(stored,masterKey,context,index);
+      try{if(!restored.equals(plain))throw new Error('resume-source-mismatch');}
+      finally{restored.fill(0);}
     }else{
       const encrypted=seal(plain,masterKey,context,index),cipherSha256=sha(encrypted);
       descriptor={index,key:`${namespace(context)}/chunks/${cipherSha256}`,plainSha256,cipherSha256,

@@ -2,6 +2,9 @@ import {createHash} from 'node:crypto';
 import {canonical,entry,directory,id,integer,isoDate} from './validation.mjs';
 import {annualInterval,financialYearForDate} from './archive-calendar.mjs';
 
+// Archive identity and controls must not depend on the host ICU locale.
+const compareCodeUnits=(a,b)=>a<b?-1:a>b?1:0;
+
 const MAX_ACCOUNTS=10_000,MAX_IDENTITIES=500_000;
 const number=(v)=>integer(v,-Number.MAX_SAFE_INTEGER,Number.MAX_SAFE_INTEGER);
 const sum=(a,b)=>{const result=BigInt(number(a))+BigInt(number(b));if(result>BigInt(Number.MAX_SAFE_INTEGER)||result<BigInt(-Number.MAX_SAFE_INTEGER))throw new Error('archive-integer-overflow');return Number(result);};
@@ -117,13 +120,13 @@ export class ArchiveControlReader {
   }
   finish(){
     if(!this.accounts.has('cash_movement/recorded_net'))throw new Error('cash-movement-baseline-required');
-    const accounts=[...this.accounts.values()].sort((a,b)=>`${a.role}/${a.id}`.localeCompare(`${b.role}/${b.id}`));
+    const accounts=[...this.accounts.values()].sort((a,b)=>compareCodeUnits(`${a.role}/${a.id}`,`${b.role}/${b.id}`));
     for(const account of accounts)if(account.role==='cash_movement'){account.periodMinor=this.cashPeriod;account.closingMinor=sum(this.cashOpening,this.cashPeriod);}
     const total=role=>accounts.filter(a=>a.role===role).reduce((n,a)=>sum(n,a.closingMinor),0);
     const payrollObligations=[],unknownPayrollMonths=[],endMonth=`${this.context.year+1}-08`;
-    const employees=[...new Set(this.salaryTerms.map(t=>t.employeeId))].sort();
+    const employees=[...new Set(this.salaryTerms.map(t=>t.employeeId))].sort(compareCodeUnits);
     for(const employeeId of employees){
-      const terms=this.salaryTerms.filter(t=>t.employeeId===employeeId).sort((a,b)=>a.effectiveMonth.localeCompare(b.effectiveMonth));
+      const terms=this.salaryTerms.filter(t=>t.employeeId===employeeId).sort((a,b)=>compareCodeUnits(a.effectiveMonth,b.effectiveMonth));
       if(new Set(terms.map(t=>t.effectiveMonth)).size!==terms.length)throw new Error('duplicate-salary-effective-month');
       let month=terms[0].effectiveMonth,index=0;
       while(month<=endMonth){

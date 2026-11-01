@@ -9,6 +9,9 @@ import {canonical,id,integer} from './validation.mjs';
 import {annualInterval} from './archive-calendar.mjs';
 import {validateArchiveRecord} from './archive-accounting.mjs';
 
+// Archive identity and controls must not depend on the host ICU locale.
+const compareCodeUnits=(a,b)=>a<b?-1:a>b?1:0;
+
 const maxInteger=BigInt(Number.MAX_SAFE_INTEGER);
 function exact(v){const n=BigInt(v);if(n>maxInteger||n< -maxInteger)throw new Error('source-control-overflow');return Number(n);}
 const sourceKinds=['entry','party','employee','salary_term','submission','review'];
@@ -49,7 +52,7 @@ export async function createArchiveProjection({context,maxChanges=500_000,maxByt
       if(!prior){const t=periodTotals[fx.value.kind]??={totalMinor:0n,paidMinor:0n,qtyMilli:0n};for(const field of Object.keys(t))t[field]+=fx.sign*BigInt(fx.value[field]??0);}
     }
     addAccount('cash_movement','recorded_net',cashOpening).period=cashPeriod;
-    const sorted=[...accounts.values()].sort((a,b)=>`${a.role}/${a.id}`.localeCompare(`${b.role}/${b.id}`));
+    const sorted=[...accounts.values()].sort((a,b)=>compareCodeUnits(`${a.role}/${a.id}`,`${b.role}/${b.id}`));
     return {openings:sorted.map(a=>({type:'opening',tenantId:context.tenantId,year:context.year,sequence:0,payload:{id:a.id,role:a.role,balanceMinor:exact(a.opening)}})),
       accounts:sorted.map(a=>({id:a.id,role:a.role,openingMinor:exact(a.opening),periodMinor:exact(a.period),closingMinor:exact(a.opening+a.period)})),
       periodTotals:Object.fromEntries(Object.entries(periodTotals).map(([kind,totals])=>[kind,Object.fromEntries(Object.entries(totals).map(([field,value])=>[field,exact(value)]))])),
@@ -101,8 +104,8 @@ export async function createArchiveProjection({context,maxChanges=500_000,maxByt
       const signedTotal=role=>exact(accounts.filter(a=>a.role===role).reduce((sum,a)=>sum+BigInt(a.closingMinor),0n));
       const salaryTerms=[...database.prepare("SELECT payload FROM records WHERE entity='salary_term'").iterate()].map(r=>JSON.parse(r.payload));
       const payrollObligations=[],unknownPayrollMonths=[];
-      for(const employeeId of [...new Set(salaryTerms.map(t=>t.employeeId))].sort()){
-        const applicable=salaryTerms.filter(t=>t.employeeId===employeeId).sort((a,b)=>a.effectiveMonth.localeCompare(b.effectiveMonth));
+      for(const employeeId of [...new Set(salaryTerms.map(t=>t.employeeId))].sort(compareCodeUnits)){
+        const applicable=salaryTerms.filter(t=>t.employeeId===employeeId).sort((a,b)=>compareCodeUnits(a.effectiveMonth,b.effectiveMonth));
         if(new Set(applicable.map(t=>t.effectiveMonth)).size!==applicable.length)throw new Error('duplicate-salary-effective-month');
         const first=applicable[0].effectiveMonth,start=Number(first.slice(0,4))*12+Number(first.slice(5))-1,last=(context.year+1)*12+7;
         if(last-start+1+payrollObligations.length>20_000)throw new Error('payroll-month-limit');

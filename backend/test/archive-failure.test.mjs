@@ -101,3 +101,24 @@ test('timed-out R2 downloads cancel an active stream and a late returned body',a
  resolve({size:bytes.length,body:new ReadableStream({cancel(){lateCancelled=true;}})});
  await new Promise(done=>setTimeout(done,0));assert.equal(lateCancelled,true);
 });
+
+for(const mismatch of ['master-key','key-id'])test(`resume rejects changed ${mismatch} before additional objects and preserves original-key recovery`,async()=>{
+ const now=Date.parse('2027-09-02T00:00:00Z'),year=2026;
+ const fixtureChanges=[changes[0],...Array.from({length:3},(_,i)=>({sequence:i+2,entity:'entry',id:`resume_invoice_${i}`,payload:entry(`resume_invoice_${i}`,'2027-08-31',{note:'x'.repeat(600)})}))];
+ const adapter=new SyntheticArchiveStateAdapter({[tenantId]:{enabled:true,sequence:fixtureChanges.length}}),store=new ArchiveStateStore(adapter,{now:()=>now}),storage=new SyntheticArchiveStorage();
+ await store.create({tenantId,year,runId:`key_resume_${mismatch}`});const lease=await store.acquire(tenantId,year,'runner');
+ await store.checkpoint(tenantId,year,lease,{authorizedClose:true,exportEnabled:true});
+ const options={stateStore:store,tenantId,year,lease,storage,masterKey,keyId:'original_key',budget,chunkBytes:1024,now:()=>now,
+  sourceFactory:async context=>{const p=await createArchiveProjection({context});try{await p.ingest(fixtureChanges);return p;}catch(error){await p.destroy();throw error;}}};
+ const first=await runArchiveExportStep({...options,maxNewChunks:1});assert.equal(first.state,'exporting');
+ const checkpoint=await store.read(tenantId,year),objects=[...storage.objects.keys()];assert.equal(checkpoint.exportProgress.chunks.length,1);
+ const changed=mismatch==='master-key'?{masterKey:Buffer.alloc(32,43)}:{keyId:'replacement_key'};
+ await assert.rejects(runArchiveExportStep({...options,...changed,maxNewChunks:8}),/archive-authentication-failed/);
+ const afterFailure=await store.read(tenantId,year);
+ assert.equal(afterFailure.state,'exporting');assert.equal(afterFailure.manifest,undefined);
+ assert.deepEqual(afterFailure.checkpoint,checkpoint.checkpoint);assert.deepEqual(afterFailure.exportProgress,checkpoint.exportProgress);
+ assert.deepEqual([...storage.objects.keys()],objects);
+ const recovered=await runArchiveExportStep({...options,maxNewChunks:8});assert.equal(recovered.state,'verified');
+ assert.equal(recovered.run.checkpoint.version,checkpoint.checkpoint.version);
+ assert.equal(recovered.run.evidence.verified.financialMatch,true);
+});
