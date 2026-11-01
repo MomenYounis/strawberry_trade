@@ -109,6 +109,22 @@ LicenseSession session(MemorySecurity security) => LicenseSession(
 );
 
 void main() {
+  test('canonical JSON rejects signed minimum and unsafe integers', () {
+    for (final value in [
+      -9223372036854775808,
+      -9007199254740992,
+      9007199254740992,
+    ]) {
+      expect(
+        () => canonicalJson({'value': value}),
+        throwsA(isA<LicenseException>()),
+      );
+    }
+    expect(
+      canonicalJson([-9007199254740991, 9007199254740991]),
+      '[-9007199254740991,9007199254740991]',
+    );
+  });
   setUpAll(() async {
     key = await algorithm.newKeyPair();
     final public = await key.extractPublicKey();

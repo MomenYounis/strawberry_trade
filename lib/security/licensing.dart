@@ -21,7 +21,11 @@ String canonicalJson(Object? value) {
   if (value == null || value is bool || value is String) {
     return jsonEncode(value);
   }
-  if (value is int && value.abs() <= 9007199254740991) return value.toString();
+  // abs() overflows for the native signed minimum; compare both bounds before
+  // serializing values shared with JavaScript/Firestore.
+  if (value is int && value >= -9007199254740991 && value <= 9007199254740991) {
+    return value.toString();
+  }
   if (value is List) return '[${value.map(canonicalJson).join(',')}]';
   if (value is Map<String, dynamic>) {
     final keys = value.keys.toList()..sort();
