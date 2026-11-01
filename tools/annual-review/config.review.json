@@ -1,0 +1,20 @@
+{
+  "reviewArtifactOnly": true,
+  "schedulerEnabled": false,
+  "exportEnabled": false,
+  "cleanupEnabled": false,
+  "productionAcceptanceApproved": false,
+  "firstYear": 2026,
+  "timeZone": "Africa/Cairo",
+  "proposedUtcCron": "17 * * * *",
+  "retentionGraceDays": 90,
+  "maxSourceRecordsPerStep": 50,
+  "maxArchiveChunkBytes": 65536,
+  "sourceReadBudgetPerUtcDay": 2500,
+  "stateWriteBudgetPerUtcDay": 500,
+  "deleteBudgetPerUtcDay": 0,
+  "liveHeadroomFraction": 0.30,
+  "storageBinding": null,
+  "independentRecoveryEvidence": null,
+  "keyRecoveryEvidence": null
+}
