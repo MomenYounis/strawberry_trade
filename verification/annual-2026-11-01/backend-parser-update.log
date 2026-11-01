@@ -1,0 +1,52 @@
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: '@firebase/ai@3.0.0',
+npm warn EBADENGINE   required: { node: '>=24.12.0' },
+npm warn EBADENGINE   current: { node: 'v22.22.2', npm: '10.9.7' }
+npm warn EBADENGINE }
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: '@firebase/app@0.16.3',
+npm warn EBADENGINE   required: { node: '>=24.12.0' },
+npm warn EBADENGINE   current: { node: 'v22.22.2', npm: '10.9.7' }
+npm warn EBADENGINE }
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: '@firebase/app-compat@0.5.19',
+npm warn EBADENGINE   required: { node: '>=24.12.0' },
+npm warn EBADENGINE   current: { node: 'v22.22.2', npm: '10.9.7' }
+npm warn EBADENGINE }
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: '@firebase/auth@1.13.7',
+npm warn EBADENGINE   required: { node: '>=24.12.0' },
+npm warn EBADENGINE   current: { node: 'v22.22.2', npm: '10.9.7' }
+npm warn EBADENGINE }
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: '@firebase/auth-compat@0.6.12',
+npm warn EBADENGINE   required: { node: '>=24.12.0' },
+npm warn EBADENGINE   current: { node: 'v22.22.2', npm: '10.9.7' }
+npm warn EBADENGINE }
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: '@firebase/firestore@4.18.0',
+npm warn EBADENGINE   required: { node: '>=24.12.0' },
+npm warn EBADENGINE   current: { node: 'v22.22.2', npm: '10.9.7' }
+npm warn EBADENGINE }
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: '@firebase/firestore-compat@0.4.15',
+npm warn EBADENGINE   required: { node: '>=24.12.0' },
+npm warn EBADENGINE   current: { node: 'v22.22.2', npm: '10.9.7' }
+npm warn EBADENGINE }
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: '@firebase/rules-unit-testing@6.0.0',
+npm warn EBADENGINE   required: { node: '>=24.12.0' },
+npm warn EBADENGINE   current: { node: 'v22.22.2', npm: '10.9.7' }
+npm warn EBADENGINE }
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: '@firebase/storage@0.14.6',
+npm warn EBADENGINE   required: { node: '>=24.12.0' },
+npm warn EBADENGINE   current: { node: 'v22.22.2', npm: '10.9.7' }
+npm warn EBADENGINE }
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: '@firebase/storage-compat@0.4.6',
+npm warn EBADENGINE   required: { node: '>=24.12.0' },
+npm warn EBADENGINE   current: { node: 'v22.22.2', npm: '10.9.7' }
+npm warn EBADENGINE }
+
+up to date in 2s

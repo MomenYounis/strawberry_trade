@@ -1,0 +1,2479 @@
+{
+  "sourceRevision": "2a3cd45f82dce989e8db45e1f7a3e113af10f10a",
+  "description": "Coverage inventory with explicit limits; listing a file is not a reviewed/pass assertion. Old verification entries remain historical only.",
+  "files": [
+    {
+      "path": ".gitignore",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": ".metadata",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "COPY-MANIFEST.json",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "README.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "analysis_options.yaml",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "android/.gitignore",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/build.gradle.kts",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/google-services.json",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/proguard-rules.pro",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/src/debug/AndroidManifest.xml",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/src/main/AndroidManifest.xml",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/src/main/kotlin/com/strawberrytrade/strawberry_trade/MainActivity.kt",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/src/main/res/drawable-v21/launch_background.xml",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/src/main/res/drawable/launch_background.xml",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/src/main/res/values-night/styles.xml",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/src/main/res/values/styles.xml",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/src/main/res/xml/data_extraction_rules.xml",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/app/src/profile/AndroidManifest.xml",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/build.gradle.kts",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/gradle.properties",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/gradle/wrapper/gradle-wrapper.properties",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/settings.gradle.kts",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "android/strawberry_trade_android.iml",
+      "coverage": "build-reviewed-selected-native-storage-executed",
+      "limits": "Only isolated API35 storage/update/setup scope; not all Android lifecycle/security paths, devices or business flows."
+    },
+    {
+      "path": "assets/fonts/NotoNaskhArabic-Bold.ttf",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "assets/fonts/NotoNaskhArabic-Regular.ttf",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "assets/fonts/NotoSans-Regular.ttf",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "assets/fonts/OFL.txt",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/.firebaserc",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/.gitignore",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/firebase.json",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/firebase.production-review.json",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/firestore.indexes.json",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/firestore.rules",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/package-lock.json",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/package.json",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/scripts/emulator-test-runner.mjs",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/scripts/external-native-demo.mjs",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/scripts/feature-map.mjs",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/scripts/legacy-dry-run.mjs",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/scripts/provision-tenant.mjs",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/scripts/seed-emulator.mjs",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/scripts/seed-helper.mjs",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/scripts/start-emulators.mjs",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/scripts/test-emulators.mjs",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/scripts/test-invitation-emulators.mjs",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/scripts/transfer-device.mjs",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/src/archive-accounting.mjs",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "backend/src/archive-calendar.mjs",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "backend/src/archive-coordinator.mjs",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "backend/src/archive-format.mjs",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "backend/src/archive-projection.mjs",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "backend/src/archive-state.mjs",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "backend/src/archive-storage.mjs",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "backend/src/demo-operator.mjs",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/src/enrollment.mjs",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "backend/src/gateway.mjs",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "backend/src/historical-view.mjs",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "backend/src/http-gateway.mjs",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "backend/src/index.mjs",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "backend/src/issuer.mjs",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "backend/src/synthetic-directory-storage.mjs",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "backend/src/validation.mjs",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "backend/src/work-budget.mjs",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "backend/test/archive-engine.test.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/test/archive-failure.test.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/test/archive-locale.fixture.mjs",
+      "coverage": "specialist-and-root-reviewed-executed-synthetic-locale-regression",
+      "limits": "No native, production storage or whole-system recovery acceptance."
+    },
+    {
+      "path": "backend/test/archive-locale.test.mjs",
+      "coverage": "specialist-and-root-reviewed-executed-synthetic-locale-regression",
+      "limits": "No native, production storage or whole-system recovery acceptance."
+    },
+    {
+      "path": "backend/test/archive-scale.fixture.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/test/body-parser-security.test.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/test/demo-operator.test.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/test/emulator-test-runner.test.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/test/gateway-deletion-race.test.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/test/historical-view.test.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/test/http-gateway.test.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/test/integration.test.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/test/invitation-signup.integration.test.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/test/invitation-token.test.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/test/seed-helper.test.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/test/shipment.test.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/test/validation.test.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/test/work-budget.test.mjs",
+      "coverage": "selected-unit-and-local-emulator-suites-executed",
+      "limits": "See command selection; no production data/load/attestation."
+    },
+    {
+      "path": "backend/worker/.gitignore",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "backend/worker/README.md",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "backend/worker/compatibility.mjs",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "backend/worker/firebase.emulator.json",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "backend/worker/index.mjs",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "backend/worker/package-lock.json",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "backend/worker/package.json",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "backend/worker/private-stream-debug.mjs",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "backend/worker/review/employee-changes-index.create.review.json",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "backend/worker/review/runtime-custom-role.review.json",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "backend/worker/runtime-config.mjs",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "backend/worker/runtime.mjs",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "backend/worker/scripts/prepare-emulator.mjs",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "backend/worker/test/config.test.mjs",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "backend/worker/test/http-emulator.mjs",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "backend/worker/wrangler.jsonc",
+      "coverage": "selected-source-config-review-tests-dry-run",
+      "limits": "No live Worker or R2 resource acceptance; no runtime CPU profile."
+    },
+    {
+      "path": "config/production.public.json",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "config/wrangler.production.json",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "delivery/SHA256SUMS",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "delivery/verification/delivery-final-check.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "delivery/verification/gateway-final-readback.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "delivery/verification/physical-phone-v9-install.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "delivery/verification/source-archive.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "docs/admin-panel-ar.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/annual-archiving-design.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "docs/annual-archiving-operations.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "docs/backend-invitation-review-ar.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/backend.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/cloud-cost-and-capacity.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "docs/commercial-release-readiness.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "docs/current-status-ar.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/deployment-review-no-card-ar.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/developer-guide.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/employee-invitations-v9-ar.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/feature-map.json",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/feature-map.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/financial-carry-forward-verification.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "docs/handoff-new-account-ar.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/implementation-plan.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/implementation-progress.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "docs/licensing.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/migration.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/no-card-backend.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/no-card-setup-ar.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/official-references.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/original-request.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/production-setup-ar.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/rollout-commands-review.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "docs/security-audit-report.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "docs/security.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/test-results.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/user-guide-ar.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "docs/worker-startup-privacy-review.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    },
+    {
+      "path": "integration_test/drive_android_fixture.py",
+      "coverage": "source-reviewed-native-fixture-NOT-RUN-this-campaign",
+      "limits": "Synthetic API35 only; normal account/business/archive/replacement-phone recovery remains untested or unimplemented."
+    },
+    {
+      "path": "integration_test/employee_registration_test.dart",
+      "coverage": "source-reviewed-native-fixture-NOT-RUN-this-campaign",
+      "limits": "Synthetic API35 only; normal account/business/archive/replacement-phone recovery remains untested or unimplemented."
+    },
+    {
+      "path": "integration_test/external_gateway_test.dart",
+      "coverage": "source-reviewed-native-fixture-NOT-RUN-this-campaign",
+      "limits": "Synthetic API35 only; normal account/business/archive/replacement-phone recovery remains untested or unimplemented."
+    },
+    {
+      "path": "integration_test/firebase_gateway_test.dart",
+      "coverage": "source-reviewed-native-fixture-NOT-RUN-this-campaign",
+      "limits": "Synthetic API35 only; normal account/business/archive/replacement-phone recovery remains untested or unimplemented."
+    },
+    {
+      "path": "integration_test/local_persistence_test.dart",
+      "coverage": "executed-real-native-storage-fixture",
+      "limits": "Synthetic API35 only; normal account/business/archive/replacement-phone recovery remains untested or unimplemented."
+    },
+    {
+      "path": "integration_test/native_full_storage_test.dart",
+      "coverage": "executed-real-native-storage-fixture",
+      "limits": "Synthetic API35 only; normal account/business/archive/replacement-phone recovery remains untested or unimplemented."
+    },
+    {
+      "path": "integration_test/offline_recovery_test.dart",
+      "coverage": "source-reviewed-native-fixture-NOT-RUN-this-campaign",
+      "limits": "Synthetic API35 only; normal account/business/archive/replacement-phone recovery remains untested or unimplemented."
+    },
+    {
+      "path": "lib/application/app_controller.dart",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "lib/data/SCHEMA.md",
+      "coverage": "included-in-analyzer-host-tests-selective-source-review",
+      "limits": "No fresh detailed source review of every lifecycle/UI/security branch."
+    },
+    {
+      "path": "lib/data/ledger_store.dart",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "lib/domain/ledger.dart",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "lib/main.dart",
+      "coverage": "included-in-analyzer-host-tests-selective-source-review",
+      "limits": "No fresh detailed source review of every lifecycle/UI/security branch."
+    },
+    {
+      "path": "lib/presentation/archive_screen.dart",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "lib/presentation/enrollment.dart",
+      "coverage": "included-in-analyzer-host-tests-selective-source-review",
+      "limits": "No fresh detailed source review of every lifecycle/UI/security branch."
+    },
+    {
+      "path": "lib/presentation/reports_extra.dart",
+      "coverage": "included-in-analyzer-host-tests-selective-source-review",
+      "limits": "No fresh detailed source review of every lifecycle/UI/security branch."
+    },
+    {
+      "path": "lib/presentation/screens.dart",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "lib/presentation/shipments.dart",
+      "coverage": "included-in-analyzer-host-tests-selective-source-review",
+      "limits": "No fresh detailed source review of every lifecycle/UI/security branch."
+    },
+    {
+      "path": "lib/security/device_security.dart",
+      "coverage": "included-in-analyzer-host-tests-selective-source-review",
+      "limits": "No fresh detailed source review of every lifecycle/UI/security branch."
+    },
+    {
+      "path": "lib/security/license_sync.dart",
+      "coverage": "included-in-analyzer-host-tests-selective-source-review",
+      "limits": "No fresh detailed source review of every lifecycle/UI/security branch."
+    },
+    {
+      "path": "lib/security/licensing.dart",
+      "coverage": "included-in-analyzer-host-tests-selective-source-review",
+      "limits": "No fresh detailed source review of every lifecycle/UI/security branch."
+    },
+    {
+      "path": "lib/security/trusted_clock.dart",
+      "coverage": "included-in-analyzer-host-tests-selective-source-review",
+      "limits": "No fresh detailed source review of every lifecycle/UI/security branch."
+    },
+    {
+      "path": "lib/services/archive_reader.dart",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "lib/services/employee_registration.dart",
+      "coverage": "included-in-analyzer-host-tests-selective-source-review",
+      "limits": "No fresh detailed source review of every lifecycle/UI/security branch."
+    },
+    {
+      "path": "lib/services/exports.dart",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "lib/services/gateway.dart",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "lib/services/gateway_endpoint.dart",
+      "coverage": "included-in-analyzer-host-tests-selective-source-review",
+      "limits": "No fresh detailed source review of every lifecycle/UI/security branch."
+    },
+    {
+      "path": "lib/services/invitation_code.dart",
+      "coverage": "included-in-analyzer-host-tests-selective-source-review",
+      "limits": "No fresh detailed source review of every lifecycle/UI/security branch."
+    },
+    {
+      "path": "lib/services/sync_protocol.dart",
+      "coverage": "targeted-source-review-and-regression-tests",
+      "limits": "Only documented flows; not a line-by-line proof of all behavior."
+    },
+    {
+      "path": "output/pdf/archived-invoice-synthetic.csv",
+      "coverage": "rendered-synthetic-export-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "output/pdf/archived-invoice-synthetic.pdf",
+      "coverage": "rendered-synthetic-export-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "pubspec.lock",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "pubspec.yaml",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "strawberry_trade.iml",
+      "coverage": "inventory-build-input-or-configuration",
+      "limits": "Not independently audited for every risk."
+    },
+    {
+      "path": "test/annual_financial_reference_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/archive_reader_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/archive_screen_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/controller_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/domain_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/employee_onboarding_widget_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/employee_registration_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/exports_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/fixtures/license_package.json",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/gateway_endpoint_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/gateway_enrollment_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/license_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/preference_backup_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/remote_batch_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/reports_extra_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/scale_storage_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/store_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/sync_protocol_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "test/widget_test.dart",
+      "coverage": "host-suite-executed",
+      "limits": "Test execution; source reviewed selectively. Not native device acceptance."
+    },
+    {
+      "path": "tools/admin-panel/README.md",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/admin-panel/credentials.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/admin-panel/credentials.test.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/admin-panel/operations.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/admin-panel/operations.test.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/admin-panel/package.json",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/admin-panel/public/app.js",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/admin-panel/public/icon.svg",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/admin-panel/public/index.html",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/admin-panel/public/styles.css",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/admin-panel/server.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/admin-panel/server.test.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/admin-panel/start.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/admin-panel/test-emulators.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/annual-review/build-release.py",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/annual-review/capacity.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/annual-review/config.review.json",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/annual-review/native-storage-check.py",
+      "coverage": "root-reviewed-executed-disposable-native-tools",
+      "limits": "Actual synthetic runs; not a standalone unit-suite or production acceptance claim."
+    },
+    {
+      "path": "tools/annual-review/sign-native-fixture.py",
+      "coverage": "root-reviewed-executed-disposable-native-tools",
+      "limits": "Actual synthetic runs; not a standalone unit-suite or production acceptance claim."
+    },
+    {
+      "path": "tools/firebase-config/README.md",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/firebase-config/cli.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/firebase-config/config.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/firebase-config/config.test.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/firebase-config/endpoint-cases.json",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/firebase-config/package.json",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/license-issuer/cli.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/license-issuer/issuer.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/license-issuer/issuer.test.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/license-issuer/package.json",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/production-operator/README.md",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/production-operator/apply-cli.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/production-operator/apply.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/production-operator/apply.test.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/production-operator/cli.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/production-operator/package.json",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/production-operator/plan.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "tools/production-operator/plan.test.mjs",
+      "coverage": "tool-unit-tests-and-selected-boundary-review",
+      "limits": "No exhaustive fresh source review of every tool function."
+    },
+    {
+      "path": "verification/all-dart-tests-final.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-debug-final-badging.txt",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-debug-final-build.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-debug-final-merged-manifest.xml",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-debug-final-signature.txt",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-debug-manifest-inspection.md",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-final-debug-install.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-firebase-integration.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-generated-statement-final.pdf",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-generated-statement-final.png",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-native-full-storage.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-native-seed.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-native-update-verify.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-offline-pdf-share-final.png",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-offline-recovery.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-optimized-home.png",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-optimized-install.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-optimized-pdf-share.png",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-optimized-statement.png",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-optimized-test-signature.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-release-final-build.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-release-manifest-inspection.md",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-release-manifest.xml",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-release-signature-verification.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-release-tooling-analysis.md",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-acceptance.md",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-back-home.xml",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-before-rotation.png",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-before-rotation.xml",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-draft-restored.png",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-draft-restored.xml",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-drafts-list.png",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-drafts-list.xml",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-environment.txt",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-final-home.png",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-final-home.xml",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-form.xml",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-home.png",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-home.xml",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-keyboard-state.txt",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-keyboard.png",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-landscape-bottom.png",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-landscape-bottom.xml",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-landscape.png",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-landscape.xml",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-reopened-home.xml",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/android-ui-manual-restored-portrait.xml",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/annual-2026-11-01/archive-failure-final.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/archive-failure-first.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/archive-integrated-final.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/archive-integrated-first.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/archive-integrated-second.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/archive-scale-73k.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/archive-scale-final-recovery.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/archive-suite-final.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/audit-coverage.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/backend-baseline-unit.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/backend-dependency-audit.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/backend-integration-final.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/backend-integration.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/backend-invitations-final.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/backend-invitations-integration.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/backend-npm-ci.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/backend-parser-after.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/backend-parser-before.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/backend-parser-update.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/backend-production-audit-final.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/backend-production-dependency-audit.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/backend-unit-final.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/backend-unit.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/baseline-source-hashes.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/baseline.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/capacity-estimate.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/evidence-integrity.json",
+      "coverage": "generated-local-review-metadata",
+      "limits": "Integrity/inventory is not independent correctness or production acceptance."
+    },
+    {
+      "path": "verification/annual-2026-11-01/evidence-secret-scan.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/final-review.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/final-source-hashes.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/analyze-before-stylefix.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/analyze-before-stylefix.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/android-runtime-preflight-final.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/apk-inspection-before-integer-review.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/apk-inspection-before-pdf-review.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/apk-inspection-final.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/archive-review-tests.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/archived-invoice-render.png",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/baseline-analyze.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/baseline-analyze.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/baseline-tests.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/baseline-tests.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/canonical-range-after.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/canonical-range-before.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/final-analyze.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/final-analyze.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/final-tests.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/final-tests.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/focused-first.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/focused-second.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/focused-second.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/integrated-analyze.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/integrated-tests-final.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/late-salary-review-tests.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native-device-preflight.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/README.md",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/avd-create.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/emulator-software.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/emulator-supervised.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/emulator.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/full-storage-roundtrip.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/full-storage-roundtrip.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/full-storage.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/integration_driver.dart",
+      "coverage": "root-reviewed-executed-disposable-native-tools",
+      "limits": "Actual synthetic runs; not a standalone unit-suite or production acceptance claim."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/local-persistence-device.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/local-persistence.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/network-isolation.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/pre-seed-disposable-reset.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/runtime.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/seed-build.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/seed-build.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/seed-v2-signature.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/seed-v2-signing-error.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/seed-v2-signing.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/shutdown.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/signed-apk-replacements.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/signed-reboot-verify.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/signed-reboot-verify.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/signed-seed-drive.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/signed-seed-drive.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/signed-v10-offline-start.png",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/signed-verify-drive.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/signed-verify-drive.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/verify-build.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/verify-build.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/verify-signature.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/native/verify-signing.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/pdf-direction-review.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/pdf-export-extracted.txt",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/pdf-export-probe.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/pdf-qa.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/pdf_export_probe_test.dart",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/prior-v9-signature-readonly.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/pub-get.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/pub-get.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/release-badging-final.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/release-build-before-integer-review.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/release-build-before-integer-review.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/release-build-before-pdf-review.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/release-build-final.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/release-build-final.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/release-build.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/release-build.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/release-manifest-final.txt",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/release-manifest-final.xml",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/release-signature-final.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/signing-preflight.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/toolchain.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/flutter/toolchain.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/generated-build-secret-scan.json",
+      "coverage": "executed-known-password-scan-of-generated-build-files",
+      "limits": "One known value only; excludes symlinks/global caches and does not prove general secret absence."
+    },
+    {
+      "path": "verification/annual-2026-11-01/historical-view-tests.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/initial-status.txt",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/original-preservation-final.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/owned-review-paths.json",
+      "coverage": "generated-local-review-metadata",
+      "limits": "Integrity/inventory is not independent correctness or production acceptance."
+    },
+    {
+      "path": "verification/annual-2026-11-01/source-path-inventory.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/tool-tests.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/tracked-secret-shape-scan.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/verification-summary.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/work-budget-tests.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/worker-dependency-audit.json",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/worker-dry-run-final.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/worker-dry-run.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/worker-npm-ci-final.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/worker-npm-ci.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/annual-2026-11-01/worker-tests.log",
+      "coverage": "generated-local-test-evidence-status-reviewed",
+      "limits": "Not an independent exhaustive audit or production acceptance assertion."
+    },
+    {
+      "path": "verification/arabic-statement-sample.pdf",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/artifacts.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/backend-final-integration.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/backend-final-production-audit.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/backend-fixture-namespace-unit.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/continuation-2026-10-20/adb-devices.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/continuation-2026-10-20/cloud-readonly-summary.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/continuation-2026-10-20/flutter-readiness-summary.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/continuation-2026-10-20/functions-list-read.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/continuation-2026-10-20/live-firestore-rules.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/continuation-2026-10-20/live-indexes-read.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/continuation-2026-10-20/verification-summary.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/continuation-2026-10-20/worker-dry-run.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/android-v9-badging.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/android-v9-inspection.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/android-v9-manifest.xml",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/android-v9-release-build.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/android-v9-release-build.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/android-v9-release-plugin-registrant.java",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/android-v9-signature.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/artifacts.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/auth-signup-readiness.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/flutter-analyze.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/flutter-error-messages.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/flutter-focused.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/flutter-host.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/flutter-summary.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/gateway-before-startup-fix.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/gateway-compatible-deploy-attempt1-startup-limit.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/gateway-compatible-deploy.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/gateway-deployments-command.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/gateway-dry-run.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/gateway-final-readback.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/human-deployment-approval.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/independent-review.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/native-employee-registration.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/reviewed-worker-source-sha256.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/worker-config.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/worker-debug-origin-review.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/worker-http-acceptance.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/worker-http-acceptance.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/worker-http-after-privacy-fix.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/worker-http-after-privacy-fix.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations-v9/worker-public-acceptance.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations/backend-emulators-38.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations/backend-summary.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/employee-invitations/backend-unit-43.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/app-check-service-enforcement.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/backend-operator-tests.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/backend-readiness.md",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/deployed-firestore-audit.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/deployed-firestore-default.rules",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/deployed-firestore-provenance.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/deployed-functions-inventory.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/direct-apk-configuration.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/direct-apk-service-preflight.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/issuer-key-preflight.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/issuer-v1-public.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/no-play-console-appcheck-review.md",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/production-android-build.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/production-apk-badging.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/production-apk-manifest.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/production-apk-signature.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/production-package-preflight.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/release-public-metadata.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/firebase-connection/setup-artifacts.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/flutter-analysis-final.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/flutter-format-final.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/legacy-client-test.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/legacy-rules-final-provenance.md",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/legacy-rules-final.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/license-issuer-final.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/no-card/host-backend-tests.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/no-card/host-config-tests.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/no-card/host-flutter-analysis.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/no-card/host-flutter-tests.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/no-card/host-result-summary.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/no-card/native-analysis.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/no-card/native-bridge-evidence.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/no-card/native-external-gateway.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/no-card/native-fixture-procedure.md",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/no-card/native-harness-instrumentation-failure.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/no-card/worker-config-tests.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/no-card/worker-dry-run.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/no-card/worker-evidence.md",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/no-card/worker-http-acceptance.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/no-card/worker-sdk-probe.json",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/pdf-final-first.png",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/pdf-final-last.png",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/remote-batch-analyze.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/remote-batch-final-tests.log",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/source-files-v7.sha256",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "verification/source-files.sha256",
+      "coverage": "historical-artifact-context-only",
+      "limits": "Does not establish current deployment or APK acceptance."
+    },
+    {
+      "path": "\u0627\u0628\u062f\u0623-\u0645\u0646-\u0647\u0646\u0627.md",
+      "coverage": "documentation-context-or-new-findings",
+      "limits": "Documentation is not independent deployment/financial evidence."
+    }
+  ],
+  "flutterArtifactSourceRevision": "2a3cd45f82dce989e8db45e1f7a3e113af10f10a",
+  "handoffLocalDate": "2026-11-02",
+  "timeZone": "Africa/Cairo"
+}

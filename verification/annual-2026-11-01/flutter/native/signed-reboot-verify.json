@@ -1,0 +1,23 @@
+{
+  "synthetic": true,
+  "status": "PASS",
+  "exitCode": 0,
+  "command": [
+    "flutter",
+    "drive",
+    "--use-application-binary=/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-01/flutter/native/persistence-verify-signed-DEBUG.apk",
+    "--target=integration_test/local_persistence_test.dart",
+    "--driver=verification/annual-2026-11-01/flutter/native/integration_driver.dart",
+    "--keep-app-running",
+    "-d",
+    "emulator-5580"
+  ],
+  "rebootPerformed": true,
+  "offlineSettingsSurvivedReboot": {
+    "airplane_mode_on": "1",
+    "wifi_on": "0",
+    "mobile_data": "0"
+  },
+  "uninstallOrClearSinceSeed": false,
+  "limits": "Native Keystore/SQLCipher queued-data recovery only; not normal account/license/archive disaster recovery"
+}

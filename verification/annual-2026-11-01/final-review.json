@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-01",
+  "baselineSourceCommit": "e246f436a092616ef2799bb04f969a19fd19ffcc",
+  "finalImplementationCommit": "2a3cd45f82dce989e8db45e1f7a3e113af10f10a",
+  "flutterArtifactCommit": "2a3cd45f82dce989e8db45e1f7a3e113af10f10a",
+  "flutterBuildInputsUnchangedSinceArtifactCommit": true,
+  "sourceHashes": "final-source-hashes.json",
+  "evidence": "verification-summary.json",
+  "missionComplete": false,
+  "productionActionsPerformed": false,
+  "verdicts": {
+    "coreCommercialAPK": "NO-GO",
+    "productionArchiveExportViewing": "NO-GO",
+    "automaticProductionClose": "NO-GO",
+    "destructiveCleanup": "NO-GO"
+  },
+  "implementationGaps": [
+    "active compact snapshot atomic/resumable client install",
+    "conditional pruner and mid-delete recovery",
+    "whole-system archive+active-data recovery",
+    "complete archived party statements/indexed cross-year search",
+    "automatic Worker scheduler under measured budget",
+    "held salary-term manager resolution"
+  ],
+  "preservation": "original-preservation-final.json",
+  "supersededArtifacts": [
+    "flutter/strawberry-trade-annual-review-v10.apk",
+    "flutter/strawberry-trade-annual-review-v10-before-pdf-review.apk",
+    "flutter/strawberry-trade-annual-review-v10-before-integer-review.apk"
+  ],
+  "intendedReviewArtifact": "flutter/strawberry-trade-annual-review-v10-final.apk",
+  "nativeAcceptance": "PASS scoped representative storage/migration/signed-update/reboot; broader native flows NOT RUN",
+  "handoffLocalDate": "2026-11-02",
+  "timeZone": "Africa/Cairo"
+}

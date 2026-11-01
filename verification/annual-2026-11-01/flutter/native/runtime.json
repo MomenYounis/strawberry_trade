@@ -1,0 +1,33 @@
+{
+  "synthetic": true,
+  "ownerAvdTouched": false,
+  "directory": "/tmp/strawberry-annual-native-oampurcz",
+  "avdHome": "/tmp/strawberry-annual-native-oampurcz/avd",
+  "serial": "emulator-5580",
+  "pid": 23124,
+  "port": 5580,
+  "createExitCode": 0,
+  "emulatorCommand": [
+    "/home/younis/Android/Sdk/emulator/emulator",
+    "-avd",
+    "strawberry_annual_disposable",
+    "-port",
+    "5580",
+    "-no-window",
+    "-no-audio",
+    "-no-boot-anim",
+    "-no-snapshot",
+    "-gpu",
+    "host",
+    "-memory",
+    "1024",
+    "-cores",
+    "2",
+    "-feature",
+    "-Vulkan"
+  ],
+  "priorRuntimeFailure": "Original GPU host runtime disappeared after three passed native assertions; cleanup force-stop timed out. GPU null-context errors observed; exact crash cause not established.",
+  "supervisedExecSession": true,
+  "syntheticDirectoryRemovedAfterChecks": true,
+  "running": false
+}

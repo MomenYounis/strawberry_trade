@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: repeated invoice reads retain identity and never offer a financial posting API
+ok 1 - repeated invoice reads retain identity and never offer a financial posting API
+  ---
+  duration_ms: 42.931092
+  type: 'test'
+  ...
+# Subtest: catalogue listing exposes no key, object location or financial payload
+ok 2 - catalogue listing exposes no key, object location or financial payload
+  ---
+  duration_ms: 6.02649
+  type: 'test'
+  ...
+# Subtest: wrong tenant/year, unverified publication and wrong key fail before returning records
+ok 3 - wrong tenant/year, unverified publication and wrong key fail before returning records
+  ---
+  duration_ms: 6.688609
+  type: 'test'
+  ...
+# Subtest: bounded reads require explicit continuation and absent IDs terminate
+ok 4 - bounded reads require explicit continuation and absent IDs terminate
+  ---
+  duration_ms: 7.84959
+  type: 'test'
+  ...
+# Subtest: tampered stored manifest and interrupted storage do not return unverified contents
+ok 5 - tampered stored manifest and interrupted storage do not return unverified contents
+  ---
+  duration_ms: 5.118158
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 675.4653

@@ -1,0 +1,145 @@
+Resolving dependencies...
+Downloading packages...
+  _flutterfire_internals 1.3.78 (1.3.79 available)
+  android_file_picker 2.1.1 (2.1.2 available)
+  archive 4.5.2 (4.6.0 available)
+  cloud_functions 7.0.0 (7.0.1 available)
+  cloud_functions_platform_interface 6.1.0 (6.1.1 available)
+  cloud_functions_web 5.1.14 (5.1.15 available)
+  code_assets 1.2.1 (2.1.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  file_picker 13.1.0 (13.3.0 available)
+  file_picker_darwin 2.3.2 (2.4.0 available)
+  firebase_app_check 0.5.0 (0.5.1 available)
+  firebase_app_check_platform_interface 0.5.0+2 (0.5.1+3 available)
+  firebase_app_check_web 0.3.0+2 (0.3.1+3 available)
+  firebase_auth 7.0.0 (7.0.1 available)
+  firebase_auth_platform_interface 9.1.1 (9.1.2 available)
+  firebase_auth_web 6.3.1 (6.3.2 available)
+  firebase_core 5.0.0 (5.1.0 available)
+  firebase_core_web 4.0.0 (4.1.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  jni 1.1.0 (1.1.1 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  objective_c 9.5.0 (9.6.2 available)
+  petitparser 7.0.2 (7.1.0 available)
+  posix 6.5.2 (6.5.4 available)
+  qr 3.0.2 (4.0.1 available)
+  record_use 0.6.0 (1.1.1 available)
+  sqflite_common_ffi 2.4.4 (2.4.5 available)
+  sqlite3 3.5.2 (3.8.0 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.2 (2.4.4 available)
+  web 1.1.1 (1.1.2 available)
+  xml 7.0.1 (7.1.0 available)
+Got dependencies!
+35 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Installing verification/annual-2026-11-01/flutter/native/persistence-verify-signed-DEBUG.apk...      1,233ms
+I/Choreographer( 3508): Skipped 32 frames!  The application may be doing too much work on its main thread.
+D/FlutterJNI( 3508): Sending viewport metrics to the engine.
+D/ProfileInstaller( 3508): Installing profile for com.strawberrytrade.strawberry_trade
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:36009/9L-ggLt8nCU=/
+VMServiceFlutterDriver: Isolate found with number: 3474168483406403
+VMServiceFlutterDriver: Isolate 3474168483406403 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/flutter ( 3508): 00:00 +0: Android Keystore identity signs challenges and protects isolated scopes
+VMServiceFlutterDriver: Connected to Flutter application.
+I/Choreographer( 3508): Skipped 33 frames!  The application may be doing too much work on its main thread.
+I/flutter ( 3508): 00:01 +1: SQLCipher commits ledger and outbox then reopens encrypted with the same protected key
+I/SQLiteConnection( 3508): Database keying operation returned:0
+W/trawberry_trade( 3508): JNI critical lock held for 377.322ms on Thread[23,tid=3562,Runnable,Thread*=0x710e621f12e0,peer=0x1432c2a8,"Sqflite"]
+I/SQLiteConnection( 3508): Database keying operation returned:0
+W/trawberry_trade( 3508): JNI critical lock held for 384.429ms on Thread[23,tid=3564,Runnable,Thread*=0x710e62210780,peer=0x143550a8,"Sqflite"]
+I/SQLiteConnection( 3508): Database keying operation returned:0
+D/sqlcipher( 3508): ERROR CORE sqlcipher_page_cipher: hmac check failed for pgno=1
+D/sqlcipher( 3508): ERROR CORE sqlite3Codec: error decrypting page 1 data: 1
+D/sqlcipher( 3508): ERROR CORE sqlcipher_codec_ctx_set_error 1
+E/SQLiteLog( 3508): (26) file is not a database in "SELECT COUNT(*) FROM sqlite_schema;"
+W/trawberry_trade( 3508): JNI critical lock held for 375.709ms on Thread[23,tid=3565,Runnable,Thread*=0x710e62207c70,peer=0x143577a0,"Sqflite"]
+E/SQLiteDatabase( 3508): Failed to open database '/data/user/0/com.strawberrytrade.strawberry_trade/files/integration-persistence/apk-update-v1/ledger.db'.
+E/SQLiteDatabase( 3508): net.zetetic.database.sqlcipher.SQLiteNotADatabaseException: file is not a database (code 26): , while compiling: SELECT COUNT(*) FROM sqlite_schema;
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnection.nativePrepareStatement(Native Method)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnection.acquirePreparedStatement(SQLiteConnection.java:973)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnection.executeForLong(SQLiteConnection.java:628)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnection.open(SQLiteConnection.java:240)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnection.open(SQLiteConnection.java:202)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnectionPool.openConnectionLocked(SQLiteConnectionPool.java:474)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnectionPool.open(SQLiteConnectionPool.java:188)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnectionPool.open(SQLiteConnectionPool.java:180)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.openInner(SQLiteDatabase.java:1028)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.open(SQLiteDatabase.java:1013)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.openDatabase(SQLiteDatabase.java:840)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.openDatabase(SQLiteDatabase.java:812)
+E/SQLiteDatabase( 3508): 	at com.davidmartos96.sqflite_sqlcipher.Database.openWithFlags(Database.java:62)
+E/SQLiteDatabase( 3508): 	at com.davidmartos96.sqflite_sqlcipher.Database.openReadOnly(Database.java:42)
+E/SQLiteDatabase( 3508): 	at com.davidmartos96.sqflite_sqlcipher.SqfliteSqlCipherPlugin$6.run(SqfliteSqlCipherPlugin.java:795)
+E/SQLiteDatabase( 3508): 	at android.os.Handler.handleCallback(Handler.java:959)
+E/SQLiteDatabase( 3508): 	at android.os.Handler.dispatchMessage(Handler.java:100)
+E/SQLiteDatabase( 3508): 	at android.os.Looper.loopOnce(Looper.java:232)
+E/SQLiteDatabase( 3508): 	at android.os.Looper.loop(Looper.java:317)
+E/SQLiteDatabase( 3508): 	at android.os.HandlerThread.run(HandlerThread.java:85)
+D/Sqflite ( 3508): Opening db in /data/user/0/com.strawberrytrade.strawberry_trade/files/integration-persistence/apk-update-v1/ledger.db with PRAGMA cipher_migrate
+I/SQLiteConnection( 3508): Database keying operation returned:0
+D/sqlcipher( 3508): ERROR CORE sqlcipher_page_cipher: hmac check failed for pgno=1
+D/sqlcipher( 3508): ERROR CORE sqlite3Codec: error decrypting page 1 data: 1
+D/sqlcipher( 3508): ERROR CORE sqlcipher_codec_ctx_set_error 1
+E/SQLiteLog( 3508): (26) statement aborts at 2: file is not a database; [PRAGMA user_version;]
+D/sqlcipher( 3508): ERROR CORE sqlcipher_page_cipher: hmac check failed for pgno=1
+D/sqlcipher( 3508): ERROR CORE sqlite3Codec: error decrypting page 1 data: 1
+D/sqlcipher( 3508): ERROR CORE sqlcipher_codec_ctx_set_error 1
+E/SQLiteLog( 3508): (26) statement aborts at 2: file is not a database; [PRAGMA user_version;]
+D/sqlcipher( 3508): ERROR CORE sqlcipher_page_cipher: hmac check failed for pgno=1
+D/sqlcipher( 3508): ERROR CORE sqlite3Codec: error decrypting page 1 data: 1
+D/sqlcipher( 3508): ERROR CORE sqlcipher_codec_ctx_set_error 1
+E/SQLiteLog( 3508): (26) statement aborts at 2: file is not a database; [PRAGMA user_version;]
+E/SQLiteLog( 3508): (26) statement aborts at 2: file is not a database; [PRAGMA user_version;]
+D/sqlcipher( 3508): ERROR CORE sqlcipher_codec_ctx_migrate: unable to determine format version for upgrade: this may indicate custom settings were used 
+D/sqlcipher( 3508): ERROR CORE sqlcipher_page_cipher: hmac check failed for pgno=1
+D/sqlcipher( 3508): ERROR CORE sqlite3Codec: error decrypting page 1 data: 1
+D/sqlcipher( 3508): ERROR CORE sqlcipher_codec_ctx_set_error 1
+E/SQLiteLog( 3508): (26) file is not a database in "DETACH DATABASE migrate;"
+D/sqlcipher( 3508): WARN CORE sqlcipher_codec_ctx_migrate: DETACH DATABASE migrate failed: 26
+D/sqlcipher( 3508): ERROR CORE sqlcipher_codec_ctx_migrate: an error occurred attempting to migrate the database - last error 1
+D/sqlcipher( 3508): ERROR CORE sqlcipher_codec_pragma: error occurred during cipher_migrate: 1
+W/trawberry_trade( 3508): JNI critical lock held for 672.192ms on Thread[23,tid=3565,Runnable,Thread*=0x710e62207c70,peer=0x143577a0,"Sqflite"]
+E/SQLiteDatabase( 3508): Failed to open database '/data/user/0/com.strawberrytrade.strawberry_trade/files/integration-persistence/apk-update-v1/ledger.db'.
+E/SQLiteDatabase( 3508): net.zetetic.database.sqlcipher.SQLiteNotADatabaseException: file is not a database (code 26): , while compiling: SELECT COUNT(*) FROM sqlite_schema;
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnection.nativePrepareStatement(Native Method)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnection.acquirePreparedStatement(SQLiteConnection.java:973)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnection.executeForLong(SQLiteConnection.java:628)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnection.open(SQLiteConnection.java:240)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnection.open(SQLiteConnection.java:202)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnectionPool.openConnectionLocked(SQLiteConnectionPool.java:474)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnectionPool.open(SQLiteConnectionPool.java:188)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteConnectionPool.open(SQLiteConnectionPool.java:180)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.openInner(SQLiteDatabase.java:1028)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.open(SQLiteDatabase.java:1013)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.openDatabase(SQLiteDatabase.java:840)
+E/SQLiteDatabase( 3508): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.openDatabase(SQLiteDatabase.java:812)
+E/SQLiteDatabase( 3508): 	at com.davidmartos96.sqflite_sqlcipher.Database.openWithFlags(Database.java:62)
+E/SQLiteDatabase( 3508): 	at com.davidmartos96.sqflite_sqlcipher.Database.openReadOnly(Database.java:42)
+E/SQLiteDatabase( 3508): 	at com.davidmartos96.sqflite_sqlcipher.SqfliteSqlCipherPlugin$6.run(SqfliteSqlCipherPlugin.java:795)
+E/SQLiteDatabase( 3508): 	at android.os.Handler.handleCallback(Handler.java:959)
+E/SQLiteDatabase( 3508): 	at android.os.Handler.dispatchMessage(Handler.java:100)
+E/SQLiteDatabase( 3508): 	at android.os.Looper.loopOnce(Looper.java:232)
+E/SQLiteDatabase( 3508): 	at android.os.Looper.loop(Looper.java:317)
+E/SQLiteDatabase( 3508): 	at android.os.HandlerThread.run(HandlerThread.java:85)
+I/SQLiteConnection( 3508): Database keying operation returned:0
+W/trawberry_trade( 3508): JNI critical lock held for 385.371ms on Thread[23,tid=3565,Runnable,Thread*=0x710e62207c70,peer=0x143577a0,"Sqflite"]
+I/flutter ( 3508): 00:03 +2: Native encrypted v1 to v3 migration preserves pending payload, retries and draft
+D/EGL_emulation( 3508): app_time_stats: avg=1724.62ms min=561.38ms max=2887.86ms count=2
+I/SQLiteConnection( 3508): Database keying operation returned:0
+I/SQLiteConnection( 3508): Database keying operation returned:0
+W/trawberry_trade( 3508): JNI critical lock held for 402.406ms on Thread[23,tid=3567,Runnable,Thread*=0x710e62207c70,peer=0x143c9780,"Sqflite"]
+I/SQLiteConnection( 3508): Database keying operation returned:0
+W/trawberry_trade( 3508): JNI critical lock held for 386.313ms on Thread[23,tid=3568,Runnable,Thread*=0x710e6220ebb0,peer=0x143e0758,"Sqflite"]
+I/flutter ( 3508): 00:05 +3: (tearDownAll)
+D/EGL_emulation( 3508): app_time_stats: avg=1253.71ms min=1253.71ms max=1253.71ms count=1
+I/flutter ( 3508): 00:05 +4: All tests passed!
+All tests passed.
+Leaving the application running.

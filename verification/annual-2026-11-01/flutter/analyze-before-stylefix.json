@@ -1,0 +1,9 @@
+{
+  "command": [
+    "flutter",
+    "analyze",
+    "--no-pub"
+  ],
+  "exitCode": 1,
+  "status": "FAIL"
+}

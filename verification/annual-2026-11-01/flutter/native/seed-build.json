@@ -1,0 +1,15 @@
+{
+  "command": [
+    "flutter",
+    "build",
+    "apk",
+    "--debug",
+    "--target",
+    "integration_test/local_persistence_test.dart",
+    "--dart-define=PERSISTENCE_PHASE=seed-v2",
+    "--build-number=8"
+  ],
+  "exitCode": 0,
+  "synthetic": true,
+  "status": "PASS"
+}

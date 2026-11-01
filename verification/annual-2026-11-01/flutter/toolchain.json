@@ -1,0 +1,8 @@
+{
+  "command": [
+    "flutter",
+    "--version"
+  ],
+  "exitCode": 0,
+  "status": "PASS"
+}

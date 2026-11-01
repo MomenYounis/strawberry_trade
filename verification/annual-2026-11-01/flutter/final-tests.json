@@ -1,0 +1,11 @@
+{
+  "command": [
+    "flutter",
+    "test",
+    "--no-pub",
+    "--reporter",
+    "expanded"
+  ],
+  "exitCode": 0,
+  "status": "PASS"
+}

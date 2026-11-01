@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "synthetic": true,
+  "device": "emulator-5580",
+  "bootComplete": true,
+  "network": {
+    "airplane_mode_on": "1",
+    "wifi_on": "0",
+    "mobile_data": "0"
+  },
+  "ownerDeviceTouched": false,
+  "fixture": "local persistence and SQLCipher only; no Firebase initialization"
+}

@@ -1,0 +1,8 @@
+{
+  "synthetic": true,
+  "status": "PASS",
+  "device": "emulator-5580",
+  "exitCode": 0,
+  "ownerAvdTouched": false,
+  "reason": "All scoped native checks completed; stopped only the new disposable emulator"
+}

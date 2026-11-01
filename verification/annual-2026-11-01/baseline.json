@@ -1,0 +1,11 @@
+{
+  "date": "2026-11-01",
+  "sourceCommit": "e246f436a092616ef2799bb04f969a19fd19ffcc",
+  "branch": "codex/annual-archive-safety",
+  "originalRepository": "/home/younis/Downloads/strawberry_trade",
+  "workingRepository": "/home/younis/strawberry-trade-annual-review",
+  "staged": "",
+  "preExistingChanges": "327 mode-only differences preserved byte-for-byte and mode-for-mode in writable clone; no tracked content changes initially",
+  "isolationReason": "original filesystem read-only; managed worktree failed; cloned full Git repository; ignored caches/credentials/generated builds not copied",
+  "deploymentObservation": "none in this mission"
+}

@@ -1,0 +1,27 @@
+{
+  "synthetic": true,
+  "status": "PASS",
+  "ownerDeviceTouched": false,
+  "uninstallOrDataClearBetweenSeedAndReplacements": false,
+  "networkDisabled": true,
+  "installs": [
+    {
+      "artifact": "/mnt/data/LinuxHome/Downloads/strawberry_trade/delivery/strawberry-trade-employee-invitations-v9.apk",
+      "versionCode": 9,
+      "sha256": "7bfaf821d141960a8a49e8ef88921406dca0dd684b5cb3b1a12bee38aae0ee83",
+      "command": "adb -s emulator-5580 install -r APK",
+      "exitCode": 0,
+      "success": true
+    },
+    {
+      "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-01/flutter/strawberry-trade-annual-review-v10-final.apk",
+      "versionCode": 10,
+      "sha256": "4c57af562a6f40c295385bb4439bf61105374be45c296b825ce59236a9c07679",
+      "command": "adb -s emulator-5580 install -r APK",
+      "exitCode": 0,
+      "success": true
+    }
+  ],
+  "releaseColdStartCommandExitCode": 0,
+  "dataSurvivalVerdict": "PASS in signed-verify-drive.json and signed-reboot-verify.json: representative schema2 encrypted queue/key/draft preserved and migrated to3; broader normal account/archive recovery not tested"
+}

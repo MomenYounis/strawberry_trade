@@ -1,0 +1,8 @@
+{
+  "command": [
+    "flutter",
+    "analyze"
+  ],
+  "exitCode": 1,
+  "status": "FAIL"
+}

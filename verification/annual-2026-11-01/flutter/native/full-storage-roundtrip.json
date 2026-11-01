@@ -1,0 +1,25 @@
+{
+  "synthetic": true,
+  "status": "PASS",
+  "ownerDeviceTouched": false,
+  "sourceCommit": "5ddbe37e1872cc7d42a130dcbd6d931100aeea04",
+  "command": [
+    "flutter",
+    "test",
+    "integration_test/native_full_storage_test.dart",
+    "-d",
+    "emulator-5580",
+    "--no-uninstall",
+    "--reporter",
+    "expanded"
+  ],
+  "network": {
+    "airplane_mode_on": "1",
+    "wifi_on": "0",
+    "mobile_data": "0"
+  },
+  "fixtureSha256": "5ec3f98bb4f24752c3ec90c80b13490df88d7def5f54e63cfea30cc3173fdd3e",
+  "exitCode": 0,
+  "tests": 1,
+  "log": "full-storage-roundtrip.log"
+}

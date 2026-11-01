@@ -1,0 +1,12 @@
+{
+  "synthetic": true,
+  "debugTestArtifact": true,
+  "status": "PASS",
+  "sourceCommit": "5ddbe37e1872cc7d42a130dcbd6d931100aeea04",
+  "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-01/flutter/native/persistence-seed-v2-signed-DEBUG.apk",
+  "sha256": "f54ee1f3b3d016fd6f9cd162157b7f68f3b71fd73022eb3e793887f51d53e0e5",
+  "inputSha256": "148a4edfb965b24b87a9640468447ebc3774bfaca0b8ca646ebc485d81575601",
+  "versionCode": 8,
+  "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+  "signingCredential": "Existing Secret Service value; anonymous memfd; no password arguments/disk file"
+}

@@ -1,0 +1,19 @@
+{
+  "synthetic": true,
+  "status": "PASS",
+  "exitCode": 0,
+  "command": [
+    "flutter",
+    "drive",
+    "--use-application-binary=/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-01/flutter/native/persistence-seed-v2-signed-DEBUG.apk",
+    "--target=integration_test/local_persistence_test.dart",
+    "--driver=verification/annual-2026-11-01/flutter/native/integration_driver.dart",
+    "--keep-app-running",
+    "-d",
+    "emulator-5580"
+  ],
+  "schemaSeeded": 2,
+  "versionCode": 8,
+  "keptInstalled": true,
+  "fixtureSha256": "8a07663e65309f52ed52e2e4bb7c83dd13b519e760a10f9bc8d57df03fc388ac"
+}

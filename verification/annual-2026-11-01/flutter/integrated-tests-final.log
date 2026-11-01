@@ -1,0 +1,154 @@
+00:00 +0: loading /home/younis/strawberry-trade-annual-review/test/controller_test.dart
+00:00 +0: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (setUpAll)
+00:00 +1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (setUpAll)
+00:00 +2: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (setUpAll)
+00:00 +3: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (setUpAll)
+00:00 +4: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (setUpAll)
+00:00 +5: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (setUpAll)
+00:00 +5: /home/younis/strawberry-trade-annual-review/test/domain_test.dart: Arabic/Persian and Western decimal parsing is exact; malformed/NaN/negative fail
+00:00 +6: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +7: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +8: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +9: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +10: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +11: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +12: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +13: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +14: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +15: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +16: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +17: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +18: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +19: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +20: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +21: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: overlapping synchronization triggers use one sender and acknowledge once
+00:00 +22: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: late acknowledgment after sign-out cannot modify another tenant with the same operation ID
+00:00 +23: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: disposing during a delayed send preserves the pending disk operation and ignores its late acknowledgment
+00:00 +24: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: known expiry retains the queue and renewal sends the original operation exactly once
+00:00 +25: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: explicit Auth account disable also clears cached data and invalidates stale storage access
+00:01 +26: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: ordinary auth-token expiry preserves offline authority and the original queued operation
+00:01 +27: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: a server authorization denial blocks the retained operation using its machine reason
+00:01 +28: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: renewal automatically resumes a server-expiry block with the preserved operation ID
+00:01 +29: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: a timed-out acknowledgment retains the same ID and clears only on a valid retry response
+00:01 +30: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: an unrecognized send response cannot acknowledge and discard a durable operation
+00:01 +31: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: a signed live revocation clears exposed data and invalidates stale store handles without deleting the queue
+00:01 +32: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: closed-period staging is retained across reopen and excluded from financial reports
+00:01 +33: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: held historical salary evidence stays durable without changing active obligations
+00:01 +34: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: malformed and history-floor pages preserve cursor and unsent work
+00:02 +35: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: bounded paging does not label unfinished history as synchronized
+00:03 +36: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (tearDownAll)
+00:08 +36: /home/younis/strawberry-trade-annual-review/test/employee_registration_test.dart: v2 invitation derives only its canonical bounded tenant route
+00:08 +37: /home/younis/strawberry-trade-annual-review/test/employee_registration_test.dart: legacy invitation requires an explicit valid tenant
+00:08 +38: /home/younis/strawberry-trade-annual-review/test/employee_registration_test.dart: verification delivery failure retains created account and retries only delivery
+00:08 +39: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:08 +40: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:08 +41: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:08 +42: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:08 +43: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:08 +44: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:08 +45: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:08 +46: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +47: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +48: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +49: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +50: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +51: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +52: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +53: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +54: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +55: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +56: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +57: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +58: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +59: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +60: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +61: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +62: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +63: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +64: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +65: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +66: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +67: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +68: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +69: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +70: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +71: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +72: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +73: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +74: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +75: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +76: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +77: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +78: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +79: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +80: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +81: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +82: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +83: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +84: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +85: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +86: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:10 +87: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:11 +88: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:11 +89: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +90: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +91: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +92: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +93: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +94: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +95: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +96: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +97: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +98: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +99: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +100: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +101: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +102: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +103: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +104: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +105: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +106: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:13 +107: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:13 +108: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:13 +109: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:13 +110: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:13 +111: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:13 +112: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:13 +113: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:13 +114: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:13 +115: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:13 +116: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:14 +117: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:14 +118: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:14 +119: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:14 +120: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:14 +121: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:14 +122: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:14 +123: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:14 +124: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:15 +125: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:15 +126: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:15 +127: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:15 +128: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:15 +129: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:15 +130: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:15 +131: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:16 +132: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:16 +133: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:17 +134: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:17 +135: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:18 +136: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:18 +137: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+00:19 +138: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page reads validation projections once and causes one complete UI snapshot
+REMOTE_PAGE_VERIFICATION {"individual":{"milliseconds":9385,"completeEntryScans":1000,"allQueryCalls":6000,"uiRefreshCalls":500,"events":500},"batch":{"milliseconds":454,"completeEntryScans":2,"allQueryCalls":511,"uiRefreshCalls":1,"events":500}}
+00:20 +139: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:20 +140: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:20 +141: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:21 +142: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:22 +143: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:23 +144: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+STORAGE_SCALE_VERIFICATION {"entryCount":10000,"partyCount":20,"seasons":10,"validatedImportMs":35301,"reopenMs":2,"read10000Ms":415,"historicalPaginationMs":73,"accountSearchAndStatementMs":15,"fileBytes":8101888}
+00:46 +145: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Actual SQLITE_FULL rolls back financial and queue writes and preserves saved drafts through reopen
+SQLITE_FULL_VERIFICATION {"resultCode":13,"pageLimit":128,"pageSize":1024,"fileBytes":131072,"pressureRows":83,"recoverySucceeded":true}
+00:47 +146: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: (tearDownAll)
+00:47 +146: All tests passed!

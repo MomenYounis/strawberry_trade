@@ -1,0 +1,545 @@
+{
+  "files": {
+    "README.md": {
+      "bytes": 9045,
+      "sha256": "d06f5ba89e2c9fa28cac6bdcc4a15d72bd9d079a0fe078989e4234859b8a1870"
+    },
+    "docs/annual-archiving-design.md": {
+      "bytes": 20978,
+      "sha256": "6c79ffbb0e7c3cb4237bfe9979fc77b7983400a28c1674803ab7b1f4128e2854"
+    },
+    "docs/annual-archiving-operations.md": {
+      "bytes": 12704,
+      "sha256": "3b064a565a22e1ac91108bc88faad7a408dcc566bddeb9e0cb2ac9c3842f5a20"
+    },
+    "docs/cloud-cost-and-capacity.md": {
+      "bytes": 9124,
+      "sha256": "a8ba13139f697e90f6e9bb6f5ce5789ed782b79f63725836fb9912434c9caffc"
+    },
+    "docs/commercial-release-readiness.md": {
+      "bytes": 15184,
+      "sha256": "77ae64d7d91b4a6bb28ea456abc2f2be6c0cd31a2bb47b16515bcb3bb953f565"
+    },
+    "docs/financial-carry-forward-verification.md": {
+      "bytes": 10730,
+      "sha256": "265f55f331a7b3b8da8fe2f65c0849d2b05478aff000c7f315cbf54fcdf0496c"
+    },
+    "docs/implementation-progress.md": {
+      "bytes": 22489,
+      "sha256": "77684f4b8c10a06c334356bb21348db62e05ae631ada315eef503cc18a91e7bc"
+    },
+    "docs/rollout-commands-review.md": {
+      "bytes": 3056,
+      "sha256": "394b40bbd67d0f84aa5db3d199920b560d4aa5d9cd1ecd3f890864381aa6cb64"
+    },
+    "docs/security-audit-report.md": {
+      "bytes": 23796,
+      "sha256": "86da34a6da716a5838d038142a5749d0eb270410311a0d181e947ddc616002ef"
+    },
+    "output/pdf/archived-invoice-synthetic.csv": {
+      "bytes": 1074,
+      "sha256": "d998cbc5623c38daf08f01191d18b3cf60ca4f58ff42e5cf48d80220a7fd9e7d"
+    },
+    "output/pdf/archived-invoice-synthetic.pdf": {
+      "bytes": 23815,
+      "sha256": "a8a6702b4f9f7054450546f8e40f891fdcbdd1539cd55eec328520fbf6a7e753"
+    },
+    "verification/annual-2026-11-01/archive-failure-final.log": {
+      "bytes": 1283,
+      "sha256": "6df94fe1de6e00c20b26d2ded01c47fa42296bbc5a1a3327ffe63664a682168c"
+    },
+    "verification/annual-2026-11-01/archive-failure-first.log": {
+      "bytes": 2225,
+      "sha256": "5c571cdb112dde56d29c434c044ca45e15129774b7b8f5622f20a115516fba83"
+    },
+    "verification/annual-2026-11-01/archive-integrated-final.log": {
+      "bytes": 6277,
+      "sha256": "62d952558f3008821e5a27c0283ecfc1dc38b221dc4e91daef804e8a2b7a3877"
+    },
+    "verification/annual-2026-11-01/archive-integrated-first.log": {
+      "bytes": 6677,
+      "sha256": "2131146cb94255f9dc03f219dba7979bd225d956c644be3242d915e9028a6ffa"
+    },
+    "verification/annual-2026-11-01/archive-integrated-second.log": {
+      "bytes": 6675,
+      "sha256": "e5feedb6b76612a9621160b704def01651d67573f65fd0daed535bd7eb317459"
+    },
+    "verification/annual-2026-11-01/archive-scale-73k.log": {
+      "bytes": 587,
+      "sha256": "29f5d113740170e2fa04fefb3e75aa3fd5e6ebba911a0edd9f975187098abc17"
+    },
+    "verification/annual-2026-11-01/archive-scale-final-recovery.log": {
+      "bytes": 587,
+      "sha256": "df8ccef4e529ff0b55689999745429f2ae056822f329c44c89b1319936fdda31"
+    },
+    "verification/annual-2026-11-01/archive-suite-final.log": {
+      "bytes": 8373,
+      "sha256": "688c60504a3669dd6d09900a30e0036bc9591641377abe64504acd7ddddbf0d2"
+    },
+    "verification/annual-2026-11-01/audit-coverage.json": {
+      "bytes": 110022,
+      "sha256": "0fb5fd9b0a379d4b6d4fd61a36326ffd2e564498a0c5525694afd6671a3b01e7"
+    },
+    "verification/annual-2026-11-01/backend-baseline-unit.log": {
+      "bytes": 10391,
+      "sha256": "74bc01446bd2da9ea96f7f82b8595baec43fd865c28401765c796886c6cb0ce5"
+    },
+    "verification/annual-2026-11-01/backend-dependency-audit.json": {
+      "bytes": 18073,
+      "sha256": "0718b4184659922ce0ac0ecb4ea5f1cc73a262dc932d8045ec657f6d51d7cced"
+    },
+    "verification/annual-2026-11-01/backend-integration-final.log": {
+      "bytes": 13477,
+      "sha256": "a9bc02072ccce0288a9f40b9b003ca9ed69c93e399422a02edfd2ab0ce026f09"
+    },
+    "verification/annual-2026-11-01/backend-integration.log": {
+      "bytes": 13155,
+      "sha256": "6d5aabe5a62f7c73eea9a90f83c85c18d5e80c5687311ecec731cefe82ccda99"
+    },
+    "verification/annual-2026-11-01/backend-invitations-final.log": {
+      "bytes": 16971,
+      "sha256": "eedc2fec63c73e3d0aa8ed7e56e117da3caa1e8fef42d1ff40dbe6436dc640b3"
+    },
+    "verification/annual-2026-11-01/backend-invitations-integration.log": {
+      "bytes": 16969,
+      "sha256": "27e38e7af4a80d32760cbc8f84e48349cefdaf57087b0e0f714c532615e11da6"
+    },
+    "verification/annual-2026-11-01/backend-npm-ci.log": {
+      "bytes": 3204,
+      "sha256": "7dfeeaa047c1e1fb605a508122172c2e726f93dcde0ee3ccd200be458d66a02a"
+    },
+    "verification/annual-2026-11-01/backend-parser-after.log": {
+      "bytes": 736,
+      "sha256": "76b84f0da51cfca20d890a1b8e5ba2a9fcc47baf18a4d5645590bae02f3d5a58"
+    },
+    "verification/annual-2026-11-01/backend-parser-before.log": {
+      "bytes": 1096,
+      "sha256": "ab9185ec28e3d98f217517ffc6062bccb9b09c8b2b3db64ea43ec73108fde939"
+    },
+    "verification/annual-2026-11-01/backend-parser-update.log": {
+      "bytes": 2479,
+      "sha256": "22d8a52f5ed215131d5c31a5f8ebe2882d2fa1e993afac34ee01ce00678b7bac"
+    },
+    "verification/annual-2026-11-01/backend-production-audit-final.json": {
+      "bytes": 3283,
+      "sha256": "18ef7bbe892190a6c39c3b43ec075b55961dc9ec9cc6a40824afeb7d05070a12"
+    },
+    "verification/annual-2026-11-01/backend-production-dependency-audit.json": {
+      "bytes": 4118,
+      "sha256": "f1c1eb00b39b1b280863bcd00b488859b0e99c7207652fd9abd8fb8227f492d2"
+    },
+    "verification/annual-2026-11-01/backend-unit-final.log": {
+      "bytes": 16140,
+      "sha256": "5450dcd7e5d7049137448a280b8b94f9d6f239c9274e0b5b1f6260ae61bcfce0"
+    },
+    "verification/annual-2026-11-01/backend-unit.log": {
+      "bytes": 15890,
+      "sha256": "61d8cb48b33fc3e274d52105207a18edb414b161603639d870cb5a1745c5caa3"
+    },
+    "verification/annual-2026-11-01/baseline-source-hashes.json": {
+      "bytes": 37507,
+      "sha256": "a434a3c2cc7fc776202ff48a13820f5f017642f72ba9e3d091923bac55a4ea19"
+    },
+    "verification/annual-2026-11-01/baseline.json": {
+      "bytes": 650,
+      "sha256": "52f217914a45a66d92d693a118d7a083a41f4f84da4b5b351fcfb33cdd198a00"
+    },
+    "verification/annual-2026-11-01/capacity-estimate.json": {
+      "bytes": 3434,
+      "sha256": "dc61d70483d47bfd6609f801f2bc7f5e0ddaabe6930dda8eef26e9dee0dea170"
+    },
+    "verification/annual-2026-11-01/evidence-secret-scan.json": {
+      "bytes": 296,
+      "sha256": "41f9cd74242ae0412de677ebc0e348369d26a07139aaa40ddcf2dae168879454"
+    },
+    "verification/annual-2026-11-01/final-review.json": {
+      "bytes": 1551,
+      "sha256": "32b4f3b3527358db8e91f3ceb809d746075875ad0d35c46908a3834d3fc8d2ad"
+    },
+    "verification/annual-2026-11-01/final-source-hashes.json": {
+      "bytes": 20287,
+      "sha256": "b374f98db2b6f5ff76baa23b5f457ff9197b202ebb9a6c93237246079094f172"
+    },
+    "verification/annual-2026-11-01/flutter/analyze-before-stylefix.json": {
+      "bytes": 105,
+      "sha256": "6cfc3fffbb04572c8ee9d4c023b119abe975f230a5069f71d5c67da620beae53"
+    },
+    "verification/annual-2026-11-01/flutter/analyze-before-stylefix.log": {
+      "bytes": 859,
+      "sha256": "4d16f3364d9a3f244c454638bbc39101f5984299df47f5572113a71c4cb63913"
+    },
+    "verification/annual-2026-11-01/flutter/android-runtime-preflight-final.json": {
+      "bytes": 342,
+      "sha256": "301802f21b21c9c08e39ffd9a51330a84c5d4635f014118ace6785a52fd35301"
+    },
+    "verification/annual-2026-11-01/flutter/apk-inspection-before-integer-review.json": {
+      "bytes": 1914,
+      "sha256": "03ca26d62391014757aa4dca902ba3ce6197a0cf88b19d8f5cbb5e3ac30bc6bf"
+    },
+    "verification/annual-2026-11-01/flutter/apk-inspection-before-pdf-review.json": {
+      "bytes": 1747,
+      "sha256": "00f2ffa3050f0d01d999cd17eb1d2bc293779a509fbabc2d1966c0ef04922a45"
+    },
+    "verification/annual-2026-11-01/flutter/apk-inspection-final.json": {
+      "bytes": 2104,
+      "sha256": "11acedff7f2ed6726fa047ccba93a5e1d5cf0ae760244ff55d14f1d9e5b861cb"
+    },
+    "verification/annual-2026-11-01/flutter/archive-review-tests.log": {
+      "bytes": 2923,
+      "sha256": "4f13e23574d8a9c0576a9badf1a665c65c698f0a5afe431ee44a4fa55c22f19c"
+    },
+    "verification/annual-2026-11-01/flutter/archived-invoice-render.png": {
+      "bytes": 94845,
+      "sha256": "c7ffdfe64975856ce967a23df7916b37be6169096d80a57ac7b56a05a5c2b27b"
+    },
+    "verification/annual-2026-11-01/flutter/baseline-analyze.json": {
+      "bytes": 89,
+      "sha256": "307d29775e72479eff1e7d5239048187228cda94a02ac9cae1595468b0e26782"
+    },
+    "verification/annual-2026-11-01/flutter/baseline-analyze.log": {
+      "bytes": 2064,
+      "sha256": "f90d65c8f9fc59899991417c14b87e667bd6ceca7185a8d3b5bc78188b56dc3e"
+    },
+    "verification/annual-2026-11-01/flutter/baseline-tests.json": {
+      "bytes": 120,
+      "sha256": "78cf8d6f88625d3e9f27cbac6a6d893f4511333e07309dc5e410fbbf0a0b991e"
+    },
+    "verification/annual-2026-11-01/flutter/baseline-tests.log": {
+      "bytes": 22737,
+      "sha256": "4ce7b737ae16023f4e9e065a8b2fcd4a3a8df15830b2f79fe30d76198a11b07e"
+    },
+    "verification/annual-2026-11-01/flutter/canonical-range-after.log": {
+      "bytes": 2622,
+      "sha256": "1f1fa5b136083ca9e371bb2f89a9b2fac9d07fac14e260e5c0e9ef33bf64e57a"
+    },
+    "verification/annual-2026-11-01/flutter/canonical-range-before.log": {
+      "bytes": 786,
+      "sha256": "4b39e5cc3b55311cecb6fee59ea023daff5c9dee4dd576cbf59672c751587d43"
+    },
+    "verification/annual-2026-11-01/flutter/final-analyze.json": {
+      "bytes": 105,
+      "sha256": "7e079de45749ed3d4ed06b6ecd049f365b74d0ac0d3e2f3c076d7f592e9eb036"
+    },
+    "verification/annual-2026-11-01/flutter/final-analyze.log": {
+      "bytes": 97,
+      "sha256": "00a9bb994960b59f78c29cb8ff049330039f690e5d20a9aadc2b6cf5f3e44625"
+    },
+    "verification/annual-2026-11-01/flutter/final-tests.json": {
+      "bytes": 136,
+      "sha256": "6278220af3f311d20557de6eeb33db58c992e0a35e49e2552923e5211e5ab8bd"
+    },
+    "verification/annual-2026-11-01/flutter/final-tests.log": {
+      "bytes": 24246,
+      "sha256": "a14634c768f5fd158d7d0c18411381229c16d7e91d9ce8372f56fe8666e17126"
+    },
+    "verification/annual-2026-11-01/flutter/focused-first.log": {
+      "bytes": 13474,
+      "sha256": "33c91a5bc656fdbfb89832212d3fcdfd12fe274801a3860861e359160ced741d"
+    },
+    "verification/annual-2026-11-01/flutter/focused-second.json": {
+      "bytes": 348,
+      "sha256": "aa2d39cb4dc04bec81c29d70241990145390212b03b683226e6203eaa6dcec21"
+    },
+    "verification/annual-2026-11-01/flutter/focused-second.log": {
+      "bytes": 11828,
+      "sha256": "4987b1f0611cc8399427aceeacb00602406bf655f588adcaac2f01640c523fba"
+    },
+    "verification/annual-2026-11-01/flutter/integrated-analyze.log": {
+      "bytes": 97,
+      "sha256": "a859f3d58d9d2ee1221996666d986ff30ea63a73acdcd2a8e091ef271e07c115"
+    },
+    "verification/annual-2026-11-01/flutter/integrated-tests-final.log": {
+      "bytes": 24207,
+      "sha256": "73520e84d62bc7f7549e48bad2a1001ddff29a24f9f87c7a0177ff606e262316"
+    },
+    "verification/annual-2026-11-01/flutter/late-salary-review-tests.log": {
+      "bytes": 1690,
+      "sha256": "81158a147a0951c97c33f78460dac09289c1477bb503b25e00ec5dc40509ca4c"
+    },
+    "verification/annual-2026-11-01/flutter/native-device-preflight.json": {
+      "bytes": 218,
+      "sha256": "174b7e47eed5ed171139a1436f51e5f0aa541c47ca0fff27c9bd750c929c4f8c"
+    },
+    "verification/annual-2026-11-01/flutter/native/README.md": {
+      "bytes": 5242,
+      "sha256": "35527c52bd4720ab42320df6dbfb2aa6116d5574321e1497464ebeabbcbf2f6c"
+    },
+    "verification/annual-2026-11-01/flutter/native/avd-create.log": {
+      "bytes": 267,
+      "sha256": "b3019eeb5c6a4095a3af95da81a9fc84f7892640070774ceb281b4abf62c69ea"
+    },
+    "verification/annual-2026-11-01/flutter/native/emulator-software.log": {
+      "bytes": 5310,
+      "sha256": "bc53eaf263f7ff187a81ca1f8b43de1708f22d736a44b09a5bdff38ecf6ffd86"
+    },
+    "verification/annual-2026-11-01/flutter/native/emulator-supervised.log": {
+      "bytes": 6404,
+      "sha256": "b59133a9443f0b0cbec673e5c5d392ac3e6f5c25395bc67fb657d689dc7804c3"
+    },
+    "verification/annual-2026-11-01/flutter/native/emulator.log": {
+      "bytes": 11232,
+      "sha256": "de27ccd1ac93b332ef098841f3e0d7ddd6a9066bdb80f79a62dc6439823aae93"
+    },
+    "verification/annual-2026-11-01/flutter/native/full-storage-roundtrip.json": {
+      "bytes": 573,
+      "sha256": "1e9f9399c760a4d3adec0429ec4eb1f9cb503d56eaa38247d3a1151ee2115410"
+    },
+    "verification/annual-2026-11-01/flutter/native/full-storage-roundtrip.log": {
+      "bytes": 3252,
+      "sha256": "2add925437252ac65c762ad7766b90bf14de0ac1b8e736478191553e0983b461"
+    },
+    "verification/annual-2026-11-01/flutter/native/full-storage.log": {
+      "bytes": 2252,
+      "sha256": "c2327cb44702bb34fd95ab27d789288a404011668f0934354ca8df21dab55e99"
+    },
+    "verification/annual-2026-11-01/flutter/native/integration_driver.dart": {
+      "bytes": 187,
+      "sha256": "437827766bf3d4a11f9b7ae11a46001989ab43f57487c132b577364cfe71e10b"
+    },
+    "verification/annual-2026-11-01/flutter/native/local-persistence-device.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "verification/annual-2026-11-01/flutter/native/local-persistence.log": {
+      "bytes": 3352,
+      "sha256": "60eb86c34addad6e216cbec526780f3e812c242ec5883068e5a2816dad081230"
+    },
+    "verification/annual-2026-11-01/flutter/native/network-isolation.json": {
+      "bytes": 301,
+      "sha256": "c716df4b6acdb955ff93c1f5142456622aeba959dca21bf465a1edeb75e7343c"
+    },
+    "verification/annual-2026-11-01/flutter/native/pre-seed-disposable-reset.json": {
+      "bytes": 178,
+      "sha256": "a5dca5e437433b95487ec797f4f89c2d1e685f5c3b687756aa9a79c3bd13aaf1"
+    },
+    "verification/annual-2026-11-01/flutter/native/runtime.json": {
+      "bytes": 887,
+      "sha256": "57af515c4692101a0abe741b59e77ad49b44301e5f3ba2ae07d0dbb2a3923e7e"
+    },
+    "verification/annual-2026-11-01/flutter/native/seed-build.json": {
+      "bytes": 273,
+      "sha256": "c5ae2edc744abafb8dd570a29ce9bdef6f148591a27675e5495f6ee0f0a4aed1"
+    },
+    "verification/annual-2026-11-01/flutter/native/seed-build.log": {
+      "bytes": 2651,
+      "sha256": "02cdc9da9eac2a59b1e70a38d77bf81f76e72ad3b158ad9bb04a69eab4309e2c"
+    },
+    "verification/annual-2026-11-01/flutter/native/seed-v2-signature.log": {
+      "bytes": 976,
+      "sha256": "9cb2d250c0dd09a5b9d3ded7ea358e3336f99f5417adf3e6cf2050254508f6fe"
+    },
+    "verification/annual-2026-11-01/flutter/native/seed-v2-signing-error.log": {
+      "bytes": 647,
+      "sha256": "f1f4b9079ceb2a5cd63884b14ee993458e101ab35acc0f7a66940caf30fe3d73"
+    },
+    "verification/annual-2026-11-01/flutter/native/seed-v2-signing.json": {
+      "bytes": 661,
+      "sha256": "5a1b5d577b154156372560517f662d4dd4a0052c3d5b0a59825aabab30dff2f5"
+    },
+    "verification/annual-2026-11-01/flutter/native/shutdown.json": {
+      "bytes": 210,
+      "sha256": "729129544628e4c8bff68cee4eb32dbf963437ab7c982e677649c8592dfab9db"
+    },
+    "verification/annual-2026-11-01/flutter/native/signed-apk-replacements.json": {
+      "bytes": 1153,
+      "sha256": "4d9aeab87f502aa8bf34f60efba5205dc4140890a367c8cd0cdad661b5285fb9"
+    },
+    "verification/annual-2026-11-01/flutter/native/signed-reboot-verify.json": {
+      "bytes": 770,
+      "sha256": "c44402a73dc615fc77c526176c451c57569501160057b508d0fbe26315e05938"
+    },
+    "verification/annual-2026-11-01/flutter/native/signed-reboot-verify.log": {
+      "bytes": 12738,
+      "sha256": "51362981c28a22f03826c677ece4e536d3e2432e9281b675332eccf4e8997a14"
+    },
+    "verification/annual-2026-11-01/flutter/native/signed-seed-drive.json": {
+      "bytes": 624,
+      "sha256": "f8b39c84dee77e8b0eb7f0c0f2f3b6b9a0c5763c86a2e18b47a51db40b179975"
+    },
+    "verification/annual-2026-11-01/flutter/native/signed-seed-drive.log": {
+      "bytes": 12038,
+      "sha256": "a29d29b92b34ae835235926674f5fdbec550365266e775b48955d03dcaea8c79"
+    },
+    "verification/annual-2026-11-01/flutter/native/signed-v10-offline-start.png": {
+      "bytes": 189570,
+      "sha256": "ed965af14dd6fae9b92bbace7f76a3b2d84024403b01ab15099e502adde04c76"
+    },
+    "verification/annual-2026-11-01/flutter/native/signed-verify-drive.json": {
+      "bytes": 877,
+      "sha256": "28736bd4f3f0e18eaef3971936fbae7e126dec203ada0eb3cf26a5d255411ea3"
+    },
+    "verification/annual-2026-11-01/flutter/native/signed-verify-drive.log": {
+      "bytes": 11859,
+      "sha256": "6738fb17c88a8313485a91767eee8db03b8716a376b1ae0ae88aa9be736aefce"
+    },
+    "verification/annual-2026-11-01/flutter/native/verify-build.json": {
+      "bytes": 273,
+      "sha256": "2f53c5aa6166e0c545529f799622808365a665e70363ed760cc90574cdd7d86b"
+    },
+    "verification/annual-2026-11-01/flutter/native/verify-build.log": {
+      "bytes": 2651,
+      "sha256": "43223bb7d112cc3ea96205c0d8e4c235917a4e444414466f31c730cf8d7b0f9d"
+    },
+    "verification/annual-2026-11-01/flutter/native/verify-signature.log": {
+      "bytes": 976,
+      "sha256": "9cb2d250c0dd09a5b9d3ded7ea358e3336f99f5417adf3e6cf2050254508f6fe"
+    },
+    "verification/annual-2026-11-01/flutter/native/verify-signing.json": {
+      "bytes": 661,
+      "sha256": "81b8a6853912b675dd6cbdc9b08ab9546d567130824a4230d2e55cc64765f768"
+    },
+    "verification/annual-2026-11-01/flutter/pdf-direction-review.log": {
+      "bytes": 1265,
+      "sha256": "6c8bc8edb32e0241dc0e16283ca1786a7b768644fbe8b811951835af0c9f756d"
+    },
+    "verification/annual-2026-11-01/flutter/pdf-export-extracted.txt": {
+      "bytes": 3010,
+      "sha256": "40277bdf127f62dfde235d459ee6535d2d2104eca1f92bae1aa4d07cb2c85684"
+    },
+    "verification/annual-2026-11-01/flutter/pdf-export-probe.log": {
+      "bytes": 230,
+      "sha256": "a7cbb8f5e70ecd61ddc4b341cb1a83a9c1551f55d016b9cdbc20c2df05ed2e48"
+    },
+    "verification/annual-2026-11-01/flutter/pdf-qa.json": {
+      "bytes": 1180,
+      "sha256": "3509337f70cc5da15c2f0c9c3dad2f7d92dd62b45d494f0bf629a8333e09ef44"
+    },
+    "verification/annual-2026-11-01/flutter/pdf_export_probe_test.dart": {
+      "bytes": 1649,
+      "sha256": "50f60937426ca42df94824bea1a2455777b6c2497f444aa757b1924f44e0c073"
+    },
+    "verification/annual-2026-11-01/flutter/prior-v9-signature-readonly.log": {
+      "bytes": 1413,
+      "sha256": "5a3b7e60d1bbdc04036bc772a12ed451ca484f464bc17a516d0587b39e4452e5"
+    },
+    "verification/annual-2026-11-01/flutter/pub-get.json": {
+      "bytes": 96,
+      "sha256": "17182ba1c8b13d6906bb9c08e8e39b3a60f023f5b009b59ac822abe08d67ea8c"
+    },
+    "verification/annual-2026-11-01/flutter/pub-get.log": {
+      "bytes": 1644,
+      "sha256": "04c02f735f2532851d1ff7c0e89e2752f02de7fc2e95234d97d1992efc7ea277"
+    },
+    "verification/annual-2026-11-01/flutter/release-badging-final.log": {
+      "bytes": 6099,
+      "sha256": "76c5a85d6859e5fce7c9b2ee1203bf9381088f952f37983dcea9ec04956e70f0"
+    },
+    "verification/annual-2026-11-01/flutter/release-build-before-integer-review.json": {
+      "bytes": 943,
+      "sha256": "635f9b98bef8cb7babf674d3818a25f2bb8484a3baf9521b7a1a1dc8faba4057"
+    },
+    "verification/annual-2026-11-01/flutter/release-build-before-integer-review.log": {
+      "bytes": 2874,
+      "sha256": "2aab65ab4918c144d42bdeaba51f261d4624ff4dd3c1259315ad81279a47b516"
+    },
+    "verification/annual-2026-11-01/flutter/release-build-before-pdf-review.json": {
+      "bytes": 943,
+      "sha256": "d91b02f4df6fa2106b18a69b815a945ad1f2415e379e595e7875b5f64209fa80"
+    },
+    "verification/annual-2026-11-01/flutter/release-build-final.json": {
+      "bytes": 943,
+      "sha256": "95d5c57bdad3c1f6b42f8ffea0672419353fc3e932f18040b3f87b946795e7c1"
+    },
+    "verification/annual-2026-11-01/flutter/release-build-final.log": {
+      "bytes": 2874,
+      "sha256": "85d54c3250219e6f232c982560e7289b8e8af0d971824ee600cafcb5f5242aeb"
+    },
+    "verification/annual-2026-11-01/flutter/release-build.json": {
+      "bytes": 942,
+      "sha256": "00e67dd7ec76b550ee903cfd99da5cbed7b5ffe47f33d45d94a826099663efe0"
+    },
+    "verification/annual-2026-11-01/flutter/release-build.log": {
+      "bytes": 2874,
+      "sha256": "53a4410427b1084f01d7bf6fb8067d12dc43c3f445983589d66c1c3d7bb20b3f"
+    },
+    "verification/annual-2026-11-01/flutter/release-manifest-final.txt": {
+      "bytes": 21526,
+      "sha256": "e71baae859a955eba3100ea22fae68d3ed3d9d7f6e996324013b2383322e6f17"
+    },
+    "verification/annual-2026-11-01/flutter/release-manifest-final.xml": {
+      "bytes": 13476,
+      "sha256": "69783b005114d9f61b671a11b9ee28d4d105618077b0a04507e82e023bb9905d"
+    },
+    "verification/annual-2026-11-01/flutter/release-signature-final.log": {
+      "bytes": 977,
+      "sha256": "75a17f43a3ab5f20bf8d04760a7187e8fcfef95482c904d8dafcd0d5141e98c5"
+    },
+    "verification/annual-2026-11-01/flutter/signing-preflight.json": {
+      "bytes": 135,
+      "sha256": "90be829e35f23d73ac190811fe3f0f63f2fddb26ad7c00642477544cd824b2ee"
+    },
+    "verification/annual-2026-11-01/flutter/toolchain.json": {
+      "bytes": 91,
+      "sha256": "a3c350f6b59ceb2735a2216b4ba391dac887052edd677fd24edf0cac23b93cb8"
+    },
+    "verification/annual-2026-11-01/flutter/toolchain.log": {
+      "bytes": 869,
+      "sha256": "b60094605c10ef050aeae5a8b1c86f470a2f0be0f8c516d199bd5c7090657f19"
+    },
+    "verification/annual-2026-11-01/generated-build-secret-scan.json": {
+      "bytes": 253,
+      "sha256": "36754a4b9d6393d0b342fcb9b891056afb029b41596f36a9d6c90b4073fc494f"
+    },
+    "verification/annual-2026-11-01/historical-view-tests.log": {
+      "bytes": 1237,
+      "sha256": "d2b798167ca6831032072bd28d79dd532cc0b583380eccc490fefdc73c7c1bda"
+    },
+    "verification/annual-2026-11-01/initial-status.txt": {
+      "bytes": 14634,
+      "sha256": "1358e5e795a6da17afdc82e5d44e19dd4dffd2519389663d3d6d5715011d679d"
+    },
+    "verification/annual-2026-11-01/original-preservation-final.json": {
+      "bytes": 158,
+      "sha256": "fa2af392303fdcfe2854941cd4e7e0f48bd7a48349dced414b456e85b0c2f65e"
+    },
+    "verification/annual-2026-11-01/owned-review-paths.json": {
+      "bytes": 8804,
+      "sha256": "cec351599fe1e21adf95a311f828bce019dab598806ce9b93243d34a075c2ef8"
+    },
+    "verification/annual-2026-11-01/source-path-inventory.json": {
+      "bytes": 2569,
+      "sha256": "0f2f2f4d19be66f1c7859bdb4203ff1c38176d84e21a41ca1f63b1ff1d0cd4c1"
+    },
+    "verification/annual-2026-11-01/tool-tests.json": {
+      "bytes": 776,
+      "sha256": "8b0e00cbce4a173f24bad501c3ea3b3d3ed2263b90b834670f0f98db111fef8b"
+    },
+    "verification/annual-2026-11-01/tracked-secret-shape-scan.json": {
+      "bytes": 175,
+      "sha256": "e86fd9450cfd798c518d5153e07b769161fe87a798d9393821ae247ab04cc94b"
+    },
+    "verification/annual-2026-11-01/verification-summary.json": {
+      "bytes": 8173,
+      "sha256": "835a1057751860c2f33ebaad46dcd048780d90ac1f75d3c0b8c201974aabacdc"
+    },
+    "verification/annual-2026-11-01/work-budget-tests.log": {
+      "bytes": 1168,
+      "sha256": "2f2d59619ab300f568039aa010876c36a9d66edbcfdd483907b5513cce9a28bb"
+    },
+    "verification/annual-2026-11-01/worker-dependency-audit.json": {
+      "bytes": 8994,
+      "sha256": "7d896ff0e84647f73e4551e1e15a7400324fa933d699b25adc9dae212da67b70"
+    },
+    "verification/annual-2026-11-01/worker-dry-run-final.log": {
+      "bytes": 526,
+      "sha256": "54e71ed0477f0f67bbffbe46e3a493601bb1f4d0b308ddc221b891011915d00b"
+    },
+    "verification/annual-2026-11-01/worker-dry-run.log": {
+      "bytes": 418,
+      "sha256": "00f04cb0a9e899c50920e6e3abac0b7ed4332499dca00547e1ad73734aa3fcb9"
+    },
+    "verification/annual-2026-11-01/worker-npm-ci-final.log": {
+      "bytes": 683,
+      "sha256": "453fc6756b63a371c40d9fe3a3547a30310f7a1f5af182e26ffd93032fecb2da"
+    },
+    "verification/annual-2026-11-01/worker-npm-ci.log": {
+      "bytes": 682,
+      "sha256": "c2c6281a153f16970d7a56c91c1ecfe93accf528816a6cd00782d6c47f91f227"
+    },
+    "verification/annual-2026-11-01/worker-tests.log": {
+      "bytes": 1133,
+      "sha256": "98ef0b8295607251857279970cb4d907ca67dd09e5ba508f4d59339a7f2c5f55"
+    }
+  },
+  "scope": "Exact owned review files; excludes itself. APKs are ignored and identified separately by release-build-final.json."
+}

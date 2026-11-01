@@ -1,0 +1,23 @@
+{
+  "startedAtUtc": "2026-11-01T21:48:15.429493+00:00",
+  "sourceCommit": "2a3cd45f82dce989e8db45e1f7a3e113af10f10a",
+  "dirtyTree": true,
+  "credentialHandling": "Existing Secret Service credential only in memory; anonymous memfd Java properties; no password argument or disk file",
+  "productionAcceptance": false,
+  "androidInstalled": false,
+  "command": [
+    "flutter",
+    "build",
+    "apk",
+    "--release",
+    "--dart-define-from-file=/home/younis/.local/share/strawberry-trade-operator/firebase-production/cloudflare-setup-v8-defines.json"
+  ],
+  "exitCode": 0,
+  "status": "PASS",
+  "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-01/flutter/strawberry-trade-annual-review-v10-final.apk",
+  "bytes": 77512964,
+  "sha256": "4c57af562a6f40c295385bb4439bf61105374be45c296b825ce59236a9c07679",
+  "versionName": "1.0.0",
+  "versionCode": 10,
+  "finishedAtUtc": "2026-11-01T21:49:28.003038+00:00"
+}

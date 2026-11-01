@@ -1,0 +1,8 @@
+{
+  "synthetic": true,
+  "target": "emulator-5580",
+  "removedOnlyDisposableDebugFixture": true,
+  "ownerDeviceTouched": false,
+  "exitCode": 0,
+  "beforePersistentSeed": true
+}

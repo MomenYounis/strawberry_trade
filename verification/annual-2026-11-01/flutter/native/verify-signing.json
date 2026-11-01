@@ -1,0 +1,12 @@
+{
+  "synthetic": true,
+  "debugTestArtifact": true,
+  "status": "PASS",
+  "sourceCommit": "2a3cd45f82dce989e8db45e1f7a3e113af10f10a",
+  "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-01/flutter/native/persistence-verify-signed-DEBUG.apk",
+  "sha256": "fcbba9de9e15bab0be58415929a77a16b23a14e037d7579e950e52a90f394d8e",
+  "inputSha256": "b38f203d6031447587f401b89783c0c4994bd834ace188c03a02d3eec142dfbd",
+  "versionCode": 10,
+  "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+  "signingCredential": "Existing Secret Service value; anonymous memfd; no password arguments/disk file"
+}

@@ -1,0 +1,9 @@
+{
+  "command": [
+    "flutter",
+    "pub",
+    "get"
+  ],
+  "exitCode": 0,
+  "status": "PASS"
+}

@@ -1,0 +1,222 @@
+
+> strawberry-trade-tenant-gateway@1.0.0 test:archive
+> node --test test/archive-*.test.mjs test/historical-view.test.mjs test/work-budget.test.mjs
+
+TAP version 13
+# (node:76309) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node-22 --trace-warnings ...` to show where the warning was created)
+# Subtest: Cairo civil first financial year, half-open boundary, DST and leap day
+ok 1 - Cairo civil first financial year, half-open boundary, DST and leap day
+  ---
+  duration_ms: 10.45624
+  type: 'test'
+  ...
+# Subtest: missed unstarted backlog requires explicit ordered selection, existing run recovers
+ok 2 - missed unstarted backlog requires explicit ordered selection, existing run recovers
+  ---
+  duration_ms: 3.478783
+  type: 'test'
+  ...
+# Subtest: persisted fenced close is once only; expired worker cannot checkpoint/publish/advance
+ok 3 - persisted fenced close is once only; expired worker cannot checkpoint/publish/advance
+  ---
+  duration_ms: 5.177128
+  type: 'test'
+  ...
+# Subtest: synthetic storage and plausible verification can never satisfy deletion gates
+ok 4 - synthetic storage and plausible verification can never satisfy deletion gates
+  ---
+  duration_ms: 0.722259
+  type: 'test'
+  ...
+# Subtest: authoritative SQLite controls independently agree; customer/supplier 20000 to 15000 continuity
+ok 5 - authoritative SQLite controls independently agree; customer/supplier 20000 to 15000 continuity
+  ---
+  duration_ms: 41.756921
+  type: 'test'
+  ...
+# Subtest: signed advances, adjustment, expenses, partial return and reversal use dated effects
+ok 6 - signed advances, adjustment, expenses, partial return and reversal use dated effects
+  ---
+  duration_ms: 9.838836
+  type: 'test'
+  ...
+# Subtest: salary obligations retain original salary month and pending submissions remain nonfinancial
+ok 7 - salary obligations retain original salary month and pending submissions remain nonfinancial
+  ---
+  duration_ms: 6.776261
+  type: 'test'
+  ...
+# Subtest: immutable source rejects gaps, cross-tenant payloads and rewritten entries
+ok 8 - immutable source rejects gaps, cross-tenant payloads and rewritten entries
+  ---
+  duration_ms: 6.490966
+  type: 'test'
+  ...
+# Subtest: strict mixed-year/mixed-tenant/unsafe-integer records block export
+ok 9 - strict mixed-year/mixed-tenant/unsafe-integer records block export
+  ---
+  duration_ms: 1.248488
+  type: 'test'
+  ...
+# Subtest: re-download authenticates exact bytes; repeated restore creates no live postings
+ok 10 - re-download authenticates exact bytes; repeated restore creates no live postings
+  ---
+  duration_ms: 26.064369
+  type: 'test'
+  ...
+# Subtest: wrong key, tenant, checkpoint and corrupted ciphertext fail closed
+ok 11 - wrong key, tenant, checkpoint and corrupted ciphertext fail closed
+  ---
+  duration_ms: 7.758693
+  type: 'test'
+  ...
+# Subtest: tampered/noncanonical/invalid UTF8 manifests and traversal rejected
+ok 12 - tampered/noncanonical/invalid UTF8 manifests and traversal rejected
+  ---
+  duration_ms: 8.643303
+  type: 'test'
+  ...
+# Subtest: partial chunk upload resumes by source hash and fails changed prefix
+ok 13 - partial chunk upload resumes by source hash and fails changed prefix
+  ---
+  duration_ms: 23.049041
+  type: 'test'
+  ...
+# Subtest: restore sink always destroyed on financial mismatch
+ok 14 - restore sink always destroyed on financial mismatch
+  ---
+  duration_ms: 5.804396
+  type: 'test'
+  ...
+# Subtest: R2 adapter uses conditional immutable put, bounded download, and does not claim acceptance
+ok 15 - R2 adapter uses conditional immutable put, bounded download, and does not claim acceptance
+  ---
+  duration_ms: 74.873221
+  type: 'test'
+  ...
+# Subtest: coordinator resumes bounded steps, reserves retries, verifies pointer and never prunes
+ok 16 - coordinator resumes bounded steps, reserves retries, verifies pointer and never prunes
+  ---
+  duration_ms: 88.493365
+  type: 'test'
+  ...
+# Subtest: coordinator budget denial performs no source/storage work
+ok 17 - coordinator budget denial performs no source/storage work
+  ---
+  duration_ms: 1.164547
+  type: 'test'
+  ...
+# (node:76310) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node-22 --trace-warnings ...` to show where the warning was created)
+# Subtest: two consecutive verified annual packages link checkpoints and retain cross-year invoice references
+ok 18 - two consecutive verified annual packages link checkpoints and retain cross-year invoice references
+  ---
+  duration_ms: 74.056145
+  type: 'test'
+  ...
+# Subtest: failure before each supported durable transition rolls back and retry preserves a single close
+ok 19 - failure before each supported durable transition rolls back and retry preserves a single close
+  ---
+  duration_ms: 5.104204
+  type: 'test'
+  ...
+# Subtest: authenticated missing/reordered chunks, truncation and invalid GCM tags fail validation
+ok 20 - authenticated missing/reordered chunks, truncation and invalid GCM tags fail validation
+  ---
+  duration_ms: 16.37998
+  type: 'test'
+  ...
+# Subtest: timed-out R2 downloads cancel an active stream and a late returned body
+ok 21 - timed-out R2 downloads cancel an active stream and a late returned body
+  ---
+  duration_ms: 213.69434
+  type: 'test'
+  ...
+# Subtest: resume rejects changed master-key before additional objects and preserves original-key recovery
+ok 22 - resume rejects changed master-key before additional objects and preserves original-key recovery
+  ---
+  duration_ms: 35.218614
+  type: 'test'
+  ...
+# Subtest: resume rejects changed key-id before additional objects and preserves original-key recovery
+ok 23 - resume rejects changed key-id before additional objects and preserves original-key recovery
+  ---
+  duration_ms: 30.228196
+  type: 'test'
+  ...
+# Subtest: source opening identity and restored controls are identical across English and Turkish locales
+ok 24 - source opening identity and restored controls are identical across English and Turkish locales
+  ---
+  duration_ms: 482.134954
+  type: 'test'
+  ...
+# Subtest: repeated invoice reads retain identity and never offer a financial posting API
+ok 25 - repeated invoice reads retain identity and never offer a financial posting API
+  ---
+  duration_ms: 63.119221
+  type: 'test'
+  ...
+# Subtest: catalogue listing exposes no key, object location or financial payload
+ok 26 - catalogue listing exposes no key, object location or financial payload
+  ---
+  duration_ms: 4.472603
+  type: 'test'
+  ...
+# Subtest: wrong tenant/year, unverified publication and wrong key fail before returning records
+ok 27 - wrong tenant/year, unverified publication and wrong key fail before returning records
+  ---
+  duration_ms: 6.964904
+  type: 'test'
+  ...
+# Subtest: bounded reads require explicit continuation and absent IDs terminate
+ok 28 - bounded reads require explicit continuation and absent IDs terminate
+  ---
+  duration_ms: 8.024305
+  type: 'test'
+  ...
+# Subtest: tampered stored manifest and interrupted storage do not return unverified contents
+ok 29 - tampered stored manifest and interrupted storage do not return unverified contents
+  ---
+  duration_ms: 5.161095
+  type: 'test'
+  ...
+# Subtest: two concurrent tenants share one cap; failed reservation changes no counters
+ok 30 - two concurrent tenants share one cap; failed reservation changes no counters
+  ---
+  duration_ms: 35.390417
+  type: 'test'
+  ...
+# Subtest: disabled/missing live headroom and zero-delete cap refuse before work
+ok 31 - disabled/missing live headroom and zero-delete cap refuse before work
+  ---
+  duration_ms: 4.184681
+  type: 'test'
+  ...
+# Subtest: repeated operation attempt charges again despite matching diagnostic step ID
+ok 32 - repeated operation attempt charges again despite matching diagnostic step ID
+  ---
+  duration_ms: 2.106496
+  type: 'test'
+  ...
+# Subtest: UTC and Pacific internal windows reset at different civil midnight including DST
+ok 33 - UTC and Pacific internal windows reset at different civil midnight including DST
+  ---
+  duration_ms: 2.268584
+  type: 'test'
+  ...
+# Subtest: unknown resources and unsafe costs fail closed
+ok 34 - unknown resources and unsafe costs fail closed
+  ---
+  duration_ms: 1.944375
+  type: 'test'
+  ...
+1..34
+# tests 34
+# suites 0
+# pass 34
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 846.277183

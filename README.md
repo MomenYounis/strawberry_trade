@@ -1,5 +1,7 @@
 # دفتر الفراولة — Arabic Flutter Android ledger
 
+> Local annual-archive review, 1–2 November 2026: targeted fixes, encrypted archive preparation and signed v10 review APK are on `codex/annual-archive-safety`. Production close/cleanup remain disabled; commercial release is NO-GO pending critical acceptance and implementation gaps. Read [the readiness decision](docs/commercial-release-readiness.md) and [resumption ledger](docs/implementation-progress.md). Earlier deployment/phone statements below are historical and do not establish this candidate's acceptance.
+
 > تحديث ٢٣ أكتوبر ٢٠٢٦: الإصدار ٩ يضيف دعوة موظف لمرة واحدة دون UID، وإنشاء حساب الموظف وتأكيد بريده من الهاتف. نُشر تحديث البوابة الموافق عليه؛ APK الجديد يُثبت كتحديث على هاتفَي المدير والموظف. ابدأ من [دليل الإصدار ٩](docs/employee-invitations-v9-ar.md) و[الحالة الحالية](docs/current-status-ar.md). التقارير الأقدم أدناه تاريخية، ولا تمثل أحدث حالة النشر أو APK.
 
 

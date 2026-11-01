@@ -1,0 +1,17 @@
+{
+  "command": [
+    "flutter",
+    "test",
+    "--no-pub",
+    "test/sync_protocol_test.dart",
+    "test/annual_financial_reference_test.dart",
+    "test/controller_test.dart",
+    "test/store_test.dart",
+    "test/domain_test.dart",
+    "test/archive_reader_test.dart",
+    "--reporter",
+    "expanded"
+  ],
+  "exitCode": 0,
+  "status": "PASS"
+}

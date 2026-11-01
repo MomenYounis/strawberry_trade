@@ -1,0 +1,74 @@
+00:00 +0: loading /home/younis/strawberry-trade-annual-review/test/sync_protocol_test.dart
+00:00 +0: /home/younis/strawberry-trade-annual-review/test/sync_protocol_test.dart: legacy protocol remains compatible without advertising snapshots
+00:00 +1: /home/younis/strawberry-trade-annual-review/test/sync_protocol_test.dart: history gaps and upgrades stop before installing any page
+00:00 +2: /home/younis/strawberry-trade-annual-review/test/sync_protocol_test.dart: cursor rollback, overflow, malformed and nonprogressing pages fail closed
+00:00 +3: /home/younis/strawberry-trade-annual-review/test/annual_financial_reference_test.dart: two year boundaries conserve receivable/payable and separate recorded cash
+00:00 +4: /home/younis/strawberry-trade-annual-review/test/annual_financial_reference_test.dart: signed advances and current-period reversal never rewrite prior close
+00:00 +5: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (setUpAll)
+00:00 +5: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +6: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +7: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +8: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +9: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +10: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +11: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +12: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +13: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +14: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:01 +15: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:01 +16: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:01 +17: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:01 +18: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:01 +19: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:01 +20: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:01 +21: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:01 +22: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:01 +23: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:01 +24: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:01 +25: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:01 +26: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:01 +27: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Documented debt adjustments retain direction, immutable evidence and queue IDs after backup and reopen
+00:01 +28: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: overlapping synchronization triggers use one sender and acknowledge once
+00:01 +29: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: overlapping synchronization triggers use one sender and acknowledge once
+00:01 +30: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Immutable shipment updates round-trip through outbox and backup without rewriting financial invoice
+00:01 +31: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: late acknowledgment after sign-out cannot modify another tenant with the same operation ID
+00:01 +32: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: late acknowledgment after sign-out cannot modify another tenant with the same operation ID
+00:01 +33: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Opening another tenant UID role or employee scope on an existing database fails
+00:01 +34: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: disposing during a delayed send preserves the pending disk operation and ignores its late acknowledgment
+00:01 +35: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: disposing during a delayed send preserves the pending disk operation and ignores its late acknowledgment
+00:01 +36: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: disposing during a delayed send preserves the pending disk operation and ignores its late acknowledgment
+00:01 +37: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Retries keep IDs and durable attempts; auth/license failure never drops operations
+00:01 +38: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: known expiry retains the queue and renewal sends the original operation exactly once
+00:01 +39: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: known expiry retains the queue and renewal sends the original operation exactly once
+00:01 +40: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: known expiry retains the queue and renewal sends the original operation exactly once
+00:01 +41: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: known expiry retains the queue and renewal sends the original operation exactly once
+00:01 +42: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: known expiry retains the queue and renewal sends the original operation exactly once
+00:01 +43: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: known expiry retains the queue and renewal sends the original operation exactly once
+00:01 +44: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: known expiry retains the queue and renewal sends the original operation exactly once
+00:01 +45: /home/younis/strawberry-trade-annual-review/test/store_test.dart: A server version that invalidates existing returns cannot be accepted
+00:01 +46: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: explicit Auth account disable also clears cached data and invalidates stale storage access
+00:01 +47: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: explicit Auth account disable also clears cached data and invalidates stale storage access
+00:02 +48: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: explicit Auth account disable also clears cached data and invalidates stale storage access
+00:02 +49: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Backup round-trip into a different device retains immutable ledger and pending operation IDs without authority
+00:02 +50: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: ordinary auth-token expiry preserves offline authority and the original queued operation
+00:02 +51: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Invalid backup totals, paid amounts, changed grade and forged authority are atomically rejected
+00:02 +52: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: a server authorization denial blocks the retained operation using its machine reason
+00:02 +53: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: a server authorization denial blocks the retained operation using its machine reason
+00:02 +54: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Employee store never accepts financial ledger, balance download, payroll, backup or impersonation
+00:02 +55: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: renewal automatically resumes a server-expiry block with the preserved operation ID
+00:02 +56: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: renewal automatically resumes a server-expiry block with the preserved operation ID
+00:02 +57: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Multi-season ledger is not truncated to latest 50 and supports historical pagination
+00:02 +58: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Multi-season ledger is not truncated to latest 50 and supports historical pagination
+00:02 +59: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Multi-season ledger is not truncated to latest 50 and supports historical pagination
+00:02 +60: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Multi-season ledger is not truncated to latest 50 and supports historical pagination
+00:03 +61: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: closed-period staging is retained across reopen and excluded from financial reports
+00:03 +62: /home/younis/strawberry-trade-annual-review/test/store_test.dart: closed-period correction is linked, durable, unique and never retries original
+00:03 +63: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: malformed and history-floor pages preserve cursor and unsent work
+00:03 +64: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: malformed and history-floor pages preserve cursor and unsent work
+00:03 +65: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: bounded paging does not label unfinished history as synchronized
+00:03 +66: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (tearDownAll)
+00:09 +66: /home/younis/strawberry-trade-annual-review/test/archive_reader_test.dart: repeated read-only record parsing/export has no financial posting
+00:09 +67: /home/younis/strawberry-trade-annual-review/test/archive_reader_test.dart: wrong tenant, year, id and writable record fail closed
+00:09 +68: /home/younis/strawberry-trade-annual-review/test/archive_reader_test.dart: bounded scan resumes only on a strictly advancing chunk cursor
+00:09 +69: /home/younis/strawberry-trade-annual-review/test/archive_reader_test.dart: CSV distinguishes trusted original business date from posting date
+00:09 +70: All tests passed!

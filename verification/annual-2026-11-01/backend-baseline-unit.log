@@ -1,0 +1,272 @@
+
+> strawberry-trade-tenant-gateway@1.0.0 test
+> node --test test/validation.test.mjs test/seed-helper.test.mjs test/demo-operator.test.mjs test/http-gateway.test.mjs test/gateway-deletion-race.test.mjs test/invitation-token.test.mjs
+
+TAP version 13
+# Subtest: demo operator admits both loopback emulator transports without production override
+ok 1 - demo operator admits both loopback emulator transports without production override
+  ---
+  duration_ms: 8.707763
+  type: 'test'
+  ...
+# Subtest: mixed Auth/Firestore environments fail before any operator callback can initialize Admin or read/revoke a real user
+ok 2 - mixed Auth/Firestore environments fail before any operator callback can initialize Admin or read/revoke a real user
+  ---
+  duration_ms: 4.551908
+  type: 'test'
+  ...
+# Subtest: loopback guards reject URLs, fake suffixes, user-info, paths and invalid ports
+ok 3 - loopback guards reject URLs, fake suffixes, user-info, paths and invalid ports
+  ---
+  duration_ms: 2.096127
+  type: 'test'
+  ...
+# Subtest: actual provision and transfer CLIs reject mixed environments before opening the request or accessing Admin
+ok 4 - actual provision and transfer CLIs reject mixed environments before opening the request or accessing Admin
+  ---
+  duration_ms: 5866.212346
+  type: 'test'
+  ...
+# Subtest: bootstrap creates a challenge only after transactional parent and identity reads
+ok 5 - bootstrap creates a challenge only after transactional parent and identity reads
+  ---
+  duration_ms: 34.098801
+  type: 'test'
+  ...
+# Subtest: deletion after authority but before transaction rejects without an orphan challenge
+ok 6 - deletion after authority but before transaction rejects without an orphan challenge
+  ---
+  duration_ms: 7.605493
+  type: 'test'
+  ...
+# Subtest: deletion after transaction reads conflicts then retry refuses without any child commit
+ok 7 - deletion after transaction reads conflicts then retry refuses without any child commit
+  ---
+  duration_ms: 4.207484
+  type: 'test'
+  ...
+# Subtest: changed device owner, tenant, membership role or employee identity is rejected before challenge creation
+ok 8 - changed device owner, tenant, membership role or employee identity is rejected before challenge creation
+  ---
+  duration_ms: 23.082775
+  type: 'test'
+  ...
+# Subtest: disabled manager and employee can still complete proof and receive a signed disabled package
+ok 9 - disabled manager and employee can still complete proof and receive a signed disabled package
+  ---
+  duration_ms: 15.652769
+  type: 'test'
+  ...
+# Subtest: deletion marker denies bootstrap before and during challenge or device-proof transactions
+ok 10 - deletion marker denies bootstrap before and during challenge or device-proof transactions
+  ---
+  duration_ms: 8.741605
+  type: 'test'
+  ...
+# Subtest: member activation rereads parent and actor/device so concurrent deletion or authority changes cannot leave audit or updates
+ok 11 - member activation rereads parent and actor/device so concurrent deletion or authority changes cannot leave audit or updates
+  ---
+  duration_ms: 12.144276
+  type: 'test'
+  ...
+# Subtest: sync and license activation reject deleted or deleting parents within their own transactions
+ok 12 - sync and license activation reject deleted or deleting parents within their own transactions
+  ---
+  duration_ms: 21.185002
+  type: 'test'
+  ...
+# Subtest: invitation creation reads parent and current manager/device atomically after non-atomic Auth revocation
+ok 13 - invitation creation reads parent and current manager/device atomically after non-atomic Auth revocation
+  ---
+  duration_ms: 13.569423
+  type: 'test'
+  ...
+# Subtest: trusted invitation helper also refuses deleted roots without gateway preflight
+ok 14 - trusted invitation helper also refuses deleted roots without gateway preflight
+  ---
+  duration_ms: 3.151836
+  type: 'test'
+  ...
+# Subtest: invitation acceptance conflicts with deletion and marker and retains normal enrollment
+ok 15 - invitation acceptance conflicts with deletion and marker and retains normal enrollment
+  ---
+  duration_ms: 16.286276
+  type: 'test'
+  ...
+# Subtest: external callable uses verified identity and preserves native Long payload values
+ok 16 - external callable uses verified identity and preserves native Long payload values
+  ---
+  duration_ms: 162.404816
+  type: 'test'
+  ...
+# Subtest: missing or invalid App Check cannot reach Auth or the financial gateway
+ok 17 - missing or invalid App Check cannot reach Auth or the financial gateway
+  ---
+  duration_ms: 3.121463
+  type: 'test'
+  ...
+# Subtest: valid attestation for another app and revoked Auth sessions are rejected
+ok 18 - valid attestation for another app and revoked Auth sessions are rejected
+  ---
+  duration_ms: 3.681033
+  type: 'test'
+  ...
+# Subtest: only the seven exact routes accept JSON POST; health is read-only and token-free
+ok 19 - only the seven exact routes accept JSON POST; health is read-only and token-free
+  ---
+  duration_ms: 7.029298
+  type: 'test'
+  ...
+# Subtest: oversized chunked bodies are cancelled and never invoke the domain gateway
+ok 20 - oversized chunked bodies are cancelled and never invoke the domain gateway
+  ---
+  duration_ms: 6.729396
+  type: 'test'
+  ...
+# Subtest: strict envelopes, UTF-8/JSON and integer tag limits reject unsafe inputs
+ok 21 - strict envelopes, UTF-8/JSON and integer tag limits reject unsafe inputs
+  ---
+  duration_ms: 8.106656
+  type: 'test'
+  ...
+# Subtest: domain errors preserve callable codes while unexpected errors hide secrets
+ok 22 - domain errors preserve callable codes while unexpected errors hide secrets
+  ---
+  duration_ms: 3.161285
+  type: 'test'
+  ...
+# Subtest: App Check emulator exemption requires exact demo plus both loopback services
+ok 23 - App Check emulator exemption requires exact demo plus both loopback services
+  ---
+  duration_ms: 2.263875
+  type: 'test'
+  ...
+# Subtest: database quota and outages remain retryable transport failures with no private details
+ok 24 - database quota and outages remain retryable transport failures with no private details
+  ---
+  duration_ms: 4.46895
+  type: 'test'
+  ...
+# Subtest: self signup token selects only canonical bounded tenant identifiers; old tokens remain opaque
+ok 25 - self signup token selects only canonical bounded tenant identifiers; old tokens remain opaque
+  ---
+  duration_ms: 11.449704
+  type: 'test'
+  ...
+# Subtest: fresh wrapper namespace allocates a different tenant while preserving identity and same-session stability
+ok 26 - fresh wrapper namespace allocates a different tenant while preserving identity and same-session stability
+  ---
+  duration_ms: 9.131364
+  type: 'test'
+  ...
+# Subtest: helper refuses missing or malformed namespace before accessing emulators
+ok 27 - helper refuses missing or malformed namespace before accessing emulators
+  ---
+  duration_ms: 1.580463
+  type: 'test'
+  ...
+# Subtest: helper refuses production project, public bind hosts and non-loopback emulator endpoints
+ok 28 - helper refuses production project, public bind hosts and non-loopback emulator endpoints
+  ---
+  duration_ms: 0.479477
+  type: 'test'
+  ...
+# Subtest: integer half-up quantity and money reference
+ok 29 - integer half-up quantity and money reference
+  ---
+  duration_ms: 6.705936
+  type: 'test'
+  ...
+# Subtest: invalid imports cannot disagree total or overpay
+ok 30 - invalid imports cannot disagree total or overpay
+  ---
+  duration_ms: 3.852951
+  type: 'test'
+  ...
+# Subtest: all financial boundaries reject NaN infinity strings negative and fractional
+ok 31 - all financial boundaries reject NaN infinity strings negative and fractional
+  ---
+  duration_ms: 1.896714
+  type: 'test'
+  ...
+# Subtest: real ISO date validation
+ok 32 - real ISO date validation
+  ---
+  duration_ms: 1.481622
+  type: 'test'
+  ...
+# Subtest: directory signed opening and tenant checks
+ok 33 - directory signed opening and tenant checks
+  ---
+  duration_ms: 1.497423
+  type: 'test'
+  ...
+# Subtest: 30x24 trial with exact shared boundary independent of employee join time
+ok 34 - 30x24 trial with exact shared boundary independent of employee join time
+  ---
+  duration_ms: 0.829615
+  type: 'test'
+  ...
+# Subtest: signed canonical UTF8 package detects tampering
+ok 35 - signed canonical UTF8 package detects tampering
+  ---
+  duration_ms: 15.265647
+  type: 'test'
+  ...
+# Subtest: paid expiry overrides remaining original trial
+ok 36 - paid expiry overrides remaining original trial
+  ---
+  duration_ms: 0.685068
+  type: 'test'
+  ...
+# Subtest: migration dry-run quarantines legacy inconsistent totals, grade mismatch, non-lossless price
+ok 37 - migration dry-run quarantines legacy inconsistent totals, grade mismatch, non-lossless price
+  ---
+  duration_ms: 26.192948
+  type: 'test'
+  ...
+# Subtest: documented debt adjustment has no cash effect and explicit direction
+ok 38 - documented debt adjustment has no cash effect and explicit direction
+  ---
+  duration_ms: 3.584045
+  type: 'test'
+  ...
+# Subtest: expense category defaults and unrelated kinds cannot carry an expense category
+ok 39 - expense category defaults and unrelated kinds cannot carry an expense category
+  ---
+  duration_ms: 2.015199
+  type: 'test'
+  ...
+# Subtest: migration keeps identifiers, same-day relationships, provenance and known control balances
+ok 40 - migration keeps identifiers, same-day relationships, provenance and known control balances
+  ---
+  duration_ms: 3.045413
+  type: 'test'
+  ...
+# Subtest: migration quarantines unit and grade mismatches, unknown shipping employees and wrong party kind
+ok 41 - migration quarantines unit and grade mismatches, unknown shipping employees and wrong party kind
+  ---
+  duration_ms: 3.039806
+  type: 'test'
+  ...
+# Subtest: migration preserves payroll payment but blocks readiness until historical salary is evidenced
+ok 42 - migration preserves payroll payment but blocks readiness until historical salary is evidenced
+  ---
+  duration_ms: 2.156303
+  type: 'test'
+  ...
+# Subtest: shipment metadata events require zero financial fields, active-invoice reference, status and documented reason
+ok 43 - shipment metadata events require zero financial fields, active-invoice reference, status and documented reason
+  ---
+  duration_ms: 7.00023
+  type: 'test'
+  ...
+1..43
+# tests 43
+# suites 0
+# pass 43
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6358.932012

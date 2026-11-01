@@ -1,0 +1,9 @@
+{
+  "command": "adb devices -l (identifiers redacted)",
+  "exitCode": 0,
+  "connectedCount": 0,
+  "emulatorCount": 0,
+  "physicalDeviceCount": 0,
+  "deviceDataRead": false,
+  "installUninstallOrClearExecuted": false
+}

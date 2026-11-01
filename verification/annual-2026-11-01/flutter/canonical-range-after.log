@@ -1,0 +1,32 @@
+00:00 +0: loading /home/younis/strawberry-trade-annual-review/test/license_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: canonical JSON rejects signed minimum and unsafe integers
+00:00 +1: Node issuer fixture verifies in Dart; fixture trust is explicitly supplied only by test
+00:00 +2: wrong tenant, user and installation are denied
+00:00 +3: tampered bytes and unknown issuer cannot grant activation
+00:00 +4: issuer-signed malformed trial or mismatched entitlement is still invalid
+00:00 +5: canonical signature format rejects padding and noncanonical JSON
+00:00 +6: employee joining day29 inherits original tenant expiration to exact millisecond
+00:00 +7: offline app reopening keeps entitlement, clock and no daily lease
+00:00 +8: re-imported package cannot rewind clock; expiry lock survives process restart
+00:00 +9: lower epoch and changed same-epoch payloads are denied; renewal resumes
+00:00 +10: disabled employee remains separate from active business entitlement
+00:00 +11: failed secure persistence does not report activation success
+00:00 +12: concurrent old check and renewal serialize without restoring an old package
+00:00 +13: old package reimport cannot erase wall rollback before reboot
+00:00 +14: fresh delayed offline package uses the later wall reference and does not restart trial
+00:01 +15: authoritative account disable survives restart and offline activation until trusted recheck
+00:01 +16: paid activation survives restart and redeems before stale trial bootstrap import
+00:01 +17: activation disconnect retains signed pending package and local entitlement
+00:01 +18: signed disable from older server entitlement overrides unredeemed paid package
+00:01 +19: employee offline renewal keeps authentic newer entitlement until manager redeems
+00:01 +20: live signed role change locks the old local store before any activation or ledger sync
+00:01 +21: an older redemption cannot clear a newer package imported while activation is in flight
+00:01 +22: trusted monotonic time timezone and wall-clock changes do not change elapsed validity inside boot
+00:01 +23: trusted monotonic time sane restart carries accepted elapsed wall time forward
+00:01 +24: trusted monotonic time rollback after reboot and missing boot counter require trusted time
+00:01 +25: trusted monotonic time rollback in same boot stays detectable if user reboots
+00:01 +26: trusted monotonic time replayed signed timestamp cannot repair rollback; a new signed response can
+00:01 +27: trusted monotonic time fresh trusted reboot recovery preserves an equal or later high-water mark
+00:01 +28: (tearDownAll)
+00:01 +28: All tests passed!

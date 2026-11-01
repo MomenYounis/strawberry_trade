@@ -1,0 +1,15 @@
+{
+  "sdkPresent": true,
+  "emulatorBinaryPresent": true,
+  "kvmPresent": true,
+  "kvmReadableWritable": true,
+  "installedSystemImages": [
+    "system-images/android-35/google_apis/x86_64/package.xml"
+  ],
+  "availableAvds": [
+    "strawberry_test_api35"
+  ],
+  "emulatorListExitCode": 0,
+  "adbDevicesExitCode": 0,
+  "attachedTargets": []
+}

@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "apk": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-01/flutter/strawberry-trade-annual-review-v10-final.apk",
+  "sha256": "2e87059d72cf1566c583909f9d1dd8a5b8d4d0c402b71cc32d115cd40f6ad55e",
+  "bytes": 77512964,
+  "package": "com.strawberrytrade.strawberry_trade",
+  "versionName": "1.0.0",
+  "versionCode": "10",
+  "signingCertificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+  "priorV9CertificateMatches": true,
+  "signatureScheme": "v2 verified; others not required for minSdk24",
+  "debuggable": "false",
+  "allowBackup": "false",
+  "usesCleartextTraffic": "false",
+  "permissions": [
+    "android.permission.INTERNET",
+    "android.permission.ACCESS_NETWORK_STATE",
+    "com.google.android.providers.gsf.permission.READ_GSERVICES",
+    "android.permission.WAKE_LOCK",
+    "com.google.android.c2dm.permission.RECEIVE",
+    "com.strawberrytrade.strawberry_trade.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+  ],
+  "abiPublicConfigChecks": [
+    {
+      "entry": "lib/arm64-v8a/libapp.so",
+      "projectPresent": true,
+      "appIdPresent": true,
+      "approvedGatewayPresent": true
+    },
+    {
+      "entry": "lib/armeabi-v7a/libapp.so",
+      "projectPresent": true,
+      "appIdPresent": true,
+      "approvedGatewayPresent": true
+    },
+    {
+      "entry": "lib/x86_64/libapp.so",
+      "projectPresent": true,
+      "appIdPresent": true,
+      "approvedGatewayPresent": true
+    }
+  ],
+  "privateKeyMarkerOrSigningPasswordHits": [],
+  "scanLimits": "Known signing password and PEM markers only; not proof against all conceivable embedded secrets.",
+  "installedOrUpgraded": false,
+  "nativeAcceptance": "BLOCKED: no attached synthetic Android target"
+}

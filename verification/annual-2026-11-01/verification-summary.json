@@ -1,0 +1,235 @@
+{
+  "date": "2026-11-01",
+  "sourceCommit": "2a3cd45f82dce989e8db45e1f7a3e113af10f10a",
+  "commands": [
+    {
+      "command": "flutter pub get",
+      "directory": "root",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": null,
+      "evidence": "flutter/pub-get.log"
+    },
+    {
+      "command": "flutter analyze --no-pub",
+      "directory": "root",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": null,
+      "evidence": "flutter/integrated-analyze.log"
+    },
+    {
+      "command": "flutter test --no-pub --reporter expanded",
+      "directory": "root",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": 146,
+      "evidence": "flutter/integrated-tests-final.log"
+    },
+    {
+      "command": "npm ci --ignore-scripts --fetch-timeout=20000 --fetch-retries=1",
+      "directory": "backend",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": null,
+      "evidence": "backend-npm-ci.log"
+    },
+    {
+      "command": "npm test",
+      "directory": "backend",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": 67,
+      "evidence": "backend-unit-final.log"
+    },
+    {
+      "command": "npm run test:integration",
+      "directory": "backend",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": 27,
+      "evidence": "backend-integration-final.log"
+    },
+    {
+      "command": "npm run test:invitations",
+      "directory": "backend",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": 39,
+      "evidence": "backend-invitations-final.log"
+    },
+    {
+      "command": "npm run test:archive",
+      "directory": "backend",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": 34,
+      "evidence": "archive-suite-final.log",
+      "skipped": 0
+    },
+    {
+      "command": "node --max-old-space-size=96 backend/test/archive-scale.fixture.mjs",
+      "directory": "root",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": null,
+      "evidence": "archive-scale-final-recovery.log"
+    },
+    {
+      "command": "npm ci --ignore-scripts --fetch-timeout=20000 --fetch-retries=1",
+      "directory": "backend/worker",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": null,
+      "evidence": "worker-npm-ci-final.log"
+    },
+    {
+      "command": "npm test",
+      "directory": "backend/worker",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": 4,
+      "evidence": "worker-tests.log"
+    },
+    {
+      "command": "npm run dry-run",
+      "directory": "backend/worker",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": null,
+      "evidence": "worker-dry-run-final.log"
+    },
+    {
+      "command": "npm audit --omit=dev --json",
+      "directory": "backend",
+      "status": "FAIL",
+      "exitCode": 1,
+      "tests": null,
+      "evidence": "backend-production-audit-final.json"
+    },
+    {
+      "command": "python3 tools/annual-review/build-release.py",
+      "directory": "root",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": null,
+      "evidence": "flutter/release-build-final.log"
+    },
+    {
+      "command": "apksigner verify --verbose --print-certs",
+      "directory": "final APK and readonly prior v9",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": null,
+      "evidence": "flutter/release-signature-final.log"
+    },
+    {
+      "command": "flutter test --no-pub --reporter expanded verification/annual-2026-11-01/flutter/pdf_export_probe_test.dart",
+      "directory": "root",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": 1,
+      "evidence": "flutter/pdf-export-probe.log",
+      "limits": "Separate synthetic rendered-export QA; not included in145 host suite or native share/print acceptance"
+    },
+    {
+      "command": "flutter test integration_test/local_persistence_test.dart -d emulator-5580 --no-uninstall --reporter expanded",
+      "directory": "root",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": 3,
+      "evidence": "flutter/native/local-persistence.log",
+      "limits": "Native storage only; renderer disappeared during cleanup after assertions and emitted force-stop warning"
+    },
+    {
+      "command": "python3 tools/annual-review/native-storage-check.py full-storage",
+      "directory": "root",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": 1,
+      "evidence": "flutter/native/full-storage-roundtrip.json"
+    },
+    {
+      "command": "Signed DEBUG seed-v2 fixture -> actual signed v9 install-r -> final signed v10 install-r -> signed DEBUG verify fixture -> reboot and verify again",
+      "directory": "isolated API35 AVD emulator-5580",
+      "status": "PASS",
+      "exitCode": 0,
+      "tests": null,
+      "evidence": "flutter/native/README.md",
+      "limits": "Representative encrypted schema2 fixture migrated to3 with same keys, queue/draft. Repeated named tests overlap; not normal account/disaster recovery acceptance."
+    }
+  ],
+  "blocked": [
+    {
+      "check": "Actual R2/copy/key-recovery acceptance",
+      "reason": "No configured/independently observed approved storage/recovery arrangement"
+    }
+  ],
+  "notRunNotImplemented": [
+    "active compact snapshot atomic/resumable client install",
+    "conditional pruner and mid-delete recovery",
+    "whole-system archive+active-data recovery",
+    "complete archived party statements/indexed cross-year search",
+    "automatic Worker scheduler under measured budget",
+    "held salary-term manager resolution"
+  ],
+  "limits": [
+    "Counts overlap between combined emulator suites; do not sum as independent unique tests",
+    "Production dependency audit still fails on six moderate findings; zero high/critical",
+    "Scale success is private Node; peak RSS exceeds Worker128MiB",
+    "No production deployment/write/billing/enablement/publication",
+    "No-target preflight was superseded by new disposable AVD; scoped native tests passed. Do not claim broad native business/recovery acceptance."
+  ],
+  "verdicts": {
+    "coreCommercialAPK": "NO-GO",
+    "productionArchiveExportViewing": "NO-GO",
+    "automaticProductionClose": "NO-GO",
+    "destructiveCleanup": "NO-GO"
+  },
+  "flutterArtifactSourceCommit": "2a3cd45f82dce989e8db45e1f7a3e113af10f10a",
+  "artifact": {
+    "startedAtUtc": "2026-11-01T21:48:15.429493+00:00",
+    "sourceCommit": "2a3cd45f82dce989e8db45e1f7a3e113af10f10a",
+    "dirtyTree": true,
+    "credentialHandling": "Existing Secret Service credential only in memory; anonymous memfd Java properties; no password argument or disk file",
+    "productionAcceptance": false,
+    "androidInstalled": false,
+    "command": [
+      "flutter",
+      "build",
+      "apk",
+      "--release",
+      "--dart-define-from-file=/home/younis/.local/share/strawberry-trade-operator/firebase-production/cloudflare-setup-v8-defines.json"
+    ],
+    "exitCode": 0,
+    "status": "PASS",
+    "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-01/flutter/strawberry-trade-annual-review-v10-final.apk",
+    "bytes": 77512964,
+    "sha256": "4c57af562a6f40c295385bb4439bf61105374be45c296b825ce59236a9c07679",
+    "versionName": "1.0.0",
+    "versionCode": 10,
+    "finishedAtUtc": "2026-11-01T21:49:28.003038+00:00"
+  },
+  "latestPackagingInspection": "flutter/apk-inspection-final.json",
+  "recoveryReview": {
+    "specialistReadOnlyReview": true,
+    "scope": "Archive state/projection/format/view/budget/storage recovery paths; not independent external whole-repository audit",
+    "confirmedFindings": [
+      "mixed-key resume could strand an uploaded run",
+      "locale-dependent identity ordering"
+    ],
+    "status": "REPAIRED",
+    "rootReviewed": true,
+    "specialistArchiveTests": 34,
+    "rootArchiveTests": 34,
+    "sourceCommit": "e6e9c4fd6a04846d7a0fb2d3fe0c38790599793a"
+  },
+  "nativeEvidence": "flutter/native/README.md",
+  "notRunCriticalNative": [
+    "Two-tenant manager/employee financial sync and auth/license/invitation against compatible server",
+    "Normal cached-account and replacement-phone recovery",
+    "Native archive storage, printing/sharing/accessibility, OEM/older Android and annual-volume performance"
+  ],
+  "handoffLocalDate": "2026-11-02",
+  "timeZone": "Africa/Cairo"
+}

@@ -1,0 +1,20 @@
+00:00 +0: loading /home/younis/strawberry-trade-annual-review/test/controller_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +1: overlapping synchronization triggers use one sender and acknowledge once
+00:00 +2: late acknowledgment after sign-out cannot modify another tenant with the same operation ID
+00:00 +3: disposing during a delayed send preserves the pending disk operation and ignores its late acknowledgment
+00:00 +4: known expiry retains the queue and renewal sends the original operation exactly once
+00:01 +5: explicit Auth account disable also clears cached data and invalidates stale storage access
+00:01 +6: ordinary auth-token expiry preserves offline authority and the original queued operation
+00:01 +7: a server authorization denial blocks the retained operation using its machine reason
+00:01 +8: renewal automatically resumes a server-expiry block with the preserved operation ID
+00:01 +9: a timed-out acknowledgment retains the same ID and clears only on a valid retry response
+00:01 +10: an unrecognized send response cannot acknowledge and discard a durable operation
+00:01 +11: a signed live revocation clears exposed data and invalidates stale store handles without deleting the queue
+00:01 +12: closed-period staging is retained across reopen and excluded from financial reports
+00:01 +13: held historical salary evidence stays durable without changing active obligations
+00:02 +14: malformed and history-floor pages preserve cursor and unsent work
+00:02 +15: bounded paging does not label unfinished history as synchronized
+00:03 +16: (tearDownAll)
+00:03 +16: All tests passed!

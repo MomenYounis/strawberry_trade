@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: two concurrent tenants share one cap; failed reservation changes no counters
+ok 1 - two concurrent tenants share one cap; failed reservation changes no counters
+  ---
+  duration_ms: 30.692215
+  type: 'test'
+  ...
+# Subtest: disabled/missing live headroom and zero-delete cap refuse before work
+ok 2 - disabled/missing live headroom and zero-delete cap refuse before work
+  ---
+  duration_ms: 3.398418
+  type: 'test'
+  ...
+# Subtest: repeated operation attempt charges again despite matching diagnostic step ID
+ok 3 - repeated operation attempt charges again despite matching diagnostic step ID
+  ---
+  duration_ms: 1.600531
+  type: 'test'
+  ...
+# Subtest: UTC and Pacific internal windows reset at different civil midnight including DST
+ok 4 - UTC and Pacific internal windows reset at different civil midnight including DST
+  ---
+  duration_ms: 1.857209
+  type: 'test'
+  ...
+# Subtest: unknown resources and unsafe costs fail closed
+ok 5 - unknown resources and unsafe costs fail closed
+  ---
+  duration_ms: 1.266768
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 418.64661

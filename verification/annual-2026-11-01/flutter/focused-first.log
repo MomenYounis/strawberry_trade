@@ -1,0 +1,94 @@
+00:00 +0: loading /home/younis/strawberry-trade-annual-review/test/sync_protocol_test.dart
+00:00 +0: /home/younis/strawberry-trade-annual-review/test/annual_financial_reference_test.dart: two year boundaries conserve receivable/payable and separate recorded cash
+00:00 +1: /home/younis/strawberry-trade-annual-review/test/annual_financial_reference_test.dart: two year boundaries conserve receivable/payable and separate recorded cash
+00:00 +2: /home/younis/strawberry-trade-annual-review/test/annual_financial_reference_test.dart: two year boundaries conserve receivable/payable and separate recorded cash
+00:00 +3: /home/younis/strawberry-trade-annual-review/test/annual_financial_reference_test.dart: two year boundaries conserve receivable/payable and separate recorded cash
+00:00 +4: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (setUpAll)
+00:00 +5: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (setUpAll)
+00:00 +6: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (setUpAll)
+00:00 +7: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (setUpAll)
+00:00 +7: /home/younis/strawberry-trade-annual-review/test/domain_test.dart: Adjustment evidence round-trips and both party kinds support signed debt corrections
+00:00 +8: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +9: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +10: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +11: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +12: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +13: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +14: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +15: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +16: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +17: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +18: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +19: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +20: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +21: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +22: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +23: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +24: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +25: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Real on-disk save and stable outbox survive closing/reopening offline
+00:00 +26: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +27: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +28: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +29: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Immutable shipment updates round-trip through outbox and backup without rewriting financial invoice
+00:00 +30: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: overlapping synchronization triggers use one sender and acknowledge once
+00:00 +31: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: overlapping synchronization triggers use one sender and acknowledge once
+00:00 +32: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: overlapping synchronization triggers use one sender and acknowledge once
+00:00 +33: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Migration v1 to v3 preserves ledger, queue identifier and attempts on disk
+error SqfliteFfiException(sqlite_error: 1, , SqliteException(1): while executing, duplicate column name: original_business_date, SQL logic error (code 1)
+  Causing statement: ALTER TABLE entries ADD COLUMN original_business_date TEXT, parameters: }) DatabaseException(SqliteException(1): while executing, duplicate column name: original_business_date, SQL logic error (code 1)
+  Causing statement: ALTER TABLE entries ADD COLUMN original_business_date TEXT, parameters: ) sql 'ALTER TABLE entries ADD COLUMN original_business_date TEXT' {details: {database: {path: /tmp/strawberry_sqlite_test_JONOGY/ledger.db, id: 20, readOnly: false, singleInstance: false}}} during open, closing...
+00:00 +33 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: late acknowledgment after sign-out cannot modify another tenant with the same operation ID
+00:00 +33 -1: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Migration v1 to v3 preserves ledger, queue identifier and attempts on disk [E]
+  SqfliteFfiException(sqlite_error: 1, , SqliteException(1): while executing, duplicate column name: original_business_date, SQL logic error (code 1)
+    Causing statement: ALTER TABLE entries ADD COLUMN original_business_date TEXT, parameters: }) DatabaseException(SqliteException(1): while executing, duplicate column name: original_business_date, SQL logic error (code 1)
+    Causing statement: ALTER TABLE entries ADD COLUMN original_business_date TEXT, parameters: ) sql 'ALTER TABLE entries ADD COLUMN original_business_date TEXT' {details: {database: {path: /tmp/strawberry_sqlite_test_JONOGY/ledger.db, id: 20, readOnly: false, singleInstance: false}}}
+  package:sqflite_common_ffi/src/method_call.dart 126:9  responseToResultOrThrow
+  package:sqflite_common_ffi/src/isolate_io.dart 84:12   SqfliteIsolate.handle
+  
+00:00 +34 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: late acknowledgment after sign-out cannot modify another tenant with the same operation ID
+00:00 +35 -1: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Retries keep IDs and durable attempts; auth/license failure never drops operations
+00:00 +36 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: disposing during a delayed send preserves the pending disk operation and ignores its late acknowledgment
+00:00 +37 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: disposing during a delayed send preserves the pending disk operation and ignores its late acknowledgment
+00:00 +38 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: disposing during a delayed send preserves the pending disk operation and ignores its late acknowledgment
+00:00 +39 -1: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Conflicting remote facts preserve both versions and block resend
+00:00 +40 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: known expiry retains the queue and renewal sends the original operation exactly once
+00:00 +41 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: known expiry retains the queue and renewal sends the original operation exactly once
+00:00 +42 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: known expiry retains the queue and renewal sends the original operation exactly once
+00:00 +43 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: known expiry retains the queue and renewal sends the original operation exactly once
+00:01 +44 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: known expiry retains the queue and renewal sends the original operation exactly once
+00:01 +45 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: known expiry retains the queue and renewal sends the original operation exactly once
+00:01 +46 -1: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Review is provisional, double taps reuse its ID and only server acceptance posts employee facts
+00:01 +47 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: explicit Auth account disable also clears cached data and invalidates stale storage access
+00:01 +48 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: explicit Auth account disable also clears cached data and invalidates stale storage access
+00:01 +49 -1: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Invalid backup totals, paid amounts, changed grade and forged authority are atomically rejected
+00:01 +50 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: ordinary auth-token expiry preserves offline authority and the original queued operation
+00:01 +51 -1: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Historical salary cannot be retroactively rewritten after payment
+00:01 +52 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: a server authorization denial blocks the retained operation using its machine reason
+00:01 +53 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: a server authorization denial blocks the retained operation using its machine reason
+00:01 +54 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: a server authorization denial blocks the retained operation using its machine reason
+00:01 +55 -1: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Multi-season ledger is not truncated to latest 50 and supports historical pagination
+00:01 +56 -1: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Multi-season ledger is not truncated to latest 50 and supports historical pagination
+00:01 +57 -1: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Multi-season ledger is not truncated to latest 50 and supports historical pagination
+00:02 +58 -1: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Multi-season ledger is not truncated to latest 50 and supports historical pagination
+00:02 +59 -1: /home/younis/strawberry-trade-annual-review/test/store_test.dart: Multi-season ledger is not truncated to latest 50 and supports historical pagination
+00:02 +60 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: closed-period staging is retained across reopen and excluded from financial reports
+00:02 +61 -1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: closed-period staging is retained across reopen and excluded from financial reports
+00:02 +61 -2: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: closed-period staging is retained across reopen and excluded from financial reports
+00:02 +61 -2: /home/younis/strawberry-trade-annual-review/test/store_test.dart: trusted correction provenance survives remote replay, backup and replacement store [E]
+  Expected: '2027-08-31'
+    Actual: ''
+     Which: is different. Both strings start the same, but the actual value is missing the following trailing characters: 2027-08-31 ...
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/store_test.dart 969:7                          main.<fn>
+  
+00:02 +61 -2: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: closed-period staging is retained across reopen and excluded from financial reports
+00:02 +62 -2: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: malformed and history-floor pages preserve cursor and unsent work
+00:03 +63 -2: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: bounded paging does not label unfinished history as synchronized
+00:04 +64 -2: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (tearDownAll)
+00:04 +64 -2: Some tests failed.
+
+Failing tests:
+  /home/younis/strawberry-trade-annual-review/test/store_test.dart: Migration v1 to v3 preserves ledger, queue identifier and attempts on disk
+  /home/younis/strawberry-trade-annual-review/test/store_test.dart: trusted correction provenance survives remote replay, backup and replacement store

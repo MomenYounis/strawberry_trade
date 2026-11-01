@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-01",
+  "runtime": "Node 22.22.2 / npm 10.9.7",
+  "commands": [
+    {
+      "cwd": "tools/license-issuer",
+      "command": "npm test",
+      "exitCode": 0,
+      "status": "PASS",
+      "tests": 8
+    },
+    {
+      "cwd": "tools/firebase-config",
+      "command": "npm test",
+      "exitCode": 0,
+      "status": "PASS",
+      "tests": 14
+    },
+    {
+      "cwd": "tools/production-operator",
+      "command": "npm test",
+      "exitCode": 0,
+      "status": "PASS",
+      "tests": 30
+    },
+    {
+      "cwd": "tools/admin-panel",
+      "command": "npm test",
+      "exitCode": 0,
+      "status": "PASS",
+      "tests": 33
+    }
+  ],
+  "scope": "Host synthetic/mocked tool tests; no production acceptance. Test counts verified from executed suites."
+}

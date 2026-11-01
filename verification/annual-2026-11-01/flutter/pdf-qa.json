@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "synthetic": true,
+  "sourceCommit": "4376643eb5527f2dbc25a602c71d3cb57200fa42",
+  "exportCommand": "flutter test --no-pub --reporter expanded verification/annual-2026-11-01/flutter/pdf_export_probe_test.dart",
+  "exportExitCode": 0,
+  "tests": 1,
+  "renderCommand": "pdftoppm -singlefile -png -r 140 output/pdf/archived-invoice-synthetic.pdf verification/annual-2026-11-01/flutter/archived-invoice-render",
+  "renderExitCode": 0,
+  "rootVisuallyInspected": true,
+  "idAndDateExtractionAssertions": "PASS",
+  "limits": "One actual synthetic Flutter export; not general layout/accessibility/native share or print acceptance",
+  "files": {
+    "output/pdf/archived-invoice-synthetic.pdf": {
+      "sha256": "a8a6702b4f9f7054450546f8e40f891fdcbdd1539cd55eec328520fbf6a7e753",
+      "bytes": 23815
+    },
+    "output/pdf/archived-invoice-synthetic.csv": {
+      "sha256": "d998cbc5623c38daf08f01191d18b3cf60ca4f58ff42e5cf48d80220a7fd9e7d",
+      "bytes": 1074
+    },
+    "verification/annual-2026-11-01/flutter/archived-invoice-render.png": {
+      "sha256": "c7ffdfe64975856ce967a23df7916b37be6169096d80a57ac7b56a05a5c2b27b",
+      "bytes": 94845
+    }
+  }
+}

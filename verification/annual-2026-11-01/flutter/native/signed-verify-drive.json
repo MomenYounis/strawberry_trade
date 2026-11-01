@@ -1,0 +1,27 @@
+{
+  "synthetic": true,
+  "status": "PASS",
+  "exitCode": 0,
+  "command": [
+    "flutter",
+    "drive",
+    "--use-application-binary=/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-01/flutter/native/persistence-verify-signed-DEBUG.apk",
+    "--target=integration_test/local_persistence_test.dart",
+    "--driver=verification/annual-2026-11-01/flutter/native/integration_driver.dart",
+    "--keep-app-running",
+    "-d",
+    "emulator-5580"
+  ],
+  "schemaBeforeReplacement": 2,
+  "schemaAfter": 3,
+  "retained": [
+    "installation Keystore identity",
+    "protected SQLCipher key digest",
+    "encrypted entry",
+    "stable outbox operation ID and wire payload digest",
+    "retry count and schedule",
+    "unfinished draft"
+  ],
+  "uninstallOrDataClearSinceSeed": false,
+  "normalAccountAndArchiveRecovery": "NOT TESTED by this storage-only fixture"
+}

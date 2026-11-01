@@ -1,0 +1,18 @@
+(node:62483) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{
+  "status": "PASS",
+  "synthetic": true,
+  "annualEntries": 73000,
+  "recordCount": 73003,
+  "chunks": 593,
+  "cipherBytes": 38612546,
+  "independentExpectedReceivableMinor": 3660000,
+  "independentExpectedCashMinor": 3650000,
+  "projectionMs": 11562,
+  "exportMs": 13000,
+  "verifyMs": 23746,
+  "maxRSSKiB": 161212,
+  "heapLimitFlag": "--max-old-space-size=96",
+  "runtime": "private Node; not Worker acceptance"
+}
