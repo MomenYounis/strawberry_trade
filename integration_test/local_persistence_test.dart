@@ -119,8 +119,8 @@ void main() {
     'SQLCipher commits ledger and outbox then reopens encrypted with the same protected key',
     (tester) async {
       final support = await getApplicationSupportDirectory();
-      final persistent = phase == 'seed' || phase == 'verify';
-      expect({'roundtrip', 'seed', 'verify'}, contains(phase));
+      final persistent = {'seed', 'seed-v2', 'verify'}.contains(phase);
+      expect({'roundtrip', 'seed', 'seed-v2', 'verify'}, contains(phase));
       final fixture = p.join(
         support.path,
         'integration-persistence',
@@ -326,11 +326,36 @@ void main() {
         await store.close();
         if (!persistent) await Directory(fixture).delete(recursive: true);
       }
+      if (phase == 'seed-v2') {
+        // Leave representative schema-2 bytes across signed APK replacements.
+        // Verification must migrate them without changing the stable outbox
+        // payload, retry/draft evidence, installation identity or protected key.
+        final legacy = await cipher.openDatabase(
+          path,
+          password: password,
+          singleInstance: false,
+        );
+        try {
+          await legacy.execute(
+            'ALTER TABLE outbox DROP COLUMN correction_of_operation_id',
+          );
+          await legacy.execute(
+            'ALTER TABLE entries DROP COLUMN original_business_date',
+          );
+          await legacy.execute(
+            'ALTER TABLE entries DROP COLUMN correction_of_operation_id',
+          );
+          await legacy.setVersion(2);
+          expect(await legacy.getVersion(), 2);
+        } finally {
+          await legacy.close();
+        }
+      }
     },
   );
 
   testWidgets(
-    'Native encrypted v1 to v2 migration preserves pending payload, retries and draft',
+    'Native encrypted v1 to v3 migration preserves pending payload, retries and draft',
     (tester) async {
       final support = await getApplicationSupportDirectory();
       final folder = Directory(
