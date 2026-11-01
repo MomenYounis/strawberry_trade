@@ -86,6 +86,58 @@ class ArabicExports {
             ),
           ),
         );
+    pw.Widget descriptionCell(LedgerEntry entry) => pw.Padding(
+      padding: const pw.EdgeInsets.symmetric(vertical: 7, horizontal: 5),
+      child: pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.end,
+        children: [
+          pw.Text(
+            '${entryDescription(entry).split('\n').first}${entry.partyName.isNotEmpty ? ' - ${entry.partyName}' : ''}',
+            textDirection: pw.TextDirection.rtl,
+            style: const pw.TextStyle(fontSize: 10),
+          ),
+          if (readOnlyArchive) ...[
+            pw.Text(
+              'معرف القيد:',
+              textDirection: pw.TextDirection.rtl,
+              style: const pw.TextStyle(fontSize: 9),
+            ),
+            pw.Text(
+              entry.id,
+              textDirection: pw.TextDirection.ltr,
+              style: const pw.TextStyle(fontSize: 9),
+            ),
+          ],
+          if (entry.originalBusinessDate.isNotEmpty) ...[
+            pw.Text(
+              'تاريخ العمل الأصلي:',
+              textDirection: pw.TextDirection.rtl,
+              style: const pw.TextStyle(fontSize: 9),
+            ),
+            pw.Text(
+              entry.originalBusinessDate,
+              textDirection: pw.TextDirection.ltr,
+              style: const pw.TextStyle(fontSize: 9),
+            ),
+            pw.Text(
+              'العملية الأصلية:',
+              textDirection: pw.TextDirection.rtl,
+              style: const pw.TextStyle(fontSize: 9),
+            ),
+            pw.Text(
+              entry.correctionOfOperationId,
+              textDirection: pw.TextDirection.ltr,
+              style: const pw.TextStyle(fontSize: 9),
+            ),
+          ],
+          pw.Text(
+            '${entry.isInvoice ? 'الإجمالي: ${formatMoney(entry.totalMinor)} · المدفوع: ${formatMoney(entry.paidMinor)}' : ''}${entry.qtyMilli > 0 ? '\nالصنف: ${entry.grade}\nالكمية: ${formatQuantity(entry.qtyMilli)} ${entry.unit}' : ''}${entry.note.isNotEmpty ? '\n${entry.note}' : ''}',
+            textDirection: pw.TextDirection.rtl,
+            style: const pw.TextStyle(fontSize: 10),
+          ),
+        ],
+      ),
+    );
     final rows = <pw.TableRow>[
       pw.TableRow(
         repeat: true,
@@ -116,9 +168,7 @@ class ArabicExports {
               cell(formatMoney(lines[i].creditMinor), latin: true),
               cell(formatMoney(lines[i].debitMinor), latin: true),
             ],
-            cell(
-              '${entryDescription(e)}${e.partyName.isNotEmpty ? ' - ${e.partyName}' : ''}${e.isInvoice ? '\nالإجمالي: ${formatMoney(e.totalMinor)} · المدفوع: ${formatMoney(e.paidMinor)}' : ''}${e.qtyMilli > 0 ? '\nالصنف: ${e.grade}\nالكمية: ${formatQuantity(e.qtyMilli)} ${e.unit}' : ''}${e.note.isNotEmpty ? '\n${e.note}' : ''}',
-            ),
+            descriptionCell(e),
             cell(e.date, latin: true),
           ],
         );
