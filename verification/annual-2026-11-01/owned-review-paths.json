@@ -124,6 +124,7 @@
   "verification/annual-2026-11-01/initial-status.txt",
   "verification/annual-2026-11-01/original-preservation-final.json",
   "verification/annual-2026-11-01/owned-review-paths.json",
+  "verification/annual-2026-11-01/post-test-preservation-check.json",
   "verification/annual-2026-11-01/source-path-inventory.json",
   "verification/annual-2026-11-01/tool-tests.json",
   "verification/annual-2026-11-01/tracked-secret-shape-scan.json",

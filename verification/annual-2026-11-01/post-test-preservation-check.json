@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "restoredOnlyTestSideEffects": [
+    "verification/arabic-statement-sample.pdf"
+  ],
+  "restorationSource": "Untouched read-only original, matched recorded initial byte hash and unchanged HEAD artifact",
+  "originalOwnerWorkChanged": false,
+  "newSyntheticPDFEvidence": "output/pdf/archived-invoice-synthetic.pdf",
+  "applicationSourceChangedByRestoration": false
+}

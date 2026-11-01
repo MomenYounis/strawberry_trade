@@ -1948,6 +1948,11 @@
       "limits": "Integrity/inventory is not independent correctness or production acceptance."
     },
     {
+      "path": "verification/annual-2026-11-01/post-test-preservation-check.json",
+      "coverage": "executed-final-owner-work-preservation-check",
+      "limits": "Confirms restoration of a synthetic historical fixture side effect; not production acceptance."
+    },
+    {
       "path": "verification/annual-2026-11-01/source-path-inventory.json",
       "coverage": "generated-local-test-evidence-status-reviewed",
       "limits": "Not an independent exhaustive audit or production acceptance assertion."

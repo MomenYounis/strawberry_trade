@@ -25,8 +25,8 @@
       "sha256": "265f55f331a7b3b8da8fe2f65c0849d2b05478aff000c7f315cbf54fcdf0496c"
     },
     "docs/implementation-progress.md": {
-      "bytes": 22489,
-      "sha256": "77684f4b8c10a06c334356bb21348db62e05ae631ada315eef503cc18a91e7bc"
+      "bytes": 22940,
+      "sha256": "4d490e190d9e2479134ec77aec6e5d73b4d48f9c1c1667577577f862c50eb1aa"
     },
     "docs/rollout-commands-review.md": {
       "bytes": 3056,
@@ -77,8 +77,8 @@
       "sha256": "688c60504a3669dd6d09900a30e0036bc9591641377abe64504acd7ddddbf0d2"
     },
     "verification/annual-2026-11-01/audit-coverage.json": {
-      "bytes": 110022,
-      "sha256": "0fb5fd9b0a379d4b6d4fd61a36326ffd2e564498a0c5525694afd6671a3b01e7"
+      "bytes": 110296,
+      "sha256": "8dd29f9f98eaa6cc6526987bd4b9e5ab43dde5d3e87f421ca39210731045a777"
     },
     "verification/annual-2026-11-01/backend-baseline-unit.log": {
       "bytes": 10391,
@@ -493,8 +493,12 @@
       "sha256": "fa2af392303fdcfe2854941cd4e7e0f48bd7a48349dced414b456e85b0c2f65e"
     },
     "verification/annual-2026-11-01/owned-review-paths.json": {
-      "bytes": 8804,
-      "sha256": "cec351599fe1e21adf95a311f828bce019dab598806ce9b93243d34a075c2ef8"
+      "bytes": 8874,
+      "sha256": "c0ee207d8385f4301a482f66ca9574ea1999e69bd39a5b45d9927a3ca5ea9feb"
+    },
+    "verification/annual-2026-11-01/post-test-preservation-check.json": {
+      "bytes": 390,
+      "sha256": "fe923e8e7a102432e5dc83923a87ee8fc67708538f2695b9887d8701c8f55837"
     },
     "verification/annual-2026-11-01/source-path-inventory.json": {
       "bytes": 2569,
