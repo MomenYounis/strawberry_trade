@@ -189,3 +189,36 @@ test('checkpoint capture rejects tenant deletion, inactive employee and changed 
  employee={active:false};await assert.rejects(()=>captureActiveSnapshotScope(input),/snapshot-authority-changed/);employee={active:true};
  member={...member,epoch:3};await assert.rejects(()=>captureActiveSnapshotScope(input),/snapshot-authority-changed/);
 });
+
+test('checkpoint capture reserves its worst-case five-attempt read budget before provider I/O',async()=>{
+ const events=[];let reads=0,reserved=0,providerCalls=0,attempts=0;
+ const ref=path=>({path,collection:name=>({doc:key=>ref(`${path}/${name}/${key}`)})});
+ const db={doc:ref,runTransaction:async(callback,options)=>{
+  providerCalls++;events.push('provider');
+  let result;
+  // Simulate the SDK retrying four aborted read transactions, then succeeding.
+  for(let attempt=0;attempt<5;attempt++){
+   attempts++;
+   result=await callback({get:async reference=>{
+    reads++;assert.ok(reads<=reserved,'provider retry reads exceeded the pre-I/O reservation');events.push('read');
+    const value=reference.path.includes('/members/')?{active:true,role:'employee',epoch:2,employeeId:'employee'}:
+     reference.path.includes('/employees/')?{active:true}:{sequence:9,historyFloor:3};
+    return {data:()=>value};
+   }});
+  }
+  assert.equal(options?.maxAttempts,5,'SDK retries must not exceed the reserved attempt bound');
+  return result;
+ }};
+ const budget={reserve:async request=>{
+  assert.equal(reads,0);assert.equal(providerCalls,0);events.push('reserve');
+  await Promise.resolve();reserved+=request.costs.firestoreReads;events.push('reserved');
+ }};
+ const input={db,snapshotId:'retry_budget',tenantId:'tenant',uid:'worker',role:'employee',membershipEpoch:2,budget};
+ const captured=await captureActiveSnapshotScope(input);
+ assert.equal(captured.checkpointSequence,9);assert.equal(captured.historyFloor,3);
+ assert.equal(attempts,5);assert.equal(reads,15);assert.equal(reserved,15);
+ assert.deepEqual(events.slice(0,3),['reserve','reserved','provider']);
+ await assert.rejects(()=>captureActiveSnapshotScope({...input,budget:{reserve:async()=>{throw new Error('synthetic budget exhausted');}}}),/synthetic budget exhausted/);
+ assert.equal(providerCalls,1,'budget exhaustion must defer before opening another provider transaction');
+ assert.equal(reads,15);
+});

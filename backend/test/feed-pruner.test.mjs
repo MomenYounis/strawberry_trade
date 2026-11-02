@@ -161,6 +161,8 @@ test('every cleanup acceptance gate fails before deletes, including malformed or
   ['protocol acceptance missing',state=>{state.run.evidence.cleanupAcceptance.protocolAcceptance=false;}],
   ['install acceptance missing',state=>{state.run.evidence.cleanupAcceptance.clientInstallAcceptance=false;}],
   ['another source consumer still active',state=>{state.root.archivePolicy.pendingFeedConsumers=[C-1];}],
+  ['same checkpoint source consumer active',state=>{state.root.archivePolicy.pendingFeedConsumers=[C];}],
+  ['later checkpoint source consumer active',state=>{state.root.archivePolicy.pendingFeedConsumers=[C+2];}],
   ['undefined checkpoint version in all copies',state=>{delete state.run.checkpoint.version;delete state.run.evidence.verified.closingVersion;delete state.run.evidence.cleanupAcceptance.closingVersion;}],
   ['missing manifest hash in all copies',state=>{delete state.run.manifest.sha256;delete state.run.evidence.verified.manifestSha256;delete state.run.evidence.cleanupAcceptance.manifestSha256;}],
   ['complete without durable cursor',state=>{state.run.state='complete';}],

@@ -95,7 +95,9 @@ function checkGates({root,run,lease,manifest,planSha256,config,storage,mode,now}
  if(mode==='production'&&(storage?.kind!=='r2'||storage.productionDurabilityAccepted!==true||accepted.productionAcceptance!==true||!accepted.approvalId))throw new Error('production-cleanup-not-accepted');
  if(mode==='synthetic'&&(storage?.kind!=='synthetic'||accepted.synthetic!==true))throw new Error('synthetic-cleanup-boundary');
  if((root.historyFloor??0)>manifest.checkpointSequence||(root.historyFloor??0)<manifest.fromSequence)throw new Error('prune-history-floor-mismatch');
- if(root.archivePolicy?.pendingFeedConsumers!==undefined&&(!Array.isArray(root.archivePolicy.pendingFeedConsumers)||root.archivePolicy.pendingFeedConsumers.some(sequence=>!Number.isSafeInteger(sequence)||sequence<0||sequence<manifest.checkpointSequence)))throw new Error('dependent-export-in-progress');
+ // Any registered source consumer may still require this prefix. A closing
+ // checkpoint at/above C does not prove its replay cursor or seed is safe.
+ if(root.archivePolicy?.pendingFeedConsumers!==undefined&&(!Array.isArray(root.archivePolicy.pendingFeedConsumers)||root.archivePolicy.pendingFeedConsumers.length>0))throw new Error('dependent-export-in-progress');
 }
 
 /** At most 20 duplicate manager-feed documents per transaction. The full
@@ -127,10 +129,8 @@ export async function runFeedPruneStep({adapter,tenantId,year,lease,plan,budget,
   const progress=checkedProgress(tx.run,tx.root);
   if(canonical(progress)!==canonical(before))throw new Error('prune-progress-changed');
   if(tx.run.state==='complete')return {state:'complete',...copy(progress)};
-  if(mode==='production'){
-    if(typeof tx.assertNoPendingFeedConsumers!=='function')throw new Error('feed-consumer-guard-required');
-    await tx.assertNoPendingFeedConsumers(manifest.checkpointSequence);
-  }
+  if(typeof tx.assertNoPendingFeedConsumers==='function')await tx.assertNoPendingFeedConsumers();
+  else if(mode==='production')throw new Error('feed-consumer-guard-required');
   if(page){
    const documents=await tx.getFeedDocuments(page.records.map(row=>row.id));
    if(documents.length!==page.records.length)throw new Error('prune-document-missing');
@@ -161,8 +161,11 @@ export class FirestoreFeedPruneAdapter {
    const [rootDoc,runDoc]=await Promise.all([transaction.get(root),transaction.get(run)]);
    if(!rootDoc.exists)throw new Error('tenant-missing');const deletes=[];
    const context={root:rootDoc.data(),run:runDoc.exists?runDoc.data():null,
-    assertNoPendingFeedConsumers:async sequence=>{
-     const query=root.collection('archiveRuns').where('state','in',['checkpointed','exporting','uploaded']).where('checkpoint.sequence','<',sequence).limit(1);
+    assertNoPendingFeedConsumers:async()=>{
+     // A same/later checkpoint still needs this prefix when rebuilding from
+     // zero. No persisted proof establishes that another active run can reseed.
+     // This run is cleanup_pending/pruning/complete, outside these states.
+     const query=root.collection('archiveRuns').where('state','in',['checkpointed','exporting','uploaded']).limit(1);
      if(!(await transaction.get(query)).empty)throw new Error('dependent-export-in-progress');
     },
     getFeedDocuments:async ids=>{if(ids.length>PAGE_SIZE)throw new Error('prune-batch-limit');return Promise.all(ids.map(async key=>{const doc=await transaction.get(root.collection('changes').doc(key));return doc.exists?{id:doc.id,data:doc.data(),updateTime:{seconds:doc.updateTime.seconds,nanoseconds:doc.updateTime.nanoseconds}}:null;}));},

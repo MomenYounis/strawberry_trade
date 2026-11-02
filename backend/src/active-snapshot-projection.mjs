@@ -19,7 +19,9 @@ export async function captureActiveSnapshotScope({db,snapshotId,tenantId,uid,rol
  id(snapshotId);id(tenantId);id(uid);integer(membershipEpoch,1,Number.MAX_SAFE_INTEGER);
  if(!['manager','employee'].includes(role))throw new Error('invalid-snapshot-role');
  const root=db.doc(`tenants/${tenantId}`);
- await reserveSource(budget,tenantId,3);
+ // Up to three reads per attempt (tenant/member/employee). Reserve all
+ // permitted SDK retries before opening the provider transaction.
+ await reserveSource(budget,tenantId,15);
  return db.runTransaction(async tx=>{
   const [tenantDoc,memberDoc]=await Promise.all([tx.get(root),tx.get(root.collection('members').doc(uid))]);
   const tenant=tenantDoc.data(),member=memberDoc.data();
@@ -29,7 +31,7 @@ export async function captureActiveSnapshotScope({db,snapshotId,tenantId,uid,rol
    if(employee?.active!==true)throw new Error('snapshot-authority-changed');
   }
   return snapshotScope({snapshotId,tenantId,uid,role,membershipEpoch,checkpointSequence:tenant.sequence??0,historyFloor:tenant.historyFloor??0});
- });
+ },{maxAttempts:5});
 }
 
 export async function* immutableActiveChangesAtCheckpoint(db,{tenantId,checkpointSequence,fromSequence=0,historyFloor=0,pageSize=100,maxPages=5001,budget=null}){

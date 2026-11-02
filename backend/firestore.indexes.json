@@ -13,20 +13,6 @@
           "order": "ASCENDING"
         }
       ]
-    },
-    {
-      "collectionGroup": "archiveRuns",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "state",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "checkpoint.sequence",
-          "order": "ASCENDING"
-        }
-      ]
     }
   ],
   "fieldOverrides": [
