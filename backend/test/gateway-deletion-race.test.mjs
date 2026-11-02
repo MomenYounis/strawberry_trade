@@ -9,7 +9,7 @@ import {canonical,hash} from '../src/validation.mjs';
 // An injected MVCC store models Firestore's read-version conflict/retry
 // behavior. It lets deletion happen exactly between authority and transaction,
 // or after transactional reads, without network access or timing sleeps.
-function fixture({role='manager',disabled=false,time=1_790_000_000_000,archiveViewer=null}={}) {
+function fixture({role='manager',disabled=false,time=1_790_000_000_000,archiveViewer=null,activeSnapshots=null}={}) {
  const tenantId='race_tenant',uid='race_owner';
  const key=generateKeyPairSync('ec',{namedCurve:'prime256v1'}),publicKeySpki=key.publicKey.export({format:'der',type:'spki'}).toString('base64url');
  const deviceId=createHash('sha256').update(Buffer.from(publicKeySpki,'base64url')).digest('base64url');
@@ -46,7 +46,7 @@ function fixture({role='manager',disabled=false,time=1_790_000_000_000,archiveVi
  if(role==='employee')put(root+'/employees/employee_a',{name:'موظف اختبار',active:!disabled});
  put(root+'/sessions/'+hash('test-device-session'),{uid,deviceId,expiresAtMs:time+3600000});
  const auth={getUser:async requestedUid=>({uid:requestedUid,emailVerified:true,disabled:false}),revokeRefreshTokens:async target=>events.push(['auth-revoke',target])};
- const gateway=createGateway({db,auth,archiveViewer,now:()=>time,privateKey:()=>issuer.privateKey.export({format:'pem',type:'pkcs8'}),publicKey:()=>issuer.publicKey.export({format:'pem',type:'spki'}),kid:()=> 'test-race-v1'});
+ const gateway=createGateway({db,auth,archiveViewer,activeSnapshots,now:()=>time,privateKey:()=>issuer.privateKey.export({format:'pem',type:'pkcs8'}),publicKey:()=>issuer.publicKey.export({format:'pem',type:'spki'}),kid:()=> 'test-race-v1'});
  const request=extra=>({auth:{uid,token:{auth_time:Math.floor(time/1000)}},data:{tenantId,deviceId,...extra}});
  const authorized=extra=>request({sessionToken:'test-device-session',...extra});
  const proof=challenge=>({challengeId:challenge.challengeId,signature:sign('sha256',Buffer.from(challenge.challenge),key.privateKey).toString('base64url')});
@@ -238,7 +238,7 @@ test('unapproved employee submission survives close and manager approval require
 
 test('protocol floor explicitly refuses lost history and sequence exhaustion cannot create unsafe numbers',async()=>{
  const f=closingFixture();f.put(f.root,{...f.rows.get(f.root),historyFloor:4});await assert.rejects(f.gateway.pullChanges(f.authorized({afterSequence:3,syncProtocolVersion:1})),/resync-required/);
- await assert.rejects(f.gateway.pullChanges(f.authorized({afterSequence:4,syncProtocolVersion:2})),/sync-upgrade-required/);f.put(f.root,{...f.rows.get(f.root),sequence:Number.MAX_SAFE_INTEGER});
+ await assert.rejects(f.gateway.pullChanges(f.authorized({afterSequence:4,syncProtocolVersion:3})),/sync-upgrade-required/);f.put(f.root,{...f.rows.get(f.root),sequence:Number.MAX_SAFE_INTEGER});
  await assert.rejects(f.gateway.syncOperation(f.authorized({operation:operation('overflow',safetySale('overflow','2027-09-03'))})),/sequence-exhausted/);assert.equal(f.rows.has(f.root+'/entries/overflow'),false);
 });
 
@@ -262,4 +262,45 @@ test('historical salary terms are held separately instead of changing closed pay
  const result=await f.gateway.syncOperation(f.authorized({operation:op}));assert.equal(result.status,'needs_review');assert.equal(result.originalBusinessDate,'2027-08-01');
  assert.equal(f.rows.has(f.root+'/salaryTerms/late_term'),false);assert.equal(f.rows.has(f.root+'/salaryLocks/staff_a_2027-08'),false);assert.equal(f.rows.get(f.root).sequence,4);
  assert.deepEqual(f.rows.get(f.root+'/lateOperations/late_term').operation,op);
+});
+
+test('v2 feed negotiation, tenant minimum and concurrent floor publication fail closed',async()=>{
+ const f=fixture();f.put(f.root,{...f.rows.get(f.root),sequence:1});
+ f.put(f.root+'/changes/0000000000000001',{entity:'party',id:'p',sequence:1,payload:{}});
+ assert.equal((await f.gateway.pullChanges(f.authorized({afterSequence:0,syncProtocolVersion:2}))).syncProtocolVersion,2);
+ f.state.afterFeedRead=()=>f.put(f.root,{...f.rows.get(f.root),historyFloor:1,minimumSyncProtocol:2});
+ await assert.rejects(f.gateway.pullChanges(f.authorized({afterSequence:0,syncProtocolVersion:2})),/resync-required/);
+ await assert.rejects(f.gateway.pullChanges(f.authorized({afterSequence:1,syncProtocolVersion:1})),/sync-upgrade-required/);
+ assert.equal((await f.gateway.pullChanges(f.authorized({afterSequence:1,syncProtocolVersion:2}))).lastSequence,1);
+});
+test('snapshot reads derive role/epoch server-side and recheck epoch, session and role after I/O',async()=>{
+ for(const mutation of ['epoch','session','role']){
+  let f;f=fixture({activeSnapshots:{getHeader:async scope=>{assert.deepEqual(scope,{tenantId:f.tenantId,uid:f.uid,role:'manager',membershipEpoch:1,minimumHistoryFloor:0});
+   if(mutation==='epoch')f.put(f.root+'/members/'+f.uid,{...f.rows.get(f.root+'/members/'+f.uid),epoch:2});
+   if(mutation==='session')f.remove(f.root+'/sessions/'+hash('test-device-session'));
+   if(mutation==='role'){f.put(f.root+'/employees/staff',{active:true});f.put(f.root+'/members/'+f.uid,{...f.rows.get(f.root+'/members/'+f.uid),role:'employee',employeeId:'staff'});}return {private:'must-not-disclose'};}}});
+  await assert.rejects(f.gateway.getActiveSnapshot(f.authorized({syncProtocolVersion:2})),/snapshot-authority-changed|device-session-expired/);
+  assert.equal(f.events.some(e=>e[0]==='transaction-write'),false);
+ }
+ const f=fixture();await assert.rejects(f.gateway.getActiveSnapshot(f.authorized({syncProtocolVersion:2})),/snapshot-storage-unavailable/);
+ await assert.rejects(f.gateway.readActiveSnapshotPage(f.authorized({syncProtocolVersion:2,snapshotId:'snapshot',index:0,headerSha256:'x'})),/invalid-argument/);
+});
+test('archive statement route is manager-only, pins continuations and rechecks revocation',async()=>{
+ const e=fixture({role:'employee'});await assert.rejects(e.gateway.readArchiveStatement(e.authorized({year:2026,partyId:'p'})),/permission-denied/);
+ let f;f=fixture({archiveViewer:{readStatement:async args=>{assert.equal(args.partyId,'p');f.put(f.root+'/members/'+f.uid,{...f.rows.get(f.root+'/members/'+f.uid),active:false});return {private:'must-not-disclose'};}}});
+ await assert.rejects(f.gateway.readArchiveStatement(f.authorized({year:2026,partyId:'p',nextChunk:1})),/archive-continuation-manifest-required/);
+ await assert.rejects(f.gateway.readArchiveStatement(f.authorized({year:2026,partyId:'p'})),/permission-denied/);
+ assert.equal(f.events.some(e=>e[0]==='transaction-write'),false);
+});
+
+test('manager pull refuses missing checkpoint tail rather than report false catch-up',async()=>{
+ for(const count of [0,1]){const f=fixture();f.put(f.root,{...f.rows.get(f.root),sequence:2});
+  if(count)f.put(f.root+'/changes/0000000000000001',{sequence:1,entity:'party',id:'p',payload:{}});
+  await assert.rejects(f.gateway.pullChanges(f.authorized({afterSequence:0,syncProtocolVersion:2})),/resync-required/);
+ }
+});
+test('snapshot publication must cover the current floor even if the catalog is stale',async()=>{
+ let f;f=fixture({activeSnapshots:{getHeader:async()=>({header:{checkpointSequence:4,historyFloor:0}})}});
+ f.put(f.root,{...f.rows.get(f.root),sequence:10,historyFloor:5});
+ await assert.rejects(f.gateway.getActiveSnapshot(f.authorized({syncProtocolVersion:2})),/snapshot-publication-stale/);
 });

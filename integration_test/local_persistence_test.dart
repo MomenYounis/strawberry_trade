@@ -345,6 +345,9 @@ void main() {
           await legacy.execute(
             'ALTER TABLE entries DROP COLUMN correction_of_operation_id',
           );
+          await legacy.execute('DROP TABLE active_snapshot_pages');
+          await legacy.execute('DROP TABLE active_snapshot_headers');
+          await legacy.execute('DROP TABLE accepted_review_facts');
           await legacy.setVersion(2);
           expect(await legacy.getVersion(), 2);
         } finally {
@@ -355,7 +358,7 @@ void main() {
   );
 
   testWidgets(
-    'Native encrypted v1 to v3 migration preserves pending payload, retries and draft',
+    'Native encrypted v1 to v4 migration preserves pending payload, retries and draft',
     (tester) async {
       final support = await getApplicationSupportDirectory();
       final folder = Directory(
@@ -419,6 +422,9 @@ void main() {
           await raw.execute('DROP INDEX outbox_schedule');
           await raw.execute('ALTER TABLE outbox DROP COLUMN next_attempt_ms');
           await raw.execute('DROP TABLE conflicts');
+          await raw.execute('DROP TABLE active_snapshot_pages');
+          await raw.execute('DROP TABLE active_snapshot_headers');
+          await raw.execute('DROP TABLE accepted_review_facts');
           await raw.setVersion(1);
         } finally {
           await raw.close();

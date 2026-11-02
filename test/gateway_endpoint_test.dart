@@ -10,7 +10,7 @@ void main() {
   ) as Map<String, dynamic>;
 
   test(
-    'empty configuration retains Firebase destination for all seven calls',
+    'empty configuration retains Firebase destination for all supported calls',
     () {
       final endpoint = GatewayEndpoint.parse('');
       expect(endpoint.baseUrl, isNull);
@@ -22,6 +22,11 @@ void main() {
         'setMemberActive',
         'acceptInvitation',
         'createEmployeeInvitation',
+        'listArchives',
+        'readArchiveRecord',
+        'readArchiveStatement',
+        'getActiveSnapshot',
+        'readActiveSnapshotPage',
       });
       for (final operation in GatewayEndpoint.operations) {
         expect(endpoint.urlFor(operation), isNull);

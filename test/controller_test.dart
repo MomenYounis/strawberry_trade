@@ -13,6 +13,10 @@ import 'package:strawberry_trade/domain/ledger.dart' hide canonicalJson;
 import 'package:strawberry_trade/security/device_security.dart';
 import 'package:strawberry_trade/security/licensing.dart';
 import 'package:strawberry_trade/services/gateway.dart';
+import 'package:strawberry_trade/services/active_snapshot.dart';
+import 'package:strawberry_trade/services/active_snapshot_gateway.dart';
+
+import 'active_snapshot_test.dart' as snapshots;
 
 const referenceTime = 1700000000000;
 
@@ -44,11 +48,56 @@ class MemorySecurity extends DeviceSecurity {
 
 /// Only the remote boundary is controlled. Controller coordination, signature
 /// validation, license state, transactions and disk persistence are real.
-class ControlledGateway implements SyncGateway {
+class ControlledGateway implements SyncGateway, ActiveSnapshotGateway {
   ControlledGateway(this.package);
   final Future<String> Function() package;
   Future<Map<String, dynamic>> Function(Map<String, dynamic>)? onSend;
   Future<Map<String, dynamic>> Function(int)? onPull;
+  Future<Map<String, dynamic>> Function(String, String)? onGetSnapshot;
+  Future<Map<String, dynamic>> Function(Map<String, dynamic>)?
+  onReadSnapshotPage;
+  final snapshotPageRequests = <Map<String, dynamic>>[];
+  int snapshotHeaderCalls = 0;
+  @override
+  Future<Map<String, dynamic>> getActiveSnapshot(
+    String tenantId,
+    String deviceId,
+  ) async {
+    snapshotHeaderCalls++;
+    if (onGetSnapshot == null) {
+      throw const LedgerException(
+        'snapshot-unavailable',
+        'Synthetic snapshot unavailable',
+      );
+    }
+    return onGetSnapshot!(tenantId, deviceId);
+  }
+
+  @override
+  Future<Map<String, dynamic>> readActiveSnapshotPage(
+    String tenantId,
+    String deviceId, {
+    required String snapshotId,
+    required int index,
+    required String headerSha256,
+  }) async {
+    final request = {
+      'tenantId': tenantId,
+      'deviceId': deviceId,
+      'snapshotId': snapshotId,
+      'index': index,
+      'headerSha256': headerSha256,
+    };
+    snapshotPageRequests.add(request);
+    if (onReadSnapshotPage == null) {
+      throw const LedgerException(
+        'snapshot-unavailable',
+        'Synthetic snapshot unavailable',
+      );
+    }
+    return onReadSnapshotPage!(request);
+  }
+
   final sent = <Map<String, dynamic>>[];
   int bootstrapCalls = 0, pullCalls = 0, activations = 0;
   @override
@@ -633,4 +682,264 @@ void main() {
       expect(app.syncMessage, contains('توجد سجلات أخرى'));
     },
   );
+
+  test('signed-session snapshot recovery retains a deferred queued ID and applies only post-checkpoint deltas', () async {
+    final queued = expense('accepted-but-still-queued');
+    await app.store!.saveEntry(queued);
+    await app.store!.fail(
+      queued.id,
+      'network',
+      nowMs: DateTime.now().millisecondsSinceEpoch + 600000,
+    );
+    await app.store!.saveDraft('recovery-draft', {
+      'note': 'مسودة أثناء استعادة السجل',
+    });
+    await app.store!.setPreference('cursor', 2);
+    final before = await app.store!.exportBackup();
+    snapshots.Fixture? active;
+    gateway.onGetSnapshot = (tenant, device) async {
+      expect(tenant, 't1');
+      expect(device, 'device-test');
+      active = snapshots.Fixture(
+        [
+          snapshots.record('entry', queued.toJson(), 3),
+          snapshots.record(
+            'party',
+            const Party(
+              id: 'server-party',
+              tenantId: 't1',
+              name: 'طرف الاستعادة',
+              kind: 'merchant',
+              openingMinor: 1200,
+            ).toJson(),
+            4,
+          ),
+        ],
+        epoch: membershipEpoch,
+        checkpoint: 10,
+        floor: 5,
+      );
+      return {
+        'header': active!.header,
+        'headerSha256': activeSnapshotHash(active!.header),
+      };
+    };
+    gateway.onReadSnapshotPage = (request) async => {
+      'headerSha256': activeSnapshotHash(active!.header),
+      'page': active!.pages[request['index'] as int],
+    };
+    final delta = expense('after-snapshot');
+    final cursors = <int>[];
+    gateway.onPull = (cursor) async {
+      cursors.add(cursor);
+      if (cursor < 5) {
+        return {'status': 'resync_required'};
+      }
+      expect(cursor, 10);
+      return {
+        'syncProtocolVersion': 2,
+        'historyFloor': 5,
+        'changes': [
+          {'entity': 'entry', 'sequence': 11, 'payload': delta.toJson()},
+        ],
+        'lastSequence': 11,
+        'hasMore': false,
+      };
+    };
+    await app.synchronize();
+    expect(cursors, [2, 10]);
+    expect(gateway.sent, isEmpty);
+    expect(
+      app.licenseSession!.verifiedPackage!.membership.epoch,
+      membershipEpoch,
+    );
+    expect((await app.store!.listOutbox()).single.payload, queued.toJson());
+    final after = await app.store!.exportBackup();
+    expect(after['outbox'], before['outbox']);
+    expect(after['drafts'], before['drafts']);
+    expect(await app.store!.entryState(queued.id), 'retry');
+    expect(await app.store!.entryState(delta.id), 'server_accepted');
+    expect(await app.store!.preference('cursor'), 11);
+    expect(await app.store!.preference('historyFloor'), 5);
+    expect(app.entries.map((entry) => entry.id).toSet(), {queued.id, delta.id});
+    expect(app.syncMessage, 'اكتملت المزامنة مع الخادم');
+  });
+
+  test('snapshot recovery downloads at most sixteen pages and resumes across a fresh signed bootstrap epoch', () async {
+    final records = [
+      for (var i = 1; i <= 18; i++)
+        snapshots.record(
+          'party',
+          Party(
+            id: 'resume-party-$i',
+            tenantId: 't1',
+            name: 'طرف $i',
+            kind: 'merchant',
+          ).toJson(),
+          i,
+        ),
+    ];
+    snapshots.Fixture? active;
+    final publishedIds = <String>[];
+    gateway.onGetSnapshot = (_, _) async {
+      active = snapshots.Fixture(
+        records,
+        id: 'bound-$membershipEpoch',
+        epoch: membershipEpoch,
+        checkpoint: 20,
+        floor: 10,
+        pageSize: 1,
+      );
+      publishedIds.add(active!.header['snapshotId'] as String);
+      return {
+        'header': active!.header,
+        'headerSha256': activeSnapshotHash(active!.header),
+      };
+    };
+    gateway.onReadSnapshotPage = (request) async => {
+      'headerSha256': activeSnapshotHash(active!.header),
+      'page': active!.pages[request['index'] as int],
+    };
+    gateway.onPull = (cursor) async => cursor < 10
+        ? {'status': 'resync_required'}
+        : {
+            'syncProtocolVersion': 2,
+            'historyFloor': 10,
+            'changes': [],
+            'lastSequence': cursor,
+            'hasMore': false,
+          };
+    await app.synchronize();
+    expect(
+      gateway.snapshotPageRequests.map((row) => row['index']),
+      List.generate(16, (i) => i),
+    );
+    expect(await app.store!.listParties(), isEmpty);
+    expect(await app.store!.preference('cursor'), isNull);
+    expect(await app.store!.preference('lastSyncMs'), isNull);
+    expect(app.syncMessage, contains('16/18'));
+    final firstEpoch = membershipEpoch;
+    await app.store!.close();
+    app.store = await open('t1', 'u1');
+    await app.synchronize();
+    expect(membershipEpoch, greaterThan(firstEpoch));
+    expect(publishedIds.toSet().length, 2);
+    expect(gateway.snapshotPageRequests.length, 18);
+    expect(gateway.snapshotPageRequests.skip(16).map((row) => row['index']), [
+      16,
+      17,
+    ]);
+    expect((await app.store!.listParties()).length, 18);
+    expect(await app.store!.preference('cursor'), 20);
+    expect(app.syncMessage, 'اكتملت المزامنة مع الخادم');
+  });
+
+  test(
+    'snapshot page response after sign-out cannot install into either account',
+    () async {
+      final oldStore = app.store!;
+      final entered = Completer<void>();
+      final delayed = Completer<Map<String, dynamic>>();
+      snapshots.Fixture? active;
+      gateway.onGetSnapshot = (_, _) async {
+        active = snapshots.Fixture(
+          [
+            snapshots.record(
+              'party',
+              const Party(
+                id: 'old-snapshot-party',
+                tenantId: 't1',
+                name: 'طرف الجلسة السابقة',
+                kind: 'merchant',
+              ).toJson(),
+              1,
+            ),
+          ],
+          epoch: membershipEpoch,
+          checkpoint: 10,
+          floor: 5,
+        );
+        return {
+          'header': active!.header,
+          'headerSha256': activeSnapshotHash(active!.header),
+        };
+      };
+      gateway.onReadSnapshotPage = (_) {
+        entered.complete();
+        return delayed.future;
+      };
+      gateway.onPull = (_) async => {'status': 'resync_required'};
+      final recovery = app.synchronize();
+      await entered.future;
+      await app.signOut();
+      await attach(tenant: 't2', uid: 'u2');
+      delayed.complete({
+        'headerSha256': activeSnapshotHash(active!.header),
+        'page': active!.pages.single,
+      });
+      await recovery;
+      expect(app.tenantId, 't2');
+      expect(await app.store!.listParties(), isEmpty);
+      expect(await app.store!.preference('cursor'), isNull);
+      await expectLater(
+        oldStore.listParties(),
+        throwsA(isA<LedgerException>()),
+      );
+      final retained = await open('t1', 'u1');
+      try {
+        expect(await retained.listParties(), isEmpty);
+        expect(await retained.preference('cursor'), isNull);
+        final staged = (await retained.activeSnapshotStatus(
+          'snapshot1',
+          expectedMembershipEpoch: active!.header['membershipEpoch'] as int,
+        ))!;
+        expect(staged.receivedPageIndexes, isEmpty);
+        expect(staged.installed, isFalse);
+      } finally {
+        await retained.close();
+      }
+    },
+  );
+
+  test('wrong snapshot response epoch or page digest preserves active cursor and retry work', () async {
+    final queued = expense('snapshot-response-retained');
+    await app.store!.saveEntry(queued);
+    await app.store!.fail(
+      queued.id,
+      'network',
+      nowMs: DateTime.now().millisecondsSinceEpoch + 600000,
+    );
+    await app.store!.setPreference('cursor', 1);
+    final before = (await app.store!.exportBackup())['outbox'];
+    var wrongEpoch = true;
+    snapshots.Fixture? active;
+    gateway.onGetSnapshot = (_, _) async {
+      active = snapshots.Fixture(
+        [snapshots.record('entry', queued.toJson(), 2)],
+        id: 'tamper-$membershipEpoch',
+        epoch: membershipEpoch + (wrongEpoch ? 1 : 0),
+        checkpoint: 10,
+        floor: 5,
+      );
+      return {
+        'header': active!.header,
+        'headerSha256': activeSnapshotHash(active!.header),
+      };
+    };
+    gateway.onReadSnapshotPage = (_) async => {
+      'headerSha256': '0' * 64,
+      'page': active!.pages.single,
+    };
+    gateway.onPull = (_) async => {'status': 'resync_required'};
+    await app.synchronize();
+    expect(gateway.snapshotPageRequests, isEmpty);
+    expect(await app.store!.preference('cursor'), 1);
+    expect((await app.store!.exportBackup())['outbox'], before);
+    wrongEpoch = false;
+    await app.synchronize();
+    expect(gateway.snapshotPageRequests, hasLength(1));
+    expect(await app.store!.preference('cursor'), 1);
+    expect((await app.store!.exportBackup())['outbox'], before);
+    expect(app.syncMessage, isNot('اكتملت المزامنة مع الخادم'));
+  });
 }

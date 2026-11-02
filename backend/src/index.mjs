@@ -30,3 +30,7 @@ export const createEmployeeInvitation=callable('createEmployeeInvitation');
 // Storage adapter is intentionally absent until approved private storage is configured.
 export const listArchives=callable('listArchives');
 export const readArchiveRecord=callable('readArchiveRecord');
+
+export const readArchiveStatement=callable('readArchiveStatement');
+export const getActiveSnapshot=callable('getActiveSnapshot');
+export const readActiveSnapshotPage=callable('readActiveSnapshotPage');

@@ -181,3 +181,34 @@ still requires no partial ledger, outbox or audit write, an intact saved draft,
 successful close/reopen, and a same-ID retry after raising the page budget.
 Verification metrics report the capacity code and transaction exception code
 separately; code 1 is never described as a returned `SQLITE_FULL` code.
+
+## Schema 4 active snapshot recovery
+
+Version 4 adds `active_snapshot_headers`, `active_snapshot_pages`, and
+`accepted_review_facts` without replacing ledger, scope, queue or draft tables.
+A separately versioned full retained projection is staged with authenticated
+scope/header digest and canonical page/content hashes. Employee pages contain
+only sanitized parties and that UID's submissions. Staging is resumable and
+invisible to active readers; identical content can be revalidated and rebound
+to a fresh verified membership epoch. Four staged identities and 256 MiB total
+staging are explicit limits. Abandoned content with a different identity may
+require explicit staging-only discard; this never clears the ledger or queue.
+
+Installation validates all pages and identities, dependency orders accepted
+facts, and merges them with the existing ledger in one SQLite transaction with
+cursor C and history floor. It creates no opening-balance posting and does not
+acknowledge any outbox operation. Queued IDs, full payloads, attempts, retry
+schedule, conflicts and drafts survive. Immutable collisions or invalid financial
+dependencies abort the complete install, retaining the old active state and
+staged evidence. Captured accepted review payloads are immutable; earlier
+schemas and user backups do not contain authoritative review bytes, so a fresh
+authenticated server feed/snapshot must establish that evidence.
+
+Current validators materialize the ledger: installation therefore rejects a
+combined existing-plus-incoming projection above 20,000 records or 16 MiB,
+including pending approval entries. Larger valid packages may stage but cannot
+install. This is an explicit production acceptance blocker for larger ledgers.
+The controller fetches at most 16 missing pages per synchronization. Ordinary
+feed page application now commits accepted facts and cursor atomically, rejecting
+a stale expected cursor. Authenticated bootstrap negotiates protocol 2 only when
+the server advertises it; protocol 1 remains supported for intact full history.

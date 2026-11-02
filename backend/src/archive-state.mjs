@@ -164,8 +164,8 @@ export function cleanupBlockers({config=ARCHIVE_DEFAULTS,run,lease,now=Date.now(
   if(!storage||storage.kind!=='r2'||storage.productionDurabilityAccepted!==true)blockers.push('durable-storage-not-accepted');
   for(const [passed,label] of [[independentRecovery,'independent-recovery-required'],[keyRecoveryTested,'key-recovery-required'],[retentionChecked,'retention-review-required'],[dependenciesResolved,'unresolved-dependencies'],[protocolAcceptance,'protocol-acceptance-required'],[productionAcceptance,'production-acceptance-required']])if(passed!==true)blockers.push(label);
   if(!expectedCheckpoint||canonical(expectedCheckpoint)!==canonical(run?.checkpoint))blockers.push('checkpoint-mismatch');
-  // This candidate deliberately exposes no delete method. A future reviewed
-  // implementation must add conditional bounded deletion and floor snapshots.
-  blockers.push('pruner-not-implemented');
+  // Only the private, conditional manager-feed pruner exists. Financial records,
+  // employee feed and duplicate/reference dependencies are retained.
+  if(!run?.evidence?.cleanupAcceptance?.planSha256||!run?.evidence?.activeSnapshot?.verified)blockers.push('conditional-feed-plan-required');
   return blockers;
 }

@@ -338,7 +338,7 @@ void main() {
     );
     expect((await store.listParties()).length, 2);
   });
-  test('Migration v1 to v3 preserves ledger, queue identifier and attempts on disk', () async {
+  test('Migration v1 to v4 preserves ledger, queue identifier and attempts on disk', () async {
     final entry = reference.invoice();
     await store.saveEntry(entry);
     await store.fail(entry.id, 'unavailable', nowMs: 1000);
@@ -357,6 +357,9 @@ void main() {
     await raw.execute('DROP INDEX outbox_schedule');
     await raw.execute('ALTER TABLE outbox DROP COLUMN next_attempt_ms');
     await raw.execute('DROP TABLE conflicts');
+    await raw.execute('DROP TABLE active_snapshot_pages');
+    await raw.execute('DROP TABLE active_snapshot_headers');
+    await raw.execute('DROP TABLE accepted_review_facts');
     await raw.setVersion(1);
     await raw.close();
     store = await open();

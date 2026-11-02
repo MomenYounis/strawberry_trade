@@ -3,10 +3,19 @@
 Password stays in memory; Gradle receives a /proc/<pid>/fd memfd properties path.
 Run from the repo root. No deployment, install, publication or production API.
 """
-import datetime, hashlib, json, os, pathlib, shutil, subprocess, sys, threading
+import argparse, datetime, hashlib, json, os, pathlib, re, shutil, subprocess, sys, threading
 
 root = pathlib.Path(__file__).resolve().parents[2]
-out = root / 'verification/annual-2026-11-01/flutter'
+args = argparse.ArgumentParser(description=__doc__)
+args.add_argument('--output-dir', default='verification/annual-2026-11-02/flutter')
+options = args.parse_args()
+out = (root / options.output_dir).resolve()
+if not out.is_relative_to(root / 'verification'):
+    raise SystemExit('output-must-be-private-verification-directory')
+match = re.search(r'^version: ([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)$', (root / 'pubspec.yaml').read_text(), re.M)
+if not match:
+    raise SystemExit('invalid-public-build-version')
+version_name, version_code = match.group(1), int(match.group(2))
 out.mkdir(parents=True, exist_ok=True)
 operator = pathlib.Path('/home/younis/.local/share/strawberry-trade-operator')
 keystore = operator / 'android-release.jks'
@@ -57,10 +66,12 @@ try:
     metadata['status']='PASS' if code==0 else 'FAIL'
     if code==0:
         source=root/'build/app/outputs/flutter-apk/app-release.apk'
-        destination=out/'strawberry-trade-annual-review-v10-final.apk'
+        destination=out/f'strawberry-trade-annual-review-v{version_code}-final.apk'
+        if destination.exists():
+            raise RuntimeError('artifact-already-exists-use-new-output-directory')
         shutil.copyfile(source,destination)
         metadata.update(artifact=str(destination),bytes=destination.stat().st_size,
-                        sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),versionName='1.0.0',versionCode=10)
+                        sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),versionName=version_name,versionCode=version_code)
 except Exception as error:
     metadata['status']='BLOCKED'
     # Do not serialize upstream exception text or credential-bearing objects.

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../application/app_controller.dart';
 import '../domain/ledger.dart';
 import '../services/archive_reader.dart';
+import '../services/archive_statement.dart';
 import '../services/exports.dart';
 import '../services/gateway.dart';
 
@@ -15,6 +16,9 @@ class ArchiveScreen extends StatefulWidget {
 
 class _ArchiveScreenState extends State<ArchiveScreen> {
   final recordId = TextEditingController();
+  final partyId = TextEditingController();
+  ArchiveStatementAssembler? statementScan;
+  ArchivedPartyStatement? statement;
   final archives = <Map<String, dynamic>>[];
   bool loading = false;
   String message =
@@ -57,6 +61,9 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
         archives.clear();
         record = null;
         recordId.clear();
+        partyId.clear();
+        statementScan = null;
+        statement = null;
         year = afterYear = nextChunk = null;
         scanningId = null;
         loading = false;
@@ -69,6 +76,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
   void dispose() {
     widget.app.removeListener(_accessChanged);
     recordId.dispose();
+    partyId.dispose();
     super.dispose();
   }
 
@@ -164,6 +172,82 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
     });
   });
 
+  Future<void> readStatement() => run((gateway) async {
+    final id = partyId.text.trim(), selected = year;
+    safeId(id);
+    if (selected == null) invalid('archive_year', 'اختر سنة الأرشيف أولاً.');
+    var scan = statementScan;
+    if (scan == null ||
+        scan.partyId != id ||
+        scan.year != selected ||
+        scan.complete) {
+      scan = ArchiveStatementAssembler(
+        tenantId: widget.app.tenantId,
+        year: selected,
+        partyId: id,
+      );
+      statementScan = scan;
+      statement = null;
+    }
+    final boundVersion = _scopeVersion;
+    final response = await gateway.readArchiveStatement(
+      widget.app.tenantId,
+      widget.app.identity!.deviceId,
+      year: selected,
+      partyId: id,
+      nextChunk: scan.nextChunk ?? 0,
+      manifestSha256: scan.manifestSha256,
+    );
+    if (!mounted ||
+        boundVersion != _scopeVersion ||
+        !widget.app.hasDataAccess ||
+        !widget.app.manager) {
+      return;
+    }
+    try {
+      scan.addPage(response);
+      final result = scan.complete ? scan.finish() : null;
+      setState(() {
+        statement = result;
+        message = result == null
+            ? 'حُفظ جزء من كشف الأرشيف؛ اضغط متابعة الكشف لاستكمال التحقق.'
+            : result.found
+            ? 'كشف مؤرشف للقراءة فقط؛ الأرصدة من نقطة الإقفال المنشورة.'
+            : 'لا يوجد حساب للطرف في الأرشيف المختار.';
+      });
+    } catch (_) {
+      statementScan = null;
+      statement = null;
+      rethrow;
+    }
+  });
+
+  Future<void> exportStatement(bool pdf) => run((_) async {
+    final value = statement;
+    if (value == null || !value.found) return;
+    final boundVersion = _scopeVersion;
+    final bytes = pdf
+        ? await ArabicExports.archivedStatement(
+            business: widget.app.business,
+            statement: value,
+          )
+        : null;
+    widget.app.requireDataAccess();
+    if (!mounted || boundVersion != _scopeVersion || !widget.app.manager) {
+      invalid('archive_access', 'الصلاحية غير متاحة.');
+    }
+    final name = 'archived-statement-${value.year}-${value.partyId}';
+    if (bytes != null) {
+      await ArabicExports.shareBytes(bytes, '$name.pdf', 'application/pdf');
+    } else {
+      await ArabicExports.shareText(
+        ArabicExports.archivedStatementCsv(value),
+        '$name.csv',
+        'text/csv',
+      );
+    }
+  });
+
   @override
   Widget build(BuildContext context) {
     if (!widget.app.manager || !widget.app.hasDataAccess) {
@@ -211,6 +295,8 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                     year = value;
                     record = null;
                     nextChunk = null;
+                    statementScan = null;
+                    statement = null;
                   }),
           ),
         TextField(
@@ -227,6 +313,58 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
             nextChunk == null ? 'عرض المستند المؤرشف' : 'متابعة البحث',
           ),
         ),
+        const Divider(),
+        TextField(
+          controller: partyId,
+          textDirection: TextDirection.ltr,
+          decoration: const InputDecoration(
+            labelText: 'المعرف الأصلي للطرف لكشف الحساب المؤرشف',
+          ),
+        ),
+        OutlinedButton(
+          onPressed: loading || year == null ? null : readStatement,
+          child: Text(
+            statementScan != null && !statementScan!.complete
+                ? 'متابعة الكشف المؤرشف'
+                : 'عرض كشف حساب مؤرشف',
+          ),
+        ),
+        if (statement case final value? when value.found) ...[
+          Text(
+            'كشف مؤرشف — ${value.partyName} — سبتمبر ${value.year} إلى أغسطس ${value.year + 1}',
+          ),
+          SelectableText(
+            'معرف الطرف: ${value.partyId}\nنقطة الإقفال: ${value.closingSequence} / ${value.closingVersion}',
+          ),
+          for (final account in value.accounts)
+            Text(
+              '${account.role == 'merchant' ? 'مديونية العميل' : 'مستحقات المورد'}: افتتاحي ${formatMoney(account.openingMinor)} · حركة الفترة ${formatMoney(account.periodMinor)} · ختامي ${formatMoney(account.closingMinor)} ج.م',
+            ),
+          Text(
+            'قيود الفترة: ${value.rows.length} · مراجع سابقة للقراءة فقط: ${value.references.length}',
+          ),
+          for (final row in value.rows.take(100))
+            ListTile(
+              dense: true,
+              title: Text(entryDescription(row.entry)),
+              subtitle: Text('${row.entry.date} · ${row.entry.id}'),
+              trailing: Text('${formatMoney(row.partyEffectMinor)} ج.م'),
+            ),
+          if (value.rows.length > 100)
+            const Text(
+              'يُعرض أول ١٠٠ قيد؛ التصدير يتضمن الكشف الكامل الذي تم التحقق منه.',
+            ),
+          OutlinedButton.icon(
+            onPressed: loading ? null : () => exportStatement(true),
+            icon: const Icon(Icons.picture_as_pdf),
+            label: const Text('تصدير كشف مؤرشف PDF'),
+          ),
+          OutlinedButton.icon(
+            onPressed: loading ? null : () => exportStatement(false),
+            icon: const Icon(Icons.table_view),
+            label: const Text('تصدير كشف مؤرشف CSV'),
+          ),
+        ],
         if (entry != null) ...[
           const Divider(),
           Text(entryDescription(entry)),

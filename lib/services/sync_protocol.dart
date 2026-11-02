@@ -1,8 +1,8 @@
 import '../domain/ledger.dart';
 
-/// Version 1 retains complete history. It deliberately does not advertise
-/// snapshot installation or server-pruning support.
-const syncProtocolVersion = 1;
+/// Maximum supported version. Transport negotiates v2 only after an authenticated
+/// bootstrap advertises it; existing full-history v1 servers remain supported.
+const syncProtocolVersion = 2;
 const maxSyncSequence = 9007199254740991;
 
 class SyncPage {
@@ -20,7 +20,7 @@ class SyncPage {
       );
     }
     final protocol = response['syncProtocolVersion'] ?? 1;
-    if (protocol != syncProtocolVersion) {
+    if (protocol is! int || protocol < 1 || protocol > syncProtocolVersion) {
       invalid(
         'upgrade-required',
         'إصدار المزامنة غير مدعوم؛ حدّث التطبيق مع الاحتفاظ ببياناته المحلية.',

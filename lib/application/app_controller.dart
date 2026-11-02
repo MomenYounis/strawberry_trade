@@ -19,6 +19,7 @@ import '../security/license_sync.dart';
 import '../services/employee_registration.dart';
 import '../services/gateway.dart';
 import '../services/sync_protocol.dart';
+import '../services/active_snapshot_gateway.dart';
 import '../services/invitation_code.dart';
 
 final appProvider = ChangeNotifierProvider<AppController>((ref) {
@@ -562,6 +563,82 @@ class AppController extends ChangeNotifier {
     await waitForSync();
   }
 
+  Future<bool> _recoverActiveSnapshot(LedgerStore db, int epoch) async {
+    final transport = gateway;
+    if (transport is! ActiveSnapshotGateway) {
+      invalid(
+        'resync-required',
+        'يلزم استعادة آمنة بإشراف المسؤول؛ العمليات المحلية محفوظة.',
+      );
+    }
+    final snapshots = transport as ActiveSnapshotGateway;
+    final boundTenant = tenantId, boundUid = uid, deviceId = identity!.deviceId;
+    final membershipEpoch = licenseSession!.verifiedPackage!.membership.epoch;
+    bool current() =>
+        epoch == _generation &&
+        tenantId == boundTenant &&
+        uid == boundUid &&
+        licenseSession?.verifiedPackage?.membership.epoch == membershipEpoch;
+    final response = await snapshots.getActiveSnapshot(boundTenant, deviceId);
+    if (!current()) return false;
+    final rawHeader = response['header'],
+        headerSha256 = response['headerSha256'];
+    if (rawHeader is! Map || headerSha256 is! String) {
+      invalid(
+        'snapshot_response',
+        'استجابة استعادة المزامنة غير صالحة؛ البيانات المحلية محفوظة.',
+      );
+    }
+    var status = await db.stageActiveSnapshotHeader(
+      Map<String, dynamic>.from(rawHeader),
+      expectedHeaderSha256: headerSha256,
+      expectedMembershipEpoch: membershipEpoch,
+    );
+    var downloaded = 0;
+    for (var index = 0; index < status.header.pageCount; index++) {
+      if (status.receivedPageIndexes.contains(index)) continue;
+      if (downloaded >= 16) break;
+      final result = await snapshots.readActiveSnapshotPage(
+        boundTenant,
+        deviceId,
+        snapshotId: status.header.snapshotId,
+        index: index,
+        headerSha256: headerSha256,
+      );
+      if (!current()) return false;
+      if (result['headerSha256'] != headerSha256 || result['page'] is! Map) {
+        invalid(
+          'snapshot_response',
+          'هوية جزء الاستعادة غير مطابقة؛ لم يتغير السجل النشط.',
+        );
+      }
+      status = await db.stageActiveSnapshotPage(
+        status.header.snapshotId,
+        Map<String, dynamic>.from(result['page'] as Map),
+        expectedMembershipEpoch: membershipEpoch,
+      );
+      downloaded++;
+    }
+    if (!current()) return false;
+    if (!status.complete) {
+      syncMessage =
+          'حُفظ تقدم استعادة المزامنة (${status.receivedPageIndexes.length}/${status.header.pageCount})؛ اضغط المزامنة للاستكمال. العمليات المحلية محفوظة.';
+      return false;
+    }
+    _remoteApplyEpoch = epoch;
+    try {
+      await db.installActiveSnapshot(
+        status.header.snapshotId,
+        expectedMembershipEpoch: membershipEpoch,
+      );
+    } finally {
+      if (_remoteApplyEpoch == epoch) _remoteApplyEpoch = null;
+    }
+    if (!current()) return false;
+    await refresh();
+    return true;
+  }
+
   Future<void> _runSynchronize(LedgerStore db) async {
     syncing = true;
     syncMessage = 'جارٍ محاولة الاتصال بالخادم';
@@ -702,21 +779,46 @@ class AppController extends ChangeNotifier {
       }
       var cursor = (await db.preference('cursor') as int?) ?? 0;
       var pages = 0;
+      var snapshotRecoveries = 0;
       var moreRemaining = false;
       do {
-        final response = await gateway.pull(
-          tenantId,
-          identity!.deviceId,
-          cursor,
-        );
-        if (epoch != _generation) return;
-        final page = SyncPage.parse(response, cursor);
+        late SyncPage page;
+        try {
+          final response = await gateway.pull(
+            boundTenant,
+            identity!.deviceId,
+            cursor,
+          );
+          if (epoch != _generation) return;
+          page = SyncPage.parse(response, cursor);
+        } catch (error) {
+          final reason =
+              error is FirebaseFunctionsException && error.details is Map
+              ? (error.details as Map)['reason']
+              : error is LedgerException
+              ? error.code
+              : null;
+          if (reason != 'resync-required') rethrow;
+          if (snapshotRecoveries++ > 0) {
+            invalid(
+              'snapshot_response',
+              'تغير نطاق السجل أثناء الاستعادة؛ حُفظ التقدم. أعد المزامنة لاحقاً.',
+            );
+          }
+          if (!await _recoverActiveSnapshot(db, epoch)) return;
+          if (epoch != _generation) return;
+          cursor = (await db.preference('cursor') as int?) ?? 0;
+          continue;
+        }
         _remoteApplyEpoch = epoch;
         try {
-          await db.applyRemoteBatch(page.changes);
+          await db.applyRemoteBatch(
+            page.changes,
+            expectedCursor: cursor,
+            lastSequence: page.lastSequence,
+          );
           if (epoch != _generation) return;
           cursor = page.lastSequence;
-          await db.setPreference('cursor', cursor);
         } finally {
           if (_remoteApplyEpoch == epoch) _remoteApplyEpoch = null;
         }

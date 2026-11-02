@@ -3,7 +3,7 @@ import {assertDemoOperatorEnvironment} from './demo-operator.mjs';
 
 export const HTTP_METHODS = Object.freeze([
   'bootstrap', 'syncOperation', 'pullChanges', 'activateLicense',
-  'setMemberActive', 'acceptInvitation', 'createEmployeeInvitation', 'listArchives', 'readArchiveRecord',
+  'setMemberActive', 'acceptInvitation', 'createEmployeeInvitation', 'listArchives', 'readArchiveRecord', 'readArchiveStatement', 'getActiveSnapshot', 'readActiveSnapshotPage',
 ]);
 const statuses = {
   UNAUTHENTICATED: 401, PERMISSION_DENIED: 403, INVALID_ARGUMENT: 400,

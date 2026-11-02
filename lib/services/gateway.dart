@@ -13,6 +13,7 @@ import 'gateway_endpoint.dart';
 import 'invitation_code.dart';
 import 'sync_protocol.dart';
 import 'archive_reader.dart';
+import 'active_snapshot_gateway.dart';
 
 abstract interface class SyncGateway {
   Future<Map<String, dynamic>> bootstrap(
@@ -37,7 +38,11 @@ abstract interface class SyncGateway {
 }
 
 class FirebaseGateway
-    implements SyncGateway, EmployeeRegistrationAuth, ArchiveGateway {
+    implements
+        SyncGateway,
+        EmployeeRegistrationAuth,
+        ArchiveGateway,
+        ActiveSnapshotGateway {
   FirebaseGateway(this.security);
   final DeviceSecurity security;
   static const emulator = bool.fromEnvironment(
@@ -58,6 +63,7 @@ class FirebaseGateway
   static bool _appCheckReady = false;
   static bool _usingFallbackAppCheck = false;
   String? _onlineSession;
+  int _syncProtocol = 1;
   String? _boundTenant;
   String? _boundUid;
   String? _boundDevice;
@@ -415,6 +421,13 @@ class FirebaseGateway
     if (FirebaseAuth.instance.currentUser?.uid != authenticatedUid) {
       throw StateError('session_changed');
     }
+    _syncProtocol =
+        result['syncProtocolVersions'] is List &&
+            (result['syncProtocolVersions'] as List).contains(
+              syncProtocolVersion,
+            )
+        ? syncProtocolVersion
+        : 1;
     _onlineSession = result['sessionToken'] as String?;
     _boundTenant = tenantId;
     _boundUid = authenticatedUid;
@@ -431,6 +444,7 @@ class FirebaseGateway
 
   void clearSession() {
     _onlineSession = null;
+    _syncProtocol = 1;
   }
 
   Map<String, dynamic> _scope(String tenantId, String deviceId) {
@@ -482,6 +496,46 @@ class FirebaseGateway
   });
 
   @override
+  Future<Map<String, dynamic>> getActiveSnapshot(
+    String tenantId,
+    String deviceId,
+  ) => _call('getActiveSnapshot', {
+    ..._scope(tenantId, deviceId),
+    'syncProtocolVersion': 2,
+  });
+
+  @override
+  Future<Map<String, dynamic>> readActiveSnapshotPage(
+    String tenantId,
+    String deviceId, {
+    required String snapshotId,
+    required int index,
+    required String headerSha256,
+  }) => _call('readActiveSnapshotPage', {
+    ..._scope(tenantId, deviceId),
+    'syncProtocolVersion': 2,
+    'snapshotId': snapshotId,
+    'index': index,
+    'headerSha256': headerSha256,
+  });
+
+  @override
+  Future<Map<String, dynamic>> readArchiveStatement(
+    String tenantId,
+    String deviceId, {
+    required int year,
+    required String partyId,
+    int nextChunk = 0,
+    String? manifestSha256,
+  }) => _call('readArchiveStatement', {
+    ..._scope(tenantId, deviceId),
+    'year': year,
+    'partyId': partyId,
+    'nextChunk': nextChunk,
+    'manifestSha256': ?manifestSha256,
+  });
+
+  @override
   Future<Map<String, dynamic>> send(
     String tenantId,
     String deviceId,
@@ -489,7 +543,7 @@ class FirebaseGateway
   ) => _call('syncOperation', {
     ..._scope(tenantId, deviceId),
     'operation': operation,
-    'syncProtocolVersion': syncProtocolVersion,
+    'syncProtocolVersion': _syncProtocol,
   });
   @override
   Future<Map<String, dynamic>> pull(
@@ -499,7 +553,7 @@ class FirebaseGateway
   ) => _call('pullChanges', {
     ..._scope(tenantId, deviceId),
     'afterSequence': afterSequence,
-    'syncProtocolVersion': syncProtocolVersion,
+    'syncProtocolVersion': _syncProtocol,
     'limit': 200,
   });
 }
@@ -531,10 +585,15 @@ String arabicError(Object error) {
     final reason = error.details is Map
         ? (error.details as Map)['reason']
         : null;
+    if (reason == 'snapshot-storage-unavailable') {
+      return 'خدمة استعادة المزامنة غير مهيأة؛ العمليات المحلية محفوظة. راجع المسؤول دون حذف بيانات التطبيق.';
+    }
     if (reason == 'archive-storage-unavailable') {
       return 'خدمة الأرشيف الدائم غير مهيأة أو غير متاحة؛ لم يُستورد أو يُحذف أي سجل. راجع المسؤول.';
     }
-    if (reason == 'resync-required' || reason == 'upgrade-required') {
+    if (reason == 'resync-required' ||
+        reason == 'upgrade-required' ||
+        reason == 'sync-upgrade-required') {
       return 'يلزم تحديث التطبيق واستعادة آمنة بإشراف المسؤول؛ لا تحذف التطبيق أو بياناته، فالعمليات المحلية محفوظة';
     }
     if (reason == 'closed-period') {

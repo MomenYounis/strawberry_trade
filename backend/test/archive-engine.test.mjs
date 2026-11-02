@@ -64,7 +64,7 @@ test('persisted fenced close is once only; expired worker cannot checkpoint/publ
 test('synthetic storage and plausible verification can never satisfy deletion gates',()=>{
   const blockers=cleanupBlockers({config:{cleanupEnabled:true,graceDays:90},storage:new SyntheticArchiveStorage(),now:due,
     independentRecovery:true,keyRecoveryTested:true,retentionChecked:true,dependenciesResolved:true,protocolAcceptance:true,productionAcceptance:true});
-  assert(blockers.includes('durable-storage-not-accepted'));assert(blockers.includes('pruner-not-implemented'));
+  assert(blockers.includes('durable-storage-not-accepted'));assert(blockers.includes('conditional-feed-plan-required'));
 });
 test('authoritative SQLite controls independently agree; customer/supplier 20000 to 15000 continuity',async()=>{
   const changes=[change(1,'party',party('customer')),change(2,'party',party('supplier','supplier')),

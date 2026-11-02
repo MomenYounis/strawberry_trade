@@ -8,6 +8,7 @@ import {createHash} from 'node:crypto';
 import {canonical,id,integer} from './validation.mjs';
 import {annualInterval} from './archive-calendar.mjs';
 import {validateArchiveRecord} from './archive-accounting.mjs';
+import {isVerifiedManagerSnapshotProjection} from './active-snapshot-projection.mjs';
 
 // Archive identity and controls must not depend on the host ICU locale.
 const compareCodeUnits=(a,b)=>a<b?-1:a>b?1:0;
@@ -16,7 +17,8 @@ const maxInteger=BigInt(Number.MAX_SAFE_INTEGER);
 function exact(v){const n=BigInt(v);if(n>maxInteger||n< -maxInteger)throw new Error('source-control-overflow');return Number(n);}
 const sourceKinds=['entry','party','employee','salary_term','submission','review'];
 
-export async function createArchiveProjection({context,maxChanges=500_000,maxBytes=268_435_456}) {
+export async function createArchiveProjection({context,seed=null,maxChanges=500_000,maxBytes=268_435_456}) {
+  context=Object.freeze(structuredClone(context));
   id(context.tenantId);id(context.runId);annualInterval(context.year);integer(context.closingSequence,0,Number.MAX_SAFE_INTEGER);
   integer(maxChanges,1,500_000);integer(maxBytes,1024,536_870_912);
   const directory=await mkdtemp(join(tmpdir(),'strawberry-checkpoint-'));await chmod(directory,0o700);
@@ -24,7 +26,7 @@ export async function createArchiveProjection({context,maxChanges=500_000,maxByt
   try{database=new DatabaseSync(join(directory,'projection.sqlite'));await chmod(join(directory,'projection.sqlite'),0o600);
     database.exec('PRAGMA journal_mode=DELETE; PRAGMA synchronous=FULL; PRAGMA cache_size=-4096; CREATE TABLE records(entity TEXT NOT NULL,id TEXT NOT NULL,sequence INTEGER NOT NULL,effective_date TEXT,payload TEXT NOT NULL,PRIMARY KEY(entity,id)); CREATE INDEX entry_dates ON records(entity,effective_date,sequence);');
   }catch(error){database?.close();await rm(directory,{recursive:true,force:true});throw error;}
-  let destroyed=false,sealed=false,lastSequence=0,totalBytes=0,changeCount=0;
+  let destroyed=false,sealed=false,failed=false,lastSequence=0,totalBytes=0,changeCount=0;
   const get=database.prepare('SELECT sequence,payload FROM records WHERE entity=? AND id=?');
   const save=database.prepare('INSERT INTO records(entity,id,sequence,effective_date,payload) VALUES(?,?,?,?,?) ON CONFLICT(entity,id) DO UPDATE SET sequence=excluded.sequence,effective_date=excluded.effective_date,payload=excluded.payload');
   const parse=row=>row?{sequence:row.sequence,payload:JSON.parse(row.payload)}:null;
@@ -72,29 +74,42 @@ export async function createArchiveProjection({context,maxChanges=500_000,maxByt
     }
     for(const stored of database.prepare("SELECT sequence,payload FROM records WHERE entity='entry' AND effective_date>=? AND effective_date<? ORDER BY sequence").iterate(startDate,endDate))yield {type:'entry',tenantId:context.tenantId,year:context.year,...parse(stored)};
   }
+  function acceptSourceRecord(change){
+    if(!sourceKinds.includes(change.entity)||change.id!==change.payload?.id||change.payload?.tenantId!==context.tenantId)throw new Error('invalid-source-change');
+    integer(change.sequence,1,context.closingSequence);id(change.id);
+    const encoded=canonical(change.payload);totalBytes+=Buffer.byteLength(encoded);changeCount++;
+    if(changeCount>maxChanges||totalBytes>maxBytes||Buffer.byteLength(encoded)>24_000)throw new Error('source-projection-budget');
+    const existing=parse(get.get(change.entity,change.id));
+    if(existing&&change.entity!=='submission')throw new Error('source-immutable-record-rewritten');
+    if(existing){
+      const stable=p=>Object.fromEntries(Object.entries(p).filter(([key])=>!['status','approvedUnitMinor','reviewNote'].includes(key)));
+      if(existing.payload.status!=='pending'||!['approved','rejected'].includes(change.payload.status)||canonical(stable(existing.payload))!==canonical(stable(change.payload)))throw new Error('source-submission-status-rewritten');
+    }
+    if(change.entity==='entry'){
+      const record={type:'entry',tenantId:context.tenantId,year:Number(change.payload.date?.slice(0,4))-(change.payload.date?.slice(5)<'09-01'?1:0),sequence:change.sequence,payload:change.payload};
+      validateArchiveRecord(record,{...context,year:record.year});
+    }else validateArchiveRecord(snapshotRow(change.entity,{sequence:change.sequence,payload:change.payload}),context);
+    save.run(change.entity,change.id,change.sequence,change.payload.date??null,encoded);
+  }
+  try{
+    if(seed){
+      if(!isVerifiedManagerSnapshotProjection(seed)||seed.scope.tenantId!==context.tenantId||seed.checkpointSequence>context.closingSequence)throw new Error('verified-manager-snapshot-required');
+      for await(const row of seed.iterateFullRecords())acceptSourceRecord(row);
+      lastSequence=seed.checkpointSequence;
+    }
+  }catch(error){database.close();await rm(directory,{recursive:true,force:true});throw error;}
   return {
-    isolated:true,context,
+    isolated:true,context,seedSequence:lastSequence,
     async ingest(changes){
-      if(destroyed||sealed)throw new Error('source-projection-closed');
+      if(destroyed||sealed||failed)throw new Error('source-projection-closed');
+      try{
       for await(const change of changes){
         if(change.sequence!==lastSequence+1||change.sequence>context.closingSequence)throw new Error('source-sequence-gap');
-        if(!sourceKinds.includes(change.entity)||change.id!==change.payload?.id||change.payload?.tenantId!==context.tenantId)throw new Error('invalid-source-change');
-        id(change.id);const encoded=canonical(change.payload);totalBytes+=Buffer.byteLength(encoded);changeCount++;
-        if(changeCount>maxChanges||totalBytes>maxBytes||Buffer.byteLength(encoded)>24_000)throw new Error('source-projection-budget');
-        const existing=parse(get.get(change.entity,change.id));
-        if(existing&&change.entity!=='submission')throw new Error('source-immutable-record-rewritten');
-        if(change.entity==='submission'&&existing&&existing.payload.status!=='pending')throw new Error('source-submission-status-rewritten');
-        // Validate all financial entries, even those outside this annual period.
-        if(change.entity==='entry'){
-          const record={type:'entry',tenantId:context.tenantId,year:Number(change.payload.date.slice(0,4))-(change.payload.date.slice(5)<'09-01'?1:0),sequence:change.sequence,payload:change.payload};
-          // Pre-first-year history can contribute to a baseline. Its date is
-          // validated without authorizing an archive for that historical year.
-          validateArchiveRecord(record,{...context,year:record.year});
-        }else validateArchiveRecord(snapshotRow(change.entity,{sequence:change.sequence,payload:change.payload}),context);
-        save.run(change.entity,change.id,change.sequence,change.payload.date??null,encoded);lastSequence=change.sequence;
+        acceptSourceRecord(change);lastSequence=change.sequence;
       }
       if(lastSequence!==context.closingSequence)throw new Error('source-sequence-gap');sealed=true;
       return {changes:changeCount,bytes:totalBytes,sequence:lastSequence};
+      }catch(error){failed=true;throw error;}
     },
     records:annualRecords,
     async trustedControls(){

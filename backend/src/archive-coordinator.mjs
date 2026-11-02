@@ -3,7 +3,7 @@ import {id,integer} from './validation.mjs';
 import {exportArchive,verifyArchive,ARCHIVE_LIMITS} from './archive-format.mjs';
 import {createTemporaryRestoreSink} from './archive-storage.mjs';
 import {createArchiveProjection} from './archive-projection.mjs';
-import {immutableChangesAtCheckpoint} from './archive-accounting.mjs';
+import {immutableActiveChangesAtCheckpoint,isVerifiedManagerSnapshotProjection} from './active-snapshot-projection.mjs';
 
 class ExportYield extends Error {}
 
@@ -80,12 +80,22 @@ export async function runArchiveExportStep({stateStore,tenantId,year,lease,sourc
   }finally{if(source?.destroy)await source.destroy();}
 }
 
-export function firestoreArchiveSourceFactory(db,{pageSize=100,maxChanges=500_000,maxBytes=268_435_456}={}) {
+export function firestoreArchiveSourceFactory(db,{pageSize=100,maxChanges=500_000,maxBytes=268_435_456,seedProvider=null}={}) {
   integer(pageSize,1,250);integer(maxChanges,1,500_000);
   return async context=>{
-    const projection=await createArchiveProjection({context,maxChanges,maxBytes});
-    try{await projection.ingest(immutableChangesAtCheckpoint(db,{tenantId:context.tenantId,
-      sequence:context.closingSequence,pageSize,maxPages:Math.ceil(maxChanges/pageSize)+1}));return projection;}
-    catch(error){await projection.destroy();throw error;}
+    const root=(await db.doc(`tenants/${id(context.tenantId)}`).get()).data();
+    if(!root||root.adminDeleting||root.enabled!==true)throw new Error('tenant-not-active');
+    const historyFloor=integer(root.historyFloor??0,0,context.closingSequence);
+    let seed,projection;
+    try{
+      seed=seedProvider===null?null:await seedProvider({context,historyFloor});
+      if(seed&&(!isVerifiedManagerSnapshotProjection(seed)||seed.scope.tenantId!==context.tenantId||seed.checkpointSequence<historyFloor||seed.checkpointSequence>context.closingSequence))throw new Error('verified-manager-snapshot-required');
+      if(historyFloor>0&&!seed)throw new Error('snapshot-seed-required');
+      projection=await createArchiveProjection({context,maxChanges,maxBytes,seed});
+      await projection.ingest(immutableActiveChangesAtCheckpoint(db,{tenantId:context.tenantId,
+        checkpointSequence:context.closingSequence,fromSequence:seed?.checkpointSequence??0,historyFloor,pageSize,maxPages:Math.ceil(maxChanges/pageSize)+1}));
+      return projection;
+    }catch(error){await projection?.destroy();throw error;}
+    finally{await seed?.destroy?.();}
   };
 }

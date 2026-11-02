@@ -63,7 +63,7 @@ test('valid attestation for another app and revoked Auth sessions are rejected',
   assert.equal(revoked.calls.some(c => c.kind === 'gateway'), false);
 });
 
-test('only the seven exact routes accept JSON POST; health is read-only and token-free', async () => {
+test('only the exact allowlisted routes accept JSON POST; health is read-only and token-free', async () => {
   const {handler, calls} = fixture();
   assert.equal((await handler(request({path: 'createUser'}))).status, 404);
   assert.equal((await handler(request({path: 'bootstrap?override=1'}))).status, 404);

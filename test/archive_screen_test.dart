@@ -9,8 +9,28 @@ import 'package:strawberry_trade/security/licensing.dart';
 import 'package:strawberry_trade/services/archive_reader.dart';
 import 'package:strawberry_trade/services/gateway.dart';
 
+import 'archive_statement_test.dart' as fixture;
+
 class HistoryGateway implements SyncGateway, ArchiveGateway {
   final pending = Completer<Map<String, dynamic>>();
+  int statementReads = 0;
+  @override
+  Future<Map<String, dynamic>> readArchiveStatement(
+    String tenantId,
+    String deviceId, {
+    required int year,
+    required String partyId,
+    int nextChunk = 0,
+    String? manifestSha256,
+  }) async {
+    statementReads++;
+    return fixture.page(
+      entries: [
+        fixture.row(2, fixture.payment('payment'), 'merchant', -500000),
+      ],
+    );
+  }
+
   @override
   Future<Map<String, dynamic>> listArchives(
     String tenantId,
@@ -65,6 +85,49 @@ class HistoryController extends AppController {
 
 void main() {
   testWidgets(
+    'manager can read and repeat a validated archived party statement',
+    (tester) async {
+      final gateway = HistoryGateway();
+      final actual = HistoryController(gateway)..tenantId = 'tenant';
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(body: ArchiveScreen(app: actual)),
+        ),
+      );
+      gateway.pending.complete({
+        'archives': [
+          {'year': 2027},
+        ],
+        'nextYear': null,
+      });
+      await tester.tap(find.text('تحميل السنوات المؤرشفة'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).last, 'party');
+      await tester.ensureVisible(find.text('عرض كشف حساب مؤرشف'));
+      await tester.tap(find.text('عرض كشف حساب مؤرشف'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text('قيود الفترة: 1 · مراجع سابقة للقراءة فقط: 0'),
+        findsOneWidget,
+      );
+      expect(gateway.statementReads, 1);
+      await tester.ensureVisible(find.text('عرض كشف حساب مؤرشف'));
+      await tester.tap(find.text('عرض كشف حساب مؤرشف'));
+      await tester.pumpAndSettle();
+      expect(gateway.statementReads, 2);
+      expect(
+        find.text('قيود الفترة: 1 · مراجع سابقة للقراءة فقط: 0'),
+        findsOneWidget,
+      );
+      actual.revoke();
+      await tester.pump();
+      expect(find.textContaining('نقطة الإقفال:'), findsNothing);
+      await tester.pumpWidget(const SizedBox());
+      actual.dispose();
+    },
+  );
+
+  testWidgets(
     'revocation removes cached archive state and ignores a pending response',
     (tester) async {
       final gateway = HistoryGateway(), app = HistoryController(gateway);
@@ -73,7 +136,10 @@ void main() {
           home: Scaffold(body: ArchiveScreen(app: app)),
         ),
       );
-      await tester.enterText(find.byType(TextField), 'private_original_id');
+      await tester.enterText(
+        find.byType(TextField).first,
+        'private_original_id',
+      );
       await tester.tap(find.text('تحميل السنوات المؤرشفة'));
       await tester.pump();
       app.revoke();

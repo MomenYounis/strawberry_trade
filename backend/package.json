@@ -8,12 +8,12 @@
     "node": "22"
   },
   "scripts": {
-    "test": "node --test test/validation.test.mjs test/seed-helper.test.mjs test/demo-operator.test.mjs test/http-gateway.test.mjs test/gateway-deletion-race.test.mjs test/invitation-token.test.mjs test/emulator-test-runner.test.mjs test/historical-view.test.mjs test/work-budget.test.mjs test/body-parser-security.test.mjs",
+    "test": "node --test test/validation.test.mjs test/seed-helper.test.mjs test/demo-operator.test.mjs test/http-gateway.test.mjs test/gateway-deletion-race.test.mjs test/invitation-token.test.mjs test/emulator-test-runner.test.mjs test/historical-view.test.mjs test/work-budget.test.mjs test/body-parser-security.test.mjs test/historical-statement.test.mjs test/active-snapshot*.test.mjs test/feed-pruner.test.mjs",
     "test:integration": "node scripts/test-emulators.mjs",
     "emulators": "node scripts/start-emulators.mjs",
     "seed:emulator": "node scripts/seed-emulator.mjs",
     "test:invitations": "node scripts/test-invitation-emulators.mjs",
-    "test:archive": "node --test test/archive-*.test.mjs test/historical-view.test.mjs test/work-budget.test.mjs"
+    "test:archive": "node --test test/archive-*.test.mjs test/historical-view.test.mjs test/work-budget.test.mjs test/historical-statement.test.mjs test/active-snapshot*.test.mjs test/feed-pruner.test.mjs"
   },
   "dependencies": {
     "firebase-admin": "14.5.0",

@@ -9,16 +9,20 @@ import hashlib
 import json
 import os
 import pathlib
+import re
 import subprocess
 import sys
 import zipfile
 
 root = pathlib.Path(__file__).resolve().parents[2]
-out = root / 'verification/annual-2026-11-01/flutter/native'
-out.mkdir(parents=True, exist_ok=True)
 parser = argparse.ArgumentParser()
 parser.add_argument('phase', choices=['seed-v2', 'verify'])
+parser.add_argument('--evidence-dir', default='verification/annual-2026-11-02/native')
 args = parser.parse_args()
+out = (root / args.evidence_dir).resolve()
+if not out.is_relative_to(root / 'verification'):
+    raise SystemExit('verification-output-required')
+out.mkdir(parents=True, exist_ok=True)
 source = root / 'build/app/outputs/flutter-apk/app-debug.apk'
 destination = out / f'persistence-{args.phase}-signed-DEBUG.apk'
 result = {'synthetic': True, 'debugTestArtifact': True, 'status': 'BLOCKED',
@@ -37,7 +41,10 @@ try:
     env['PATH'] = env['JAVA_HOME'] + '/bin:' + env['PATH']
     tools = '/home/younis/Android/Sdk/build-tools/36.0.0/'
     badging = subprocess.check_output([tools + 'aapt', 'dump', 'badging', str(source)], env=env, text=True, timeout=30)
-    version = '8' if args.phase == 'seed-v2' else '10'
+    match = re.search(r'^version: [0-9]+\.[0-9]+\.[0-9]+\+([0-9]+)$', (root / 'pubspec.yaml').read_text(), re.M)
+    if not match:
+        raise RuntimeError('invalid-public-build-version')
+    version = '8' if args.phase == 'seed-v2' else match.group(1)
     if "name='com.strawberrytrade.strawberry_trade'" not in badging or f"versionCode='{version}'" not in badging or 'application-debuggable' not in badging:
         raise RuntimeError('synthetic-debug-package-version-required')
     secret = subprocess.run(['secret-tool', 'lookup', 'purpose', 'android-release-v1'], capture_output=True, timeout=20)

@@ -8,16 +8,19 @@ void main() {
     'lastSequence': 10,
     'hasMore': false,
   };
-  test('legacy protocol remains compatible without advertising snapshots', () {
-    expect(SyncPage.parse(page(), 10).lastSequence, 10);
-    expect(syncProtocolVersion, 1);
-  });
+  test(
+    'legacy full-history responses remain compatible during protocol rollout',
+    () {
+      expect(SyncPage.parse(page(), 10).lastSequence, 10);
+      expect(syncProtocolVersion, 2);
+    },
+  );
   test('history gaps and upgrades stop before installing any page', () {
     for (final response in [
       {...page(), 'historyFloor': 11},
       {...page(), 'status': 'resync_required'},
       {...page(), 'status': 'upgrade_required'},
-      {...page(), 'syncProtocolVersion': 2},
+      {...page(), 'syncProtocolVersion': 3},
     ]) {
       expect(
         () => SyncPage.parse(response, 10),

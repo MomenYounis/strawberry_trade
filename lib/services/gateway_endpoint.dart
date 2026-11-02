@@ -84,6 +84,11 @@ class GatewayEndpoint {
     'setMemberActive',
     'acceptInvitation',
     'createEmployeeInvitation',
+    'listArchives',
+    'readArchiveRecord',
+    'readArchiveStatement',
+    'getActiveSnapshot',
+    'readActiveSnapshotPage',
   };
 
   String? urlFor(String operation) {

@@ -364,4 +364,62 @@ void main() {
       await dir.delete(recursive: true);
     }
   }, timeout: const Timeout(Duration(minutes: 2)));
+
+  test('trusted page commits cursor with facts and rejects failed or stale cursor pages atomically', () async {
+    final dir = await Directory.systemTemp.createTemp('remote_atomic_cursor_');
+    final store = await LedgerStore.open(
+      path: '${dir.path}/ledger.db',
+      tenantId: 't1',
+      userId: 'u1',
+      factory: databaseFactoryFfi,
+    );
+    try {
+      final changes = [
+        change('party', reference.merchant.toJson()),
+        change('entry', {...reference.invoice().toJson(), 'totalMinor': 1}),
+      ];
+      await expectLater(
+        store.applyRemoteBatch(changes, expectedCursor: 0, lastSequence: 2),
+        throwsA(isA<LedgerException>()),
+      );
+      expect(await store.preference('cursor'), isNull);
+      expect(await store.listParties(), isEmpty);
+      changes.last = change('entry', reference.invoice().toJson());
+      await store.applyRemoteBatch(changes, expectedCursor: 0, lastSequence: 2);
+      expect(await store.preference('cursor'), 2);
+      expect((await store.listEntries()).single.id, 'invoice');
+      await expectLater(
+        store.applyRemoteBatch(
+          [change('party', reference.supplier.toJson())],
+          expectedCursor: 0,
+          lastSequence: 3,
+        ),
+        throwsA(
+          isA<LedgerException>().having(
+            (error) => error.code,
+            'code',
+            'remote_cursor_mismatch',
+          ),
+        ),
+      );
+      expect((await store.listParties()).map((party) => party.id), ['m1']);
+      expect(await store.preference('cursor'), 2);
+      for (final call in [
+        () => store.applyRemoteBatch([], expectedCursor: 2),
+        () => store.applyRemoteBatch([], lastSequence: 3),
+        () => store.applyRemoteBatch([], expectedCursor: 2, lastSequence: 1),
+        () => store.applyRemoteBatch(
+          [],
+          expectedCursor: 2,
+          lastSequence: 9007199254740992,
+        ),
+      ]) {
+        await expectLater(call(), throwsA(isA<LedgerException>()));
+      }
+      expect(await store.preference('cursor'), 2);
+    } finally {
+      await store.close();
+      await dir.delete(recursive: true);
+    }
+  });
 }

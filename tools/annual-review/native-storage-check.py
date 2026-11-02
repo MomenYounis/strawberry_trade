@@ -16,12 +16,15 @@ import sys
 import time
 
 root = pathlib.Path(__file__).resolve().parents[2]
-out = root / 'verification/annual-2026-11-01/flutter/native'
-out.mkdir(parents=True, exist_ok=True)
 parser = argparse.ArgumentParser()
 parser.add_argument('fixture', choices=['persistence', 'full-storage'])
 parser.add_argument('--phase', choices=['roundtrip', 'seed', 'seed-v2', 'verify'], default='roundtrip')
+parser.add_argument('--evidence-dir', default='verification/annual-2026-11-02/native')
 args = parser.parse_args()
+out = (root / args.evidence_dir).resolve()
+if not out.is_relative_to(root / 'verification'):
+    raise SystemExit('verification-output-required')
+out.mkdir(parents=True, exist_ok=True)
 stem = f'{args.fixture}-{args.phase}'
 result = {'synthetic': True, 'status': 'BLOCKED', 'ownerDeviceTouched': False,
           'sourceCommit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip()}
@@ -30,7 +33,7 @@ try:
     if runtime['serial'] != 'emulator-5580' or not runtime['avdHome'].startswith('/tmp/strawberry-annual-native-'):
         raise RuntimeError('synthetic-runtime-required')
     commandline = pathlib.Path(f"/proc/{runtime['pid']}/cmdline").read_bytes()
-    if b'strawberry_annual_disposable' not in commandline:
+    if b'strawberry_annual_disposable' not in commandline or runtime['avdHome'].encode() not in commandline:
         raise RuntimeError('synthetic-emulator-process-required')
     adb = ['/home/younis/Android/Sdk/platform-tools/adb', '-s', runtime['serial'], 'shell']
     def shell(*command):

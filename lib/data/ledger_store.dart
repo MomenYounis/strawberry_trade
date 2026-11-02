@@ -5,6 +5,7 @@ import 'package:sqflite_common/sqlite_api.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart' as cipher;
 
 import '../domain/ledger.dart';
+import '../services/active_snapshot.dart';
 
 class OutboxItem {
   const OutboxItem({
@@ -63,7 +64,7 @@ class LedgerStore {
     this.role,
     this.employeeId,
   );
-  static const schemaVersion = 3;
+  static const schemaVersion = 4;
   final Database _db;
   final String tenantId, userId, role;
   final String? employeeId;
@@ -212,6 +213,17 @@ class LedgerStore {
       );
       await db.execute(
         'ALTER TABLE entries ADD COLUMN correction_of_operation_id TEXT',
+      );
+    }
+    if (oldVersion < 4 && newVersion >= 4) {
+      await db.execute(
+        'CREATE TABLE accepted_review_facts(id TEXT PRIMARY KEY, payload TEXT NOT NULL)',
+      );
+      await db.execute(
+        'CREATE TABLE active_snapshot_headers(snapshot_id TEXT PRIMARY KEY, header_json TEXT NOT NULL, header_sha256 TEXT NOT NULL, installed INTEGER NOT NULL DEFAULT 0 CHECK(installed IN (0,1)))',
+      );
+      await db.execute(
+        'CREATE TABLE active_snapshot_pages(snapshot_id TEXT NOT NULL REFERENCES active_snapshot_headers(snapshot_id), page_index INTEGER NOT NULL, records_json TEXT NOT NULL, sha256 TEXT NOT NULL, record_count INTEGER NOT NULL, PRIMARY KEY(snapshot_id,page_index))',
       );
     }
   }
@@ -1160,13 +1172,41 @@ class LedgerStore {
 
   /// One trusted cursor page is committed atomically and emits one notification.
   /// A failed event rolls back the whole page, including its audit evidence.
-  Future<void> applyRemoteBatch(List<Map<String, dynamic>> changes) async {
+  Future<void> applyRemoteBatch(
+    List<Map<String, dynamic>> changes, {
+    int? expectedCursor,
+    int? lastSequence,
+  }) async {
     _ready();
+    if ((expectedCursor == null) != (lastSequence == null) ||
+        (expectedCursor != null &&
+            (expectedCursor < 0 ||
+                expectedCursor > 9007199254740991 ||
+                lastSequence! < expectedCursor ||
+                lastSequence > 9007199254740991))) {
+      invalid('remote_cursor', 'مؤشر صفحة المزامنة غير صالح.');
+    }
     if (changes.length > maxRemoteBatchSize) {
       invalid('remote_batch_size', 'دفعة المزامنة أكبر من الحد المسموح');
     }
-    if (changes.isEmpty) return;
+    if (changes.isEmpty && expectedCursor == null) return;
     await _transaction((tx) async {
+      if (expectedCursor != null) {
+        final rows = await tx.query(
+          'preferences',
+          where: 'key=?',
+          whereArgs: ['cursor'],
+        );
+        final persisted = rows.isEmpty
+            ? 0
+            : jsonDecode(rows.single['value']! as String);
+        if (persisted is! int || persisted != expectedCursor) {
+          invalid(
+            'remote_cursor_mismatch',
+            'تغير مؤشر السجل؛ لم تُطبق صفحة تخص مؤشراً سابقاً.',
+          );
+        }
+      }
       final projection = _RemoteProjection(
         await _entries(tx),
         await _parties(tx),
@@ -1186,6 +1226,509 @@ class LedgerStore {
           projection,
         );
       }
+      if (lastSequence != null) {
+        await tx.insert('preferences', {
+          'key': 'cursor',
+          'value': jsonEncode(lastSequence),
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
+      }
+    });
+    _notify();
+  }
+
+  ActiveSnapshotHeader _snapshotHeader(
+    Map<String, Object?> row,
+    int expectedMembershipEpoch,
+  ) {
+    final headerJson = row['header_json']! as String;
+    final value = Map<String, dynamic>.from(jsonDecode(headerJson) as Map);
+    final header = ActiveSnapshotHeader.parse(value);
+    if (activeSnapshotHash(value) != row['header_sha256'] ||
+        canonicalJson(value) != headerJson) {
+      invalid('snapshot_header_integrity', 'فشل التحقق من رأس نسخة الاستعادة.');
+    }
+    header.requireScope(
+      tenantId: tenantId,
+      uid: userId,
+      role: role,
+      membershipEpoch: expectedMembershipEpoch,
+    );
+    return header;
+  }
+
+  Future<ActiveSnapshotStatus?> _snapshotStatus(
+    DatabaseExecutor db,
+    String snapshotId,
+    int expectedMembershipEpoch,
+  ) async {
+    final rows = await db.query(
+      'active_snapshot_headers',
+      where: 'snapshot_id=?',
+      whereArgs: [snapshotId],
+    );
+    if (rows.isEmpty) return null;
+    final header = _snapshotHeader(rows.single, expectedMembershipEpoch);
+    final pages = await db.query(
+      'active_snapshot_pages',
+      columns: ['page_index'],
+      where: 'snapshot_id=?',
+      whereArgs: [snapshotId],
+      orderBy: 'page_index ASC',
+    );
+    return ActiveSnapshotStatus(
+      header: header,
+      receivedPageIndexes: List.unmodifiable(
+        pages.map((row) => row['page_index']! as int),
+      ),
+      installed: rows.single['installed'] == 1,
+    );
+  }
+
+  /// Only the authenticated snapshot endpoint supplies this digest and the
+  /// verified current membership epoch. Staging never changes active readers.
+  Future<ActiveSnapshotStatus> stageActiveSnapshotHeader(
+    Map<String, dynamic> value, {
+    required String expectedHeaderSha256,
+    required int expectedMembershipEpoch,
+  }) async {
+    _ready();
+    final header = ActiveSnapshotHeader.parse(value);
+    header.requireScope(
+      tenantId: tenantId,
+      uid: userId,
+      role: role,
+      membershipEpoch: expectedMembershipEpoch,
+    );
+    final headerJson = canonicalJson(header.toJson());
+    if (activeSnapshotHash(header.toJson()) != expectedHeaderSha256) {
+      invalid('snapshot_header_integrity', 'فشل التحقق من رأس نسخة الاستعادة.');
+    }
+    return _transaction((tx) async {
+      final existing = await tx.query(
+        'active_snapshot_headers',
+        where: 'snapshot_id=?',
+        whereArgs: [header.snapshotId],
+      );
+      if (existing.isNotEmpty) {
+        if (existing.single['header_json'] != headerJson ||
+            existing.single['header_sha256'] != expectedHeaderSha256) {
+          invalid(
+            'snapshot_immutable_header',
+            'تغيرت نسخة الاستعادة المنشورة.',
+          );
+        }
+      } else {
+        // A fresh authenticated bootstrap changes the epoch and bound ID.
+        // Reuse only fully revalidated pages of identical scoped content.
+        final older = await tx.query('active_snapshot_headers');
+        final reusable = <Map<String, Object?>>[];
+        for (final row in older) {
+          final oldValue = Map<String, dynamic>.from(
+            jsonDecode(row['header_json']! as String) as Map,
+          );
+          final old = ActiveSnapshotHeader.parse(oldValue);
+          if (activeSnapshotHash(oldValue) != row['header_sha256']) {
+            invalid(
+              'snapshot_header_integrity',
+              'فشل التحقق من نسخة الاستعادة المرحلية.',
+            );
+          }
+          if (old.tenantId == header.tenantId &&
+              old.uid == header.uid &&
+              old.role == header.role &&
+              old.membershipEpoch <= header.membershipEpoch &&
+              old.checkpointSequence == header.checkpointSequence &&
+              old.historyFloor == header.historyFloor &&
+              old.pageCount == header.pageCount &&
+              old.recordCount == header.recordCount &&
+              old.contentSha256 == header.contentSha256) {
+            reusable.add(row);
+          }
+        }
+        if (older.length - reusable.length >= 4) {
+          invalid(
+            'snapshot_stage_limit',
+            'احذف نسخة استعادة مرحلية قديمة أولاً.',
+          );
+        }
+        await tx.insert('active_snapshot_headers', {
+          'snapshot_id': header.snapshotId,
+          'header_json': headerJson,
+          'header_sha256': expectedHeaderSha256,
+        });
+        for (final old in reusable) {
+          final oldId = old['snapshot_id']! as String;
+          final indexes = await tx.query(
+            'active_snapshot_pages',
+            columns: ['page_index'],
+            where: 'snapshot_id=?',
+            whereArgs: [oldId],
+            orderBy: 'page_index ASC',
+          );
+          for (final indexRow in indexes) {
+            final index = indexRow['page_index']! as int;
+            final row = (await tx.query(
+              'active_snapshot_pages',
+              where: 'snapshot_id=? AND page_index=?',
+              whereArgs: [oldId, index],
+            )).single;
+            final page = ActiveSnapshotPage.parse({
+              'snapshotId': header.snapshotId,
+              'index': index,
+              'records': jsonDecode(row['records_json']! as String),
+              'sha256': row['sha256'],
+            }, header);
+            if (page.recordsJson != row['records_json'] ||
+                page.records.length != row['record_count']) {
+              invalid(
+                'snapshot_page_integrity',
+                'فشل التحقق من صفحة الاستعادة المرحلية.',
+              );
+            }
+            final existing = await tx.query(
+              'active_snapshot_pages',
+              where: 'snapshot_id=? AND page_index=?',
+              whereArgs: [header.snapshotId, index],
+            );
+            if (existing.isNotEmpty) {
+              if (existing.single['records_json'] != page.recordsJson ||
+                  existing.single['sha256'] != page.sha256) {
+                invalid(
+                  'snapshot_immutable_page',
+                  'تعارضت صفحات الاستعادة المرحلية.',
+                );
+              }
+              await tx.delete(
+                'active_snapshot_pages',
+                where: 'snapshot_id=? AND page_index=?',
+                whereArgs: [oldId, index],
+              );
+            } else {
+              await tx.update(
+                'active_snapshot_pages',
+                {'snapshot_id': header.snapshotId},
+                where: 'snapshot_id=? AND page_index=?',
+                whereArgs: [oldId, index],
+              );
+            }
+          }
+          await tx.delete(
+            'active_snapshot_headers',
+            where: 'snapshot_id=?',
+            whereArgs: [oldId],
+          );
+        }
+      }
+      return (await _snapshotStatus(
+        tx,
+        header.snapshotId,
+        expectedMembershipEpoch,
+      ))!;
+    });
+  }
+
+  Future<ActiveSnapshotStatus?> activeSnapshotStatus(
+    String snapshotId, {
+    required int expectedMembershipEpoch,
+  }) async {
+    _ready();
+    safeId(snapshotId);
+    return _transaction(
+      (tx) => _snapshotStatus(tx, snapshotId, expectedMembershipEpoch),
+    );
+  }
+
+  /// Pages may arrive in any order and identical retries make no writes.
+  Future<ActiveSnapshotStatus> stageActiveSnapshotPage(
+    String snapshotId,
+    Map<String, dynamic> value, {
+    required int expectedMembershipEpoch,
+  }) async {
+    _ready();
+    safeId(snapshotId);
+    return _transaction((tx) async {
+      final status = await _snapshotStatus(
+        tx,
+        snapshotId,
+        expectedMembershipEpoch,
+      );
+      if (status == null) {
+        invalid('snapshot_missing', 'يلزم تنزيل رأس نسخة الاستعادة أولاً.');
+      }
+      final page = ActiveSnapshotPage.parse(value, status.header);
+      final existing = await tx.query(
+        'active_snapshot_pages',
+        where: 'snapshot_id=? AND page_index=?',
+        whereArgs: [snapshotId, page.index],
+      );
+      if (existing.isNotEmpty) {
+        final row = existing.single;
+        if (row['sha256'] != page.sha256 ||
+            row['records_json'] != page.recordsJson ||
+            row['record_count'] != page.records.length) {
+          invalid('snapshot_immutable_page', 'تغيرت صفحة نسخة الاستعادة.');
+        }
+      } else {
+        final totals = (await tx.rawQuery(
+          'SELECT coalesce(sum(record_count),0) AS records, coalesce(sum(length(CAST(records_json AS BLOB))),0) AS bytes FROM active_snapshot_pages WHERE snapshot_id=?',
+          [snapshotId],
+        )).single;
+        final allBytes =
+            (await tx.rawQuery(
+                  'SELECT coalesce(sum(length(CAST(records_json AS BLOB))),0) AS bytes FROM active_snapshot_pages',
+                )).single['bytes']!
+                as int;
+        if ((totals['records']! as int) + page.records.length >
+                status.header.recordCount ||
+            (totals['bytes']! as int) + page.bytes >
+                activeSnapshotMaxTotalBytes ||
+            allBytes + page.bytes > activeSnapshotMaxTotalBytes) {
+          invalid(
+            'snapshot_stage_limit',
+            'نسخة الاستعادة تتجاوز حدود التخزين المرحلي.',
+          );
+        }
+        await tx.insert('active_snapshot_pages', {
+          'snapshot_id': snapshotId,
+          'page_index': page.index,
+          'records_json': page.recordsJson,
+          'sha256': page.sha256,
+          'record_count': page.records.length,
+        });
+      }
+      return (await _snapshotStatus(tx, snapshotId, expectedMembershipEpoch))!;
+    });
+  }
+
+  /// Removes only staging bytes. Accepted facts, drafts and outbox are retained.
+  Future<void> discardActiveSnapshot(
+    String snapshotId, {
+    required int expectedMembershipEpoch,
+  }) async {
+    _ready();
+    safeId(snapshotId);
+    await _transaction((tx) async {
+      final status = await _snapshotStatus(
+        tx,
+        snapshotId,
+        expectedMembershipEpoch,
+      );
+      if (status == null) return;
+      await tx.delete(
+        'active_snapshot_pages',
+        where: 'snapshot_id=?',
+        whereArgs: [snapshotId],
+      );
+      await tx.delete(
+        'active_snapshot_headers',
+        where: 'snapshot_id=?',
+        whereArgs: [snapshotId],
+      );
+    });
+  }
+
+  /// Merge a fully verified retained ledger in one transaction. This does not
+  /// post opening balances, acknowledge queued IDs or replace local operations.
+  /// Current validators load ledger projections, so installation has a stricter
+  /// explicit memory budget than resumable encrypted staging.
+  Future<void> installActiveSnapshot(
+    String snapshotId, {
+    required int expectedMembershipEpoch,
+  }) async {
+    _ready();
+    safeId(snapshotId);
+    await _transaction((tx) async {
+      final status = await _snapshotStatus(
+        tx,
+        snapshotId,
+        expectedMembershipEpoch,
+      );
+      if (status == null || !status.complete) {
+        invalid('snapshot_incomplete', 'لم تكتمل صفحات نسخة الاستعادة بعد.');
+      }
+      final header = status.header;
+      if (status.installed) return;
+      final preferences = await tx.query(
+        'preferences',
+        where: "key IN ('cursor','historyFloor')",
+      );
+      for (final row in preferences) {
+        final current = jsonDecode(row['value']! as String);
+        if (current is! int ||
+            current < 0 ||
+            (row['key'] == 'cursor' && current > header.checkpointSequence) ||
+            (row['key'] == 'historyFloor' && current > header.historyFloor)) {
+          invalid(
+            'snapshot_stale',
+            'نسخة الاستعادة أقدم من مؤشر السجل المحلي.',
+          );
+        }
+      }
+      var currentRecords = 0;
+      var currentBytes = 0;
+      for (final table in [
+        'parties',
+        'employees',
+        'salary_terms',
+        'entries',
+        'submissions',
+        'accepted_review_facts',
+      ]) {
+        final aggregate = (await tx.rawQuery(
+          'SELECT count(*) AS records, coalesce(sum(length(CAST(payload AS BLOB))),0) AS bytes FROM $table',
+        )).single;
+        currentRecords += aggregate['records']! as int;
+        currentBytes += aggregate['bytes']! as int;
+      }
+      final pendingReviewSize = (await tx.rawQuery(
+        "SELECT count(*) AS records, coalesce(sum(length(CAST(payload AS BLOB))),0) AS bytes FROM outbox WHERE entity='review'",
+      )).single;
+      currentRecords += pendingReviewSize['records']! as int;
+      currentBytes += pendingReviewSize['bytes']! as int;
+      final incomingBytes =
+          (await tx.rawQuery(
+                'SELECT coalesce(sum(length(CAST(records_json AS BLOB))),0) AS bytes FROM active_snapshot_pages WHERE snapshot_id=?',
+                [snapshotId],
+              )).single['bytes']!
+              as int;
+      if (currentRecords + header.recordCount >
+              activeSnapshotInstallMaxRecords ||
+          currentBytes + incomingBytes > activeSnapshotInstallMaxBytes) {
+        invalid(
+          'snapshot_install_budget',
+          'تتجاوز النسخة حد الاستعادة الآمنة على هذا الجهاز؛ بقيت الصفحات والعمليات المحلية محفوظة.',
+        );
+      }
+      final records = <Map<String, dynamic>>[];
+      final descriptors = <Map<String, dynamic>>[];
+      String? previousKey;
+      final identities = <String>{};
+      final sequences = <int>{};
+      for (var index = 0; index < header.pageCount; index++) {
+        final row = (await tx.query(
+          'active_snapshot_pages',
+          where: 'snapshot_id=? AND page_index=?',
+          whereArgs: [snapshotId, index],
+        )).single;
+        final page = ActiveSnapshotPage.parse({
+          'snapshotId': snapshotId,
+          'index': index,
+          'records': jsonDecode(row['records_json']! as String),
+          'sha256': row['sha256'],
+        }, header);
+        if (page.recordsJson != row['records_json'] ||
+            page.records.length != row['record_count']) {
+          invalid(
+            'snapshot_page_integrity',
+            'فشل التحقق من صفحة الاستعادة المحفوظة.',
+          );
+        }
+        descriptors.add(page.descriptor);
+        for (final record in page.records) {
+          final key = activeSnapshotRecordKey(record);
+          final identity =
+              '${record['entity']}/${(record['payload'] as Map)['id']}';
+          if ((previousKey != null && previousKey.compareTo(key) >= 0) ||
+              !identities.add(identity) ||
+              !sequences.add(record['sequence'] as int)) {
+            invalid(
+              'snapshot_record_order',
+              'تكرار أو ترتيب غير صالح في نسخة الاستعادة.',
+            );
+          }
+          previousKey = key;
+          records.add(record);
+        }
+      }
+      if (records.length != header.recordCount ||
+          activeSnapshotHash(descriptors) != header.contentSha256) {
+        invalid(
+          'snapshot_content_integrity',
+          'فشل التحقق من اكتمال نسخة الاستعادة.',
+        );
+      }
+      // Provisional approvals have no entries row yet. Their full immutable
+      // financial facts must still agree with a server entry carrying that ID.
+      final queuedApprovalEntries = <String, String>{};
+      for (final row in await tx.query(
+        'outbox',
+        columns: ['payload'],
+        where: 'entity=?',
+        whereArgs: ['review'],
+      )) {
+        final approval = _payload(row)['entry'];
+        if (approval is! Map) continue;
+        final local = LedgerEntry.fromJson(Map<String, dynamic>.from(approval));
+        final encoded = canonicalJson(local.toJson());
+        final previous = queuedApprovalEntries[local.id];
+        if (previous != null && previous != encoded) {
+          invalid(
+            'snapshot_immutable_conflict',
+            'تعارضت حقائق اعتماد محلية لنفس معرّف القيد.',
+          );
+        }
+        queuedApprovalEntries[local.id] = encoded;
+      }
+      for (final record in records) {
+        if (record['entity'] != 'entry') continue;
+        final entry = LedgerEntry.fromJson(
+          Map<String, dynamic>.from(record['payload'] as Map),
+        );
+        final queued = queuedApprovalEntries[entry.id];
+        if (queued != null && queued != canonicalJson(entry.toJson())) {
+          invalid(
+            'snapshot_immutable_conflict',
+            'تعارضت حقائق اعتماد محفوظة مع قيد الخادم؛ لم تتغير البيانات المحلية.',
+          );
+        }
+      }
+      const order = {
+        'party': 0,
+        'employee': 1,
+        'salary_term': 2,
+        'submission': 3,
+        'entry': 4,
+        'review': 5,
+      };
+      records.sort((a, b) {
+        final dependency = order[a['entity']]!.compareTo(order[b['entity']]!);
+        return dependency != 0
+            ? dependency
+            : (a['sequence'] as int).compareTo(b['sequence'] as int);
+      });
+      final projection = _RemoteProjection(
+        await _entries(tx),
+        await _parties(tx),
+        await _employees(tx),
+        await _terms(tx),
+      );
+      for (final record in records) {
+        await _applyRemote(
+          tx,
+          record['entity'] as String,
+          Map<String, dynamic>.from(record['payload'] as Map),
+          projection,
+          snapshotInstall: true,
+        );
+      }
+      for (final pair in {
+        'cursor': header.checkpointSequence,
+        'syncCursor': header.checkpointSequence,
+        'historyFloor': header.historyFloor,
+        'activeSnapshotId': header.snapshotId,
+      }.entries) {
+        await tx.insert('preferences', {
+          'key': pair.key,
+          'value': jsonEncode(pair.value),
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
+      }
+      await tx.update(
+        'active_snapshot_headers',
+        {'installed': 1},
+        where: 'snapshot_id=?',
+        whereArgs: [snapshotId],
+      );
+      await _audit(tx, snapshotId, 'active_snapshot_installed');
     });
     _notify();
   }
@@ -1194,8 +1737,9 @@ class LedgerStore {
     Transaction tx,
     String entity,
     Map<String, dynamic> payload,
-    _RemoteProjection projection,
-  ) async {
+    _RemoteProjection projection, {
+    bool snapshotInstall = false,
+  }) async {
     _ready();
     _scope(strictString(payload, 'tenantId'));
     final id = strictString(payload, 'id');
@@ -1275,6 +1819,33 @@ class LedgerStore {
       payload = SalaryTerm.fromJson(payload).toJson();
     }
     if (entity == 'review') {
+      final immutable = await tx.query(
+        'accepted_review_facts',
+        where: 'id=?',
+        whereArgs: [id],
+      );
+      if (immutable.isNotEmpty &&
+          canonicalJson(_payload(immutable.single)) != canonicalJson(payload)) {
+        invalid(
+          'remote_review_conflict',
+          'تعارض قرار مراجعة ثابت؛ لم تتغير البيانات المحلية.',
+        );
+      }
+      final queued = await tx.query('outbox', where: 'id=?', whereArgs: [id]);
+      if (queued.isNotEmpty) {
+        final local = _payload(queued.single);
+        final localEntry = local['entry'];
+        if (queued.single['entity'] != 'review' ||
+            local['submissionId'] != payload['submissionId'] ||
+            local['decision'] != payload['decision'] ||
+            (local['note'] ?? '') != (payload['note'] ?? '') ||
+            (localEntry is Map && localEntry['id'] != payload['entryId'])) {
+          invalid(
+            'remote_review_conflict',
+            'تعارضت هوية قرار المراجعة مع العملية المحلية المحفوظة.',
+          );
+        }
+      }
       final submissionId = strictString(payload, 'submissionId');
       safeId(submissionId);
       if (!{'approved', 'rejected'}.contains(payload['decision'])) {
@@ -1290,6 +1861,13 @@ class LedgerStore {
       }
       if (role == 'employee' && rows.single['creator_uid'] != userId) {
         invalid('private_data', 'المراجعة تخص موظفاً آخر');
+      }
+      await tx.insert('accepted_review_facts', {
+        'id': id,
+        'payload': canonicalJson(payload),
+      }, conflictAlgorithm: ConflictAlgorithm.ignore);
+      if (snapshotInstall && rows.single['state'] == 'review_pending') {
+        return; // Preserve the pending local review and its outbox operation.
       }
       await tx.update(
         'submissions',
@@ -1334,6 +1912,7 @@ class LedgerStore {
           canonicalJson(payload)) {
         if (entity == 'entry') {
           await _confirmProvenance(tx, provenance!);
+          if (snapshotInstall) return; // Queue acknowledgment owns local state.
           await tx.update(
             'entries',
             {'state': 'server_accepted'},
@@ -1342,6 +1921,8 @@ class LedgerStore {
           );
         }
         if (entity == 'submission' &&
+            !(snapshotInstall &&
+                existing.single['state'] == 'review_pending') &&
             (submissionState != 'awaiting_approval' ||
                 !{
                   'review_pending',
@@ -1356,6 +1937,12 @@ class LedgerStore {
           );
         }
         return;
+      }
+      if (snapshotInstall) {
+        invalid(
+          'snapshot_immutable_conflict',
+          'تعارض سجل ثابت؛ بقيت النسخة المحلية ومؤشرها دون تغيير.',
+        );
       }
       await tx.insert('conflicts', {
         'id': id,

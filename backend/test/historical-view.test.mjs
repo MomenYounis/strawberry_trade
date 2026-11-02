@@ -33,7 +33,7 @@ test('repeated invoice reads retain identity and never offer a financial posting
     assert.equal(result.record.archived,true);assert.equal(result.record.readOnly,true);
   }
   assert.equal(JSON.stringify(f.run),before);assert.deepEqual([...f.storage.objects.keys()],bytesBefore);
-  assert.deepEqual(Object.keys(f.viewer).sort(),['list','readRecord']);assert.ok(f.masterKey.every(n=>n===27));
+  assert.deepEqual(Object.keys(f.viewer).sort(),['list','readRecord','readStatement']);assert.ok(f.masterKey.every(n=>n===27));
 });
 
 test('catalogue listing exposes no key, object location or financial payload',async()=>{

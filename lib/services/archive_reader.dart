@@ -13,6 +13,14 @@ abstract interface class ArchiveGateway {
     required String recordId,
     int nextChunk = 0,
   });
+  Future<Map<String, dynamic>> readArchiveStatement(
+    String tenantId,
+    String deviceId, {
+    required int year,
+    required String partyId,
+    int nextChunk = 0,
+    String? manifestSha256,
+  });
 }
 
 class ArchiveListPage {
