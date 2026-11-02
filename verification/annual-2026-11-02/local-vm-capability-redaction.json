@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "nativeUnredactedVmCapabilities": 0,
+  "changedPaths": [],
+  "reversedProjectPathNormalization": {
+    "paths": [
+      "verification/annual-2026-11-02/backend-invitations.log",
+      "verification/annual-2026-11-02/backend-invitations-final.log",
+      "verification/annual-2026-11-02/backend/feed-pruner-firestore-emulator-attempt1.log",
+      "verification/annual-2026-11-02/backend/feed-pruner-firestore-emulator-attempt2.log",
+      "verification/annual-2026-11-02/backend/feed-pruner-firestore-emulator-attempt3.log",
+      "verification/annual-2026-11-02/backend/feed-pruner-firestore-emulator.log",
+      "verification/annual-2026-11-02/backend/feed-pruner-firestore-emulator-root-final.log"
+    ],
+    "allOriginalHashesVerified": true
+  },
+  "scope": "Native helper already redacts actual VM capability paths. An overbroad loopback scan matched only known demo project endpoint paths; those seven logs were restored byte-for-byte to their verified prior hashes. No tokens recorded."
+}

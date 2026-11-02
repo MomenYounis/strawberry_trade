@@ -1,0 +1,6 @@
+Analyzing strawberry-trade-annual-review...                     
+
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/presentation/archive_screen.dart:205:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/presentation/archive_screen.dart:236:7 • curly_braces_in_flow_control_structures
+
+2 issues found. (ran in 10.6s)

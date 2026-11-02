@@ -1,0 +1,25 @@
+{
+  "synthetic": true,
+  "ownerDeviceTouched": false,
+  "status": "PASS",
+  "verifiedAtUtc": "2026-11-02T10:35:53.531501+00:00",
+  "serial": "emulator-5580",
+  "pid": 27397,
+  "processSession": 39783,
+  "runtimeRoot": "/tmp/strawberry-annual-native-20261102-da3kvv_i",
+  "avdHome": "/tmp/strawberry-annual-native-20261102-da3kvv_i/avd",
+  "avdPath": "/tmp/strawberry-annual-native-20261102-da3kvv_i/avd/strawberry_annual_disposable_20261102.avd",
+  "processPathMarkerVerified": true,
+  "bootCompleted": true,
+  "emulator": true,
+  "apiLevel": "35",
+  "network": {
+    "airplane_mode_on": "1",
+    "wifi_on": "0",
+    "mobile_data": "0"
+  },
+  "applicationInstalled": false,
+  "productionAuthenticationUsed": false,
+  "flutterBuildOrInstallRun": false,
+  "initialBootWait": "first bounded probe ended before cold boot finished; final independent probe passed"
+}

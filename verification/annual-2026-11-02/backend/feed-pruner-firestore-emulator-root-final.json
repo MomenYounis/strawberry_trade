@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "exitCode": 0,
+  "command": [
+    "node",
+    "--input-type=module",
+    "-e",
+    "import {runEmulatorTests} from './scripts/emulator-test-runner.mjs'; process.exitCode=await runEmulatorTests(['test/feed-pruner.integration.test.mjs']);"
+  ],
+  "cwd": "backend",
+  "startedAtUtc": "2026-11-02T16:21:38.792622+00:00",
+  "finishedAtUtc": "2026-11-02T16:22:09.456748+00:00",
+  "inputSha256": {
+    "backend/src/feed-pruner.mjs": "0e48838b0adcfd63af659cca29627b790245407d0d0a38cbae4ee00ec051021a",
+    "backend/test/feed-pruner.integration.test.mjs": "7ad0215a748f5bb79cbcab99aa945c912693e2d71325ff342e1f0dc87a5f82b5",
+    "backend/test/feed-pruner.test.mjs": "0177f70908ea05321ced9c643302ee4031091369a63d717dad2a3569118765dd"
+  },
+  "inputsUnchangedDuringRun": true,
+  "scope": "Real Firestore emulator transactions with guarded disposable demo project and explicit synthetic storage; root rerun after fixture cleanup ownership repair",
+  "productionOperations": false,
+  "productionStorageAcceptance": false
+}

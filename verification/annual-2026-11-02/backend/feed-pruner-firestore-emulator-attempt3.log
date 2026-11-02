@@ -1,0 +1,70 @@
+(node:38440) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+i  emulators: Starting emulators: auth, functions, firestore
+i  emulators: Detected demo project ID "demo-strawberry-flutter", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 9173.
+i  functions: Watching "/tmp/strawberry-synthetic-emulators-vZvvWV/functions" for Cloud Functions...
+✔  functions: Using node@22 from host.
+Serving at port 8955
+
+✔  functions: Loaded functions definitions from source: acceptInvitation, activateLicense, bootstrap, createEmployeeInvitation, getActiveSnapshot, listArchives, pullChanges, readActiveSnapshotPage, readArchiveRecord, readArchiveStatement, setMemberActive, syncOperation.
+✔  functions[europe-west1-acceptInvitation]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/acceptInvitation).
+✔  functions[europe-west1-activateLicense]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/activateLicense).
+✔  functions[europe-west1-bootstrap]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/bootstrap).
+✔  functions[europe-west1-createEmployeeInvitation]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/createEmployeeInvitation).
+✔  functions[europe-west1-getActiveSnapshot]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/getActiveSnapshot).
+✔  functions[europe-west1-listArchives]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/listArchives).
+✔  functions[europe-west1-pullChanges]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/pullChanges).
+✔  functions[europe-west1-readActiveSnapshotPage]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/readActiveSnapshotPage).
+✔  functions[europe-west1-readArchiveRecord]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/readArchiveRecord).
+✔  functions[europe-west1-readArchiveStatement]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/readArchiveStatement).
+✔  functions[europe-west1-setMemberActive]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/setMemberActive).
+✔  functions[europe-west1-syncOperation]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/syncOperation).
+i  Running script: node --test --test-concurrency=1 test/feed-pruner.integration.test.mjs
+TAP version 13
+# (node:38597) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node-22 --trace-warnings ...` to show where the warning was created)
+# Subtest: real Firestore transaction commits first20, resumes with a new adapter/verified plan and retains post-C financial facts/receipts/employee feed
+ok 1 - real Firestore transaction commits first20, resumes with a new adapter/verified plan and retains post-C financial facts/receipts/employee feed
+  ---
+  duration_ms: 2631.369933
+  type: 'test'
+  ...
+# Subtest: real Firestore rollback rejects a changed candidate before its firstbatch with floor/cursor/feed and retained facts unchanged
+ok 2 - real Firestore rollback rejects a changed candidate before its firstbatch with floor/cursor/feed and retained facts unchanged
+  ---
+  duration_ms: 579.970301
+  type: 'test'
+  ...
+# Subtest: real Firestore rollback rejects provider-version-only mutation and runtime deletion fence before deleting remaining rows
+ok 3 - real Firestore rollback rejects provider-version-only mutation and runtime deletion fence before deleting remaining rows
+  ---
+  duration_ms: 577.363252
+  type: 'test'
+  ...
+# Subtest: real Firestore consumer guard blocks same and later checkpoints as well as earlier source consumers
+ok 4 - real Firestore consumer guard blocks same and later checkpoints as well as earlier source consumers
+  ---
+  duration_ms: 675.746512
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6044.138565
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  functions: Stopping Functions Emulator
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  eventarc: Stopping Eventarc Emulator
+i  tasks: Stopping Cloud Tasks Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

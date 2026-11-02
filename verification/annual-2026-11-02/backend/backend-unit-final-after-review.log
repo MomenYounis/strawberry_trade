@@ -1,0 +1,714 @@
+
+> strawberry-trade-tenant-gateway@1.0.0 test
+> node --test test/validation.test.mjs test/seed-helper.test.mjs test/demo-operator.test.mjs test/http-gateway.test.mjs test/gateway-deletion-race.test.mjs test/invitation-token.test.mjs test/emulator-test-runner.test.mjs test/historical-view.test.mjs test/work-budget.test.mjs test/body-parser-security.test.mjs test/historical-statement.test.mjs test/active-snapshot*.test.mjs test/feed-pruner.test.mjs
+
+TAP version 13
+# Subtest: active format requires exact schema, safe integer bounds and scope
+ok 1 - active format requires exact schema, safe integer bounds and scope
+  ---
+  duration_ms: 17.686096
+  type: 'test'
+  ...
+# Subtest: active pages reject checksum, sequence, ordering and canonical byte corruption
+ok 2 - active pages reject checksum, sequence, ordering and canonical byte corruption
+  ---
+  duration_ms: 5.875732
+  type: 'test'
+  ...
+# Subtest: JSON boundaries reject prototypes, sparse arrays, unsafe numbers and depth
+ok 3 - JSON boundaries reject prototypes, sparse arrays, unsafe numbers and depth
+  ---
+  duration_ms: 1.266881
+  type: 'test'
+  ...
+# Subtest: employee schema permits only exact sanitized party and own valid submissions
+ok 4 - employee schema permits only exact sanitized party and own valid submissions
+  ---
+  duration_ms: 2.467442
+  type: 'test'
+  ...
+# (node:59885) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node-22 --trace-warnings ...` to show where the warning was created)
+# Subtest: full manager projection seals a unique latest image and employee view removes financial data
+ok 5 - full manager projection seals a unique latest image and employee view removes financial data
+  ---
+  duration_ms: 68.291395
+  type: 'test'
+  ...
+# Subtest: projection requires complete contiguous feed, closes after failures and never accepts immutable rewrites
+ok 6 - projection requires complete contiguous feed, closes after failures and never accepts immutable rewrites
+  ---
+  duration_ms: 34.841754
+  type: 'test'
+  ...
+# Subtest: trusted full manager seed resumes from C and employee seed or wrong hash cannot authorize continuation
+ok 7 - trusted full manager seed resumes from C and employee seed or wrong hash cannot authorize continuation
+  ---
+  duration_ms: 31.472022
+  type: 'test'
+  ...
+# Subtest: seed validates all pages, final digest, record count and collision uniqueness before sealing
+ok 8 - seed validates all pages, final digest, record count and collision uniqueness before sealing
+  ---
+  duration_ms: 45.811105
+  type: 'test'
+  ...
+# Subtest: bounded package pages retain deterministic order and empty C=0 is valid
+ok 9 - bounded package pages retain deterministic order and empty C=0 is valid
+  ---
+  duration_ms: 174.688666
+  type: 'test'
+  ...
+# Subtest: guarded service binds fresh manager UID and epoch to immutable new snapshot IDs
+ok 10 - guarded service binds fresh manager UID and epoch to immutable new snapshot IDs
+  ---
+  duration_ms: 20.683252
+  type: 'test'
+  ...
+# Subtest: trusted live history floor rejects stale snapshots and fresh-binds a raised floor at the same checkpoint
+ok 11 - trusted live history floor rejects stale snapshots and fresh-binds a raised floor at the same checkpoint
+  ---
+  duration_ms: 14.762274
+  type: 'test'
+  ...
+# Subtest: service refuses cross-role or cross-UID employee data, corruption and authority revocation
+ok 12 - service refuses cross-role or cross-UID employee data, corruption and authority revocation
+  ---
+  duration_ms: 14.827115
+  type: 'test'
+  ...
+# Subtest: service detects catalog replacement and post-I/O authority loss without returning a page
+ok 13 - service detects catalog replacement and post-I/O authority loss without returning a page
+  ---
+  duration_ms: 13.512315
+  type: 'test'
+  ...
+# Subtest: budget deferral happens before provider I/O and failed writes never return a publication
+ok 14 - budget deferral happens before provider I/O and failed writes never return a publication
+  ---
+  duration_ms: 9.240405
+  type: 'test'
+  ...
+# Subtest: checkpoint source bounds each query and rejects missing history before yielding a seedless image
+ok 15 - checkpoint source bounds each query and rejects missing history before yielding a seedless image
+  ---
+  duration_ms: 2.738781
+  type: 'test'
+  ...
+# Subtest: checkpoint capture rejects tenant deletion, inactive employee and changed membership epoch
+ok 16 - checkpoint capture rejects tenant deletion, inactive employee and changed membership epoch
+  ---
+  duration_ms: 1.976809
+  type: 'test'
+  ...
+# Subtest: checkpoint capture reserves its worst-case five-attempt read budget before provider I/O
+ok 17 - checkpoint capture reserves its worst-case five-attempt read budget before provider I/O
+  ---
+  duration_ms: 2.220459
+  type: 'test'
+  ...
+# Subtest: production parser drains trailing compressed bytes without a process crash
+ok 18 - production parser drains trailing compressed bytes without a process crash
+  ---
+  duration_ms: 92.851133
+  type: 'test'
+  ...
+# Subtest: production parser still accepts normal compressed JSON
+ok 19 - production parser still accepts normal compressed JSON
+  ---
+  duration_ms: 56.855313
+  type: 'test'
+  ...
+# Subtest: production parser survives a gzip frame followed by a large invalid tail
+ok 20 - production parser survives a gzip frame followed by a large invalid tail
+  ---
+  duration_ms: 233.567898
+  type: 'test'
+  ...
+# Subtest: demo operator admits both loopback emulator transports without production override
+ok 21 - demo operator admits both loopback emulator transports without production override
+  ---
+  duration_ms: 5.187259
+  type: 'test'
+  ...
+# Subtest: mixed Auth/Firestore environments fail before any operator callback can initialize Admin or read/revoke a real user
+ok 22 - mixed Auth/Firestore environments fail before any operator callback can initialize Admin or read/revoke a real user
+  ---
+  duration_ms: 3.095389
+  type: 'test'
+  ...
+# Subtest: loopback guards reject URLs, fake suffixes, user-info, paths and invalid ports
+ok 23 - loopback guards reject URLs, fake suffixes, user-info, paths and invalid ports
+  ---
+  duration_ms: 1.295776
+  type: 'test'
+  ...
+# Subtest: actual provision and transfer CLIs reject mixed environments before opening the request or accessing Admin
+ok 24 - actual provision and transfer CLIs reject mixed environments before opening the request or accessing Admin
+  ---
+  duration_ms: 5413.725186
+  type: 'test'
+  ...
+# Subtest: synthetic runner rejects live project and nonloopback/partial emulator environment
+ok 25 - synthetic runner rejects live project and nonloopback/partial emulator environment
+  ---
+  duration_ms: 5.608834
+  type: 'test'
+  ...
+# Subtest: synthetic runner refuses an occupied local service instead of reusing it
+ok 26 - synthetic runner refuses an occupied local service instead of reusing it
+  ---
+  duration_ms: 27.677775
+  type: 'test'
+  ...
+# (node:59889) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node-22 --trace-warnings ...` to show where the warning was created)
+# Subtest: manager feed pruning is bounded, publishes floor atomically and retains every financial fact and receipt
+ok 27 - manager feed pruning is bounded, publishes floor atomically and retains every financial fact and receipt
+  ---
+  duration_ms: 146.657727
+  type: 'test'
+  ...
+# Subtest: failed deleting commit rolls back its full batch and resumes from the durable cursor with a new runner
+ok 28 - failed deleting commit rolls back its full batch and resumes from the durable cursor with a new runner
+  ---
+  duration_ms: 72.268864
+  type: 'test'
+  ...
+# Subtest: changed provider version, changed body and unexpectedly missing candidate abort before any batch deletion
+ok 29 - changed provider version, changed body and unexpectedly missing candidate abort before any batch deletion
+  ---
+  duration_ms: 55.335219
+  type: 'test'
+  ...
+# Subtest: plan capture is bound to exact raw source used by sealed manager snapshot and rejects gaps or rewritten metadata
+ok 30 - plan capture is bound to exact raw source used by sealed manager snapshot and rejects gaps or rewritten metadata
+  ---
+  duration_ms: 39.09908
+  type: 'test'
+  ...
+# Subtest: plan verifier rejects wrong expected hash, altered page and a forged digest with noncontiguous rows
+ok 31 - plan verifier rejects wrong expected hash, altered page and a forged digest with noncontiguous rows
+  ---
+  duration_ms: 34.014583
+  type: 'test'
+  ...
+# Subtest: resumed runner reauthenticates immutable plan pages and rejects publication or progress substitution
+ok 32 - resumed runner reauthenticates immutable plan pages and rejects publication or progress substitution
+  ---
+  duration_ms: 46.533956
+  type: 'test'
+  ...
+# Subtest: every cleanup acceptance gate fails before deletes, including malformed or future protocol state
+ok 33 - every cleanup acceptance gate fails before deletes, including malformed or future protocol state
+  ---
+  duration_ms: 214.606254
+  type: 'test'
+  ...
+# Subtest: tenant deletion, stale lease and floor advances between preflight and deletion recheck abort the transaction
+ok 34 - tenant deletion, stale lease and floor advances between preflight and deletion recheck abort the transaction
+  ---
+  duration_ms: 34.916975
+  type: 'test'
+  ...
+# Subtest: concurrent financial writes above C survive and a racing second runner cannot delete an already committed page
+ok 35 - concurrent financial writes above C survive and a racing second runner cannot delete an already committed page
+  ---
+  duration_ms: 37.978666
+  type: 'test'
+  ...
+# Subtest: shared budget exhaustion defers before provider transactions or storage I/O
+ok 36 - shared budget exhaustion defers before provider transactions or storage I/O
+  ---
+  duration_ms: 19.440992
+  type: 'test'
+  ...
+# Subtest: a partial or completed run refuses a regressed published floor or minimum protocol
+ok 37 - a partial or completed run refuses a regressed published floor or minimum protocol
+  ---
+  duration_ms: 44.097765
+  type: 'test'
+  ...
+# Subtest: an annual year that has not ended in Cairo cannot be pruned even with otherwise accepted evidence
+ok 38 - an annual year that has not ended in Cairo cannot be pruned even with otherwise accepted evidence
+  ---
+  duration_ms: 28.552677
+  type: 'test'
+  ...
+# Subtest: production adapter rejects synthetic, unaccepted storage or missing explicit production acceptance
+ok 39 - production adapter rejects synthetic, unaccepted storage or missing explicit production acceptance
+  ---
+  duration_ms: 23.640035
+  type: 'test'
+  ...
+# Subtest: bounded provider source reserves before every query and captures provider update versions
+ok 40 - bounded provider source reserves before every query and captures provider update versions
+  ---
+  duration_ms: 25.96253
+  type: 'test'
+  ...
+# Subtest: bootstrap creates a challenge only after transactional parent and identity reads
+ok 41 - bootstrap creates a challenge only after transactional parent and identity reads
+  ---
+  duration_ms: 29.955224
+  type: 'test'
+  ...
+# Subtest: deletion after authority but before transaction rejects without an orphan challenge
+ok 42 - deletion after authority but before transaction rejects without an orphan challenge
+  ---
+  duration_ms: 3.978845
+  type: 'test'
+  ...
+# Subtest: deletion after transaction reads conflicts then retry refuses without any child commit
+ok 43 - deletion after transaction reads conflicts then retry refuses without any child commit
+  ---
+  duration_ms: 2.675621
+  type: 'test'
+  ...
+# Subtest: changed device owner, tenant, membership role or employee identity is rejected before challenge creation
+ok 44 - changed device owner, tenant, membership role or employee identity is rejected before challenge creation
+  ---
+  duration_ms: 12.023629
+  type: 'test'
+  ...
+# Subtest: disabled manager and employee can still complete proof and receive a signed disabled package
+ok 45 - disabled manager and employee can still complete proof and receive a signed disabled package
+  ---
+  duration_ms: 7.834433
+  type: 'test'
+  ...
+# Subtest: deletion marker denies bootstrap before and during challenge or device-proof transactions
+ok 46 - deletion marker denies bootstrap before and during challenge or device-proof transactions
+  ---
+  duration_ms: 4.543075
+  type: 'test'
+  ...
+# Subtest: member activation rereads parent and actor/device so concurrent deletion or authority changes cannot leave audit or updates
+ok 47 - member activation rereads parent and actor/device so concurrent deletion or authority changes cannot leave audit or updates
+  ---
+  duration_ms: 9.365717
+  type: 'test'
+  ...
+# Subtest: sync and license activation reject deleted or deleting parents within their own transactions
+ok 48 - sync and license activation reject deleted or deleting parents within their own transactions
+  ---
+  duration_ms: 19.406599
+  type: 'test'
+  ...
+# Subtest: invitation creation reads parent and current manager/device atomically after non-atomic Auth revocation
+ok 49 - invitation creation reads parent and current manager/device atomically after non-atomic Auth revocation
+  ---
+  duration_ms: 10.830128
+  type: 'test'
+  ...
+# Subtest: trusted invitation helper also refuses deleted roots without gateway preflight
+ok 50 - trusted invitation helper also refuses deleted roots without gateway preflight
+  ---
+  duration_ms: 2.584657
+  type: 'test'
+  ...
+# Subtest: invitation acceptance conflicts with deletion and marker and retains normal enrollment
+ok 51 - invitation acceptance conflicts with deletion and marker and retains normal enrollment
+  ---
+  duration_ms: 13.883053
+  type: 'test'
+  ...
+# Subtest: session revocation during transaction conflicts and cannot commit a financial effect
+ok 52 - session revocation during transaction conflicts and cannot commit a financial effect
+  ---
+  duration_ms: 6.250485
+  type: 'test'
+  ...
+# Subtest: closed-period entry retains original evidence exactly once without accepting money or advancing sequence
+ok 53 - closed-period entry retains original evidence exactly once without accepting money or advancing sequence
+  ---
+  duration_ms: 4.392685
+  type: 'test'
+  ...
+# Subtest: manager correction posts preserved facts in open period and links original evidence once
+ok 54 - manager correction posts preserved facts in open period and links original evidence once
+  ---
+  duration_ms: 58.516061
+  type: 'test'
+  ...
+# Subtest: correction refuses altered financial facts, old/future posting dates and employees
+ok 55 - correction refuses altered financial facts, old/future posting dates and employees
+  ---
+  duration_ms: 14.451429
+  type: 'test'
+  ...
+# Subtest: unapproved employee submission survives close and manager approval requires explicit current-period correction
+ok 56 - unapproved employee submission survives close and manager approval requires explicit current-period correction
+  ---
+  duration_ms: 5.247831
+  type: 'test'
+  ...
+# Subtest: protocol floor explicitly refuses lost history and sequence exhaustion cannot create unsafe numbers
+ok 57 - protocol floor explicitly refuses lost history and sequence exhaustion cannot create unsafe numbers
+  ---
+  duration_ms: 3.573683
+  type: 'test'
+  ...
+# Subtest: archive access is manager-only, unavailable without adapter, rechecks revocation after read, and never posts finance
+ok 58 - archive access is manager-only, unavailable without adapter, rechecks revocation after read, and never posts finance
+  ---
+  duration_ms: 5.545734
+  type: 'test'
+  ...
+# Subtest: manager feed is not disclosed after membership is revoked or downgraded during the query
+ok 59 - manager feed is not disclosed after membership is revoked or downgraded during the query
+  ---
+  duration_ms: 5.787659
+  type: 'test'
+  ...
+# Subtest: historical salary terms are held separately instead of changing closed payroll obligations
+ok 60 - historical salary terms are held separately instead of changing closed payroll obligations
+  ---
+  duration_ms: 10.870776
+  type: 'test'
+  ...
+# Subtest: v2 feed negotiation, tenant minimum and concurrent floor publication fail closed
+ok 61 - v2 feed negotiation, tenant minimum and concurrent floor publication fail closed
+  ---
+  duration_ms: 5.823058
+  type: 'test'
+  ...
+# Subtest: snapshot reads derive role/epoch server-side and recheck epoch, session and role after I/O
+ok 62 - snapshot reads derive role/epoch server-side and recheck epoch, session and role after I/O
+  ---
+  duration_ms: 4.929022
+  type: 'test'
+  ...
+# Subtest: archive statement route is manager-only, pins continuations and rechecks revocation
+ok 63 - archive statement route is manager-only, pins continuations and rechecks revocation
+  ---
+  duration_ms: 2.241989
+  type: 'test'
+  ...
+# Subtest: manager pull refuses missing checkpoint tail rather than report false catch-up
+ok 64 - manager pull refuses missing checkpoint tail rather than report false catch-up
+  ---
+  duration_ms: 2.442491
+  type: 'test'
+  ...
+# Subtest: snapshot publication must cover the current floor even if the catalog is stale
+ok 65 - snapshot publication must cover the current floor even if the catalog is stale
+  ---
+  duration_ms: 1.251955
+  type: 'test'
+  ...
+# Subtest: two annual statements carry EGP20000 to15000; original party opening is never reposted
+ok 66 - two annual statements carry EGP20000 to15000; original party opening is never reposted
+  ---
+  duration_ms: 43.779605
+  type: 'test'
+  ...
+# Subtest: supplier payable and merchant receivable with same stable ID remain separate roles
+ok 67 - supplier payable and merchant receivable with same stable ID remain separate roles
+  ---
+  duration_ms: 14.898434
+  type: 'test'
+  ...
+# Subtest: signed advances and zero activity preserve exact baseline
+ok 68 - signed advances and zero activity preserve exact baseline
+  ---
+  duration_ms: 23.226268
+  type: 'test'
+  ...
+# Subtest: cross-year return and reversals resolve original evidence across pages without posting references
+ok 69 - cross-year return and reversals resolve original evidence across pages without posting references
+  ---
+  duration_ms: 26.804836
+  type: 'test'
+  ...
+# Subtest: prior-year invoice reversal affects current period only, and correction keeps both dates
+ok 70 - prior-year invoice reversal affects current period only, and correction keeps both dates
+  ---
+  duration_ms: 8.364622
+  type: 'test'
+  ...
+# Subtest: repeated complete statements keep storage, source records and master key unchanged
+ok 71 - repeated complete statements keep storage, source records and master key unchanged
+  ---
+  duration_ms: 12.511451
+  type: 'test'
+  ...
+# Subtest: continuation requires exact publication identity; replacement between pages fails closed
+ok 72 - continuation requires exact publication identity; replacement between pages fails closed
+  ---
+  duration_ms: 25.331687
+  type: 'test'
+  ...
+# Subtest: publication revoked or changed during a page is rechecked before contents return
+ok 73 - publication revoked or changed during a page is rechecked before contents return
+  ---
+  duration_ms: 15.992981
+  type: 'test'
+  ...
+# Subtest: unknown parties terminate without financial rows and invalid inputs fail
+ok 74 - unknown parties terminate without financial rows and invalid inputs fail
+  ---
+  duration_ms: 6.951981
+  type: 'test'
+  ...
+# Subtest: a fully paid invoice still requires its explicit financial role despite zero party effect
+ok 75 - a fully paid invoice still requires its explicit financial role despite zero party effect
+  ---
+  duration_ms: 6.49124
+  type: 'test'
+  ...
+# Subtest: wrong tenant, wrong key, tampered manifest, corrupted chunk and outage return no statement
+ok 76 - wrong tenant, wrong key, tampered manifest, corrupted chunk and outage return no statement
+  ---
+  duration_ms: 5.747511
+  type: 'test'
+  ...
+# Subtest: row and byte caps stop at whole chunk boundary and preserve deterministic complete order
+ok 77 - row and byte caps stop at whole chunk boundary and preserve deterministic complete order
+  ---
+  duration_ms: 696.08405
+  type: 'test'
+  ...
+# Subtest: prior-year return reversal needs the retained return reference only, without reposting its invoice
+ok 78 - prior-year return reversal needs the retained return reference only, without reposting its invoice
+  ---
+  duration_ms: 3.487234
+  type: 'test'
+  ...
+# Subtest: repeated invoice reads retain identity and never offer a financial posting API
+ok 79 - repeated invoice reads retain identity and never offer a financial posting API
+  ---
+  duration_ms: 74.205122
+  type: 'test'
+  ...
+# Subtest: catalogue listing exposes no key, object location or financial payload
+ok 80 - catalogue listing exposes no key, object location or financial payload
+  ---
+  duration_ms: 7.857862
+  type: 'test'
+  ...
+# Subtest: wrong tenant/year, unverified publication and wrong key fail before returning records
+ok 81 - wrong tenant/year, unverified publication and wrong key fail before returning records
+  ---
+  duration_ms: 10.416023
+  type: 'test'
+  ...
+# Subtest: bounded reads require explicit continuation and absent IDs terminate
+ok 82 - bounded reads require explicit continuation and absent IDs terminate
+  ---
+  duration_ms: 12.251993
+  type: 'test'
+  ...
+# Subtest: tampered stored manifest and interrupted storage do not return unverified contents
+ok 83 - tampered stored manifest and interrupted storage do not return unverified contents
+  ---
+  duration_ms: 7.604047
+  type: 'test'
+  ...
+# Subtest: external callable uses verified identity and preserves native Long payload values
+ok 84 - external callable uses verified identity and preserves native Long payload values
+  ---
+  duration_ms: 130.775162
+  type: 'test'
+  ...
+# Subtest: missing or invalid App Check cannot reach Auth or the financial gateway
+ok 85 - missing or invalid App Check cannot reach Auth or the financial gateway
+  ---
+  duration_ms: 4.069458
+  type: 'test'
+  ...
+# Subtest: valid attestation for another app and revoked Auth sessions are rejected
+ok 86 - valid attestation for another app and revoked Auth sessions are rejected
+  ---
+  duration_ms: 3.573659
+  type: 'test'
+  ...
+# Subtest: only the exact allowlisted routes accept JSON POST; health is read-only and token-free
+ok 87 - only the exact allowlisted routes accept JSON POST; health is read-only and token-free
+  ---
+  duration_ms: 4.840634
+  type: 'test'
+  ...
+# Subtest: oversized chunked bodies are cancelled and never invoke the domain gateway
+ok 88 - oversized chunked bodies are cancelled and never invoke the domain gateway
+  ---
+  duration_ms: 5.607051
+  type: 'test'
+  ...
+# Subtest: strict envelopes, UTF-8/JSON and integer tag limits reject unsafe inputs
+ok 89 - strict envelopes, UTF-8/JSON and integer tag limits reject unsafe inputs
+  ---
+  duration_ms: 14.62685
+  type: 'test'
+  ...
+# Subtest: domain errors preserve callable codes while unexpected errors hide secrets
+ok 90 - domain errors preserve callable codes while unexpected errors hide secrets
+  ---
+  duration_ms: 3.843536
+  type: 'test'
+  ...
+# Subtest: App Check emulator exemption requires exact demo plus both loopback services
+ok 91 - App Check emulator exemption requires exact demo plus both loopback services
+  ---
+  duration_ms: 2.172405
+  type: 'test'
+  ...
+# Subtest: database quota and outages remain retryable transport failures with no private details
+ok 92 - database quota and outages remain retryable transport failures with no private details
+  ---
+  duration_ms: 6.395322
+  type: 'test'
+  ...
+# Subtest: self signup token selects only canonical bounded tenant identifiers; old tokens remain opaque
+ok 93 - self signup token selects only canonical bounded tenant identifiers; old tokens remain opaque
+  ---
+  duration_ms: 7.805439
+  type: 'test'
+  ...
+# Subtest: fresh wrapper namespace allocates a different tenant while preserving identity and same-session stability
+ok 94 - fresh wrapper namespace allocates a different tenant while preserving identity and same-session stability
+  ---
+  duration_ms: 6.239384
+  type: 'test'
+  ...
+# Subtest: helper refuses missing or malformed namespace before accessing emulators
+ok 95 - helper refuses missing or malformed namespace before accessing emulators
+  ---
+  duration_ms: 1.32922
+  type: 'test'
+  ...
+# Subtest: helper refuses production project, public bind hosts and non-loopback emulator endpoints
+ok 96 - helper refuses production project, public bind hosts and non-loopback emulator endpoints
+  ---
+  duration_ms: 0.469927
+  type: 'test'
+  ...
+# Subtest: integer half-up quantity and money reference
+ok 97 - integer half-up quantity and money reference
+  ---
+  duration_ms: 5.537626
+  type: 'test'
+  ...
+# Subtest: invalid imports cannot disagree total or overpay
+ok 98 - invalid imports cannot disagree total or overpay
+  ---
+  duration_ms: 3.621606
+  type: 'test'
+  ...
+# Subtest: all financial boundaries reject NaN infinity strings negative and fractional
+ok 99 - all financial boundaries reject NaN infinity strings negative and fractional
+  ---
+  duration_ms: 1.299603
+  type: 'test'
+  ...
+# Subtest: real ISO date validation
+ok 100 - real ISO date validation
+  ---
+  duration_ms: 1.08693
+  type: 'test'
+  ...
+# Subtest: directory signed opening and tenant checks
+ok 101 - directory signed opening and tenant checks
+  ---
+  duration_ms: 1.075876
+  type: 'test'
+  ...
+# Subtest: 30x24 trial with exact shared boundary independent of employee join time
+ok 102 - 30x24 trial with exact shared boundary independent of employee join time
+  ---
+  duration_ms: 0.493372
+  type: 'test'
+  ...
+# Subtest: signed canonical UTF8 package detects tampering
+ok 103 - signed canonical UTF8 package detects tampering
+  ---
+  duration_ms: 12.457799
+  type: 'test'
+  ...
+# Subtest: paid expiry overrides remaining original trial
+ok 104 - paid expiry overrides remaining original trial
+  ---
+  duration_ms: 0.355477
+  type: 'test'
+  ...
+# Subtest: migration dry-run quarantines legacy inconsistent totals, grade mismatch, non-lossless price
+ok 105 - migration dry-run quarantines legacy inconsistent totals, grade mismatch, non-lossless price
+  ---
+  duration_ms: 31.564154
+  type: 'test'
+  ...
+# Subtest: documented debt adjustment has no cash effect and explicit direction
+ok 106 - documented debt adjustment has no cash effect and explicit direction
+  ---
+  duration_ms: 2.092494
+  type: 'test'
+  ...
+# Subtest: expense category defaults and unrelated kinds cannot carry an expense category
+ok 107 - expense category defaults and unrelated kinds cannot carry an expense category
+  ---
+  duration_ms: 0.861706
+  type: 'test'
+  ...
+# Subtest: migration keeps identifiers, same-day relationships, provenance and known control balances
+ok 108 - migration keeps identifiers, same-day relationships, provenance and known control balances
+  ---
+  duration_ms: 2.292223
+  type: 'test'
+  ...
+# Subtest: migration quarantines unit and grade mismatches, unknown shipping employees and wrong party kind
+ok 109 - migration quarantines unit and grade mismatches, unknown shipping employees and wrong party kind
+  ---
+  duration_ms: 2.263391
+  type: 'test'
+  ...
+# Subtest: migration preserves payroll payment but blocks readiness until historical salary is evidenced
+ok 110 - migration preserves payroll payment but blocks readiness until historical salary is evidenced
+  ---
+  duration_ms: 1.1271
+  type: 'test'
+  ...
+# Subtest: shipment metadata events require zero financial fields, active-invoice reference, status and documented reason
+ok 111 - shipment metadata events require zero financial fields, active-invoice reference, status and documented reason
+  ---
+  duration_ms: 3.497629
+  type: 'test'
+  ...
+# Subtest: two concurrent tenants share one cap; failed reservation changes no counters
+ok 112 - two concurrent tenants share one cap; failed reservation changes no counters
+  ---
+  duration_ms: 56.31172
+  type: 'test'
+  ...
+# Subtest: disabled/missing live headroom and zero-delete cap refuse before work
+ok 113 - disabled/missing live headroom and zero-delete cap refuse before work
+  ---
+  duration_ms: 5.533179
+  type: 'test'
+  ...
+# Subtest: repeated operation attempt charges again despite matching diagnostic step ID
+ok 114 - repeated operation attempt charges again despite matching diagnostic step ID
+  ---
+  duration_ms: 2.822824
+  type: 'test'
+  ...
+# Subtest: UTC and Pacific internal windows reset at different civil midnight including DST
+ok 115 - UTC and Pacific internal windows reset at different civil midnight including DST
+  ---
+  duration_ms: 3.212204
+  type: 'test'
+  ...
+# Subtest: unknown resources and unsafe costs fail closed
+ok 116 - unknown resources and unsafe costs fail closed
+  ---
+  duration_ms: 2.328893
+  type: 'test'
+  ...
+1..116
+# tests 116
+# suites 0
+# pass 116
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5767.144692

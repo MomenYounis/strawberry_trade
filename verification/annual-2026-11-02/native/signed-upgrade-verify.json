@@ -1,0 +1,68 @@
+{
+  "synthetic": true,
+  "ownerDeviceTouched": false,
+  "phase": "verify",
+  "status": "PASS",
+  "startedAtUtc": "2026-11-02T10:51:57.769044+00:00",
+  "sourceCommit": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+  "fixtureSha256": "d422c631acdec4d0f0f66a17e1e73a725328c66c943d62eab3b275176d01347a",
+  "productionAuthenticationUsed": false,
+  "uninstallOrDataClearSinceSeed": false,
+  "serial": "emulator-5580",
+  "pid": 32353,
+  "avdPath": "/tmp/strawberry-annual-native-20261102-da3kvv_i/avd/strawberry_annual_disposable_20261102.avd",
+  "commands": [
+    [
+      "flutter",
+      "build",
+      "apk",
+      "--debug",
+      "--no-pub",
+      "--target=integration_test/local_persistence_test.dart",
+      "--dart-define=PERSISTENCE_PHASE=verify",
+      "--build-number=11"
+    ],
+    [
+      "/usr/bin/python3",
+      "tools/annual-review/sign-native-fixture.py",
+      "verify",
+      "--evidence-dir",
+      "verification/annual-2026-11-02/native"
+    ],
+    [
+      "/home/younis/flutter/bin/cache/dart-sdk/bin/dart",
+      "--packages=.dart_tool/package_config.json",
+      "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/storage_integration_driver.dart"
+    ]
+  ],
+  "network": {
+    "airplane_mode_on": "1",
+    "wifi_on": "0",
+    "mobile_data": "0"
+  },
+  "retainingDataInstalls": [
+    {
+      "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/persistence-verify-signed-DEBUG.apk",
+      "versionCode": 11,
+      "debugTestArtifact": true,
+      "sha256": "0dca3d1c645cb8ac98868b19e773dd67d0560f73d3ef716392f52a94f5ff10f8",
+      "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+    }
+  ],
+  "uniquePersistenceTests": 3,
+  "allPersistenceAssertionsPassed": true,
+  "retained": [
+    "installation Keystore identity",
+    "protected SQLCipher key digest",
+    "encrypted entry",
+    "stable outbox operation and wire payload digest",
+    "retry count and schedule",
+    "unfinished draft"
+  ],
+  "driverUsesExistingApp": true,
+  "flutterInstallerUsedAfterSeed": false,
+  "schemaBeforeReplacements": 2,
+  "schemaAfter": 4,
+  "versionCode": 11,
+  "finishedAtUtc": "2026-11-02T10:52:59.904448+00:00"
+}

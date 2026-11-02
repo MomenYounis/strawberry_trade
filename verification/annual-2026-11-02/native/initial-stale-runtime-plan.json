@@ -1,0 +1,10 @@
+{
+  "synthetic": true,
+  "status": "BLOCKED_PLAN_ONLY",
+  "observedAtUtc": "2026-11-02T10:42:36.997853+00:00",
+  "phase": "seed --review-plan",
+  "reason": "FileNotFoundError from stale /proc/27397/cmdline after the first renderer exited",
+  "buildInstallOrDeviceMutationRun": false,
+  "resolution": "Same private AVD/data restarted under PID32353; dry review plan passed afterward; all signed campaign phases subsequently passed",
+  "evidence": "runtime-renderer-failure.json"
+}

@@ -1,0 +1,6 @@
+All tests passed.
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:37811/[LOCAL_VM_AUTH_REDACTED]/
+VMServiceFlutterDriver: Isolate found with number: 6859969537469635
+VMServiceFlutterDriver: Isolate 6859969537469635 is runnable.
+VMServiceFlutterDriver: Isolate is not paused. Assuming application is ready.
+VMServiceFlutterDriver: Connected to Flutter application.

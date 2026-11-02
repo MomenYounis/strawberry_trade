@@ -1,0 +1,13 @@
+# November 2 continuation evidence
+
+Application source2ad243a; final backend/source/helper revision7a51c54. The compiled application inputs remain byte-identical after the backend-only repairs. See verification-summary.json and final-source-hashes.json; documentation/evidence commits follow.
+
+Final results: Flutter190/analyzer0; backend116; archive81; combined invitation integration39; real Firestore pruner4; Worker4/dry-run; three unique native storage assertions repeated across signed seed/actual v10/v11/schema4 verification and offline reboot. Suites overlap and must not be summed. Logs preserve initial failures and intermediate source versions. Current root backend reruns are in backend/root-final-review-checks.json and backend/feed-pruner-firestore-emulator-root-final.json; older flat115/80 logs are earlier passes, not the final source.
+
+Confirmed final repairs: a source consumer at the same/later checkpoint still needs a prefix, so every active source consumer blocks pruning. Snapshot capture now reserves15 reads before its five-attempt SDK transaction. Before/after reproductions are retained. A temporary overlapping root budget test was removed; final focused format/projection suite is17PASS. The earlier specialist18-test log/hash describes the transient two-test variant and is superseded by the root final source/results.
+
+Native/README.md defines the exact storage-only scope, actual release hashes and signed DEBUG test instrumentation. Initial post-assertion renderer failure and restart are disclosed. All signed phases and reboot passed; only the owned disposable offline AVD/runtime was removed after full ownership checks. Owner devices/AVD/accounts were untouched.
+
+APK files are ignored generated artifacts and delivered separately; signed DEBUG fixtures and idsig files are not source or release deliverables. The review release is flutter/strawberry-trade-annual-review-v11-final.apk, SHA2565f597f42a4f4142fdf56b6b9c27ec34299361d260abea68cddec57e180fd7203. Metadata/manifest/certificate/config/secret scans are included. Actual synthetic Arabic statement PDF/CSV live under output/pdf; page renders and artifact hashes are under pdf/.
+
+No production deployment/write/delete/close/schedule/billing/account creation/publication was performed. Four production verdicts remain NO-GO. Whole-system disaster recovery, held salary-term resolution, scale-safe orchestration, accepted private storage/copy/key recovery and broader native account/business acceptance remain outstanding. Local emulator transactions and injected plaintext snapshot storage are not production storage/recovery acceptance.

@@ -1,0 +1,143 @@
+{
+  "recordedAtUtc": "2026-11-02T16:25:54.873353+00:00",
+  "localDate": "2026-11-02",
+  "timeZone": "Africa/Cairo",
+  "baselineRevision": "e246f436a092616ef2799bb04f969a19fd19ffcc",
+  "backendRevision": "7a51c54b23c9f0ed56db79d49db762dd0952fcdf",
+  "compiledApplicationRevision": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+  "documentationEvidenceRevision": "Subsequent commit; use git log and the handoff patch identity",
+  "missionComplete": false,
+  "productionActionsPerformed": false,
+  "checks": [
+    {
+      "name": "Flutter analyzer",
+      "status": "PASS",
+      "issues": 0,
+      "log": "flutter-analyze-final.log"
+    },
+    {
+      "name": "Flutter host",
+      "status": "PASS",
+      "passed": 190,
+      "log": "flutter-test-final.log"
+    },
+    {
+      "name": "Backend unit",
+      "status": "PASS",
+      "passed": 116,
+      "log": "backend/backend-unit-final-after-review.log"
+    },
+    {
+      "name": "Archive/snapshot/pruner",
+      "status": "PASS",
+      "passed": 81,
+      "log": "backend/archive-suite-final-after-review.log"
+    },
+    {
+      "name": "Combined Auth/Firestore/Functions invitation integration",
+      "status": "PASS",
+      "passed": 39,
+      "log": "backend-invitations-final.log",
+      "overlap": "Includes gateway/shipment cases"
+    },
+    {
+      "name": "Real Firestore feed-pruner transaction integration",
+      "status": "PASS",
+      "passed": 4,
+      "log": "backend/feed-pruner-firestore-emulator-root-final.log",
+      "boundary": "Guarded disposable demo project; synthetic storage acceptance only"
+    },
+    {
+      "name": "Snapshot retry budget format/projection",
+      "status": "PASS",
+      "passed": 17,
+      "log": "backend/snapshot-retry-budget-after.log",
+      "overlap": "Included in unit/archive suites"
+    },
+    {
+      "name": "Worker unit",
+      "status": "PASS",
+      "passed": 4,
+      "log": "worker-unit.log"
+    },
+    {
+      "name": "Worker bundle dry run",
+      "status": "PASS",
+      "log": "worker-dry-run-final.log"
+    },
+    {
+      "name": "Native storage unique assertions",
+      "status": "PASS",
+      "passed": 3,
+      "log": "native/README.md",
+      "overlap": "Three assertions repeated across roundtrip/seed/verify/reboot, not twelve unique tests"
+    },
+    {
+      "name": "Signed v11 release and identity/config inspection",
+      "status": "PASS",
+      "log": "flutter/apk-inspection-final.json"
+    },
+    {
+      "name": "Actual Arabic statement PDF/CSV layout",
+      "status": "PASS",
+      "log": "pdf/synthetic-artifacts.json",
+      "boundary": "Synthetic fixture, rendered pages inspected; native share/print untested"
+    },
+    {
+      "name": "Actual private R2/copy/key recovery",
+      "status": "BLOCKED",
+      "reason": "Approved arrangement not configured or accepted"
+    },
+    {
+      "name": "Whole-system disaster recovery",
+      "status": "NOT IMPLEMENTED",
+      "reason": "Snapshot/annual financial restore do not include complete system authority/metadata/keys"
+    },
+    {
+      "name": "Native full account/business/multi-device/replacement-phone acceptance",
+      "status": "NOT RUN",
+      "reason": "Storage fixture and offline setup startup are narrower workflows"
+    },
+    {
+      "name": "Production deployment/close/cleanup/schedules",
+      "status": "NOT RUN",
+      "reason": "Not authorized and readiness gates unresolved"
+    }
+  ],
+  "overlappingSuitesMustNotBeSummed": true,
+  "apk": {
+    "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/flutter/strawberry-trade-annual-review-v11-final.apk",
+    "sha256": "5f597f42a4f4142fdf56b6b9c27ec34299361d260abea68cddec57e180fd7203",
+    "bytes": 78070020,
+    "package": "com.strawberrytrade.strawberry_trade",
+    "versionName": "1.0.0",
+    "versionCode": 11,
+    "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+  },
+  "buildDirtyTree": true,
+  "applicationInputsUnchangedSinceBuild": true,
+  "nativePhases": {
+    "seed": "PASS",
+    "replace": "PASS",
+    "verify": "PASS",
+    "reboot-verify": "PASS"
+  },
+  "privateNativeRuntimeCleanup": "PASS",
+  "ownerDeviceOrAvdTouched": false,
+  "verdicts": {
+    "coreCommercialApk": "NO-GO",
+    "archiveExportAndReadonlyView": "NO-GO",
+    "automaticProductionClose": "NO-GO",
+    "destructiveCleanup": "NO-GO"
+  },
+  "limits": [
+    "No accepted production durable encrypted snapshot/archive storage, independent copy/key recovery or crash-cleaned private verifier",
+    "No efficient enabled scheduled Worker annual runner; prior161512KiB private Node RSS exceeds128MiB Worker",
+    "Client combined install20krecords/16MiB and statement assembly20k/16MiB",
+    "No complete staged whole-system disaster recovery or native business acceptance",
+    "Held salary-term manager resolution and undated opening policy unfinished",
+    "Only duplicate manager changes feed is conditionally eligible; all original financial facts and employee feed retained",
+    "No production cleanup, live floor advancement or measured storage saving",
+    "Current live deployed gateway unobserved; additive compatible server must precede APK distribution"
+  ]
+}

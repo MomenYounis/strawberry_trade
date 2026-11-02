@@ -1,0 +1,8 @@
+Formatted lib/application/app_controller.dart
+Formatted lib/presentation/archive_screen.dart
+Formatted lib/services/active_snapshot_gateway.dart
+Formatted lib/services/archive_reader.dart
+Formatted lib/services/gateway.dart
+Formatted test/archive_screen_test.dart
+Formatted test/sync_protocol_test.dart
+Formatted 20 files (7 changed) in 0.58 seconds.

@@ -1,0 +1,19 @@
+{
+  "scope": "guarded disposable demo-strawberry-flutter emulators only; read-only consumer guard reproduction",
+  "sourceCommit": "2ad243a with working backend guard addition",
+  "testFile": "backend/test/feed-pruner.integration.test.mjs",
+  "command": [
+    "node",
+    "--input-type=module",
+    "-e",
+    "import {runEmulatorTests} from './scripts/emulator-test-runner.mjs'; process.exitCode=await runEmulatorTests(['test/feed-pruner.integration.test.mjs']);"
+  ],
+  "exitCode": 1,
+  "elapsedSeconds": 28.678,
+  "logSha256": "a128e2a68e9323777375a241c3d528c715fc45527ccb6db2576cc6a8f9e89f70",
+  "prunerSourceSha256": "ce9f10316684903eeccf750b9176a2abe4c7a10e81745a119860eb54db78989a",
+  "testFileSha256": "090b1d1839bcad3e96e591d8dd4fcbe9eed6459b9acb2c0c54cdc41e3f33d810",
+  "productionOperations": false,
+  "productionStorageAcceptance": false,
+  "apkSourceChanged": false
+}

@@ -1,0 +1,19 @@
+{
+  "synthetic": true,
+  "ownerDeviceTouched": false,
+  "status": "CAPTURED",
+  "serial": "emulator-5580",
+  "pid": 32353,
+  "network": {
+    "airplane_mode_on": "1",
+    "wifi_on": "0",
+    "mobile_data": "0"
+  },
+  "screenshot": "signed-v11-offline-setup.png",
+  "waitAfterColdStartSeconds": 4,
+  "productionAuthenticationUsed": false,
+  "accountCreated": false,
+  "uninstallOrDataClearSinceSeed": false,
+  "capturedAtUtc": "2026-11-02T10:51:57.605100+00:00",
+  "visualReview": "PASS: settled Arabic account/device setup screen with empty account fields; airplane icon visible; no login attempted"
+}

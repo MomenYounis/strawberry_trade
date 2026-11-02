@@ -1,0 +1,38 @@
+[
+  {
+    "name": "snapshot-retry-budget-after",
+    "command": [
+      "node",
+      "--test",
+      "test/active-snapshot-format.test.mjs",
+      "test/active-snapshot-projection.test.mjs"
+    ],
+    "cwd": "backend",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-02T16:20:49.957202+00:00",
+    "finishedAtUtc": "2026-11-02T16:20:50.948886+00:00"
+  },
+  {
+    "name": "backend-unit-final-after-review",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "cwd": "backend",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-02T16:20:50.949156+00:00",
+    "finishedAtUtc": "2026-11-02T16:20:57.685026+00:00"
+  },
+  {
+    "name": "archive-suite-final-after-review",
+    "command": [
+      "npm",
+      "run",
+      "test:archive"
+    ],
+    "cwd": "backend",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-02T16:20:57.685610+00:00",
+    "finishedAtUtc": "2026-11-02T16:20:59.558772+00:00"
+  }
+]

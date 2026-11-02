@@ -1,0 +1,33 @@
+TAP version 13
+# (node:59563) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node-22 --trace-warnings ...` to show where the warning was created)
+# Subtest: checkpoint capture reserves its worst-case five-attempt read budget before provider I/O
+not ok 1 - checkpoint capture reserves its worst-case five-attempt read budget before provider I/O
+  ---
+  duration_ms: 8.67648
+  type: 'test'
+  location: '/home/younis/strawberry-trade-annual-review/backend/test/active-snapshot-projection.test.mjs:193:1'
+  failureType: 'testCodeFailure'
+  error: 'provider retry reads exceeded the pre-I/O reservation'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    Object.get (file:///home/younis/strawberry-trade-annual-review/backend/test/active-snapshot-projection.test.mjs:203:20)
+    file:///home/younis/strawberry-trade-annual-review/backend/src/active-snapshot-projection.mjs:24:53
+    Object.runTransaction (file:///home/younis/strawberry-trade-annual-review/backend/test/active-snapshot-projection.test.mjs:202:17)
+    async TestContext.<anonymous> (file:///home/younis/strawberry-trade-annual-review/backend/test/active-snapshot-projection.test.mjs:217:17)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 403.498072

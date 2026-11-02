@@ -1,0 +1,33 @@
+{
+  "synthetic": true,
+  "productionActions": false,
+  "baseSourceCommit": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+  "change": "Reserve the 15-read maximum before a snapshot-capture transaction with maxAttempts=5; SDK retry regression confirms bound and pre-I/O deferral.",
+  "before": {
+    "command": [
+      "node",
+      "--test",
+      "--test-name-pattern=checkpoint capture reserves",
+      "test/active-snapshot-projection.test.mjs"
+    ],
+    "exitCode": 1,
+    "log": "snapshot-capture-budget-before.log"
+  },
+  "after": {
+    "command": [
+      "node",
+      "--test",
+      "test/active-snapshot-format.test.mjs",
+      "test/active-snapshot-projection.test.mjs"
+    ],
+    "cwd": "backend",
+    "startedAtUtc": "2026-11-02T16:20:03.056154+00:00",
+    "finishedAtUtc": "2026-11-02T16:20:04.053677+00:00",
+    "exitCode": 0,
+    "log": "snapshot-capture-budget-after.log"
+  },
+  "sourceSha256": {
+    "backend/src/active-snapshot-projection.mjs": "21cab84c87cdf6b8c2e786bdde705fb6e307072b767794500050fedab3587880",
+    "backend/test/active-snapshot-projection.test.mjs": "a99982d209725492d48d536f6fc23fe7d6ecdb5206484af7b1c03bbaee150326"
+  }
+}

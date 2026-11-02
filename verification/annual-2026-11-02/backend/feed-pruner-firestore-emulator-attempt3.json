@@ -1,0 +1,20 @@
+{
+  "scope": "guarded disposable demo-strawberry-flutter emulators only; real Firestore adapter with explicit synthetic storage boundary",
+  "sourceCommit": "2ad243a plus reviewed backend-only pending-consumer guard fix",
+  "testFile": "backend/test/feed-pruner.integration.test.mjs",
+  "command": [
+    "node",
+    "--input-type=module",
+    "-e",
+    "import {runEmulatorTests} from './scripts/emulator-test-runner.mjs'; process.exitCode=await runEmulatorTests(['test/feed-pruner.integration.test.mjs']);"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 30.996,
+  "logSha256": "9893d5384ed6e4e3564a971b7edb450dd3e5b79ad81aaca99f65c3e6d4ea8f5f",
+  "prunerSourceSha256": "27a051e3eeb3be4bac3c46e5775a6b42b71d7f64a75adad742befefebf7b38a8",
+  "testFileSha256": "090b1d1839bcad3e96e591d8dd4fcbe9eed6459b9acb2c0c54cdc41e3f33d810",
+  "productionOperations": false,
+  "productionStorageAcceptance": false,
+  "apkSourceChanged": false,
+  "credentials": "fresh in-memory synthetic session RSA certificate; no ADC discovery"
+}

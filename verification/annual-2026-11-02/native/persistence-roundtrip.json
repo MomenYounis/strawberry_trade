@@ -1,0 +1,26 @@
+{
+  "synthetic": true,
+  "status": "PASS",
+  "ownerDeviceTouched": false,
+  "sourceCommit": "377a1e5cee16315bb4c3cd380f68922bbedbb73f",
+  "command": [
+    "flutter",
+    "test",
+    "integration_test/local_persistence_test.dart",
+    "-d",
+    "emulator-5580",
+    "--no-uninstall",
+    "--reporter",
+    "expanded",
+    "--dart-define=PERSISTENCE_PHASE=roundtrip"
+  ],
+  "network": {
+    "airplane_mode_on": "1",
+    "wifi_on": "0",
+    "mobile_data": "0"
+  },
+  "fixtureSha256": "d422c631acdec4d0f0f66a17e1e73a725328c66c943d62eab3b275176d01347a",
+  "exitCode": 0,
+  "tests": 3,
+  "log": "persistence-roundtrip.log"
+}

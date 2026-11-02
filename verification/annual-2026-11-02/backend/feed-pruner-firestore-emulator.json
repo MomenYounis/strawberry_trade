@@ -1,0 +1,24 @@
+{
+  "scope": "guarded disposable demo-strawberry-flutter emulators only; real Firestore adapter with explicit synthetic storage boundary",
+  "sourceCommit": "2ad243a plus reviewed backend-only pending-consumer guard fix",
+  "testFile": "backend/test/feed-pruner.integration.test.mjs",
+  "command": [
+    "node",
+    "--input-type=module",
+    "-e",
+    "import {runEmulatorTests} from './scripts/emulator-test-runner.mjs'; process.exitCode=await runEmulatorTests(['test/feed-pruner.integration.test.mjs']);"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 25.442,
+  "logSha256": "adb909de42a6c76fe7235bddf1bfbe64bd397c0edd9d6f527d9487a8a86354a6",
+  "inputSha256": {
+    "backend/src/feed-pruner.mjs": "0e48838b0adcfd63af659cca29627b790245407d0d0a38cbae4ee00ec051021a",
+    "backend/test/feed-pruner.integration.test.mjs": "2297f0c7da0923a9841500374fad8ffd324a5af3f7c3874250f803812a256294",
+    "backend/test/feed-pruner.test.mjs": "0177f70908ea05321ced9c643302ee4031091369a63d717dad2a3569118765dd"
+  },
+  "inputsUnchangedDuringRun": true,
+  "productionOperations": false,
+  "productionStorageAcceptance": false,
+  "apkSourceChanged": false,
+  "credentials": "fresh in-memory synthetic session RSA certificate; no ADC discovery"
+}

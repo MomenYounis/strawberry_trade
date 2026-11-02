@@ -1,0 +1,43 @@
+[
+  {
+    "name": "flutter-format",
+    "command": [
+      "dart",
+      "format",
+      "lib/application/app_controller.dart",
+      "lib/data/ledger_store.dart",
+      "lib/presentation/archive_screen.dart",
+      "lib/services/active_snapshot.dart",
+      "lib/services/active_snapshot_gateway.dart",
+      "lib/services/archive_reader.dart",
+      "lib/services/archive_statement.dart",
+      "lib/services/exports.dart",
+      "lib/services/gateway.dart",
+      "lib/services/gateway_endpoint.dart",
+      "lib/services/sync_protocol.dart",
+      "test/active_snapshot_test.dart",
+      "test/archive_screen_test.dart",
+      "test/archive_statement_test.dart",
+      "test/archive_statement_exports_test.dart",
+      "test/controller_test.dart",
+      "test/remote_batch_test.dart",
+      "test/store_test.dart",
+      "test/sync_protocol_test.dart",
+      "integration_test/local_persistence_test.dart"
+    ],
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-02T10:33:15.592549+00:00",
+    "finishedAtUtc": "2026-11-02T10:33:16.309489+00:00"
+  },
+  {
+    "name": "flutter-analyze",
+    "command": [
+      "flutter",
+      "analyze",
+      "--no-pub"
+    ],
+    "exitCode": 1,
+    "startedAtUtc": "2026-11-02T10:33:16.309733+00:00",
+    "finishedAtUtc": "2026-11-02T10:33:28.253972+00:00"
+  }
+]

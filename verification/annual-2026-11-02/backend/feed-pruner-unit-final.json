@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "test/feed-pruner.test.mjs"
+  ],
+  "exitCode": 0,
+  "tests": 14,
+  "logSha256": "8e4eb7f2ca9f37abe1269e0ce9def06ab7451e3e3e41877506080bad0819cb6d",
+  "prunerSourceSha256": "0e48838b0adcfd63af659cca29627b790245407d0d0a38cbae4ee00ec051021a",
+  "testFileSha256": "0177f70908ea05321ced9c643302ee4031091369a63d717dad2a3569118765dd",
+  "scope": "synthetic serialized rollback adapter; no production I/O"
+}

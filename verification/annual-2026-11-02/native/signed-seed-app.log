@@ -1,0 +1,143 @@
+--------- beginning of main
+I/trawberry_trade( 3045): Late-enabling -Xcheck:jni
+I/trawberry_trade( 3045): Using CollectorTypeCMC GC.
+W/trawberry_trade( 3045): Unexpected CPU variant for x86: x86_64.
+W/trawberry_trade( 3045): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, default
+D/nativeloader( 3045): Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+D/ApplicationLoaders( 3045): Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+D/ApplicationLoaders( 3045): Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
+W/ziparchive( 3045): Unable to open '/data/app/~~blwPfojsKLlmx2nksIub2A==/com.strawberrytrade.strawberry_trade-plBUd0fU6S9v1Ynci3tiyw==/base.dm': No such file or directory
+W/ziparchive( 3045): Unable to open '/data/app/~~blwPfojsKLlmx2nksIub2A==/com.strawberrytrade.strawberry_trade-plBUd0fU6S9v1Ynci3tiyw==/base.dm': No such file or directory
+D/nativeloader( 3045): Configuring clns-7 for other apk /data/app/~~blwPfojsKLlmx2nksIub2A==/com.strawberrytrade.strawberry_trade-plBUd0fU6S9v1Ynci3tiyw==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~blwPfojsKLlmx2nksIub2A==/com.strawberrytrade.strawberry_trade-plBUd0fU6S9v1Ynci3tiyw==/lib/x86_64:/data/app/~~blwPfojsKLlmx2nksIub2A==/com.strawberrytrade.strawberry_trade-plBUd0fU6S9v1Ynci3tiyw==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/com.strawberrytrade.strawberry_trade
+V/GraphicsEnvironment( 3045): Currently set values for:
+V/GraphicsEnvironment( 3045):   angle_gl_driver_selection_pkgs=[]
+V/GraphicsEnvironment( 3045):   angle_gl_driver_selection_values=[]
+V/GraphicsEnvironment( 3045): Global.Settings values are invalid: number of packages: 0, number of values: 0
+V/GraphicsEnvironment( 3045): Neither updatable production driver nor prerelease driver is supported.
+W/FirebaseApp( 3045): Default FirebaseApp failed to initialize because no default options were found. This usually means that com.google.gms:google-services was not applied to your gradle project.
+I/FirebaseInitProvider( 3045): FirebaseApp initialization unsuccessful
+I/ResourceExtractor( 3045): Resource version mismatch res_timestamp-8-1793616389551
+D/FlutterJNI( 3045): Beginning load of flutter...
+D/nativeloader( 3045): Load /data/app/~~blwPfojsKLlmx2nksIub2A==/com.strawberrytrade.strawberry_trade-plBUd0fU6S9v1Ynci3tiyw==/base.apk!/lib/x86_64/libflutter.so using ns clns-7 from class loader (caller=/data/app/~~blwPfojsKLlmx2nksIub2A==/com.strawberrytrade.strawberry_trade-plBUd0fU6S9v1Ynci3tiyw==/base.apk): ok
+D/FlutterJNI( 3045): flutter (null) was loaded normally!
+D/skia    ( 3045): [SkFontMgr Android Parser] '/product/etc/fonts_customization.xml' could not be opened
+I/ResourceExtractor( 3045): Extracted baseline resource assets/flutter_assets/kernel_blob.bin
+I/ResourceExtractor( 3045): Extracted baseline resource assets/flutter_assets/vm_snapshot_data
+I/ResourceExtractor( 3045): Extracted baseline resource assets/flutter_assets/isolate_snapshot_data
+W/trawberry_trade( 3045): type=1400 audit(0.0:33): avc:  denied  { read } for  name="max_map_count" dev="proc" ino=16581 scontext=u:r:untrusted_app:s0:c210,c256,c512,c768 tcontext=u:object_r:proc_max_map_count:s0 tclass=file permissive=0 app=com.strawberrytrade.strawberry_trade
+I/EGL_emulation( 3045): Opening libGLESv1_CM_emulation.so
+I/EGL_emulation( 3045): Opening libGLESv2_emulation.so
+I/flutter ( 3045): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+I/flutter ( 3045): The Dart VM service is listening on http://127.0.0.1:36543/[LOCAL_VM_AUTH_REDACTED]/
+D/nativeloader( 3045): Load /data/app/~~blwPfojsKLlmx2nksIub2A==/com.strawberrytrade.strawberry_trade-plBUd0fU6S9v1Ynci3tiyw==/base.apk!/lib/x86_64/libdartjni.so using ns clns-7 from class loader (caller=/data/app/~~blwPfojsKLlmx2nksIub2A==/com.strawberrytrade.strawberry_trade-plBUd0fU6S9v1Ynci3tiyw==/base.apk!classes7.dex): ok
+D/nativeloader( 3045): Load /data/app/~~blwPfojsKLlmx2nksIub2A==/com.strawberrytrade.strawberry_trade-plBUd0fU6S9v1Ynci3tiyw==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~blwPfojsKLlmx2nksIub2A==/com.strawberrytrade.strawberry_trade-plBUd0fU6S9v1Ynci3tiyw==/base.apk!classes3.dex): ok
+W/trawberry_trade( 3045): Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (unsupported,test-api, reflection, allowed)
+W/trawberry_trade( 3045): Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (unsupported, reflection, allowed)
+W/trawberry_trade( 3045): Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (unsupported, reflection, allowed)
+W/trawberry_trade( 3045): Accessing hidden method Landroid/util/LongArray;->get(I)J (unsupported, reflection, allowed)
+D/AccessibilityBridge( 3045): Setting not found: accessibility_display_inversion_enabled, using default: 0
+D/FlutterRenderer( 3045): Width is zero. 0,0
+W/HWUI    ( 3045): Unknown dataspace 0
+I/flutter ( 3045): 00:00 +0: Android Keystore identity signs challenges and protects isolated scopes
+I/Choreographer( 3045): Skipped 35 frames!  The application may be doing too much work on its main thread.
+I/WindowExtensionsImpl( 3045): Initializing Window Extensions, vendor API level=6, activity embedding enabled=true
+D/FlutterRenderer( 3045): Width is zero. 0,0
+I/trawberry_trade( 3045): Compiler allocated 5174KB to compile void android.view.ViewRootImpl.performTraversals()
+D/FlutterJNI( 3045): Sending viewport metrics to the engine.
+W/HWUI    ( 3045): Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+W/HWUI    ( 3045): Failed to initialize 101010-2 format, error = EGL_SUCCESS
+I/Gralloc4( 3045): mapper 4.x is not supported
+I/Choreographer( 3045): Skipped 39 frames!  The application may be doing too much work on its main thread.
+D/FlutterJNI( 3045): Sending viewport metrics to the engine.
+I/flutter ( 3045): 00:01 +1: SQLCipher commits ledger and outbox then reopens encrypted with the same protected key
+I/SQLiteConnection( 3045): Database keying operation returned:0
+I/SQLiteConnection( 3045): Database keying operation returned:0
+W/trawberry_trade( 3045): JNI critical lock held for 285.022ms on Thread[23,tid=3093,Runnable,Thread*=0x7512607450a0,peer=0x1434a4a0,"Sqflite"]
+I/SQLiteConnection( 3045): Database keying operation returned:0
+D/sqlcipher( 3045): ERROR CORE sqlcipher_page_cipher: hmac check failed for pgno=1
+D/sqlcipher( 3045): ERROR CORE sqlite3Codec: error decrypting page 1 data: 1
+D/sqlcipher( 3045): ERROR CORE sqlcipher_codec_ctx_set_error 1
+E/SQLiteLog( 3045): (26) file is not a database in "SELECT COUNT(*) FROM sqlite_schema;"
+W/trawberry_trade( 3045): JNI critical lock held for 297.077ms on Thread[23,tid=3094,Runnable,Thread*=0x751260738df0,peer=0x14354b98,"Sqflite"]
+E/SQLiteDatabase( 3045): Failed to open database '/data/user/0/com.strawberrytrade.strawberry_trade/files/integration-persistence/apk-update-v1/ledger.db'.
+E/SQLiteDatabase( 3045): net.zetetic.database.sqlcipher.SQLiteNotADatabaseException: file is not a database (code 26): , while compiling: SELECT COUNT(*) FROM sqlite_schema;
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnection.nativePrepareStatement(Native Method)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnection.acquirePreparedStatement(SQLiteConnection.java:973)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnection.executeForLong(SQLiteConnection.java:628)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnection.open(SQLiteConnection.java:240)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnection.open(SQLiteConnection.java:202)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnectionPool.openConnectionLocked(SQLiteConnectionPool.java:474)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnectionPool.open(SQLiteConnectionPool.java:188)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnectionPool.open(SQLiteConnectionPool.java:180)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.openInner(SQLiteDatabase.java:1028)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.open(SQLiteDatabase.java:1013)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.openDatabase(SQLiteDatabase.java:840)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.openDatabase(SQLiteDatabase.java:812)
+E/SQLiteDatabase( 3045): 	at com.davidmartos96.sqflite_sqlcipher.Database.openWithFlags(Database.java:62)
+E/SQLiteDatabase( 3045): 	at com.davidmartos96.sqflite_sqlcipher.Database.openReadOnly(Database.java:42)
+E/SQLiteDatabase( 3045): 	at com.davidmartos96.sqflite_sqlcipher.SqfliteSqlCipherPlugin$6.run(SqfliteSqlCipherPlugin.java:795)
+E/SQLiteDatabase( 3045): 	at android.os.Handler.handleCallback(Handler.java:959)
+E/SQLiteDatabase( 3045): 	at android.os.Handler.dispatchMessage(Handler.java:100)
+E/SQLiteDatabase( 3045): 	at android.os.Looper.loopOnce(Looper.java:232)
+E/SQLiteDatabase( 3045): 	at android.os.Looper.loop(Looper.java:317)
+E/SQLiteDatabase( 3045): 	at android.os.HandlerThread.run(HandlerThread.java:85)
+D/Sqflite ( 3045): Opening db in /data/user/0/com.strawberrytrade.strawberry_trade/files/integration-persistence/apk-update-v1/ledger.db with PRAGMA cipher_migrate
+I/SQLiteConnection( 3045): Database keying operation returned:0
+D/ProfileInstaller( 3045): Installing profile for com.strawberrytrade.strawberry_trade
+D/sqlcipher( 3045): ERROR CORE sqlcipher_page_cipher: hmac check failed for pgno=1
+D/sqlcipher( 3045): ERROR CORE sqlite3Codec: error decrypting page 1 data: 1
+D/sqlcipher( 3045): ERROR CORE sqlcipher_codec_ctx_set_error 1
+E/SQLiteLog( 3045): (26) statement aborts at 2: file is not a database; [PRAGMA user_version;]
+D/sqlcipher( 3045): ERROR CORE sqlcipher_page_cipher: hmac check failed for pgno=1
+D/sqlcipher( 3045): ERROR CORE sqlite3Codec: error decrypting page 1 data: 1
+D/sqlcipher( 3045): ERROR CORE sqlcipher_codec_ctx_set_error 1
+E/SQLiteLog( 3045): (26) statement aborts at 2: file is not a database; [PRAGMA user_version;]
+D/sqlcipher( 3045): ERROR CORE sqlcipher_page_cipher: hmac check failed for pgno=1
+D/sqlcipher( 3045): ERROR CORE sqlite3Codec: error decrypting page 1 data: 1
+D/sqlcipher( 3045): ERROR CORE sqlcipher_codec_ctx_set_error 1
+E/SQLiteLog( 3045): (26) statement aborts at 2: file is not a database; [PRAGMA user_version;]
+E/SQLiteLog( 3045): (26) statement aborts at 2: file is not a database; [PRAGMA user_version;]
+D/sqlcipher( 3045): ERROR CORE sqlcipher_codec_ctx_migrate: unable to determine format version for upgrade: this may indicate custom settings were used 
+D/sqlcipher( 3045): ERROR CORE sqlcipher_page_cipher: hmac check failed for pgno=1
+D/sqlcipher( 3045): ERROR CORE sqlite3Codec: error decrypting page 1 data: 1
+D/sqlcipher( 3045): ERROR CORE sqlcipher_codec_ctx_set_error 1
+E/SQLiteLog( 3045): (26) file is not a database in "DETACH DATABASE migrate;"
+D/sqlcipher( 3045): WARN CORE sqlcipher_codec_ctx_migrate: DETACH DATABASE migrate failed: 26
+D/sqlcipher( 3045): ERROR CORE sqlcipher_codec_ctx_migrate: an error occurred attempting to migrate the database - last error 1
+D/sqlcipher( 3045): ERROR CORE sqlcipher_codec_pragma: error occurred during cipher_migrate: 1
+W/trawberry_trade( 3045): JNI critical lock held for 675.345ms on Thread[23,tid=3094,Runnable,Thread*=0x751260738df0,peer=0x14354b98,"Sqflite"]
+E/SQLiteDatabase( 3045): Failed to open database '/data/user/0/com.strawberrytrade.strawberry_trade/files/integration-persistence/apk-update-v1/ledger.db'.
+E/SQLiteDatabase( 3045): net.zetetic.database.sqlcipher.SQLiteNotADatabaseException: file is not a database (code 26): , while compiling: SELECT COUNT(*) FROM sqlite_schema;
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnection.nativePrepareStatement(Native Method)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnection.acquirePreparedStatement(SQLiteConnection.java:973)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnection.executeForLong(SQLiteConnection.java:628)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnection.open(SQLiteConnection.java:240)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnection.open(SQLiteConnection.java:202)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnectionPool.openConnectionLocked(SQLiteConnectionPool.java:474)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnectionPool.open(SQLiteConnectionPool.java:188)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteConnectionPool.open(SQLiteConnectionPool.java:180)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.openInner(SQLiteDatabase.java:1028)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.open(SQLiteDatabase.java:1013)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.openDatabase(SQLiteDatabase.java:840)
+E/SQLiteDatabase( 3045): 	at net.zetetic.database.sqlcipher.SQLiteDatabase.openDatabase(SQLiteDatabase.java:812)
+E/SQLiteDatabase( 3045): 	at com.davidmartos96.sqflite_sqlcipher.Database.openWithFlags(Database.java:62)
+E/SQLiteDatabase( 3045): 	at com.davidmartos96.sqflite_sqlcipher.Database.openReadOnly(Database.java:42)
+E/SQLiteDatabase( 3045): 	at com.davidmartos96.sqflite_sqlcipher.SqfliteSqlCipherPlugin$6.run(SqfliteSqlCipherPlugin.java:795)
+E/SQLiteDatabase( 3045): 	at android.os.Handler.handleCallback(Handler.java:959)
+E/SQLiteDatabase( 3045): 	at android.os.Handler.dispatchMessage(Handler.java:100)
+E/SQLiteDatabase( 3045): 	at android.os.Looper.loopOnce(Looper.java:232)
+E/SQLiteDatabase( 3045): 	at android.os.Looper.loop(Looper.java:317)
+E/SQLiteDatabase( 3045): 	at android.os.HandlerThread.run(HandlerThread.java:85)
+I/SQLiteConnection( 3045): Database keying operation returned:0
+W/trawberry_trade( 3045): JNI critical lock held for 568.475ms on Thread[23,tid=3094,Runnable,Thread*=0x751260738df0,peer=0x14354b98,"Sqflite"]
+I/SQLiteConnection( 3045): Database keying operation returned:0
+W/trawberry_trade( 3045): JNI critical lock held for 398.998ms on Thread[23,tid=3096,Runnable,Thread*=0x75126074dbb0,peer=0x1438b4b0,"Sqflite"]
+I/flutter ( 3045): 00:04 +2: Native encrypted v1 to v4 migration preserves pending payload, retries and draft
+I/SQLiteConnection( 3045): Database keying operation returned:0
+I/SQLiteConnection( 3045): Database keying operation returned:0
+W/trawberry_trade( 3045): JNI critical lock held for 291.762ms on Thread[23,tid=3099,Runnable,Thread*=0x75126074a410,peer=0x143d64f0,"Sqflite"]
+I/SQLiteConnection( 3045): Database keying operation returned:0
+W/trawberry_trade( 3045): JNI critical lock held for 285.205ms on Thread[23,tid=3101,Runnable,Thread*=0x7512607450a0,peer=0x143ed760,"Sqflite"]
+I/flutter ( 3045): 00:06 +3: (tearDownAll)
+D/EGL_emulation( 3045): app_time_stats: avg=1519.48ms min=2.69ms max=3423.78ms count=3
+I/flutter ( 3045): 00:06 +4: All tests passed!

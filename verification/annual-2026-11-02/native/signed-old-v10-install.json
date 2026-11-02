@@ -1,0 +1,22 @@
+{
+  "synthetic": true,
+  "ownerDeviceTouched": false,
+  "status": "PASS",
+  "serial": "emulator-5580",
+  "pid": 32353,
+  "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-01/flutter/strawberry-trade-annual-review-v10-final.apk",
+  "sha256": "4c57af562a6f40c295385bb4439bf61105374be45c296b825ce59236a9c07679",
+  "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+  "versionCode": 10,
+  "debugTestArtifact": false,
+  "exitCode": 0,
+  "network": {
+    "airplane_mode_on": "1",
+    "wifi_on": "0",
+    "mobile_data": "0"
+  },
+  "uninstallOrDataClearSinceSeed": false,
+  "applicationLaunched": false,
+  "productionAuthenticationUsed": false,
+  "installedAtUtc": "2026-11-02T10:47:10.260368+00:00"
+}

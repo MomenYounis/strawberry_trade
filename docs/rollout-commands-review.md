@@ -1,6 +1,6 @@
 # Review-only rollout commands
 
-These commands are artifacts for review, **not authorization to deploy/install/publish**. Read `commercial-release-readiness.md`; all four production verdicts are NO-GO. No archive storage, scheduler or cleanup enable command exists in the current candidate. Exact tenant/year/storage/key decisions remain unresolved.
+These commands are artifacts for review, **not authorization to deploy/install/publish**. Read `commercial-release-readiness.md`; all four production verdicts are NO-GO. No production archive storage, scheduler or cleanup enable command is configured in the current candidate. Exact tenant/year/storage/key decisions remain unresolved.
 
 The reviewed existing Worker config is `config/wrangler.production.json`, name `strawberry-tenant-gateway`, entry `../backend/worker/index.mjs`, compatibility date2026-10-19. It has no R2 archive binding or enabled archive cron. Deployment of this additive gateway support is distinct from accepting financial close or cleanup.
 
@@ -31,6 +31,6 @@ cd /home/younis/strawberry-trade-annual-review/backend/worker
 
 Before approving, verify the intended existing account, protected runtime secret bindings, deployed identity/roles, exact reviewed source and local bundle. Confirm this config still contains no unintended R2/cron/cleanup change. Source baseline rejects the new `syncProtocolVersion` field; compatible server support must precede client distribution. This command has **not** been executed. No production account or secret was queried to turn historical deployment reports into current acceptance.
 
-Synthetic device acceptance, once an explicitly disposable target is identified, uses the repository native fixtures and signed v9->v10 installation sequence. Select that serial explicitly; never substitute an owner phone or run uninstall/clear-data. A fresh install and an upgrade are separate tests. The exact install serial/action is intentionally not fabricated while no target is attached.
+Synthetic storage acceptance now uses a separately owned offline API35 AVD, scoped serial emulator-5580, and the guarded tools/annual-review/native-v11-upgrade-check.py phases. It verifies signed representative schema2 seed8→actual v10→v11→schema4 and reboot. Only explicit adb install -r is used after seed; Flutter installer fallback can uninstall and is avoided. Never reuse an owner device/AVD or clear persistent seeded data. Exact results are in verification/annual-2026-11-02/native/. Broader business/account acceptance remains untested.
 
-Only after real storage/key/copy acceptance and synthetic staging should a concrete named tenant/year dry-run/close plan be produced for approval. Destructive cleanup remains technically unavailable until the snapshot/pruner/recovery implementation is completed and tested; no proposed shell command can bypass that boundary.
+Only after real storage/key/copy acceptance and synthetic staging should a concrete named tenant/year dry-run/close plan be produced for approval. A conditional manager-feed-only pruner and scoped snapshot installer are implemented and default disabled. Production cleanup remains blocked by storage/copy/key acceptance, fleet proof, scale and full recovery; no proposed shell command bypasses those gates. Original financial documents and employee feed remain retained.

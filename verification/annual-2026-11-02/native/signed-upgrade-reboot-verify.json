@@ -1,0 +1,42 @@
+{
+  "synthetic": true,
+  "ownerDeviceTouched": false,
+  "phase": "reboot-verify",
+  "status": "PASS",
+  "startedAtUtc": "2026-11-02T10:53:03.633150+00:00",
+  "sourceCommit": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+  "fixtureSha256": "d422c631acdec4d0f0f66a17e1e73a725328c66c943d62eab3b275176d01347a",
+  "productionAuthenticationUsed": false,
+  "uninstallOrDataClearSinceSeed": false,
+  "serial": "emulator-5580",
+  "pid": 32353,
+  "avdPath": "/tmp/strawberry-annual-native-20261102-da3kvv_i/avd/strawberry_annual_disposable_20261102.avd",
+  "network": {
+    "airplane_mode_on": "1",
+    "wifi_on": "0",
+    "mobile_data": "0"
+  },
+  "commands": [
+    [
+      "/home/younis/flutter/bin/cache/dart-sdk/bin/dart",
+      "--packages=.dart_tool/package_config.json",
+      "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/storage_integration_driver.dart"
+    ]
+  ],
+  "uniquePersistenceTests": 3,
+  "allPersistenceAssertionsPassed": true,
+  "retained": [
+    "installation Keystore identity",
+    "protected SQLCipher key digest",
+    "encrypted entry",
+    "stable outbox operation and wire payload digest",
+    "retry count and schedule",
+    "unfinished draft"
+  ],
+  "driverUsesExistingApp": true,
+  "flutterInstallerUsedAfterSeed": false,
+  "schemaAfter": 4,
+  "versionCode": 11,
+  "sameOwnedEmulatorRebooted": true,
+  "finishedAtUtc": "2026-11-02T10:53:52.676201+00:00"
+}

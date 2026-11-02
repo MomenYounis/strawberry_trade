@@ -1,0 +1,120 @@
+TAP version 13
+# Subtest: active format requires exact schema, safe integer bounds and scope
+ok 1 - active format requires exact schema, safe integer bounds and scope
+  ---
+  duration_ms: 10.480374
+  type: 'test'
+  ...
+# Subtest: active pages reject checksum, sequence, ordering and canonical byte corruption
+ok 2 - active pages reject checksum, sequence, ordering and canonical byte corruption
+  ---
+  duration_ms: 5.0127
+  type: 'test'
+  ...
+# Subtest: JSON boundaries reject prototypes, sparse arrays, unsafe numbers and depth
+ok 3 - JSON boundaries reject prototypes, sparse arrays, unsafe numbers and depth
+  ---
+  duration_ms: 0.799555
+  type: 'test'
+  ...
+# Subtest: employee schema permits only exact sanitized party and own valid submissions
+ok 4 - employee schema permits only exact sanitized party and own valid submissions
+  ---
+  duration_ms: 1.616838
+  type: 'test'
+  ...
+# (node:59655) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node-22 --trace-warnings ...` to show where the warning was created)
+# Subtest: full manager projection seals a unique latest image and employee view removes financial data
+ok 5 - full manager projection seals a unique latest image and employee view removes financial data
+  ---
+  duration_ms: 37.177746
+  type: 'test'
+  ...
+# Subtest: projection requires complete contiguous feed, closes after failures and never accepts immutable rewrites
+ok 6 - projection requires complete contiguous feed, closes after failures and never accepts immutable rewrites
+  ---
+  duration_ms: 22.094176
+  type: 'test'
+  ...
+# Subtest: trusted full manager seed resumes from C and employee seed or wrong hash cannot authorize continuation
+ok 7 - trusted full manager seed resumes from C and employee seed or wrong hash cannot authorize continuation
+  ---
+  duration_ms: 23.969166
+  type: 'test'
+  ...
+# Subtest: seed validates all pages, final digest, record count and collision uniqueness before sealing
+ok 8 - seed validates all pages, final digest, record count and collision uniqueness before sealing
+  ---
+  duration_ms: 22.031062
+  type: 'test'
+  ...
+# Subtest: bounded package pages retain deterministic order and empty C=0 is valid
+ok 9 - bounded package pages retain deterministic order and empty C=0 is valid
+  ---
+  duration_ms: 112.177665
+  type: 'test'
+  ...
+# Subtest: guarded service binds fresh manager UID and epoch to immutable new snapshot IDs
+ok 10 - guarded service binds fresh manager UID and epoch to immutable new snapshot IDs
+  ---
+  duration_ms: 13.664757
+  type: 'test'
+  ...
+# Subtest: trusted live history floor rejects stale snapshots and fresh-binds a raised floor at the same checkpoint
+ok 11 - trusted live history floor rejects stale snapshots and fresh-binds a raised floor at the same checkpoint
+  ---
+  duration_ms: 12.04414
+  type: 'test'
+  ...
+# Subtest: service refuses cross-role or cross-UID employee data, corruption and authority revocation
+ok 12 - service refuses cross-role or cross-UID employee data, corruption and authority revocation
+  ---
+  duration_ms: 8.159724
+  type: 'test'
+  ...
+# Subtest: service detects catalog replacement and post-I/O authority loss without returning a page
+ok 13 - service detects catalog replacement and post-I/O authority loss without returning a page
+  ---
+  duration_ms: 10.92819
+  type: 'test'
+  ...
+# Subtest: budget deferral happens before provider I/O and failed writes never return a publication
+ok 14 - budget deferral happens before provider I/O and failed writes never return a publication
+  ---
+  duration_ms: 6.986732
+  type: 'test'
+  ...
+# Subtest: checkpoint source bounds each query and rejects missing history before yielding a seedless image
+ok 15 - checkpoint source bounds each query and rejects missing history before yielding a seedless image
+  ---
+  duration_ms: 1.863981
+  type: 'test'
+  ...
+# Subtest: checkpoint capture rejects tenant deletion, inactive employee and changed membership epoch
+ok 16 - checkpoint capture rejects tenant deletion, inactive employee and changed membership epoch
+  ---
+  duration_ms: 1.439722
+  type: 'test'
+  ...
+# Subtest: checkpoint retry budget covers every employee authority read before a bounded transaction starts
+ok 17 - checkpoint retry budget covers every employee authority read before a bounded transaction starts
+  ---
+  duration_ms: 1.719134
+  type: 'test'
+  ...
+# Subtest: checkpoint capture reserves its worst-case five-attempt read budget before provider I/O
+ok 18 - checkpoint capture reserves its worst-case five-attempt read budget before provider I/O
+  ---
+  duration_ms: 1.269056
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 660.24742

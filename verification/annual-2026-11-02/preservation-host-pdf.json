@@ -1,0 +1,6 @@
+{
+  "historicalTestSideEffectRestored": true,
+  "baselineAndHeadEqual": true,
+  "restoredSha256": "bd7764eb609c012724c25bacfb1169706c60ec4725cdf1789971500b7036fef1",
+  "newStatementArtifact": "output/pdf/archived-statement-synthetic.pdf"
+}

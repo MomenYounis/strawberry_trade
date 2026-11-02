@@ -1,0 +1,12 @@
+{
+  "synthetic": true,
+  "debugTestArtifact": true,
+  "status": "PASS",
+  "sourceCommit": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+  "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/persistence-verify-signed-DEBUG.apk",
+  "sha256": "0dca3d1c645cb8ac98868b19e773dd67d0560f73d3ef716392f52a94f5ff10f8",
+  "inputSha256": "eaac28fac0cbd9825caabec98d88fdd4a5992119db5d9ddfc16de23cc8a7013f",
+  "versionCode": 11,
+  "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+  "signingCredential": "Existing Secret Service value; anonymous memfd; no password arguments/disk file"
+}

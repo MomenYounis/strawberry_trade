@@ -1,0 +1,30 @@
+{
+  "synthetic": true,
+  "ownerDeviceTouched": false,
+  "status": "PASS",
+  "pid": 32353,
+  "processSession": 5739,
+  "serial": "emulator-5580",
+  "runtimeRoot": "/tmp/strawberry-annual-native-20261102-da3kvv_i",
+  "avdPath": "/tmp/strawberry-annual-native-20261102-da3kvv_i/avd/strawberry_annual_disposable_20261102.avd",
+  "fullPathAndNameGuardPassed": true,
+  "ownedTemporaryPrefixGuardPassed": true,
+  "runtimeOwnerUidMatched": true,
+  "allAcceptancePhasesPassed": true,
+  "rootScreenshotInspectionApproved": true,
+  "startedAtUtc": "2026-11-02T10:55:52.628264+00:00",
+  "stopCommand": [
+    "adb",
+    "-s",
+    "emulator-5580",
+    "emu",
+    "kill"
+  ],
+  "stopExitCode": 0,
+  "stopOutput": "OK: killing emulator, bye bye\nOK",
+  "terminationMode": "scoped adb emulator console kill",
+  "processExited": true,
+  "runtimeGone": true,
+  "onlyExactOwnedRuntimeRemoved": true,
+  "finishedAtUtc": "2026-11-02T10:55:55.430440+00:00"
+}

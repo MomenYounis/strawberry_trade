@@ -1,0 +1,17 @@
+{
+  "scope": "disposable guarded demo-strawberry-flutter Auth/Firestore/Functions emulators only",
+  "sourceCommit": "2ad243a",
+  "testFile": "backend/test/feed-pruner.integration.test.mjs",
+  "command": [
+    "node",
+    "--input-type=module",
+    "-e",
+    "import {runEmulatorTests} from './scripts/emulator-test-runner.mjs'; process.exitCode=await runEmulatorTests(['test/feed-pruner.integration.test.mjs']);"
+  ],
+  "exitCode": 1,
+  "elapsedSeconds": 27.462,
+  "logSha256": "44c2be556919991644c6ac1227907a1ca9ecb610ac3babf4ed61470b56db91f8",
+  "productionOperations": false,
+  "productionStorageAcceptance": false,
+  "apkSourceChanged": false
+}

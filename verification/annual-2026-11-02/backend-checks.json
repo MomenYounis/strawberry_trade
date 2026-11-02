@@ -1,0 +1,61 @@
+[
+  {
+    "name": "backend-unit",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "cwd": "backend",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-02T10:31:30.815541+00:00",
+    "finishedAtUtc": "2026-11-02T10:31:37.046672+00:00"
+  },
+  {
+    "name": "archive-suite",
+    "command": [
+      "npm",
+      "run",
+      "test:archive"
+    ],
+    "cwd": "backend",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-02T10:31:37.047192+00:00",
+    "finishedAtUtc": "2026-11-02T10:31:38.968973+00:00"
+  },
+  {
+    "name": "backend-invitations",
+    "command": [
+      "npm",
+      "run",
+      "test:invitations"
+    ],
+    "cwd": "backend",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-02T10:31:38.969352+00:00",
+    "finishedAtUtc": "2026-11-02T10:33:03.833235+00:00"
+  },
+  {
+    "name": "worker-unit",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "cwd": "backend/worker",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-02T10:33:03.833799+00:00",
+    "finishedAtUtc": "2026-11-02T10:33:05.101888+00:00"
+  },
+  {
+    "name": "worker-dry-run",
+    "command": [
+      "npx",
+      "wrangler",
+      "deploy",
+      "--dry-run"
+    ],
+    "cwd": "backend/worker",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-02T10:33:05.102167+00:00",
+    "finishedAtUtc": "2026-11-02T10:33:13.798695+00:00"
+  }
+]

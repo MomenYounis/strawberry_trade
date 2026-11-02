@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "recordedAtUtc": "2026-11-02T16:29:50.224109+00:00",
+  "originalTrackedPathsChecked": 327,
+  "originalContentMismatches": [],
+  "originalToCloneModeMismatches": [],
+  "originalStagedChanges": [],
+  "originalStatusCount": 327,
+  "applicationBuildInputsChangedFrom2ad243a": [],
+  "scope": "Original tracked byte/index/mode preservation; current application/Android/assets/config/pubspec content equals recorded compiled source milestone; owner mode differences not staged.",
+  "finalSourceHashMismatches": [],
+  "finalBackendRevision": "7a51c54b23c9f0ed56db79d49db762dd0952fcdf"
+}

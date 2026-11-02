@@ -1,0 +1,31 @@
+[
+  {
+    "command": [
+      "flutter",
+      "analyze",
+      "--no-pub"
+    ],
+    "status": "PASS",
+    "exitCode": 0,
+    "sourceMilestone": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+    "log": "flutter-analyze-final.log",
+    "issues": 0,
+    "passed": null,
+    "metadataOrigin": "Final exit0 observed in completed orchestration; log checked; original invocation timestamp not reconstructed"
+  },
+  {
+    "command": [
+      "flutter",
+      "test",
+      "--no-pub",
+      "--reporter=expanded"
+    ],
+    "status": "PASS",
+    "exitCode": 0,
+    "sourceMilestone": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+    "log": "flutter-test-final.log",
+    "issues": null,
+    "passed": 190,
+    "metadataOrigin": "Final exit0 observed in completed orchestration; log checked; original invocation timestamp not reconstructed"
+  }
+]

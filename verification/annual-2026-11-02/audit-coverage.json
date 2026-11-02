@@ -1,0 +1,99 @@
+{
+  "sourceMilestone": "7a51c54b23c9f0ed56db79d49db762dd0952fcdf",
+  "date": "2026-11-02",
+  "previousAllFileMap": "../annual-2026-11-01/audit-coverage.json",
+  "description": "Incremental coverage map. Prior map retains its original date/source and limitations; inventory does not mean exhaustive verification. Current changed paths have targeted review plus integration checks; runtime coverage is stated per flow.",
+  "currentChangedPaths": [
+    "backend/package.json",
+    "backend/src/active-snapshot-format.mjs",
+    "backend/src/active-snapshot-projection.mjs",
+    "backend/src/active-snapshot-service.mjs",
+    "backend/src/archive-coordinator.mjs",
+    "backend/src/archive-projection.mjs",
+    "backend/src/archive-state.mjs",
+    "backend/src/feed-pruner.mjs",
+    "backend/src/gateway.mjs",
+    "backend/src/historical-view.mjs",
+    "backend/src/http-gateway.mjs",
+    "backend/src/index.mjs",
+    "backend/test/active-snapshot-format.test.mjs",
+    "backend/test/active-snapshot-projection.test.mjs",
+    "backend/test/archive-engine.test.mjs",
+    "backend/test/archive-snapshot-seed.test.mjs",
+    "backend/test/feed-pruner.integration.test.mjs",
+    "backend/test/feed-pruner.test.mjs",
+    "backend/test/gateway-deletion-race.test.mjs",
+    "backend/test/historical-statement.test.mjs",
+    "backend/test/historical-view.test.mjs",
+    "backend/test/http-gateway.test.mjs",
+    "integration_test/local_persistence_test.dart",
+    "lib/application/app_controller.dart",
+    "lib/data/SCHEMA.md",
+    "lib/data/ledger_store.dart",
+    "lib/presentation/archive_screen.dart",
+    "lib/services/active_snapshot.dart",
+    "lib/services/active_snapshot_gateway.dart",
+    "lib/services/archive_reader.dart",
+    "lib/services/archive_statement.dart",
+    "lib/services/exports.dart",
+    "lib/services/gateway.dart",
+    "lib/services/gateway_endpoint.dart",
+    "lib/services/sync_protocol.dart",
+    "pubspec.yaml",
+    "test/active_snapshot_test.dart",
+    "test/archive_screen_test.dart",
+    "test/archive_statement_exports_test.dart",
+    "test/archive_statement_test.dart",
+    "test/controller_test.dart",
+    "test/gateway_endpoint_test.dart",
+    "test/remote_batch_test.dart",
+    "test/store_test.dart",
+    "test/sync_protocol_test.dart",
+    "tools/annual-review/build-release.py",
+    "tools/annual-review/native-storage-check.py",
+    "tools/annual-review/native-v11-upgrade-check.py",
+    "tools/annual-review/sign-native-fixture.py"
+  ],
+  "flows": [
+    {
+      "scope": "scoped active snapshot build/service/gateway",
+      "coverage": "source review + canonical/hash/continuity/role/authority regressions",
+      "limits": "Injected storage; no production encrypted snapshot publication or R2 acceptance"
+    },
+    {
+      "scope": "schema4 staging/install/outbox and cursor transaction",
+      "coverage": "source review + crash/rebind/collision/queue/preservation host regressions",
+      "limits": "20k combined records/16MiB; replacement-phone and fleet acceptance not run"
+    },
+    {
+      "scope": "archived statements and Arabic exports",
+      "coverage": "source review + independent effects/continuity fixtures; actual PDF render/visual QA",
+      "limits": "Bounded assembly; no broad index/search; native share/print untested"
+    },
+    {
+      "scope": "conditional manager-feed pruner",
+      "coverage": "Source review; synthetic rollback/fencing/version/retention/budget regressions; four actual guarded Firestore-emulator transaction tests",
+      "limits": "Default OFF; no production deletion/R2/key/copy acceptance or complete disaster recovery"
+    },
+    {
+      "scope": "native storage/upgrade",
+      "coverage": "Actual SQLCipher/Keystore/v1\u21924; signed schema2 seed8\u2192actual releases10/11\u2192schema4 inspection and offline reboot all PASS; private runtime cleaned",
+      "limits": "Phase JSON is authoritative; no account/business/multi-device/replacement-phone acceptance"
+    }
+  ],
+  "notAccepted": [
+    "complete staged whole-system disaster recovery",
+    "efficient scheduled Worker annual run",
+    "production storage/copy/key recovery",
+    "held salary-term manager resolution",
+    "native ordinary business/auth/license/invitation acceptance",
+    "large-ledger client installation above bounded limit",
+    "current live deployment identity/configuration"
+  ],
+  "compiledApplicationRevision": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+  "rootFinalReview": {
+    "consumerGuardP1": "reproduced real emulator, fixed and root rerun4PASS",
+    "captureBudgetP2": "before FAIL; reserve15reads before five-attempt transaction; root focused17PASS",
+    "testDuplication": "A temporary overlapping root budget regression was removed; current source retains the stronger per-read reservation regression. Earlier18-test focused log remains historical; final root suite17PASS."
+  }
+}

@@ -1,0 +1,96 @@
+TAP version 13
+# (node:39264) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node-22 --trace-warnings ...` to show where the warning was created)
+# Subtest: manager feed pruning is bounded, publishes floor atomically and retains every financial fact and receipt
+ok 1 - manager feed pruning is bounded, publishes floor atomically and retains every financial fact and receipt
+  ---
+  duration_ms: 69.354541
+  type: 'test'
+  ...
+# Subtest: failed deleting commit rolls back its full batch and resumes from the durable cursor with a new runner
+ok 2 - failed deleting commit rolls back its full batch and resumes from the durable cursor with a new runner
+  ---
+  duration_ms: 40.836349
+  type: 'test'
+  ...
+# Subtest: changed provider version, changed body and unexpectedly missing candidate abort before any batch deletion
+ok 3 - changed provider version, changed body and unexpectedly missing candidate abort before any batch deletion
+  ---
+  duration_ms: 42.990367
+  type: 'test'
+  ...
+# Subtest: plan capture is bound to exact raw source used by sealed manager snapshot and rejects gaps or rewritten metadata
+ok 4 - plan capture is bound to exact raw source used by sealed manager snapshot and rejects gaps or rewritten metadata
+  ---
+  duration_ms: 26.020475
+  type: 'test'
+  ...
+# Subtest: plan verifier rejects wrong expected hash, altered page and a forged digest with noncontiguous rows
+ok 5 - plan verifier rejects wrong expected hash, altered page and a forged digest with noncontiguous rows
+  ---
+  duration_ms: 19.468418
+  type: 'test'
+  ...
+# Subtest: resumed runner reauthenticates immutable plan pages and rejects publication or progress substitution
+ok 6 - resumed runner reauthenticates immutable plan pages and rejects publication or progress substitution
+  ---
+  duration_ms: 28.74485
+  type: 'test'
+  ...
+# Subtest: every cleanup acceptance gate fails before deletes, including malformed or future protocol state
+ok 7 - every cleanup acceptance gate fails before deletes, including malformed or future protocol state
+  ---
+  duration_ms: 186.961054
+  type: 'test'
+  ...
+# Subtest: tenant deletion, stale lease and floor advances between preflight and deletion recheck abort the transaction
+ok 8 - tenant deletion, stale lease and floor advances between preflight and deletion recheck abort the transaction
+  ---
+  duration_ms: 32.023613
+  type: 'test'
+  ...
+# Subtest: concurrent financial writes above C survive and a racing second runner cannot delete an already committed page
+ok 9 - concurrent financial writes above C survive and a racing second runner cannot delete an already committed page
+  ---
+  duration_ms: 31.832505
+  type: 'test'
+  ...
+# Subtest: shared budget exhaustion defers before provider transactions or storage I/O
+ok 10 - shared budget exhaustion defers before provider transactions or storage I/O
+  ---
+  duration_ms: 18.801173
+  type: 'test'
+  ...
+# Subtest: a partial or completed run refuses a regressed published floor or minimum protocol
+ok 11 - a partial or completed run refuses a regressed published floor or minimum protocol
+  ---
+  duration_ms: 38.467254
+  type: 'test'
+  ...
+# Subtest: an annual year that has not ended in Cairo cannot be pruned even with otherwise accepted evidence
+ok 12 - an annual year that has not ended in Cairo cannot be pruned even with otherwise accepted evidence
+  ---
+  duration_ms: 21.876258
+  type: 'test'
+  ...
+# Subtest: production adapter rejects synthetic, unaccepted storage or missing explicit production acceptance
+ok 13 - production adapter rejects synthetic, unaccepted storage or missing explicit production acceptance
+  ---
+  duration_ms: 29.627871
+  type: 'test'
+  ...
+# Subtest: bounded provider source reserves before every query and captures provider update versions
+ok 14 - bounded provider source reserves before every query and captures provider update versions
+  ---
+  duration_ms: 17.786499
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1014.015173

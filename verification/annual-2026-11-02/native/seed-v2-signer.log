@@ -1,0 +1,12 @@
+{
+  "synthetic": true,
+  "debugTestArtifact": true,
+  "status": "PASS",
+  "sourceCommit": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+  "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/persistence-seed-v2-signed-DEBUG.apk",
+  "sha256": "63e4ac7f92f890e54bd175efde030f82d166ecbea2c6870cf7596793474f64ad",
+  "inputSha256": "654713d2dfcc6e5dbf0b15d302400984281119248bd91dc70df72bcea64d6c86",
+  "versionCode": 8,
+  "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+  "signingCredential": "Existing Secret Service value; anonymous memfd; no password arguments/disk file"
+}

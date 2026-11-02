@@ -1,0 +1,14 @@
+{
+  "synthetic": true,
+  "status": "PASS",
+  "pid": 32353,
+  "processSession": 5739,
+  "samePrivateAvdDataRetained": true,
+  "network": {
+    "airplane_mode_on": "1",
+    "wifi_on": "0",
+    "mobile_data": "0"
+  },
+  "bootCompleted": true,
+  "observedAtUtc": "2026-11-02T10:45:02.491179+00:00"
+}

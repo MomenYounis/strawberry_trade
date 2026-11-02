@@ -1,0 +1,449 @@
+{
+  "synthetic": true,
+  "ownerDeviceTouched": false,
+  "phases": {
+    "seed": {
+      "synthetic": true,
+      "ownerDeviceTouched": false,
+      "phase": "seed",
+      "status": "PASS",
+      "startedAtUtc": "2026-11-02T10:45:38.857532+00:00",
+      "sourceCommit": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+      "fixtureSha256": "d422c631acdec4d0f0f66a17e1e73a725328c66c943d62eab3b275176d01347a",
+      "productionAuthenticationUsed": false,
+      "uninstallOrDataClearSinceSeed": false,
+      "serial": "emulator-5580",
+      "pid": 32353,
+      "avdPath": "/tmp/strawberry-annual-native-20261102-da3kvv_i/avd/strawberry_annual_disposable_20261102.avd",
+      "network": {
+        "airplane_mode_on": "1",
+        "wifi_on": "0",
+        "mobile_data": "0"
+      },
+      "initialDisposableDebugRemovalBeforeSeed": true,
+      "commands": [
+        [
+          "flutter",
+          "build",
+          "apk",
+          "--debug",
+          "--no-pub",
+          "--target=integration_test/local_persistence_test.dart",
+          "--dart-define=PERSISTENCE_PHASE=seed-v2",
+          "--build-number=8"
+        ],
+        [
+          "/usr/bin/python3",
+          "tools/annual-review/sign-native-fixture.py",
+          "seed-v2",
+          "--evidence-dir",
+          "verification/annual-2026-11-02/native"
+        ],
+        [
+          "/home/younis/flutter/bin/cache/dart-sdk/bin/dart",
+          "--packages=.dart_tool/package_config.json",
+          "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/storage_integration_driver.dart"
+        ]
+      ],
+      "retainingDataInstalls": [
+        {
+          "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/persistence-seed-v2-signed-DEBUG.apk",
+          "versionCode": 8,
+          "debugTestArtifact": true,
+          "sha256": "63e4ac7f92f890e54bd175efde030f82d166ecbea2c6870cf7596793474f64ad",
+          "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+        }
+      ],
+      "uniquePersistenceTests": 3,
+      "allPersistenceAssertionsPassed": true,
+      "retained": [
+        "installation Keystore identity",
+        "protected SQLCipher key digest",
+        "encrypted entry",
+        "stable outbox operation and wire payload digest",
+        "retry count and schedule",
+        "unfinished draft"
+      ],
+      "driverUsesExistingApp": true,
+      "flutterInstallerUsedAfterSeed": false,
+      "seededSchema": 2,
+      "versionCode": 8,
+      "finishedAtUtc": "2026-11-02T10:46:40.660030+00:00"
+    },
+    "replace": {
+      "synthetic": true,
+      "ownerDeviceTouched": false,
+      "phase": "replace",
+      "status": "PASS",
+      "startedAtUtc": "2026-11-02T10:51:03.584705+00:00",
+      "sourceCommit": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+      "fixtureSha256": "d422c631acdec4d0f0f66a17e1e73a725328c66c943d62eab3b275176d01347a",
+      "productionAuthenticationUsed": false,
+      "uninstallOrDataClearSinceSeed": false,
+      "serial": "emulator-5580",
+      "pid": 32353,
+      "avdPath": "/tmp/strawberry-annual-native-20261102-da3kvv_i/avd/strawberry_annual_disposable_20261102.avd",
+      "network": {
+        "airplane_mode_on": "1",
+        "wifi_on": "0",
+        "mobile_data": "0"
+      },
+      "retainingDataInstalls": [
+        {
+          "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-01/flutter/strawberry-trade-annual-review-v10-final.apk",
+          "versionCode": 10,
+          "debugTestArtifact": false,
+          "sha256": "4c57af562a6f40c295385bb4439bf61105374be45c296b825ce59236a9c07679",
+          "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+        },
+        {
+          "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/flutter/strawberry-trade-annual-review-v11-final.apk",
+          "versionCode": 11,
+          "debugTestArtifact": false,
+          "sha256": "5f597f42a4f4142fdf56b6b9c27ec34299361d260abea68cddec57e180fd7203",
+          "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+        }
+      ],
+      "installedReleaseVersions": [
+        10,
+        11
+      ],
+      "offlineReleaseColdStart": true,
+      "finishedAtUtc": "2026-11-02T10:51:10.451452+00:00"
+    },
+    "verify": {
+      "synthetic": true,
+      "ownerDeviceTouched": false,
+      "phase": "verify",
+      "status": "PASS",
+      "startedAtUtc": "2026-11-02T10:51:57.769044+00:00",
+      "sourceCommit": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+      "fixtureSha256": "d422c631acdec4d0f0f66a17e1e73a725328c66c943d62eab3b275176d01347a",
+      "productionAuthenticationUsed": false,
+      "uninstallOrDataClearSinceSeed": false,
+      "serial": "emulator-5580",
+      "pid": 32353,
+      "avdPath": "/tmp/strawberry-annual-native-20261102-da3kvv_i/avd/strawberry_annual_disposable_20261102.avd",
+      "commands": [
+        [
+          "flutter",
+          "build",
+          "apk",
+          "--debug",
+          "--no-pub",
+          "--target=integration_test/local_persistence_test.dart",
+          "--dart-define=PERSISTENCE_PHASE=verify",
+          "--build-number=11"
+        ],
+        [
+          "/usr/bin/python3",
+          "tools/annual-review/sign-native-fixture.py",
+          "verify",
+          "--evidence-dir",
+          "verification/annual-2026-11-02/native"
+        ],
+        [
+          "/home/younis/flutter/bin/cache/dart-sdk/bin/dart",
+          "--packages=.dart_tool/package_config.json",
+          "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/storage_integration_driver.dart"
+        ]
+      ],
+      "network": {
+        "airplane_mode_on": "1",
+        "wifi_on": "0",
+        "mobile_data": "0"
+      },
+      "retainingDataInstalls": [
+        {
+          "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/persistence-verify-signed-DEBUG.apk",
+          "versionCode": 11,
+          "debugTestArtifact": true,
+          "sha256": "0dca3d1c645cb8ac98868b19e773dd67d0560f73d3ef716392f52a94f5ff10f8",
+          "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+        }
+      ],
+      "uniquePersistenceTests": 3,
+      "allPersistenceAssertionsPassed": true,
+      "retained": [
+        "installation Keystore identity",
+        "protected SQLCipher key digest",
+        "encrypted entry",
+        "stable outbox operation and wire payload digest",
+        "retry count and schedule",
+        "unfinished draft"
+      ],
+      "driverUsesExistingApp": true,
+      "flutterInstallerUsedAfterSeed": false,
+      "schemaBeforeReplacements": 2,
+      "schemaAfter": 4,
+      "versionCode": 11,
+      "finishedAtUtc": "2026-11-02T10:52:59.904448+00:00"
+    },
+    "reboot-verify": {
+      "synthetic": true,
+      "ownerDeviceTouched": false,
+      "phase": "reboot-verify",
+      "status": "PASS",
+      "startedAtUtc": "2026-11-02T10:53:03.633150+00:00",
+      "sourceCommit": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+      "fixtureSha256": "d422c631acdec4d0f0f66a17e1e73a725328c66c943d62eab3b275176d01347a",
+      "productionAuthenticationUsed": false,
+      "uninstallOrDataClearSinceSeed": false,
+      "serial": "emulator-5580",
+      "pid": 32353,
+      "avdPath": "/tmp/strawberry-annual-native-20261102-da3kvv_i/avd/strawberry_annual_disposable_20261102.avd",
+      "network": {
+        "airplane_mode_on": "1",
+        "wifi_on": "0",
+        "mobile_data": "0"
+      },
+      "commands": [
+        [
+          "/home/younis/flutter/bin/cache/dart-sdk/bin/dart",
+          "--packages=.dart_tool/package_config.json",
+          "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/storage_integration_driver.dart"
+        ]
+      ],
+      "uniquePersistenceTests": 3,
+      "allPersistenceAssertionsPassed": true,
+      "retained": [
+        "installation Keystore identity",
+        "protected SQLCipher key digest",
+        "encrypted entry",
+        "stable outbox operation and wire payload digest",
+        "retry count and schedule",
+        "unfinished draft"
+      ],
+      "driverUsesExistingApp": true,
+      "flutterInstallerUsedAfterSeed": false,
+      "schemaAfter": 4,
+      "versionCode": 11,
+      "sameOwnedEmulatorRebooted": true,
+      "finishedAtUtc": "2026-11-02T10:53:52.676201+00:00"
+    }
+  },
+  "seedAttempted": true,
+  "fixtureSha256": "d422c631acdec4d0f0f66a17e1e73a725328c66c943d62eab3b275176d01347a",
+  "avdPath": "/tmp/strawberry-annual-native-20261102-da3kvv_i/avd/strawberry_annual_disposable_20261102.avd",
+  "attempts": [
+    {
+      "synthetic": true,
+      "ownerDeviceTouched": false,
+      "phase": "seed",
+      "status": "PASS",
+      "startedAtUtc": "2026-11-02T10:45:38.857532+00:00",
+      "sourceCommit": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+      "fixtureSha256": "d422c631acdec4d0f0f66a17e1e73a725328c66c943d62eab3b275176d01347a",
+      "productionAuthenticationUsed": false,
+      "uninstallOrDataClearSinceSeed": false,
+      "serial": "emulator-5580",
+      "pid": 32353,
+      "avdPath": "/tmp/strawberry-annual-native-20261102-da3kvv_i/avd/strawberry_annual_disposable_20261102.avd",
+      "network": {
+        "airplane_mode_on": "1",
+        "wifi_on": "0",
+        "mobile_data": "0"
+      },
+      "initialDisposableDebugRemovalBeforeSeed": true,
+      "commands": [
+        [
+          "flutter",
+          "build",
+          "apk",
+          "--debug",
+          "--no-pub",
+          "--target=integration_test/local_persistence_test.dart",
+          "--dart-define=PERSISTENCE_PHASE=seed-v2",
+          "--build-number=8"
+        ],
+        [
+          "/usr/bin/python3",
+          "tools/annual-review/sign-native-fixture.py",
+          "seed-v2",
+          "--evidence-dir",
+          "verification/annual-2026-11-02/native"
+        ],
+        [
+          "/home/younis/flutter/bin/cache/dart-sdk/bin/dart",
+          "--packages=.dart_tool/package_config.json",
+          "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/storage_integration_driver.dart"
+        ]
+      ],
+      "retainingDataInstalls": [
+        {
+          "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/persistence-seed-v2-signed-DEBUG.apk",
+          "versionCode": 8,
+          "debugTestArtifact": true,
+          "sha256": "63e4ac7f92f890e54bd175efde030f82d166ecbea2c6870cf7596793474f64ad",
+          "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+        }
+      ],
+      "uniquePersistenceTests": 3,
+      "allPersistenceAssertionsPassed": true,
+      "retained": [
+        "installation Keystore identity",
+        "protected SQLCipher key digest",
+        "encrypted entry",
+        "stable outbox operation and wire payload digest",
+        "retry count and schedule",
+        "unfinished draft"
+      ],
+      "driverUsesExistingApp": true,
+      "flutterInstallerUsedAfterSeed": false,
+      "seededSchema": 2,
+      "versionCode": 8,
+      "finishedAtUtc": "2026-11-02T10:46:40.660030+00:00"
+    },
+    {
+      "synthetic": true,
+      "ownerDeviceTouched": false,
+      "phase": "replace",
+      "status": "PASS",
+      "startedAtUtc": "2026-11-02T10:51:03.584705+00:00",
+      "sourceCommit": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+      "fixtureSha256": "d422c631acdec4d0f0f66a17e1e73a725328c66c943d62eab3b275176d01347a",
+      "productionAuthenticationUsed": false,
+      "uninstallOrDataClearSinceSeed": false,
+      "serial": "emulator-5580",
+      "pid": 32353,
+      "avdPath": "/tmp/strawberry-annual-native-20261102-da3kvv_i/avd/strawberry_annual_disposable_20261102.avd",
+      "network": {
+        "airplane_mode_on": "1",
+        "wifi_on": "0",
+        "mobile_data": "0"
+      },
+      "retainingDataInstalls": [
+        {
+          "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-01/flutter/strawberry-trade-annual-review-v10-final.apk",
+          "versionCode": 10,
+          "debugTestArtifact": false,
+          "sha256": "4c57af562a6f40c295385bb4439bf61105374be45c296b825ce59236a9c07679",
+          "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+        },
+        {
+          "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/flutter/strawberry-trade-annual-review-v11-final.apk",
+          "versionCode": 11,
+          "debugTestArtifact": false,
+          "sha256": "5f597f42a4f4142fdf56b6b9c27ec34299361d260abea68cddec57e180fd7203",
+          "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+        }
+      ],
+      "installedReleaseVersions": [
+        10,
+        11
+      ],
+      "offlineReleaseColdStart": true,
+      "finishedAtUtc": "2026-11-02T10:51:10.451452+00:00"
+    },
+    {
+      "synthetic": true,
+      "ownerDeviceTouched": false,
+      "phase": "verify",
+      "status": "PASS",
+      "startedAtUtc": "2026-11-02T10:51:57.769044+00:00",
+      "sourceCommit": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+      "fixtureSha256": "d422c631acdec4d0f0f66a17e1e73a725328c66c943d62eab3b275176d01347a",
+      "productionAuthenticationUsed": false,
+      "uninstallOrDataClearSinceSeed": false,
+      "serial": "emulator-5580",
+      "pid": 32353,
+      "avdPath": "/tmp/strawberry-annual-native-20261102-da3kvv_i/avd/strawberry_annual_disposable_20261102.avd",
+      "commands": [
+        [
+          "flutter",
+          "build",
+          "apk",
+          "--debug",
+          "--no-pub",
+          "--target=integration_test/local_persistence_test.dart",
+          "--dart-define=PERSISTENCE_PHASE=verify",
+          "--build-number=11"
+        ],
+        [
+          "/usr/bin/python3",
+          "tools/annual-review/sign-native-fixture.py",
+          "verify",
+          "--evidence-dir",
+          "verification/annual-2026-11-02/native"
+        ],
+        [
+          "/home/younis/flutter/bin/cache/dart-sdk/bin/dart",
+          "--packages=.dart_tool/package_config.json",
+          "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/storage_integration_driver.dart"
+        ]
+      ],
+      "network": {
+        "airplane_mode_on": "1",
+        "wifi_on": "0",
+        "mobile_data": "0"
+      },
+      "retainingDataInstalls": [
+        {
+          "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/persistence-verify-signed-DEBUG.apk",
+          "versionCode": 11,
+          "debugTestArtifact": true,
+          "sha256": "0dca3d1c645cb8ac98868b19e773dd67d0560f73d3ef716392f52a94f5ff10f8",
+          "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+        }
+      ],
+      "uniquePersistenceTests": 3,
+      "allPersistenceAssertionsPassed": true,
+      "retained": [
+        "installation Keystore identity",
+        "protected SQLCipher key digest",
+        "encrypted entry",
+        "stable outbox operation and wire payload digest",
+        "retry count and schedule",
+        "unfinished draft"
+      ],
+      "driverUsesExistingApp": true,
+      "flutterInstallerUsedAfterSeed": false,
+      "schemaBeforeReplacements": 2,
+      "schemaAfter": 4,
+      "versionCode": 11,
+      "finishedAtUtc": "2026-11-02T10:52:59.904448+00:00"
+    },
+    {
+      "synthetic": true,
+      "ownerDeviceTouched": false,
+      "phase": "reboot-verify",
+      "status": "PASS",
+      "startedAtUtc": "2026-11-02T10:53:03.633150+00:00",
+      "sourceCommit": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+      "fixtureSha256": "d422c631acdec4d0f0f66a17e1e73a725328c66c943d62eab3b275176d01347a",
+      "productionAuthenticationUsed": false,
+      "uninstallOrDataClearSinceSeed": false,
+      "serial": "emulator-5580",
+      "pid": 32353,
+      "avdPath": "/tmp/strawberry-annual-native-20261102-da3kvv_i/avd/strawberry_annual_disposable_20261102.avd",
+      "network": {
+        "airplane_mode_on": "1",
+        "wifi_on": "0",
+        "mobile_data": "0"
+      },
+      "commands": [
+        [
+          "/home/younis/flutter/bin/cache/dart-sdk/bin/dart",
+          "--packages=.dart_tool/package_config.json",
+          "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/storage_integration_driver.dart"
+        ]
+      ],
+      "uniquePersistenceTests": 3,
+      "allPersistenceAssertionsPassed": true,
+      "retained": [
+        "installation Keystore identity",
+        "protected SQLCipher key digest",
+        "encrypted entry",
+        "stable outbox operation and wire payload digest",
+        "retry count and schedule",
+        "unfinished draft"
+      ],
+      "driverUsesExistingApp": true,
+      "flutterInstallerUsedAfterSeed": false,
+      "schemaAfter": 4,
+      "versionCode": 11,
+      "sameOwnedEmulatorRebooted": true,
+      "finishedAtUtc": "2026-11-02T10:53:52.676201+00:00"
+    }
+  ]
+}

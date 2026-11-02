@@ -1,0 +1,12 @@
+{
+  "synthetic": true,
+  "ownerDeviceTouched": false,
+  "pid": 27397,
+  "processSession": 39783,
+  "observedAtUtc": "2026-11-02T10:43:34.517092+00:00",
+  "roundtripAssertions": "PASS 3 tests exit0",
+  "rendererSession": "FAILED after assertions; cleanup timed out",
+  "persistentSeedCreated": false,
+  "avdDataWiped": false,
+  "nextAction": "restart only same owned AVD with its data retained"
+}

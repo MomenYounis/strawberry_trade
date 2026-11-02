@@ -1,0 +1,50 @@
+[
+  {
+    "name": "backend-unit-final",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "cwd": "backend",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-02T10:38:16.991521+00:00",
+    "finishedAtUtc": "2026-11-02T10:38:25.885401+00:00"
+  },
+  {
+    "name": "archive-suite-final",
+    "command": [
+      "npm",
+      "run",
+      "test:archive"
+    ],
+    "cwd": "backend",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-02T10:38:25.885681+00:00",
+    "finishedAtUtc": "2026-11-02T10:38:27.807193+00:00"
+  },
+  {
+    "name": "backend-invitations-final",
+    "command": [
+      "npm",
+      "run",
+      "test:invitations"
+    ],
+    "cwd": "backend",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-02T10:38:27.807510+00:00",
+    "finishedAtUtc": "2026-11-02T10:39:52.632133+00:00"
+  },
+  {
+    "name": "worker-dry-run-final",
+    "command": [
+      "npx",
+      "wrangler",
+      "deploy",
+      "--dry-run"
+    ],
+    "cwd": "backend/worker",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-02T10:39:52.632993+00:00",
+    "finishedAtUtc": "2026-11-02T10:40:00.068388+00:00"
+  }
+]

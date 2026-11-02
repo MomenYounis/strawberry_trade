@@ -1,0 +1,68 @@
+{
+  "synthetic": true,
+  "ownerDeviceTouched": false,
+  "phase": "seed",
+  "status": "PASS",
+  "startedAtUtc": "2026-11-02T10:45:38.857532+00:00",
+  "sourceCommit": "2ad243a44ac7886d2ad49f25b5368811d288d228",
+  "fixtureSha256": "d422c631acdec4d0f0f66a17e1e73a725328c66c943d62eab3b275176d01347a",
+  "productionAuthenticationUsed": false,
+  "uninstallOrDataClearSinceSeed": false,
+  "serial": "emulator-5580",
+  "pid": 32353,
+  "avdPath": "/tmp/strawberry-annual-native-20261102-da3kvv_i/avd/strawberry_annual_disposable_20261102.avd",
+  "network": {
+    "airplane_mode_on": "1",
+    "wifi_on": "0",
+    "mobile_data": "0"
+  },
+  "initialDisposableDebugRemovalBeforeSeed": true,
+  "commands": [
+    [
+      "flutter",
+      "build",
+      "apk",
+      "--debug",
+      "--no-pub",
+      "--target=integration_test/local_persistence_test.dart",
+      "--dart-define=PERSISTENCE_PHASE=seed-v2",
+      "--build-number=8"
+    ],
+    [
+      "/usr/bin/python3",
+      "tools/annual-review/sign-native-fixture.py",
+      "seed-v2",
+      "--evidence-dir",
+      "verification/annual-2026-11-02/native"
+    ],
+    [
+      "/home/younis/flutter/bin/cache/dart-sdk/bin/dart",
+      "--packages=.dart_tool/package_config.json",
+      "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/storage_integration_driver.dart"
+    ]
+  ],
+  "retainingDataInstalls": [
+    {
+      "artifact": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/native/persistence-seed-v2-signed-DEBUG.apk",
+      "versionCode": 8,
+      "debugTestArtifact": true,
+      "sha256": "63e4ac7f92f890e54bd175efde030f82d166ecbea2c6870cf7596793474f64ad",
+      "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+    }
+  ],
+  "uniquePersistenceTests": 3,
+  "allPersistenceAssertionsPassed": true,
+  "retained": [
+    "installation Keystore identity",
+    "protected SQLCipher key digest",
+    "encrypted entry",
+    "stable outbox operation and wire payload digest",
+    "retry count and schedule",
+    "unfinished draft"
+  ],
+  "driverUsesExistingApp": true,
+  "flutterInstallerUsedAfterSeed": false,
+  "seededSchema": 2,
+  "versionCode": 8,
+  "finishedAtUtc": "2026-11-02T10:46:40.660030+00:00"
+}
