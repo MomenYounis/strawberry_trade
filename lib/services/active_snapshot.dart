@@ -366,5 +366,8 @@ class ActiveSnapshotStatus {
   final ActiveSnapshotHeader header;
   final List<int> receivedPageIndexes;
   final bool installed;
-  bool get complete => receivedPageIndexes.length == header.pageCount;
+  // A committed install marker attests that the complete package was verified
+  // atomically. Its disposable download pages may subsequently be reclaimed.
+  bool get complete =>
+      installed || receivedPageIndexes.length == header.pageCount;
 }

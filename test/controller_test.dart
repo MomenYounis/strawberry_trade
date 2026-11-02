@@ -15,6 +15,7 @@ import 'package:strawberry_trade/security/licensing.dart';
 import 'package:strawberry_trade/services/gateway.dart';
 import 'package:strawberry_trade/services/active_snapshot.dart';
 import 'package:strawberry_trade/services/active_snapshot_gateway.dart';
+import 'package:strawberry_trade/services/sync_protocol.dart';
 
 import 'active_snapshot_test.dart' as snapshots;
 
@@ -52,6 +53,7 @@ class ControlledGateway implements SyncGateway, ActiveSnapshotGateway {
   ControlledGateway(this.package);
   final Future<String> Function() package;
   Future<Map<String, dynamic>> Function(Map<String, dynamic>)? onSend;
+  Future<void> Function()? beforeBootstrap;
   Future<Map<String, dynamic>> Function(int)? onPull;
   Future<Map<String, dynamic>> Function(String, String)? onGetSnapshot;
   Future<Map<String, dynamic>> Function(Map<String, dynamic>)?
@@ -106,6 +108,7 @@ class ControlledGateway implements SyncGateway, ActiveSnapshotGateway {
     InstallationIdentity identity,
   ) async {
     bootstrapCalls++;
+    await beforeBootstrap?.call();
     return {'licensePackage': await package()};
   }
 
@@ -486,6 +489,59 @@ void main() {
     expect(blocked.payload, entry.toJson());
     await app.synchronize();
     expect(gateway.sent.length, 1);
+  });
+  test('unsupported authenticated bootstrap preserves the untouched durable queue before any send', () async {
+    final entry = expense('future-protocol-bootstrap');
+    await app.store!.saveEntry(entry);
+    final before = (await app.store!.listOutbox()).single;
+    gateway.beforeBootstrap = () async {
+      negotiateSyncProtocol({
+        'syncProtocolVersions': [3],
+        'minimumSyncProtocol': 3,
+      });
+    };
+    await app.synchronize();
+    expect(gateway.sent, isEmpty);
+    final after = (await app.store!.listOutbox()).single;
+    expect(after.id, before.id);
+    expect(after.payload, before.payload);
+    expect(after.status, before.status);
+    expect(after.attempts, before.attempts);
+    expect(after.nextAttemptMs, before.nextAttemptMs);
+    expect((await app.store!.listEntries()).single.toJson(), entry.toJson());
+    gateway.beforeBootstrap = null;
+    await app.synchronize();
+    expect(await app.store!.listOutbox(), isEmpty);
+    expect(gateway.sent.single['operation'], before.toOperation());
+  });
+  test('server protocol upgrade refusal blocks original bytes and resumes the same ID only after compatible retry', () async {
+    final entry = expense('minimum-protocol-block');
+    await app.store!.saveEntry(entry);
+    final operation = (await app.store!.listOutbox()).single.toOperation();
+    gateway.onSend = (_) async => throw FirebaseFunctionsException(
+      code: 'failed-precondition',
+      message: 'synthetic minimum protocol rejection',
+      details: {'reason': 'sync-upgrade-required'},
+    );
+    await app.synchronize();
+    final refused = (await app.store!.listOutbox()).single;
+    expect(refused.id, entry.id);
+    expect(refused.payload, entry.toJson());
+    expect(refused.status, 'blocked');
+    expect(refused.error, 'sync-upgrade-required');
+    expect(refused.attempts, 1);
+    await app.synchronize();
+    expect(gateway.sent.length, 1);
+    await app.store!.close();
+    app.store = await open('t1', 'u1');
+    expect((await app.store!.listOutbox()).single.toOperation(), operation);
+    gateway.onSend = null;
+    await app.store!.retry(entry.id);
+    await app.synchronize();
+    expect(await app.store!.listOutbox(), isEmpty);
+    expect(gateway.sent[0]['operation'], operation);
+    expect(gateway.sent[1]['operation'], operation);
+    expect((await app.store!.listEntries()).single.toJson(), entry.toJson());
   });
   test('renewal automatically resumes a server-expiry block with the preserved operation ID', () async {
     final entry = expense('server-expired-before-ack');

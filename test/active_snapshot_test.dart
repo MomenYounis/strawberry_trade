@@ -817,4 +817,331 @@ void main() {
     expect((await store.listSubmissions()).single['state'], 'review_pending');
     expect(await store.preference('cursor'), 100);
   });
+  test('indexed snapshot validation preserves purchase-return residuals across batched siblings and reversed returns', () async {
+    final invoice = reference.invoice(
+      id: 'purchase_origin',
+      kind: 'purchase',
+      partyId: reference.supplier.id,
+      partyName: reference.supplier.name,
+      qtyMilli: 40000,
+      paidMinor: 0,
+    );
+    final facts = <LedgerEntry>[invoice];
+    final records = <Map<String, dynamic>>[
+      record('party', reference.supplier.toJson(), 1),
+      record('entry', invoice.toJson(), 2),
+    ];
+    for (var i = 0; i < 20; i++) {
+      final returned = reference.returned(invoice, 'returned_$i', 1000, facts);
+      facts.add(returned);
+      records.add(record('entry', returned.toJson(), i + 3));
+    }
+    final reversal = LedgerEntry(
+      id: 'reversed_return',
+      tenantId: 't1',
+      creatorUid: 'u1',
+      kind: 'reversal',
+      date: '2026-10-06',
+      originalId: 'returned_0',
+      note: 'correct mistaken return',
+    );
+    facts.add(reversal);
+    records.add(record('entry', reversal.toJson(), 23));
+    final finalReturn = reference.returned(
+      invoice,
+      'residual_return',
+      21000,
+      facts,
+    );
+    expect(
+      finalReturn.totalMinor,
+      42000,
+    ); //80000-(19*2000), independently calculated.
+    final invalid = Fixture(
+      [
+        ...records,
+        record('entry', {...finalReturn.toJson(), 'totalMinor': 42001}, 24),
+      ],
+      id: 'invalid_residual',
+      pageSize: 5,
+    );
+    await invalid.stage(store);
+    await expectLater(invalid.install(store), throwsA(code('return_total')));
+    expect(await store.listEntries(), isEmpty);
+    expect(await store.preference('cursor'), isNull);
+    records.add(record('entry', finalReturn.toJson(), 24));
+    final valid = Fixture(records, id: 'valid_residual', pageSize: 5);
+    await valid.stage(store);
+    await valid.install(store);
+    expect(
+      LedgerRules.partyBalance(reference.supplier, await store.listEntries()),
+      3000,
+    );
+    final impossibleReversal = LedgerEntry(
+      id: 'bad_reversal',
+      tenantId: 't1',
+      creatorUid: 'u1',
+      kind: 'reversal',
+      date: '2026-10-06',
+      originalId: invoice.id,
+      note: 'original has active returns',
+    );
+    final bad = Fixture(
+      [...records, record('entry', impossibleReversal.toJson(), 25)],
+      id: 'invalid_reversal',
+      checkpoint: 101,
+    );
+    await bad.stage(store);
+    await expectLater(bad.install(store), throwsA(code('invalid_reversal')));
+    expect((await store.listEntries()).length, 23);
+    expect(await store.preference('cursor'), 100);
+  });
+  test('abandoned staging eviction is oldest-first, epoch-fenced and leaves current transfer, ledger and outbox intact', () async {
+    await store.saveParty(reference.merchant);
+    await store.saveEntry(reference.invoice(id: 'local_queue'));
+    await store.fail('local_queue', 'unavailable', nowMs: 123);
+    final before = await store.exportBackup();
+    Fixture transfer(String id, int epoch, int checkpoint) => Fixture(
+      [record('party', reference.supplier.toJson(), 1)],
+      id: id,
+      epoch: epoch,
+      checkpoint: checkpoint,
+      floor: 0,
+    );
+    for (var i = 0; i < 4; i++) {
+      await transfer('abandoned_$i', 7 + i, 100 + i).stage(store);
+    }
+    final current = transfer('current_transfer', 11, 104);
+    await current.begin(store);
+    expect(
+      await store.activeSnapshotStatus(
+        'abandoned_0',
+        expectedMembershipEpoch: 7,
+      ),
+      isNull,
+    );
+    for (var i = 1; i < 4; i++) {
+      expect(
+        await store.activeSnapshotStatus(
+          'abandoned_$i',
+          expectedMembershipEpoch: 7 + i,
+        ),
+        isNotNull,
+      );
+    }
+    final stale = transfer('stale_transfer', 6, 99);
+    await expectLater(
+      stale.begin(store),
+      throwsA(code('snapshot_stage_limit')),
+    );
+    expect(
+      await store.activeSnapshotStatus(
+        'current_transfer',
+        expectedMembershipEpoch: 11,
+      ),
+      isNotNull,
+    );
+    for (final key in ['entries', 'outbox', 'drafts', 'conflicts']) {
+      expect((await store.exportBackup())[key], before[key]);
+    }
+  });
+
+  test(
+    'failed page rebinding retains previous staged bytes atomically',
+    () async {
+      Fixture transfer(String id, int checkpoint) => Fixture(
+        [record('party', reference.supplier.toJson(), 1)],
+        id: id,
+        checkpoint: checkpoint,
+        floor: 0,
+      );
+      final reusable = transfer('reusable', 105);
+      await reusable.stage(store);
+      for (var i = 0; i < 3; i++) {
+        await transfer('old_$i', 100 + i).stage(store);
+      }
+      final raw = await databaseFactoryFfi.openDatabase(
+        '${dir.path}/manager.db',
+        options: OpenDatabaseOptions(singleInstance: false),
+      );
+      await raw.update(
+        'active_snapshot_pages',
+        {'records_json': '[]'},
+        where: 'snapshot_id=?',
+        whereArgs: ['reusable'],
+      );
+      await raw.close();
+      final rebound = Fixture(
+        [record('party', reference.supplier.toJson(), 1)],
+        id: 'rebound_bad',
+        epoch: 8,
+        checkpoint: 105,
+        floor: 0,
+      );
+      await expectLater(rebound.begin(store), throwsA(isA<LedgerException>()));
+      expect(
+        await store.activeSnapshotStatus('old_0', expectedMembershipEpoch: 7),
+        isNotNull,
+      );
+      expect(
+        await store.activeSnapshotStatus(
+          'rebound_bad',
+          expectedMembershipEpoch: 8,
+        ),
+        isNull,
+      );
+      expect(await store.preference('cursor'), isNull);
+    },
+  );
+
+  test('installed proof survives cache reclamation and fresh epoch binding; proof history and download bytes stay bounded', () async {
+    final first = Fixture(
+      [record('party', reference.merchant.toJson(), 1)],
+      id: 'installed_0',
+      floor: 0,
+    );
+    await first.stage(store);
+    await first.install(store);
+    final initial = await store.activeSnapshotStatus(
+      'installed_0',
+      expectedMembershipEpoch: 7,
+    );
+    expect(initial!.installed, isTrue);
+    expect(initial.complete, isTrue);
+    expect(initial.receivedPageIndexes, isEmpty);
+    final rebound = Fixture(
+      [record('party', reference.merchant.toJson(), 1)],
+      id: 'installed_rebound',
+      epoch: 8,
+      floor: 0,
+    );
+    final reboundStatus = await rebound.begin(store);
+    expect(reboundStatus.installed, isTrue);
+    expect(reboundStatus.complete, isTrue);
+    expect(reboundStatus.receivedPageIndexes, isEmpty);
+    expect(await store.preference('activeSnapshotId'), 'installed_rebound');
+    await rebound.install(
+      store,
+    ); // Exact-C proof, no repeated postings or download.
+    for (var i = 1; i <= 6; i++) {
+      final next = Fixture(
+        [record('party', reference.merchant.toJson(), 1)],
+        id: 'installed_$i',
+        epoch: 8 + i,
+        checkpoint: 100 + i,
+        floor: 0,
+      );
+      await next.stage(store);
+      await next.install(store);
+    }
+    final raw = await databaseFactoryFfi.openDatabase(
+      '${dir.path}/manager.db',
+      options: OpenDatabaseOptions(singleInstance: false, readOnly: true),
+    );
+    expect(
+      (await raw.rawQuery(
+        'SELECT count(*) AS count FROM active_snapshot_headers WHERE installed=1',
+      )).single['count'],
+      4,
+    );
+    expect(
+      (await raw.rawQuery(
+        'SELECT count(*) AS count FROM active_snapshot_pages',
+      )).single['count'],
+      0,
+    );
+    await raw.close();
+    expect(
+      (await store.activeSnapshotStatus(
+        'installed_6',
+        expectedMembershipEpoch: 14,
+      ))!.installed,
+      isTrue,
+    );
+    expect(await store.preference('activeSnapshotId'), 'installed_6');
+    expect(await store.preference('cursor'), 106);
+    expect((await store.listParties()).length, 1);
+  });
+  test('header-write failure rolls back abandoned-cache eviction in the same transaction', () async {
+    Fixture transfer(String id, int checkpoint) => Fixture(
+      [record('party', reference.supplier.toJson(), 1)],
+      id: id,
+      checkpoint: checkpoint,
+      floor: 0,
+    );
+    for (var i = 0; i < 4; i++) {
+      await transfer('retained_$i', 100 + i).stage(store);
+    }
+    final raw = await databaseFactoryFfi.openDatabase(
+      '${dir.path}/manager.db',
+      options: OpenDatabaseOptions(singleInstance: false),
+    );
+    await raw.execute(
+      "CREATE TRIGGER reject_snapshot_header BEFORE INSERT ON active_snapshot_headers WHEN NEW.snapshot_id='write_failure' BEGIN SELECT RAISE(ABORT,'synthetic header write failure'); END",
+    );
+    await raw.close();
+    await expectLater(
+      transfer('write_failure', 104).begin(store),
+      throwsA(isA<DatabaseException>()),
+    );
+    for (var i = 0; i < 4; i++) {
+      final retained = await store.activeSnapshotStatus(
+        'retained_$i',
+        expectedMembershipEpoch: 7,
+      );
+      expect(retained!.complete, isTrue);
+    }
+    expect(
+      await store.activeSnapshotStatus(
+        'write_failure',
+        expectedMembershipEpoch: 7,
+      ),
+      isNull,
+    );
+    expect(await store.preference('cursor'), isNull);
+  });
+
+  test('older epoch cannot retire newer installed proof even with a higher checkpoint', () async {
+    Fixture transfer(int i, {int? epoch}) => Fixture(
+      [record('party', reference.merchant.toJson(), 1)],
+      id: 'proof_$i',
+      epoch: epoch ?? 8 + i,
+      checkpoint: 100 + i,
+      floor: 0,
+    );
+    for (var i = 0; i < 4; i++) {
+      final next = transfer(i);
+      await next.stage(store);
+      await next.install(store);
+    }
+    final stale = transfer(4, epoch: 7);
+    await stale.stage(store);
+    await expectLater(
+      stale.install(store),
+      throwsA(code('snapshot_stage_limit')),
+    );
+    expect(await store.preference('cursor'), 103);
+    expect(await store.preference('activeSnapshotId'), 'proof_3');
+    expect(
+      (await store.activeSnapshotStatus(
+        'proof_3',
+        expectedMembershipEpoch: 11,
+      ))!.installed,
+      isTrue,
+    );
+    expect(
+      (await store.activeSnapshotStatus(
+        'proof_4',
+        expectedMembershipEpoch: 7,
+      ))!.installed,
+      isFalse,
+    );
+    expect(
+      (await store.activeSnapshotStatus(
+        'proof_4',
+        expectedMembershipEpoch: 7,
+      ))!.complete,
+      isTrue,
+    );
+  });
 }

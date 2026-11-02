@@ -596,6 +596,7 @@ class AppController extends ChangeNotifier {
     );
     var downloaded = 0;
     for (var index = 0; index < status.header.pageCount; index++) {
+      if (status.installed) break;
       if (status.receivedPageIndexes.contains(index)) continue;
       if (downloaded >= 16) break;
       final result = await snapshots.readActiveSnapshotPage(

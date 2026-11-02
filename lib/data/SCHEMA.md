@@ -190,9 +190,15 @@ A separately versioned full retained projection is staged with authenticated
 scope/header digest and canonical page/content hashes. Employee pages contain
 only sanitized parties and that UID's submissions. Staging is resumable and
 invisible to active readers; identical content can be revalidated and rebound
-to a fresh verified membership epoch. Four staged identities and 256 MiB total
-staging are explicit limits. Abandoned content with a different identity may
-require explicit staging-only discard; this never clears the ledger or queue.
+to a fresh verified membership epoch. Four uninstalled transfers and 256 MiB total
+download pages are explicit limits. The oldest abandoned transfer can be evicted
+when a validated newer transfer needs a slot or page budget; a future epoch,
+checkpoint or history floor is protected. No ledger or outbox row is evicted.
+An installed package retains its authenticated header/atomic install marker;
+its download pages are reclaimed. The current proof and at most three prior
+proofs are retained. Same-content fresh-epoch proof rebinding requires the exact
+local checkpoint, history floor and current installed identity, and changes no
+financial facts. Failed cache maintenance rolls back with its enclosing write.
 
 Installation validates all pages and identities, dependency orders accepted
 facts, and merges them with the existing ledger in one SQLite transaction with
@@ -204,11 +210,30 @@ staged evidence. Captured accepted review payloads are immutable; earlier
 schemas and user backups do not contain authoritative review bytes, so a fresh
 authenticated server feed/snapshot must establish that evidence.
 
-Current validators materialize the ledger: installation therefore rejects a
-combined existing-plus-incoming projection above 20,000 records or 16 MiB,
-including pending approval entries. Larger valid packages may stage but cannot
-install. This is an explicit production acceptance blocker for larger ledgers.
+Installation stores its sort/uniqueness set in SQLite, verifies one 64 KiB page
+at a time, and applies at most 16 records per Dart batch. Indexed dependency
+queries reduce return allocations exactly without loading the annual ledger.
+Package limits remain 500,000 records, 4,096 pages, 24,000 bytes per record and
+256 MiB total; combined existing/incoming/pending-review installation bounds are
+1,000,000 records and 512 MiB. These are disk/transaction limits, not permission
+to load that graph into Dart. Ordinary deltas and portable backup merges use the
+same indexed financial dependency validation. Actual SIGKILL testing verifies
+rollback to the old ledger/cursor/outbox and resumption from retained pages.
+Host SQLite FFI tests cover 73,000 records and 10 percent growth to 80,300;
+Android annual-volume timing, UI/report memory and low-space capacity remain
+separate acceptance requirements.
 The controller fetches at most 16 missing pages per synchronization. Ordinary
 feed page application now commits accepted facts and cursor atomically, rejecting
 a stale expected cursor. Authenticated bootstrap negotiates protocol 2 only when
 the server advertises it; protocol 1 remains supported for intact full history.
+
+The primary portable recovery copy contains pending operations, their validation
+dependencies, drafts and conflict evidence, with original IDs, payloads, retry
+metadata and provisional review state. It reads 16 rows at a time and refuses
+the entire export above 1,000 queue/draft/conflict items per category or a
+conservative 16 MiB byte budget. It never truncates a copy or clears a queue.
+AES-GCM with a separately held passphrase protects the portable file; the UI
+accepts at most 23 MiB before JSON decoding. Imported accepted-state flags are
+not server receipts. Unrelated accepted history comes from authenticated server
+recovery. Pending operations created after the saved copy on a lost phone,
+without a server receipt or another durable copy, cannot be recovered.

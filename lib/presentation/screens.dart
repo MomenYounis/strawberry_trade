@@ -3816,13 +3816,34 @@ class _BackupScreenState extends State<BackupScreen> {
     padding: const EdgeInsets.all(20),
     children: [
       const Icon(Icons.shield_outlined, size: 60, color: Color(0xff235b42)),
-      heading('نسخة تحفظ سجلك وطابور الإرسال'),
+      heading('نسخة استعادة مشفرة للطابور والمسودات'),
       const Text(
-        'تحتوي النسخة على بيانات مالية خاصة. احتفظ بها في مكان آمن، ولا تشاركها مع غير المصرح لهم. لا تتضمن كلمة المرور أو مفاتيح الجهاز أو صلاحية التفعيل.',
+        'احفظ نسخة دورية خارج الهاتف واحتفظ بعبارة فتحها منفصلة. النسخة الأساسية تحفظ العمليات غير المزامنة ومسوداتك والأصول اللازمة لفحصها؛ يُستعاد السجل المقبول من الخادم بعد تسجيل الهاتف البديل. لا تنقل النسخة كلمة المرور أو مفاتيح أندرويد أو التفعيل.',
       ),
       const SizedBox(height: 20),
+      FilledButton.icon(
+        onPressed: busy
+            ? null
+            : () => _run(() async {
+                final passphrase = await _passphrase(creating: true);
+                if (passphrase == null) return;
+                final backup = await widget.app.store!.exportPendingBackup();
+                final encrypted = await RecoveryBackup.encrypt(
+                  backup,
+                  passphrase,
+                );
+                await ArabicExports.shareText(
+                  jsonEncode(encrypted),
+                  'strawberry-pending-recovery.json',
+                  'application/json',
+                );
+                message = 'تم تجهيز نسخة مشفرة للطابور والمسودات وأدلة التعارض والأصول اللازمة، وليست نسخة كاملة للسجل المقبول. تأكد من حفظ الملف خارج الهاتف؛ فتح نافذة المشاركة وحده لا يثبت وجود نسخة قابلة للاستعادة.';
+              }),
+        icon: const Icon(Icons.save_alt),
+        label: const Text('حفظ / مشاركة نسخة استعادة مشفرة'),
+      ),
       if (widget.app.manager)
-        FilledButton.icon(
+        OutlinedButton.icon(
           onPressed: busy
               ? null
               : () => _run(() async {
@@ -3840,32 +3861,13 @@ class _BackupScreenState extends State<BackupScreen> {
                     'strawberry-recovery.json',
                     'application/json',
                   );
-                  message = 'تم تجهيز النسخة المشفرة. احفظ الملف وعبارة الاستعادة خارج هذا الهاتف؛ فتح نافذة المشاركة وحده لا يثبت حفظ نسخة.';
+                  message = 'تم تجهيز نسخة محلية موسعة ضمن حد 16 ميجابايت قبل التشفير. لا تشمل حساب الدخول أو سلطة الخادم أو جميع بيانات النظام. احفظ الملف والعبارة خارج الهاتف؛ لا تُنشأ نسخة جزئية عند تجاوز الحد.';
                 }),
-          icon: const Icon(Icons.save_alt),
-          label: const Text('حفظ / مشاركة نسخة احتياطية'),
+          icon: const Icon(Icons.inventory_2_outlined),
+          label: const Text(
+            'نسخة محلية موسعة للسجلات الصغيرة (حد 16 ميجابايت)',
+          ),
         ),
-      OutlinedButton.icon(
-        onPressed: busy
-            ? null
-            : () => _run(() async {
-                final passphrase = await _passphrase(creating: true);
-                if (passphrase == null) return;
-                final backup = await widget.app.store!.exportPendingBackup();
-                final encrypted = await RecoveryBackup.encrypt(
-                  backup,
-                  passphrase,
-                );
-                await ArabicExports.shareText(
-                  jsonEncode(encrypted),
-                  'strawberry-pending-recovery.json',
-                  'application/json',
-                );
-                message = 'تحتوي هذه النسخة الطابور ومسوداته والأصول اللازمة فقط. استعد السجل المقبول من الخادم بعد تسجيل الهاتف البديل. احفظ الملف والعبارة خارج الهاتف.';
-              }),
-        icon: const Icon(Icons.pending_actions),
-        label: const Text('نسخة مشفرة للطابور والمسودات فقط (للسجلات الكبيرة)'),
-      ),
       const SizedBox(height: 14),
       OutlinedButton.icon(
         onPressed: busy
@@ -3877,13 +3879,17 @@ class _BackupScreenState extends State<BackupScreen> {
                 );
                 if (result == null) return;
                 final file = result;
-                if ((await file.length() ?? 0) > 50000000) {
+                if ((await file.length() ?? 0) >
+                    RecoveryBackup.maxEnvelopeBytes) {
                   throw const LedgerException(
                     'backup_size',
-                    'حجم النسخة أكبر من الحد المسموح',
+                    'حجم الملف يتجاوز حد الاستيراد الآمن (23 ميجابايت). احتفظ بالنسخة القديمة وراجع المسؤول لاستعادة منضبطة؛ لم تُستورد بيانات جزئية.',
                   );
                 }
-                final bytes = await readPickedFile(file, 50000000);
+                final bytes = await readPickedFile(
+                  file,
+                  RecoveryBackup.maxEnvelopeBytes,
+                );
                 final decoded = jsonDecode(utf8.decode(bytes));
                 if (decoded is! Map) {
                   throw const LedgerException(
@@ -3899,7 +3905,9 @@ class _BackupScreenState extends State<BackupScreen> {
                 }
                 await widget.app.store!.restoreBackup(backup);
                 await widget.app.refresh();
-                message = 'اكتملت الاستعادة المحلية؛ راجع المزامنة قبل الاعتماد على حالة الخادم';
+                message = backup['coverage'] == 'pending-and-dependencies'
+                    ? 'استعيد الطابور والمسودات والأصول اللازمة فقط. استكمل تسجيل الجهاز والمزامنة لاستعادة السجل المقبول؛ لا تثبت النسخة قبول أي عملية.'
+                    : 'اكتملت الاستعادة المحلية؛ لا تنقل النسخة سلطة الحساب أو التفعيل. راجع المزامنة قبل الاعتماد على حالة الخادم.';
               }),
         icon: const Icon(Icons.restore_page_outlined),
         label: const Text('اختيار نسخة واستعادتها'),

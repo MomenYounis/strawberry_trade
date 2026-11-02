@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:strawberry_trade/data/ledger_store.dart';
 import 'package:strawberry_trade/services/active_snapshot.dart';
+import 'package:strawberry_trade/services/recovery_backup.dart';
 
 import 'active_snapshot_test.dart' show record;
 import 'domain_test.dart' as reference;
@@ -155,6 +156,68 @@ void main() {
           'merchantClosingMinor': 5000 + count * 10000,
           'recordedCashMinor': count * 10000,
         });
+      }
+      // A large accepted ledger is never serialized into the portable pending
+      // copy. Merge only the saved queue onto the recovered history, then apply
+      // a post-checkpoint delta using indexed dependencies and bounded memory.
+      final source = await LedgerStore.open(
+        path: '${dir.path}/old-device.db',
+        tenantId: 't1',
+        userId: 'u1',
+        factory: databaseFactoryFfi,
+      );
+      final beforeMerge = ProcessInfo.currentRss;
+      try {
+        await source.saveParty(reference.merchant);
+        await source.acknowledge('m1');
+        await source.saveEntry(reference.invoice(id: 'backed_pending'));
+        await source.fail('backed_pending', 'unavailable', nowMs: 1234);
+        final saved = await source.exportPendingBackup();
+        await store.restoreBackup(saved);
+        expect(
+          (await store.listOutbox()).single.toOperation(),
+          (await source.listOutbox()).single.toOperation(),
+        );
+        final portable = await store.exportPendingBackup();
+        expect((portable['entries'] as List).length, 1);
+        expect(utf8.encode(jsonEncode(portable)).length, lessThan(32768));
+        final envelope = await RecoveryBackup.encrypt(
+          portable,
+          'Separate recovery phrase 2026',
+        );
+        expect(
+          (await RecoveryBackup.decrypt(
+            envelope,
+            'Separate recovery phrase 2026',
+          ))['coverage'],
+          'pending-and-dependencies',
+        );
+        await store.applyRemoteBatch(
+          [
+            record(
+              'entry',
+              reference.invoice(id: 'accepted_after_snapshot').toJson(),
+              80302,
+            ),
+          ],
+          expectedCursor: 80301,
+          lastSequence: 80302,
+        );
+        expect(await store.preference('cursor'), 80302);
+        expect((await store.listOutbox()).single.id, 'backed_pending');
+        expect(
+          ProcessInfo.currentRss - beforeMerge,
+          lessThan(64 * 1024 * 1024),
+        );
+        results.add({
+          'scenario': 'pending-copy-plus-post-snapshot-delta',
+          'acceptedRecords': 80301,
+          'pendingRecords': 1,
+          'portableBytes': utf8.encode(jsonEncode(portable)).length,
+          'incrementalRssBytes': ProcessInfo.currentRss - beforeMerge,
+        });
+      } finally {
+        await source.close();
       }
       final out = File(
         'verification/continuation-2026-11-02/snapshot-annual-scale.json',

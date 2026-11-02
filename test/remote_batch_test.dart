@@ -260,7 +260,7 @@ void main() {
     }
   });
 
-  test('A 500-event page reads validation projections once and causes one complete UI snapshot', () async {
+  test('A 500-event page validates with indexed dependencies and causes one complete UI snapshot', () async {
     final dir = await Directory.systemTemp.createTemp(
       'remote_page_read_count_',
     );
@@ -345,10 +345,13 @@ void main() {
           expect(app.entries.length, 500);
           if (batched) {
             expect(refreshCalls, 1);
-            expect(entryScans, 2); // One validation load and one UI snapshot.
+            expect(
+              entryScans,
+              1,
+            ); // Only the complete UI snapshot scans the ledger.
           } else {
             expect(refreshCalls, 500);
-            expect(entryScans, 1000);
+            expect(entryScans, 500); // One UI refresh per individual event.
           }
         } finally {
           await subscription.cancel();
