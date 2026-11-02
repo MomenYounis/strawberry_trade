@@ -5,6 +5,30 @@ import '../domain/ledger.dart';
 const syncProtocolVersion = 2;
 const maxSyncSequence = 9007199254740991;
 
+/// Legacy gateways reject unknown request fields even when their value is 1.
+/// Negotiate only from authenticated bootstrap metadata; never probe by sending
+/// or replaying a financial operation with a different identity.
+int negotiateSyncProtocol(Map<String, dynamic> bootstrap) {
+  final minimum = bootstrap['minimumSyncProtocol'] ?? 1;
+  final versions = bootstrap['syncProtocolVersions'] ?? [1];
+  if (minimum is! int ||
+      minimum < 1 ||
+      versions is! List ||
+      versions.any((v) => v is! int || v < 1)) {
+    invalid('sync_response', 'بيانات توافق المزامنة غير صالحة.');
+  }
+  for (var version = syncProtocolVersion; version >= minimum; version--) {
+    if (versions.contains(version)) return version;
+  }
+  invalid('upgrade-required', 'يلزم تحديث التطبيق؛ العمليات المحلية محفوظة.');
+}
+
+Map<String, dynamic> syncProtocolFields(int version) {
+  if (version == 1) return const {};
+  if (version == 2) return const {'syncProtocolVersion': 2};
+  invalid('upgrade-required', 'إصدار المزامنة غير مدعوم.');
+}
+
 class SyncPage {
   const SyncPage(this.changes, this.lastSequence, this.hasMore);
   final List<Map<String, dynamic>> changes;

@@ -3,6 +3,39 @@ import 'package:strawberry_trade/domain/ledger.dart';
 import 'package:strawberry_trade/services/sync_protocol.dart';
 
 void main() {
+  test(
+    'strict legacy request shape and authenticated mixed-version negotiation',
+    () {
+      expect(negotiateSyncProtocol({}), 1);
+      expect(syncProtocolFields(1), isEmpty);
+      expect(
+        negotiateSyncProtocol({
+          'syncProtocolVersions': [1, 2],
+        }),
+        2,
+      );
+      expect(syncProtocolFields(2), {'syncProtocolVersion': 2});
+      for (final metadata in [
+        {
+          'syncProtocolVersions': [3],
+          'minimumSyncProtocol': 3,
+        },
+        {
+          'syncProtocolVersions': [1],
+          'minimumSyncProtocol': 2,
+        },
+        {'syncProtocolVersions': '2'},
+        {
+          'syncProtocolVersions': [true],
+        },
+      ]) {
+        expect(
+          () => negotiateSyncProtocol(metadata),
+          throwsA(isA<LedgerException>()),
+        );
+      }
+    },
+  );
   Map<String, dynamic> page() => {
     'changes': <dynamic>[],
     'lastSequence': 10,

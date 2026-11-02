@@ -53,6 +53,28 @@ export class SyntheticArchiveStorage {
   async read(key,{maxBytes}){validateKey(key);integer(maxBytes,1,ARCHIVE_LIMITS.maxManifestBytes);const bytes=this.objects.get(key);if(!bytes)throw new Error('archive-object-missing');if(bytes.length>maxBytes)throw new Error('archive-download-limit');return Buffer.from(bytes);}
 }
 
+// Independently configured primary/recovery adapters. A successful write must
+// survive a bounded readback from BOTH stores. This supplies local integration
+// semantics, not evidence about provider independence, retention or key custody.
+export class MirroredArchiveStorage {
+  constructor(primary,recovery){
+    if(!primary||!recovery||primary===recovery||[primary,recovery].some(s=>typeof s.putImmutable!=='function'||typeof s.read!=='function'))throw Error('independent-storage-adapters-required');
+    this.primary=primary;this.recovery=recovery;this.kind='mirrored';
+    Object.defineProperty(this,'productionDurabilityAccepted',{value:false,enumerable:true});
+  }
+  async putImmutable(key,bytes){
+    validateBody(key,bytes);
+    for(const storage of [this.primary,this.recovery]){
+      await storage.putImmutable(key,bytes);
+      const observed=await storage.read(key,{maxBytes:bytes.byteLength});
+      if(!Buffer.from(observed).equals(Buffer.from(bytes)))throw Error('recovery-copy-mismatch');
+    }
+    return {key};
+  }
+  read(key,options){return this.primary.read(key,options);}
+  readRecovery(key,options){return this.recovery.read(key,options);}
+}
+
 // Development/private verifier sink only. No public directory, no live DB, no
 // user/account recreation. Process crashes can leave private temporary data;
 // production requires encrypted scratch storage + a startup sweeper before use.

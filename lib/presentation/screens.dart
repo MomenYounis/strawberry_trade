@@ -13,6 +13,7 @@ import '../services/employee_registration.dart';
 import '../services/exports.dart';
 import '../services/gateway.dart';
 import '../services/invitation_code.dart';
+import '../services/recovery_backup.dart';
 import 'enrollment.dart';
 import 'shipments.dart';
 import 'reports_extra.dart';
@@ -2707,14 +2708,14 @@ class MoreScreen extends StatelessWidget {
                 onTap: () =>
                     open(context, 'التقارير والتصدير', ReportsScreen(app: app)),
               ),
-              ListTile(
-                minVerticalPadding: 14,
-                leading: const Icon(Icons.backup_outlined),
-                title: const Text('النسخ الاحتياطي والاستعادة'),
-                onTap: () =>
-                    open(context, 'النسخ والاستعادة', BackupScreen(app: app)),
-              ),
             ],
+            ListTile(
+              minVerticalPadding: 14,
+              leading: const Icon(Icons.backup_outlined),
+              title: const Text('النسخ الاحتياطي والاستعادة'),
+              onTap: () =>
+                  open(context, 'النسخ والاستعادة', BackupScreen(app: app)),
+            ),
             ListTile(
               minVerticalPadding: 14,
               leading: const Icon(Icons.key_outlined),
@@ -2846,8 +2847,10 @@ class SyncScreen extends ConsumerWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'لم تُقبل العملية مالياً. تحفظ التسوية المبالغ والكمية والأصل وتضيف قيداً مرتبطاً بتاريخ في السنة المفتوحة. يتحقق الخادم من السنة بتوقيت القاهرة. لا يغيّر هذا الإجراء رصيد الإغلاق المنشور.',
+                Text(
+                  operation['entity'] == 'salary_term'
+                      ? 'هذه العملية لم تُقبل كتاريخ راتب. يمكن توثيق المعدل نفسه للشهر الحالي فقط دون تغيير شهر مغلق أو تسوية مستحقات سابقة تلقائياً. إذا وُثق راتب لهذا الشهر فتحتاج الحالة مراجعة مستقلة.'
+                      : 'لم تُقبل العملية مالياً. تحفظ التسوية المبالغ والكمية والأصل وتضيف قيداً مرتبطاً بتاريخ في السنة المفتوحة. يتحقق الخادم من السنة بتوقيت القاهرة. لا يغيّر هذا الإجراء رصيد الإغلاق المنشور.',
                 ),
                 const SizedBox(height: 12),
                 SelectableText(
@@ -3744,6 +3747,68 @@ class BackupScreen extends StatefulWidget {
 }
 
 class _BackupScreenState extends State<BackupScreen> {
+  Future<String?> _passphrase({required bool creating}) async {
+    if (!mounted) return null;
+    final password = TextEditingController(),
+        confirmation = TextEditingController();
+    try {
+      return await showDialog<String>(
+        context: context,
+        builder: (dialog) => AlertDialog(
+          title: Text(
+            creating ? 'عبارة فتح النسخة المشفرة' : 'فتح نسخة الاستعادة',
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                '12 حرفاً على الأقل. احتفظ بها خارج الهاتف؛ لا يمكن استعادتها من حسابك.',
+              ),
+              TextField(
+                controller: password,
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration: const InputDecoration(labelText: 'عبارة الاستعادة'),
+              ),
+              if (creating)
+                TextField(
+                  controller: confirmation,
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  decoration: const InputDecoration(labelText: 'تأكيد العبارة'),
+                ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialog),
+              child: const Text('إلغاء'),
+            ),
+            FilledButton(
+              onPressed: () {
+                if (password.text.length < 12 ||
+                    (creating && password.text != confirmation.text)) {
+                  snack(
+                    dialog,
+                    'أدخل عبارة من 12 حرفاً على الأقل وتأكيداً مطابقاً.',
+                  );
+                  return;
+                }
+                Navigator.pop(dialog, password.text);
+              },
+              child: const Text('متابعة'),
+            ),
+          ],
+        ),
+      );
+    } finally {
+      password.dispose();
+      confirmation.dispose();
+    }
+  }
+
   bool busy = false;
   String? message;
   @override
@@ -3756,20 +3821,50 @@ class _BackupScreenState extends State<BackupScreen> {
         'تحتوي النسخة على بيانات مالية خاصة. احتفظ بها في مكان آمن، ولا تشاركها مع غير المصرح لهم. لا تتضمن كلمة المرور أو مفاتيح الجهاز أو صلاحية التفعيل.',
       ),
       const SizedBox(height: 20),
-      FilledButton.icon(
+      if (widget.app.manager)
+        FilledButton.icon(
+          onPressed: busy
+              ? null
+              : () => _run(() async {
+                  final passphrase = await _passphrase(creating: true);
+                  if (passphrase == null) return;
+                  final backup = await widget.app.store!.exportBackup(
+                    maxBytes: RecoveryBackup.maxPlaintextBytes,
+                  );
+                  final encrypted = await RecoveryBackup.encrypt(
+                    backup,
+                    passphrase,
+                  );
+                  await ArabicExports.shareText(
+                    jsonEncode(encrypted),
+                    'strawberry-recovery.json',
+                    'application/json',
+                  );
+                  message = 'تم تجهيز النسخة المشفرة. احفظ الملف وعبارة الاستعادة خارج هذا الهاتف؛ فتح نافذة المشاركة وحده لا يثبت حفظ نسخة.';
+                }),
+          icon: const Icon(Icons.save_alt),
+          label: const Text('حفظ / مشاركة نسخة احتياطية'),
+        ),
+      OutlinedButton.icon(
         onPressed: busy
             ? null
             : () => _run(() async {
-                final backup = await widget.app.store!.exportBackup();
+                final passphrase = await _passphrase(creating: true);
+                if (passphrase == null) return;
+                final backup = await widget.app.store!.exportPendingBackup();
+                final encrypted = await RecoveryBackup.encrypt(
+                  backup,
+                  passphrase,
+                );
                 await ArabicExports.shareText(
-                  jsonEncode(backup),
-                  'strawberry-backup.json',
+                  jsonEncode(encrypted),
+                  'strawberry-pending-recovery.json',
                   'application/json',
                 );
-                message = 'تم تجهيز النسخة للمشاركة أو الحفظ';
+                message = 'تحتوي هذه النسخة الطابور ومسوداته والأصول اللازمة فقط. استعد السجل المقبول من الخادم بعد تسجيل الهاتف البديل. احفظ الملف والعبارة خارج الهاتف.';
               }),
-        icon: const Icon(Icons.save_alt),
-        label: const Text('حفظ / مشاركة نسخة احتياطية'),
+        icon: const Icon(Icons.pending_actions),
+        label: const Text('نسخة مشفرة للطابور والمسودات فقط (للسجلات الكبيرة)'),
       ),
       const SizedBox(height: 14),
       OutlinedButton.icon(
@@ -3796,15 +3891,24 @@ class _BackupScreenState extends State<BackupScreen> {
                     'تنسيق النسخة غير صالح',
                   );
                 }
-                await widget.app.store!.restoreBackup(
-                  Map<String, dynamic>.from(decoded),
-                );
+                var backup = Map<String, dynamic>.from(decoded);
+                if (backup['format'] == 'strawberry-recovery') {
+                  final passphrase = await _passphrase(creating: false);
+                  if (passphrase == null) return;
+                  backup = await RecoveryBackup.decrypt(backup, passphrase);
+                }
+                await widget.app.store!.restoreBackup(backup);
                 await widget.app.refresh();
                 message = 'اكتملت الاستعادة المحلية؛ راجع المزامنة قبل الاعتماد على حالة الخادم';
               }),
         icon: const Icon(Icons.restore_page_outlined),
         label: const Text('اختيار نسخة واستعادتها'),
       ),
+      heading('ما الذي يمكن استعادته؟'),
+      const Text(
+        'ما قبله الخادم يُستعاد بعد تسجيل الجهاز البديل والمزامنة، ما دام سجل الخادم محفوظاً أو توجد لقطة استعادة مقبولة. العمليات المعلقة والمسودات تُستعاد فقط إذا كانت موجودة في ملف نسخة محفوظ خارج الهاتف ومعك عبارة فتحه. أي عملية لم تصل إلى الخادم ولم تُنسخ خارج هاتف مفقود لا يمكن استعادتها. النسخة لا تثبت قبول الخادم ولا تحفظ حساب الدخول أو التفعيل.',
+      ),
+      const SizedBox(height: 12),
       heading('الاستعادة على هاتف آخر'),
       const Text(
         'سجّل الهاتف الجديد أولاً بواسطة المسؤول واحصل على حزمة عضوية وتفعيل تخصه. لا تنقل النسخة مفاتيح أندرويد. استخدم الحساب والمنشأة نفسيهما؛ تظل معرفات العمليات المعلقة كما هي لتجنب التكرار. لا تبدأ الاستعادة فترة تجريبية جديدة.',

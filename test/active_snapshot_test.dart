@@ -571,26 +571,38 @@ void main() {
     },
   );
 
-  test('oversized valid snapshots remain resumably staged and fail install before loading projections', () async {
-    // 20,001 retained rows, all valid pages. The install cap counts even rows
-    // whose IDs would match existing local facts rather than hiding peak memory.
+  test('20001 records install with bounded staging and interruption rolls back ledger and cursor', () async {
     final records = [
       for (var i = 1; i <= 20001; i++)
         record('party', {...reference.merchant.toJson(), 'id': 'party_$i'}, i),
     ];
     final fixture = Fixture(records, checkpoint: 30000, floor: 0, pageSize: 80);
+    await store.saveDraft('kept_draft', {'id': 'kept_draft', 'note': 'keep'});
     await fixture.stage(store);
     await expectLater(
-      fixture.install(store),
-      throwsA(code('snapshot_install_budget')),
+      store.installActiveSnapshot(
+        'snapshot1',
+        expectedMembershipEpoch: 7,
+        onProgress: (count) async {
+          if (count >= 1000) throw StateError('interrupted-install');
+        },
+      ),
+      throwsStateError,
     );
     expect(await store.listParties(), isEmpty);
+    expect(await store.preference('cursor'), isNull);
+    await store.close();
+    store = await open();
     final status = (await store.activeSnapshotStatus(
       'snapshot1',
       expectedMembershipEpoch: 7,
     ))!;
     expect(status.complete, isTrue);
     expect(status.installed, isFalse);
+    await fixture.install(store);
+    expect((await store.listParties()).length, 20001);
+    expect(await store.preference('cursor'), 30000);
+    expect((await store.listDrafts()).single['id'], 'kept_draft');
   });
 
   test(

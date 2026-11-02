@@ -3,6 +3,7 @@ import {initializeApp,deleteApp} from 'firebase-admin/app';import {getFirestore}
 import {initializeTestEnvironment,assertFails} from '@firebase/rules-unit-testing';import {doc,getDoc,setDoc} from 'firebase/firestore';
 import {assertDemoOperatorEnvironment} from '../src/demo-operator.mjs';
 import {createGateway,TRIAL_MS} from '../src/gateway.mjs';import {canonical,signed} from '../src/validation.mjs';import {provisionTenant,issueEmployeeInvitation,acceptInvitation} from '../src/enrollment.mjs';
+import {execFileSync} from 'node:child_process';
 const projectId='demo-strawberry-flutter';assertDemoOperatorEnvironment(projectId,process.env);
 const functionsPort=process.env.STRAWBERRY_TEST_FUNCTIONS_PORT||'5001';if(!/^[1-9][0-9]{0,4}$/.test(functionsPort)||Number(functionsPort)>65535)throw Error('Invalid local Functions test port');
 const app=initializeApp({projectId}),db=getFirestore(app),auth=getAuth(app);let time=Date.now(),rules,a,b,e;
@@ -15,6 +16,33 @@ const send=(who,id,entity,payload,revision=0)=>gateway.syncOperation(req(who,{op
 const party={id:'party_a',name:'عميل أ',kind:'merchant',openingMinor:0,phone:'',favorite:false,revision:1};
 const sale=(id='invoice_a',extra={})=>({id,kind:'sale',date:'2026-10-18',partyId:'party_a',partyName:'ignored',qtyMilli:10000,priceMinor:2000,totalMinor:20000,paidMinor:5000,unit:'كجم',grade:'أول',note:'',originalId:'',employeeId:'',salaryMonth:'',revision:1,...extra});
 const sub=(id='submission_a')=>({id,tenantId:'tenant_a',creatorUid:'employee_a',employeeId:'staff_a',kind:'delivery',date:'2026-10-18',partyId:'party_a',partyName:'',qtyMilli:1000,grade:'أول',unit:'كجم',originalId:'',amountMinor:0,note:''});
+test('actual original strict backend rejection and additive v9/v10/v11 protocol compatibility',async()=>{
+ // Read the immutable original source, rather than inventing a permissive mock.
+ const original=execFileSync('git',['show','e246f436a092616ef2799bb04f969a19fd19ffcc:backend/src/gateway.mjs'],{encoding:'utf8',cwd:new URL('../..',import.meta.url)});
+ const source=original.replace(/from '(.\/[^']+)'/g,(_,path)=>`from '${new URL('../src/'+path.slice(2),import.meta.url).href}'`);
+ const {createGateway:legacyFactory}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+ const legacy=legacyFactory({db,auth});
+ for(const endpoint of ['syncOperation','pullChanges'])await assert.rejects(legacy[endpoint](req(a,{syncProtocolVersion:1})),/invalid-argument/);
+ const operation={id:'mixed_protocol',entity:'party',expectedRevision:0,payload:{...party,id:'mixed_protocol'}};
+ const old=await gateway.syncOperation(req(a,{operation}));
+ assert.equal(old.status,'accepted');
+ for(const syncProtocolVersion of [1,2])assert.deepEqual(await gateway.syncOperation(req(a,{operation,syncProtocolVersion})),old);
+ for(const protocol of [0,3,'2',true]){
+  await assert.rejects(gateway.syncOperation(req(a,{operation:{...operation,id:'unsupported'},syncProtocolVersion:protocol})),/sync-upgrade-required/);
+  await assert.rejects(gateway.pullChanges(req(a,{afterSequence:0,syncProtocolVersion:protocol})),/sync-upgrade-required/);
+ }
+ assert.equal((await db.doc('tenants/tenant_a/operations/unsupported').get()).exists,false);
+ for(const protocol of [undefined,1,2]){
+  const page=await gateway.pullChanges(req(a,{afterSequence:0,...(protocol===undefined?{}:{syncProtocolVersion:protocol})}));
+  assert.equal(page.syncProtocolVersion,protocol??1);
+  assert.equal(page.changes.filter(c=>c.id==='mixed_protocol').length,1);
+ }
+ await db.doc('tenants/tenant_a').set({minimumSyncProtocol:2},{merge:true});
+ await assert.rejects(gateway.syncOperation(req(a,{operation})),/sync-upgrade-required/);
+ await assert.rejects(gateway.pullChanges(req(a,{afterSequence:0})),/sync-upgrade-required/);
+ assert.equal((await gateway.pullChanges(req(a,{afterSequence:0,syncProtocolVersion:2}))).syncProtocolVersion,2);
+ await db.doc('tenants/tenant_a').set({minimumSyncProtocol:1},{merge:true});
+});
 before(async()=>{if(!process.env.FIRESTORE_EMULATOR_HOST||!process.env.FIREBASE_AUTH_EMULATOR_HOST)throw Error('Emulators required');rules=await initializeTestEnvironment({projectId,firestore:{rules:await readFile('firestore.rules','utf8')}});await rules.clearFirestore();for(const uid of ['manager_a','manager_b','employee_a','unverified']){await auth.deleteUser(uid).catch(()=>{});await auth.createUser({uid,email:uid+'@example.test',emailVerified:uid!=='unverified',password:'Synthetic_only_7'});}for(const [tenantId,uid,d] of [['tenant_a','manager_a',da],['tenant_b','manager_b',dbb]])await provisionTenant({db,auth,tenantId,uid,name:'مدير',deviceId:d.deviceId,publicKeySpki:d.publicKeySpki,now:time});a=await session('manager_a','tenant_a',da);b=await session('manager_b','tenant_b',dbb);});
 after(async()=>{await rules?.cleanup();await deleteApp(app);});
 test('direct access denied: two tenants, manager, employee, global legacy paths',async()=>{for(const uid of ['manager_a','manager_b','employee_a']){const fs=rules.authenticatedContext(uid).firestore();for(const path of ['tenants/tenant_a/entries/i','tenants/tenant_b/parties/p','managerData/transactions/items/x','members/manager_a']){await assertFails(getDoc(doc(fs,path)));await assertFails(setDoc(doc(fs,path),{totalMinor:-1}));}}});
@@ -79,6 +107,14 @@ test('closed checkpoint keeps late evidence, concurrent new-year trade, duplicat
  assert.equal((await root.collection('salaryTerms').doc('closed_term').get()).exists,false);
  assert.equal((await root.collection('salaryLocks').doc('staff_a_2027-08').get()).exists,false);
  assert.equal((await root.get()).data().sequence,before+2);
+ const prospective={id:'prospective_term',entity:'salary_term',expectedRevision:0,
+  payload:{...lateTerm.payload,id:'prospective_term',effectiveMonth:'2027-09'},correctionOfOperationId:'closed_term'};
+ await assert.rejects(gateway.syncOperation(req(a,{operation:{...prospective,payload:{...prospective.payload,monthlyMinor:200000}}})),/correction-facts-changed/);
+ const resolved=await gateway.syncOperation(req(a,{operation:prospective,syncProtocolVersion:2}));
+ assert.equal(resolved.status,'accepted');assert.deepEqual(await gateway.syncOperation(req(a,{operation:prospective,syncProtocolVersion:2})),resolved);
+ assert.equal((await root.collection('lateOperations').doc('closed_term').get()).data().resolution,'prospective-unchanged-rate');
+ assert.equal((await root.collection('salaryTerms').doc('closed_term').get()).exists,false);
+ assert.equal((await root.collection('salaryTerms').doc('prospective_term').get()).data().effectiveMonth,'2027-09');
  const history=(await root.collection('changes').where('sequence','<=',before).orderBy('sequence').get()).docs;
  assert.equal(history.some(row=>['closed_old','closed_fixed','open_current'].includes(row.data().id)),false);
  await root.set({historyFloor:before},{merge:true});

@@ -57,8 +57,9 @@ export class ArchiveStateStore {
   async assertCurrent(tenantId,year,lease) {
     return this.adapter.transaction(tenantId,year,async tx=>{assertFence(tx.run,lease,this.now());return clone(tx.run);});
   }
-  async checkpoint(tenantId,year,lease,{authorizedClose=false,exportEnabled=false}={}) {
+  async checkpoint(tenantId,year,lease,{authorizedClose=false,exportEnabled=false,openingDateEvidence=null}={}) {
     if(!authorizedClose||!exportEnabled)throw new Error('financial-close-disabled');
+    if(this.adapter.kind==='firestore'&&(!openingDateEvidence||openingDateEvidence.policy!=='dated-openings'||openingDateEvidence.tenantId!==tenantId||openingDateEvidence.year!==year||!/^[a-f0-9]{64}$/.test(openingDateEvidence.sha256)))throw new Error('opening-date-policy-required');
     return this.adapter.transaction(tenantId,year,async tx=>{
       assertFence(tx.run,lease,this.now());
       if(tx.run.state!=='eligible') {if(tx.run.checkpoint)return clone(tx.run);throw new Error('invalid-archive-state');}
@@ -67,9 +68,10 @@ export class ArchiveStateStore {
       if((tx.root.archivePolicy?.activeYearStart??2026)!==year)throw new Error('previous-close-required');
       if(year>2026&&tx.root.archivePolicy?.lastVerifiedYear!==year-1)throw new Error('previous-archive-verification-required');
       const interval=annualInterval(year), sequence=integer(tx.root.sequence??0,0,Number.MAX_SAFE_INTEGER);
+      if(openingDateEvidence&&openingDateEvidence.checkpointSequence!==sequence)throw new Error('opening-date-plan-stale');
       const version=integer((tx.root.archivePolicy?.closeVersion??0)+1,1,Number.MAX_SAFE_INTEGER);
       const previousClose=tx.root.archivePolicy?.lastRunId??null;
-      tx.run.checkpoint={...interval,sequence,version,previousClose,capturedAtMs:this.now()};
+      tx.run.checkpoint={...interval,sequence,version,previousClose,capturedAtMs:this.now(),...(openingDateEvidence?{openingDatePolicySha256:openingDateEvidence.sha256}:{})};
       tx.run.state='checkpointed';
       tx.root.archivePolicy={...(tx.root.archivePolicy??{}),closedThroughDate:interval.endDate,
         closeVersion:version,checkpointSequence:sequence,activeYearStart:year+1,lastRunId:tx.run.runId};

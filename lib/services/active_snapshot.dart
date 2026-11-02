@@ -12,8 +12,9 @@ const activeSnapshotMaxRecordBytes = 24000;
 const activeSnapshotMaxPages = 4096;
 const activeSnapshotMaxRecords = 500000;
 const activeSnapshotMaxTotalBytes = 268435456;
-const activeSnapshotInstallMaxRecords = 20000;
-const activeSnapshotInstallMaxBytes = 16777216;
+// Disk/transaction bounds; installation streams pages and indexed dependencies.
+const activeSnapshotInstallMaxRecords = 1000000;
+const activeSnapshotInstallMaxBytes = 536870912;
 const _maxSafeInteger = 9007199254740991;
 final _hashPattern = RegExp(r'^[a-f0-9]{64}$');
 

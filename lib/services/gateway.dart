@@ -421,13 +421,7 @@ class FirebaseGateway
     if (FirebaseAuth.instance.currentUser?.uid != authenticatedUid) {
       throw StateError('session_changed');
     }
-    _syncProtocol =
-        result['syncProtocolVersions'] is List &&
-            (result['syncProtocolVersions'] as List).contains(
-              syncProtocolVersion,
-            )
-        ? syncProtocolVersion
-        : 1;
+    _syncProtocol = negotiateSyncProtocol(result);
     _onlineSession = result['sessionToken'] as String?;
     _boundTenant = tenantId;
     _boundUid = authenticatedUid;
@@ -543,7 +537,7 @@ class FirebaseGateway
   ) => _call('syncOperation', {
     ..._scope(tenantId, deviceId),
     'operation': operation,
-    'syncProtocolVersion': _syncProtocol,
+    ...syncProtocolFields(_syncProtocol),
   });
   @override
   Future<Map<String, dynamic>> pull(
@@ -553,7 +547,7 @@ class FirebaseGateway
   ) => _call('pullChanges', {
     ..._scope(tenantId, deviceId),
     'afterSequence': afterSequence,
-    'syncProtocolVersion': _syncProtocol,
+    ...syncProtocolFields(_syncProtocol),
     'limit': 200,
   });
 }

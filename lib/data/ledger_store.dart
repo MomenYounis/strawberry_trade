@@ -635,7 +635,7 @@ class LedgerStore {
       final source = OutboxItem.fromRow(sources.single);
       if (source.status != 'blocked' ||
           source.error != 'closed-period' ||
-          !{'entry', 'review'}.contains(source.entity)) {
+          !{'entry', 'review', 'salary_term'}.contains(source.entity)) {
         invalid('late_correction', 'العملية ليست بحاجة إلى تسوية فترة مغلقة.');
       }
       final queued = await tx.query(
@@ -648,6 +648,47 @@ class LedgerStore {
           'late_correction_pending',
           'توجد تسوية محفوظة لهذه العملية؛ استكمل مزامنتها.',
         );
+      }
+      if (source.entity == 'salary_term') {
+        final original = SalaryTerm.fromJson(source.payload);
+        final term = SalaryTerm(
+          id: id,
+          tenantId: tenantId,
+          employeeId: original.employeeId,
+          effectiveMonth: date.substring(0, 7),
+          monthlyMinor: original.monthlyMinor,
+        );
+        term.validate();
+        final existing = await tx.query(
+          'salary_terms',
+          where: 'employee_id=? AND effective_month=?',
+          whereArgs: [term.employeeId, term.effectiveMonth],
+        );
+        if (existing.isNotEmpty) {
+          invalid(
+            'salary-term-exists',
+            'يوجد راتب موثق لهذا الشهر؛ لا تستبدله تلقائياً.',
+          );
+        }
+        await tx.insert('salary_terms', {
+          'id': id,
+          'employee_id': term.employeeId,
+          'effective_month': term.effectiveMonth,
+          'payload': jsonEncode(term.toJson()),
+        });
+        await _enqueue(tx, id, 'salary_term', term.toJson());
+        await tx.update(
+          'outbox',
+          {'correction_of_operation_id': originalOperationId},
+          where: 'id=?',
+          whereArgs: [id],
+        );
+        await _audit(
+          tx,
+          originalOperationId,
+          'late_salary_prospective:$id:${note.trim()}',
+        );
+        return;
       }
       final original = source.entity == 'entry'
           ? source.payload
@@ -1529,11 +1570,12 @@ class LedgerStore {
 
   /// Merge a fully verified retained ledger in one transaction. This does not
   /// post opening balances, acknowledge queued IDs or replace local operations.
-  /// Current validators load ledger projections, so installation has a stricter
-  /// explicit memory budget than resumable encrypted staging.
+  /// Verified pages and uniqueness sets stay in SQLite. Process termination
+  /// rolls back the merge; staged pages and the original outbox remain intact.
   Future<void> installActiveSnapshot(
     String snapshotId, {
     required int expectedMembershipEpoch,
+    Future<void> Function(int installedRecords)? onProgress,
   }) async {
     _ready();
     safeId(snapshotId);
@@ -1599,11 +1641,27 @@ class LedgerStore {
           'تتجاوز النسخة حد الاستعادة الآمنة على هذا الجهاز؛ بقيت الصفحات والعمليات المحلية محفوظة.',
         );
       }
-      final records = <Map<String, dynamic>>[];
+      // SQLite owns the full sort/uniqueness set. Dart retains only one page
+      // and at most 16 records during application, never the annual ledger.
+      await tx.execute('DROP TABLE IF EXISTS snapshot_install_records');
+      await tx.execute(
+        'CREATE TABLE snapshot_install_records(entity TEXT NOT NULL, id TEXT NOT NULL, sequence INTEGER NOT NULL UNIQUE, dependency INTEGER NOT NULL, payload TEXT NOT NULL, PRIMARY KEY(entity,id))',
+      );
+      await tx.execute(
+        'CREATE INDEX snapshot_install_order ON snapshot_install_records(dependency,sequence)',
+      );
+      const order = {
+        'party': 0,
+        'employee': 1,
+        'salary_term': 2,
+        'submission': 3,
+        'entry': 4,
+        'review': 5,
+      };
+      var recordCount = 0;
       final descriptors = <Map<String, dynamic>>[];
       String? previousKey;
-      final identities = <String>{};
-      final sequences = <int>{};
+
       for (var index = 0; index < header.pageCount; index++) {
         final row = (await tx.query(
           'active_snapshot_pages',
@@ -1626,91 +1684,104 @@ class LedgerStore {
         descriptors.add(page.descriptor);
         for (final record in page.records) {
           final key = activeSnapshotRecordKey(record);
-          final identity =
-              '${record['entity']}/${(record['payload'] as Map)['id']}';
-          if ((previousKey != null && previousKey.compareTo(key) >= 0) ||
-              !identities.add(identity) ||
-              !sequences.add(record['sequence'] as int)) {
+          if (previousKey != null && previousKey.compareTo(key) >= 0) {
             invalid(
               'snapshot_record_order',
-              'تكرار أو ترتيب غير صالح في نسخة الاستعادة.',
+              'ترتيب غير صالح في نسخة الاستعادة.',
             );
           }
           previousKey = key;
-          records.add(record);
+          final payload = Map<String, dynamic>.from(record['payload'] as Map);
+          try {
+            await tx.insert('snapshot_install_records', {
+              'entity': record['entity'],
+              'id': payload['id'],
+              'sequence': record['sequence'],
+              'dependency': order[record['entity']],
+              'payload': canonicalJson(payload),
+            });
+          } on DatabaseException catch (error) {
+            if (!error.isUniqueConstraintError()) rethrow;
+            invalid(
+              'snapshot_record_order',
+              'تكرار معرّف أو تسلسل في نسخة الاستعادة.',
+            );
+          }
+          recordCount++;
         }
       }
-      if (records.length != header.recordCount ||
+      if (recordCount != header.recordCount ||
           activeSnapshotHash(descriptors) != header.contentSha256) {
         invalid(
           'snapshot_content_integrity',
           'فشل التحقق من اكتمال نسخة الاستعادة.',
         );
       }
-      // Provisional approvals have no entries row yet. Their full immutable
-      // financial facts must still agree with a server entry carrying that ID.
-      final queuedApprovalEntries = <String, String>{};
-      for (final row in await tx.query(
-        'outbox',
-        columns: ['payload'],
-        where: 'entity=?',
-        whereArgs: ['review'],
-      )) {
-        final approval = _payload(row)['entry'];
-        if (approval is! Map) continue;
-        final local = LedgerEntry.fromJson(Map<String, dynamic>.from(approval));
-        final encoded = canonicalJson(local.toJson());
-        final previous = queuedApprovalEntries[local.id];
-        if (previous != null && previous != encoded) {
-          invalid(
-            'snapshot_immutable_conflict',
-            'تعارضت حقائق اعتماد محلية لنفس معرّف القيد.',
-          );
-        }
-        queuedApprovalEntries[local.id] = encoded;
-      }
-      for (final record in records) {
-        if (record['entity'] != 'entry') continue;
-        final entry = LedgerEntry.fromJson(
-          Map<String, dynamic>.from(record['payload'] as Map),
+      // A provisional approval is not an entries row. Compare its immutable
+      // facts against the server snapshot without buffering the whole outbox.
+      String afterQueueId = '';
+      while (true) {
+        final queued = await tx.query(
+          'outbox',
+          columns: ['id', 'payload'],
+          where: "entity='review' AND id>?",
+          whereArgs: [afterQueueId],
+          orderBy: 'id',
+          limit: 16,
         );
-        final queued = queuedApprovalEntries[entry.id];
-        if (queued != null && queued != canonicalJson(entry.toJson())) {
-          invalid(
-            'snapshot_immutable_conflict',
-            'تعارضت حقائق اعتماد محفوظة مع قيد الخادم؛ لم تتغير البيانات المحلية.',
+        if (queued.isEmpty) break;
+        for (final row in queued) {
+          final approval = _payload(row)['entry'];
+          if (approval is! Map) continue;
+          final local = LedgerEntry.fromJson(
+            Map<String, dynamic>.from(approval),
           );
+          final remote = await tx.query(
+            'snapshot_install_records',
+            columns: ['payload'],
+            where: "entity='entry' AND id=?",
+            whereArgs: [local.id],
+          );
+          if (remote.isNotEmpty &&
+              canonicalJson(
+                    LedgerEntry.fromJson(_payload(remote.single)).toJson(),
+                  ) !=
+                  canonicalJson(local.toJson())) {
+            invalid(
+              'snapshot_immutable_conflict',
+              'تعارضت حقائق اعتماد محفوظة؛ لم تتغير البيانات المحلية.',
+            );
+          }
+        }
+        afterQueueId = queued.last['id']! as String;
+      }
+      var applied = 0;
+      for (var dependency = 0; dependency < order.length; dependency++) {
+        var after = 0;
+        while (true) {
+          final batch = await tx.query(
+            'snapshot_install_records',
+            where: 'dependency=? AND sequence>?',
+            whereArgs: [dependency, after],
+            orderBy: 'sequence',
+            limit: 16,
+          );
+          if (batch.isEmpty) break;
+          for (final record in batch) {
+            await _applyRemote(
+              tx,
+              record['entity']! as String,
+              _payload(record),
+              null,
+              snapshotInstall: true,
+            );
+            applied++;
+          }
+          after = batch.last['sequence']! as int;
+          await onProgress?.call(applied);
         }
       }
-      const order = {
-        'party': 0,
-        'employee': 1,
-        'salary_term': 2,
-        'submission': 3,
-        'entry': 4,
-        'review': 5,
-      };
-      records.sort((a, b) {
-        final dependency = order[a['entity']]!.compareTo(order[b['entity']]!);
-        return dependency != 0
-            ? dependency
-            : (a['sequence'] as int).compareTo(b['sequence'] as int);
-      });
-      final projection = _RemoteProjection(
-        await _entries(tx),
-        await _parties(tx),
-        await _employees(tx),
-        await _terms(tx),
-      );
-      for (final record in records) {
-        await _applyRemote(
-          tx,
-          record['entity'] as String,
-          Map<String, dynamic>.from(record['payload'] as Map),
-          projection,
-          snapshotInstall: true,
-        );
-      }
+      await tx.execute('DROP TABLE snapshot_install_records');
       for (final pair in {
         'cursor': header.checkpointSequence,
         'syncCursor': header.checkpointSequence,
@@ -1733,11 +1804,105 @@ class LedgerStore {
     _notify();
   }
 
+  /// Minimal indexed dependency projection, not a full-ledger cache. All
+  /// historical siblings are scanned in bounded batches; active return totals
+  /// are reduced exactly to one internal validation accumulator.
+  Future<_RemoteProjection> _snapshotEntryProjection(
+    Transaction tx,
+    LedgerEntry e,
+  ) async {
+    final entries = <LedgerEntry>[];
+    if (e.originalId.isNotEmpty) {
+      for (final row in await tx.query(
+        'entries',
+        where: 'id=?',
+        whereArgs: [e.originalId],
+      )) {
+        entries.add(LedgerEntry.fromJson(_payload(row)));
+      }
+      for (final row in await tx.query(
+        'entries',
+        where: "kind='reversal' AND original_id=?",
+        whereArgs: [e.originalId],
+        limit: 1,
+      )) {
+        entries.add(LedgerEntry.fromJson(_payload(row)));
+      }
+      var after = '', quantity = 0, total = 0;
+      while (true) {
+        final rows = await tx.rawQuery(
+          "SELECT e.id,e.payload FROM entries e WHERE e.original_id=? AND e.kind IN ('sale_return','purchase_return') AND e.id>? AND NOT EXISTS(SELECT 1 FROM entries r WHERE r.original_id=e.id AND r.kind='reversal') ORDER BY e.id LIMIT 16",
+          [e.originalId, after],
+        );
+        if (rows.isEmpty) break;
+        for (final row in rows) {
+          final returned = LedgerEntry.fromJson(_payload(row));
+          quantity += returned.qtyMilli;
+          total += returned.totalMinor;
+          if (quantity > 9007199254740991 || total > 9007199254740991) {
+            invalid('snapshot_number', 'تجاوز مجموع المرتجعات حد الدقة.');
+          }
+        }
+        after = rows.last['id']! as String;
+      }
+      if (quantity > 0) {
+        entries.add(
+          LedgerEntry(
+            id: '_snapshot_return_accumulator',
+            tenantId: tenantId,
+            creatorUid: userId,
+            kind: 'sale_return',
+            date: e.date,
+            originalId: e.originalId,
+            qtyMilli: quantity,
+            totalMinor: total,
+          ),
+        );
+      }
+    }
+    final parties = <Party>[];
+    if (e.partyId.isNotEmpty) {
+      parties.addAll(
+        (await tx.query(
+          'parties',
+          where: 'id=?',
+          whereArgs: [e.partyId],
+        )).map((r) => Party.fromJson(_payload(r))),
+      );
+    }
+    final employees = <Employee>[];
+    for (final id in {
+      e.employeeId,
+      e.shippingEmployeeId,
+    }.where((id) => id.isNotEmpty)) {
+      employees.addAll(
+        (await tx.query(
+          'employees',
+          where: 'id=?',
+          whereArgs: [id],
+        )).map((r) => Employee.fromJson(_payload(r))),
+      );
+    }
+    final terms = <SalaryTerm>[];
+    if (e.employeeId.isNotEmpty && e.salaryMonth.isNotEmpty) {
+      terms.addAll(
+        (await tx.query(
+          'salary_terms',
+          where: 'employee_id=? AND effective_month<=?',
+          whereArgs: [e.employeeId, e.salaryMonth],
+          orderBy: 'effective_month DESC',
+          limit: 1,
+        )).map((r) => SalaryTerm.fromJson(_payload(r))),
+      );
+    }
+    return _RemoteProjection(entries, parties, employees, terms);
+  }
+
   Future<void> _applyRemote(
     Transaction tx,
     String entity,
     Map<String, dynamic> payload,
-    _RemoteProjection projection, {
+    _RemoteProjection? projection, {
     bool snapshotInstall = false,
   }) async {
     _ready();
@@ -1978,7 +2143,7 @@ class LedgerStore {
           'name': p.name,
           'payload': jsonEncode(p.toJson()),
         });
-        projection.parties.add(p);
+        projection?.parties.add(p);
       case 'employee':
         final e = Employee.fromJson(payload);
         e.validate();
@@ -1987,7 +2152,7 @@ class LedgerStore {
           'name': e.name,
           'payload': jsonEncode(e.toJson()),
         });
-        projection.employees.add(e);
+        projection?.employees.add(e);
       case 'salary_term':
         final t = SalaryTerm.fromJson(payload);
         t.validate();
@@ -1997,18 +2162,19 @@ class LedgerStore {
           'effective_month': t.effectiveMonth,
           'payload': jsonEncode(t.toJson()),
         });
-        projection.terms.add(t);
+        projection?.terms.add(t);
       case 'entry':
         final e = provenance!;
+        final validation = projection ?? await _snapshotEntryProjection(tx, e);
         LedgerRules.validateEntry(
           e,
-          projection.entries,
-          projection.parties,
-          projection.employees,
-          projection.terms,
+          validation.entries,
+          validation.parties,
+          validation.employees,
+          validation.terms,
         );
         await _insertEntry(tx, e, enqueue: false, state: 'server_accepted');
-        projection.entries.add(e);
+        projection?.entries.add(e);
       case 'submission':
         final s = EmployeeSubmission.fromJson(payload);
         s.validate();
@@ -2023,8 +2189,7 @@ class LedgerStore {
     await _audit(tx, id, 'remote_$entity');
   }
 
-  Future<void> saveDraft(String id, Map<String, dynamic> draft) async {
-    _ready();
+  void _validateDraft(String id, Map<String, dynamic> draft) {
     safeId(id);
     if (jsonEncode(draft).length > 32000) {
       invalid('draft_size', 'المسودة أكبر من الحد المسموح');
@@ -2065,6 +2230,11 @@ class LedgerStore {
         invalid('draft_scope', 'المسودة لا تخص هذا الحساب');
       }
     }
+  }
+
+  Future<void> saveDraft(String id, Map<String, dynamic> draft) async {
+    _ready();
+    _validateDraft(id, draft);
     await _db.insert('drafts', {
       'id': id,
       'payload': jsonEncode(draft),
@@ -2153,10 +2323,43 @@ class LedgerStore {
     return rows.isEmpty ? null : jsonDecode(rows.single['value']! as String);
   }
 
-  Future<Map<String, dynamic>> exportBackup() async {
+  Future<Map<String, dynamic>> exportBackup({int maxBytes = 50000000}) async {
     _manager();
-    return _transaction(
-      (tx) async => {
+    return _transaction((tx) async {
+      // Bound materialization before allocating the portable JSON graph.
+      // The conservative allowance covers nested payload string escaping.
+      var estimated = 1024;
+      for (final table in [
+        'parties',
+        'employees',
+        'salary_terms',
+        'entries',
+        'submissions',
+        'outbox',
+        'drafts',
+        'conflicts',
+        'audit',
+      ]) {
+        var after = 0;
+        while (true) {
+          final rows = await tx.rawQuery(
+            'SELECT rowid AS backup_rowid,* FROM $table WHERE rowid>? ORDER BY rowid LIMIT 32',
+            [after],
+          );
+          if (rows.isEmpty) break;
+          for (final row in rows) {
+            estimated += 2 * utf8.encode(jsonEncode(row)).length + 128;
+            if (estimated > maxBytes) {
+              invalid(
+                'backup_size',
+                'تتجاوز النسخة حد الذاكرة الآمن؛ لم تُنشأ نسخة ناقصة. احتفظ بالجهاز وراجع المسؤول.',
+              );
+            }
+          }
+          after = rows.last['backup_rowid']! as int;
+        }
+      }
+      return {
         'format': 'strawberry-ledger',
         'version': 2,
         'tenantId': tenantId,
@@ -2189,15 +2392,191 @@ class LedgerStore {
           whereArgs: backupPreferenceKeys.toList(),
         ),
         // No membership, entitlement, device key, credentials or authority settings.
-      },
-    );
+      };
+    });
+  }
+
+  /// Bounded recovery copy for a large ledger: pending operations plus their
+  /// validation dependencies. Accepted history is recovered from the server,
+  /// never claimed to be contained in this portable file.
+  Future<Map<String, dynamic>> exportPendingBackup() async {
+    _ready();
+    return _transaction((tx) async {
+      const maxBytes = 16 * 1024 * 1024;
+      final queue = await tx.query('outbox', limit: 1001);
+      if (queue.length > 1000) {
+        invalid(
+          'backup_queue_limit',
+          'يتجاوز الطابور حد النسخة المحمولة؛ لم تُحذف أو تُختصر أي عملية.',
+        );
+      }
+      final selected = <String, Map<String, Map<String, Object?>>>{};
+      var bytes = 1024;
+      final pendingEntries = <Map<String, Object?>>[];
+      final related = <String>{};
+      Future<void> add(String table, String id) async {
+        if (id.isEmpty || (selected[table]?.containsKey(id) ?? false)) return;
+        final rows = await tx.query(
+          table,
+          columns: table == 'entries' ? ['rowid AS recovery_order', '*'] : null,
+          where: 'id=?',
+          whereArgs: [id],
+        );
+        if (rows.isEmpty) {
+          invalid(
+            'backup_relationship',
+            'أصل مطلوب للنسخة غير موجود؛ لم تُنشأ نسخة ناقصة.',
+          );
+        }
+        final row = rows.single;
+        bytes += 2 * utf8.encode(jsonEncode(row)).length + 128;
+        if (bytes > maxBytes) {
+          invalid(
+            'backup_size',
+            'تتجاوز تبعيات الطابور حد النسخة الآمن؛ احتفظ بالجهاز وراجع المسؤول.',
+          );
+        }
+        (selected[table] ??= {})[id] = row;
+        if (table == 'entries') pendingEntries.add(row);
+      }
+
+      Future<void> dependencies(Map<String, dynamic> payload) async {
+        for (final id in [payload['partyId']]) {
+          if (id is String && id.isNotEmpty) await add('parties', id);
+        }
+        for (final id in [
+          payload['employeeId'],
+          payload['shippingEmployeeId'],
+        ]) {
+          if (role == 'manager' && id is String && id.isNotEmpty) {
+            await add('employees', id);
+            final terms = await tx.query(
+              'salary_terms',
+              columns: ['id'],
+              where: 'employee_id=?',
+              whereArgs: [id],
+              limit: 1001,
+            );
+            if (terms.length > 1000) {
+              invalid(
+                'backup_size',
+                'تاريخ الراتب أكبر من حد النسخة المحمولة.',
+              );
+            }
+            for (final term in terms) {
+              await add('salary_terms', term['id']! as String);
+            }
+          }
+        }
+        final original = payload['originalId'];
+        if (role == 'manager' &&
+            original is String &&
+            original.isNotEmpty &&
+            related.add(original)) {
+          await add('entries', original);
+          var after = '';
+          while (true) {
+            final siblings = await tx.query(
+              'entries',
+              columns: ['id'],
+              where: 'original_id=? AND id>?',
+              whereArgs: [original, after],
+              orderBy: 'id',
+              limit: 32,
+            );
+            if (siblings.isEmpty) break;
+            for (final sibling in siblings) {
+              await add('entries', sibling['id']! as String);
+            }
+            after = siblings.last['id']! as String;
+          }
+        }
+      }
+
+      for (final row in queue) {
+        final item = OutboxItem.fromRow(row);
+        bytes += 2 * utf8.encode(jsonEncode(row)).length + 128;
+        final table = {
+          'party': 'parties',
+          'employee': 'employees',
+          'salary_term': 'salary_terms',
+          'entry': 'entries',
+          'submission': 'submissions',
+        }[item.entity];
+        if (table != null) await add(table, item.id);
+        await dependencies(item.payload);
+        if (item.entity == 'review') {
+          await add('submissions', strictString(item.payload, 'submissionId'));
+          final approval = item.payload['entry'];
+          if (approval is Map) {
+            await dependencies(Map<String, dynamic>.from(approval));
+          }
+        }
+      }
+      var index = 0;
+      for (final row
+          in selected['submissions']?.values ?? <Map<String, Object?>>[]) {
+        await dependencies(_payload(row));
+      }
+      while (index < pendingEntries.length) {
+        await dependencies(_payload(pendingEntries[index++]));
+      }
+      List<Map<String, Object?>> rows(String table) {
+        final values =
+            selected[table]?.values.toList() ?? <Map<String, Object?>>[];
+        if (table == 'entries') {
+          values.sort(
+            (a, b) => (a['recovery_order']! as int).compareTo(
+              b['recovery_order']! as int,
+            ),
+          );
+          return values
+              .map((row) => {...row}..remove('recovery_order'))
+              .toList();
+        }
+        return values;
+      }
+
+      final drafts = await tx.query('drafts', limit: 1001);
+      if (drafts.length > 1000) {
+        invalid('backup_size', 'المسودات أكبر من حد النسخة المحمولة.');
+      }
+      for (final row in drafts) {
+        bytes += 2 * utf8.encode(jsonEncode(row)).length + 128;
+      }
+      if (bytes > maxBytes) {
+        invalid('backup_size', 'تتجاوز النسخة حد الذاكرة الآمن.');
+      }
+      return {
+        'format': 'strawberry-ledger',
+        'version': 2,
+        'tenantId': tenantId,
+        'userId': userId,
+        'exportedAt': DateTime.now().toUtc().toIso8601String(),
+        'coverage': 'pending-and-dependencies',
+        'role': role,
+        'parties': rows('parties').map(_payload).toList(),
+        'employees': rows('employees').map(_payload).toList(),
+        'salaryTerms': rows('salary_terms').map(_payload).toList(),
+        'entries': rows('entries'),
+        'submissions': rows('submissions'),
+        'outbox': queue,
+        'drafts': drafts,
+        'conflicts': <dynamic>[],
+        'audit': <dynamic>[],
+        'preferences': <dynamic>[],
+      };
+    });
   }
 
   /// Restores into the same authenticated tenant and UID, including stable queue
   /// IDs. Trusted enrollment is still required on a new device. Existing data is
   /// merged only when byte-identical; mismatches abort the entire transaction.
   Future<void> restoreBackup(Map<String, dynamic> backup) async {
-    _manager();
+    _ready();
+    if ((backup['role'] ?? 'manager') != role) {
+      invalid('backup_scope', 'النسخة لا تخص صلاحية هذا الحساب.');
+    }
     if (jsonEncode(backup).length > 50000000 ||
         backup['format'] != 'strawberry-ledger' ||
         backup['version'] != 2 ||
@@ -2211,6 +2590,8 @@ class LedgerStore {
       'tenantId',
       'userId',
       'exportedAt',
+      'coverage',
+      'role',
       'preferences',
       'parties',
       'employees',
@@ -2224,6 +2605,10 @@ class LedgerStore {
     };
     if (backup.keys.any((k) => !allowed.contains(k))) {
       invalid('backup_authority', 'النسخة تحتوي إعدادات صلاحية غير مسموحة');
+    }
+    if (backup.containsKey('coverage') &&
+        backup['coverage'] != 'pending-and-dependencies') {
+      invalid('backup_format', 'نطاق تغطية النسخة غير مدعوم.');
     }
     List<Map<String, dynamic>> rows(String key) {
       final value = backup[key];
@@ -2282,6 +2667,23 @@ class LedgerStore {
     final submissions = submissionRows
         .map((r) => EmployeeSubmission.fromJson(decodePayload(r)))
         .toList();
+    if (role == 'employee') {
+      if (entries.isNotEmpty ||
+          employees.isNotEmpty ||
+          terms.isNotEmpty ||
+          conflicts.isNotEmpty ||
+          audits.isNotEmpty ||
+          parties.any((p) => p.openingMinor != 0) ||
+          submissions.any(
+            (s) => s.creatorUid != userId || s.employeeId != employeeId,
+          ) ||
+          outbox.any((o) => o['entity'] != 'submission')) {
+        invalid(
+          'backup_authority',
+          'نسخة الموظف تحتوي نطاقاً أو بيانات غير مصرح بها.',
+        );
+      }
+    }
     final allIds = <String>{};
     for (final p in parties) {
       p.validate();
@@ -2342,7 +2744,8 @@ class LedgerStore {
       final entity = strictString(o, 'entity');
       final correction = o['correction_of_operation_id'];
       if (correction != null) {
-        if (correction is! String || !{'entry', 'review'}.contains(entity)) {
+        if (correction is! String ||
+            !{'entry', 'review', 'salary_term'}.contains(entity)) {
           invalid('backup_queue', 'رابط التسوية غير صالح');
         }
         safeId(correction);
@@ -2424,7 +2827,7 @@ class LedgerStore {
     }
     for (final d in drafts) {
       safeId(strictString(d, 'id'));
-      decodePayload(d);
+      _validateDraft(strictString(d, 'id'), decodePayload(d));
       if (strictInt(d, 'updated_ms') < 0) {
         invalid('backup_draft', 'مسودة غير صالحة');
       }
@@ -2522,7 +2925,7 @@ class LedgerStore {
           'attempts': o['attempts'],
           'error': o['error'],
           'created_ms': o['created_ms'],
-          'next_attempt_ms': 0,
+          'next_attempt_ms': o['next_attempt_ms'],
           'correction_of_operation_id': o['correction_of_operation_id'],
         });
       }

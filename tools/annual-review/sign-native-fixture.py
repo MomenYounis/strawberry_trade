@@ -16,7 +16,7 @@ import zipfile
 
 root = pathlib.Path(__file__).resolve().parents[2]
 parser = argparse.ArgumentParser()
-parser.add_argument('phase', choices=['seed-v2', 'verify'])
+parser.add_argument('phase', choices=['seed-v2', 'verify', 'recovery-seed', 'recovery-restore'])
 parser.add_argument('--evidence-dir', default='verification/annual-2026-11-02/native')
 args = parser.parse_args()
 out = (root / args.evidence_dir).resolve()
@@ -34,7 +34,8 @@ try:
         raise RuntimeError('destination-already-exists')
     with zipfile.ZipFile(source) as archive:
         kernel = archive.read('assets/flutter_assets/kernel_blob.bin')
-        if b'local_persistence_test.dart' not in kernel:
+        marker = b'recovery_device_test.dart' if args.phase.startswith('recovery-') else b'local_persistence_test.dart'
+        if marker not in kernel:
             raise RuntimeError('persistence-test-entrypoint-required')
     env = os.environ.copy()
     env['JAVA_HOME'] = '/usr/lib/jvm/java-17-temurin-jdk'
