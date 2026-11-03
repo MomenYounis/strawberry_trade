@@ -1,0 +1,230 @@
+// Synthetic disposable Android acceptance. Never a production entrypoint.
+// Historical lib/ is unchanged; this entrypoint supplies only demo configuration.
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:strawberry_trade/data/ledger_store.dart';
+import 'package:strawberry_trade/domain/ledger.dart';
+import 'package:strawberry_trade/security/device_security.dart';
+import 'package:strawberry_trade/security/licensing.dart' hide canonicalJson;
+import 'package:strawberry_trade/services/gateway.dart';
+import 'package:strawberry_trade/services/sync_protocol.dart';
+
+const _client = 'v12';
+const _security = DeviceSecurity();
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  testWidgets('historical client native compatibility phase', (tester) async {
+    expect(Platform.isAndroid, isTrue);
+    // These checks run before any Firebase/Auth SDK or network initialization.
+    expect(FirebaseGateway.emulator, isTrue);
+    expect(FirebaseGateway.emulatorHost, '10.0.2.2');
+    expect(FirebaseGateway.endpoint.baseUrl, 'http://10.0.2.2:8788');
+    final directory = await getApplicationSupportDirectory();
+    final identity = await _security.installationIdentity();
+    final jobFile = File('${directory.path}/commercial-job.json');
+    final job = await jobFile.exists()
+        ? Map<String, dynamic>.from(jsonDecode(await jobFile.readAsString()) as Map)
+        : <String, dynamic>{'phase': 'identity'};
+    final phase = job['phase'] as String;
+    final result = <String, dynamic>{
+      'phase': phase,
+      'client': _client,
+      'synthetic': true,
+      'deviceId': identity.deviceId,
+      'publicKeySpki': identity.publicKeySpki,
+      'historicalLibraryPatched': false,
+      'productionAuthenticationUsed': false,
+    };
+    if (phase == 'identity') {
+      await File('${directory.path}/commercial-result.json').writeAsString(jsonEncode(result));
+      return;
+    }
+    final campaign = job['campaign'] as String;
+    expect(RegExp(r'^legacy_[a-f0-9]{12}$').hasMatch(campaign), isTrue);
+    final accounts = Map<String, dynamic>.from(job['accounts'] as Map);
+    final account = Map<String, dynamic>.from(accounts['managerA'] as Map);
+    final tenant = account['tenantId'] as String;
+    final uid = account['uid'] as String;
+    expect(tenant, '${campaign}_business');
+    expect(uid, '${campaign}_manager');
+    expect((account['email'] as String).endsWith('@example.test'), isTrue);
+    final gateway = FirebaseGateway(_security);
+    await gateway.login(account['email'] as String, account['password'] as String);
+    final bootstrap = await gateway.bootstrap(tenant, identity);
+    final license = await LicenseSession(
+      security: _security,
+      verifier: LicenseVerifier(Map<String, String>.from(job['licensePublicKeys'] as Map)),
+      tenantId: tenant,
+      uid: uid,
+      deviceId: identity.deviceId,
+    ).importPackage(jsonEncode(bootstrap['licensePackage']), trustedOnline: true);
+    expect(license.operationalAllowed, isTrue);
+    expect(license.role, 'manager');
+    final scope = 'legacy-compatibility:$campaign:$tenant:$uid';
+    final path = '${directory.path}/legacy-compatibility-$campaign.db';
+    Future<LedgerStore> open() async => LedgerStore.open(
+      path: path,
+      tenantId: tenant,
+      userId: uid,
+      role: 'manager',
+      password: await _security.databasePassword(scope),
+    );
+    var store = await open();
+    final continuityFile = File('${directory.path}/legacy-compatibility-$campaign.json');
+
+    LedgerEntry invoice(String id, int total, int paid) => LedgerEntry(
+      id: id,
+      tenantId: tenant,
+      creatorUid: uid,
+      kind: 'sale',
+      date: '2026-10-18',
+      partyId: 'compat_customer',
+      partyName: 'عميل توافق تجريبي',
+      qtyMilli: 1000,
+      priceMinor: total,
+      totalMinor: total,
+      paidMinor: paid,
+      grade: 'أول',
+      unit: 'كجم',
+    );
+    Future<void> send(OutboxItem item) async {
+      final first = await gateway.send(tenant, identity.deviceId, item.toOperation());
+      final duplicate = await gateway.send(tenant, identity.deviceId, item.toOperation());
+      expect(first['status'], 'accepted');
+      expect(duplicate, first, reason: 'Duplicate delivery must return the identical receipt.');
+      await store.acknowledge(item.id, sessionTenantId: tenant, sessionUserId: uid);
+    }
+    Future<void> flush() async {
+      for (final item in await store.listOutbox()) {
+        await send(item);
+      }
+    }
+    Future<void> pull() async {
+      for (var pages = 0; pages < 100; pages++) {
+        final cursor = (await store.preference('cursor') as int?) ?? 0;
+        final response = await gateway.pull(tenant, identity.deviceId, cursor);
+        final page = SyncPage.parse(response, cursor);
+        await store.applyRemoteBatch(page.changes,
+          expectedCursor: cursor, lastSequence: page.lastSequence);
+        if (response['hasMore'] != true) return;
+      }
+      fail('legacy-fixture-page-budget-exceeded');
+    }
+    Future<Map<String, dynamic>> continuity() async =>
+        Map<String, dynamic>.from(jsonDecode(await continuityFile.readAsString()) as Map);
+    Future<void> saveContinuity(OutboxItem item) async {
+      await continuityFile.writeAsString(jsonEncode({
+        'pendingOperation': item.toOperation(),
+        'pendingId': item.id,
+        'attempts': item.attempts,
+        'cursor': (await store.preference('cursor') as int?) ?? 0,
+      }));
+    }
+
+    try {
+      if (phase == 'legacy_seed_v9') {
+        expect(_client, 'v9');
+        expect(await continuityFile.exists(), isFalse);
+        expect(await store.listEntries(), isEmpty);
+        await store.saveParty(Party(
+          id: 'compat_customer', tenantId: tenant, name: 'عميل توافق تجريبي',
+          kind: 'merchant', openingMinor: 100,
+        ));
+        await store.saveEntry(invoice('compat_v9_accepted', 2000, 500));
+        await store.fail('compat_v9_accepted', 'unavailable', nowMs: 0);
+        await store.close();
+        store = await open();
+        final retry = (await store.listOutbox()).singleWhere((item) => item.id == 'compat_v9_accepted');
+        expect(retry.status, 'retry');
+        expect(retry.attempts, 1);
+        await flush();
+        await pull();
+        expect(await store.entryState('compat_v9_accepted'), 'server_accepted');
+        await store.saveEntry(invoice('compat_v9_pending', 3000, 500));
+        await store.fail('compat_v9_pending', 'unavailable', nowMs: 0);
+        await store.saveDraft('compat_draft', {
+          'id': 'compat_draft', 'tenantId': tenant, 'creatorUid': uid,
+          'kind': 'sale', 'qtyText': '1', 'priceText': '40',
+          'note': 'Synthetic draft retained through historical clients',
+        });
+        final pending = (await store.listOutbox()).single;
+        await saveContinuity(pending);
+        await store.close();
+        store = await open();
+        expect(canonicalJson((await store.listOutbox()).single.toOperation()), canonicalJson(pending.toOperation()));
+        expect((await store.listDrafts()).single['id'], 'compat_draft');
+        result.addAll({'acceptedEntryCount': 1, 'pendingQueueCount': 1, 'diskRetryRestored': true, 'duplicateReceiptIdentical': true});
+      } else if (phase == 'legacy_unsupported_v9') {
+        expect(_client, 'v9');
+        final before = await continuity();
+        final pending = (await store.listOutbox()).single;
+        expect(canonicalJson(pending.toOperation()), canonicalJson(before['pendingOperation']));
+        Future<void> rejected(Future<dynamic> call) async {
+          try {
+            await call;
+            fail('Unsupported v9 must be rejected by the minimum-v2 tenant.');
+          } on FirebaseFunctionsException catch (error) {
+            expect(error.details, isA<Map>());
+            expect((error.details as Map)['reason'], 'sync-upgrade-required');
+          }
+        }
+        await rejected(gateway.send(tenant, identity.deviceId, pending.toOperation()));
+        await rejected(gateway.pull(tenant, identity.deviceId, before['cursor'] as int));
+        // This is the real old controller's error path. It retries with backoff;
+        // it does not understand the newer actionable blocked-status UI.
+        await store.fail(pending.id, 'sync-upgrade-required', nowMs: 0);
+        await store.close();
+        store = await open();
+        final retained = (await store.listOutbox()).single;
+        expect(retained.id, pending.id);
+        expect(canonicalJson(retained.toOperation()), canonicalJson(before['pendingOperation']));
+        expect(retained.attempts, pending.attempts + 1);
+        expect(retained.status, 'retry');
+        expect(await store.preference('cursor'), before['cursor']);
+        expect((await store.listDrafts()).single['id'], 'compat_draft');
+        await saveContinuity(retained);
+        result.addAll({'unsupportedRefusalObserved': true, 'pendingQueueCount': 1, 'queueIdAndPayloadPreserved': true, 'oldClientQueueStatusAfterRefusal': retained.status, 'cursorUnchanged': true});
+      } else if (phase == 'legacy_resume_v11' || phase == 'legacy_resume_v12') {
+        expect(_client, phase == 'legacy_resume_v11' ? 'v11' : 'v12');
+        final before = await continuity();
+        final pending = (await store.listOutbox()).single;
+        expect(pending.id, before['pendingId']);
+        expect(canonicalJson(pending.toOperation()), canonicalJson(before['pendingOperation']));
+        expect(pending.attempts, before['attempts']);
+        expect((await store.listDrafts()).single['id'], 'compat_draft');
+        await flush();
+        final entry = _client == 'v11'
+            ? invoice('compat_v11_accepted', 4000, 1000)
+            : invoice('compat_v12_accepted', 5000, 1000);
+        await store.saveEntry(entry);
+        await flush();
+        await pull();
+        expect(await store.entryState(before['pendingId'] as String), 'server_accepted');
+        expect(await store.entryState(entry.id), 'server_accepted');
+        final next = _client == 'v11'
+            ? invoice('compat_v11_pending', 4500, 500)
+            : invoice('compat_v12_pending', 6000, 500);
+        await store.saveEntry(next);
+        await store.fail(next.id, 'unavailable', nowMs: 0);
+        await saveContinuity((await store.listOutbox()).single);
+        await store.close();
+        store = await open();
+        expect((await store.listOutbox()).single.id, next.id);
+        expect((await store.listDrafts()).single['id'], 'compat_draft');
+        result.addAll({'acceptedEntryCount': _client == 'v11' ? 3 : 5, 'pendingQueueCount': 1, 'priorClientQueueAcceptedExactlyOnce': true, 'duplicateReceiptIdentical': true, 'draftPreserved': true});
+      } else {
+        fail('Unknown historical-client fixture phase.');
+      }
+      result.addAll({'schemaVersion': LedgerStore.schemaVersion, 'status': 'PASS'});
+      await File('${directory.path}/commercial-result.json').writeAsString(jsonEncode(result));
+    } finally {
+      await store.close();
+    }
+  });
+}
