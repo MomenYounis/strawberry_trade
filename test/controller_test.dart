@@ -685,6 +685,43 @@ void main() {
     expect(gateway.sent.length, 1);
   });
 
+  test('normal synchronization delivers the manager reason for a prospective salary correction', () async {
+    await app.store!.applyRemote(
+      'employee',
+      const Employee(id: 'staff', tenantId: 't1', name: 'Synthetic').toJson(),
+    );
+    const original = SalaryTerm(
+      id: 'held-salary-reason',
+      tenantId: 't1',
+      employeeId: 'staff',
+      effectiveMonth: '2026-08',
+      monthlyMinor: 100000,
+    );
+    await app.store!.saveSalaryTerm(original);
+    await app.store!.fail(original.id, 'closed-period');
+    final corrected = await app.store!.saveClosedPeriodCorrection(
+      original.id,
+      date: '2026-11-03',
+      note: 'Manager reviewed original closed salary evidence',
+    );
+    await app.synchronize();
+    final operation = gateway.sent.single['operation'] as Map;
+    expect(operation['id'], corrected);
+    expect(operation['correctionOfOperationId'], original.id);
+    expect(
+      operation['correctionReason'],
+      'Manager reviewed original closed salary evidence',
+    );
+    expect(
+      (operation['payload'] as Map).containsKey('correctionReason'),
+      isFalse,
+    );
+    final retained = (await app.store!.listOutbox()).single;
+    expect(retained.id, original.id);
+    expect(retained.status, 'blocked');
+    expect(app.terms.single.effectiveMonth, '2026-11');
+  });
+
   test(
     'malformed and history-floor pages preserve cursor and unsent work',
     () async {

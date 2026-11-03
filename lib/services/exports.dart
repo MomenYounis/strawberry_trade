@@ -18,6 +18,19 @@ String entryDescription(LedgerEntry e) {
 }
 
 class ArabicExports {
+  // The PDF package retains its layout tree until serialization. Bound that
+  // tree before loading fonts or creating any PDF widgets; a date filter must
+  // reduce the requested rows, never the financial history used for balances.
+  static const maxPdfRows = 500;
+  static const maxPdfTextCodeUnits = 160000;
+  static const maxPdfRowCodeUnits = 1600;
+  static const maxPdfOutputBytes = 8 * 1024 * 1024;
+  static const maxPdfPages = 200;
+  static const maxCsvRows = 20000;
+  static const maxCsvBytes = 16 * 1024 * 1024;
+  static const maxTextRows = 20000;
+  static const maxTextBytes = 4 * 1024 * 1024;
+
   static Future<Uint8List> statement({
     required String business,
     required String title,
@@ -27,6 +40,15 @@ class ArabicExports {
     String? to,
     bool readOnlyArchive = false,
   }) async {
+    _checkStatementRequest(
+      entries,
+      party: party,
+      from: from,
+      to: to,
+      maxRows: maxPdfRows,
+      pdfBudget: _PdfBudget([business, title, party?.name ?? '']),
+      readOnlyArchive: readOnlyArchive,
+    );
     final regular = await rootBundle.load(
       'assets/fonts/NotoNaskhArabic-Regular.ttf',
     );
@@ -58,11 +80,24 @@ class ArabicExports {
     String? to,
     bool readOnlyArchive = false,
   }) async {
+    _checkStatementRequest(
+      entries,
+      party: party,
+      from: from,
+      to: to,
+      maxRows: maxPdfRows,
+      pdfBudget: _PdfBudget([business, title, party?.name ?? '']),
+      readOnlyArchive: readOnlyArchive,
+    );
     final font = pw.Font.ttf(regular), fontBold = pw.Font.ttf(bold);
     final doc = pw.Document(title: title, author: business);
     final lines = party == null
         ? <StatementLine>[]
         : LedgerRules.statement(party, entries, from: from, to: to);
+    final opening = party == null
+        ? null
+        : _statementOpening(party, entries, lines, from: from);
+    final closing = lines.lastOrNull?.balanceMinor ?? opening;
     final visible = party == null
         ? entries
               .where(
@@ -105,6 +140,18 @@ class ArabicExports {
             ),
             pw.Text(
               entry.id,
+              textDirection: pw.TextDirection.ltr,
+              style: const pw.TextStyle(fontSize: 9),
+            ),
+          ],
+          if (entry.originalId.isNotEmpty) ...[
+            pw.Text(
+              'مرجع القيد الأصلي:',
+              textDirection: pw.TextDirection.rtl,
+              style: const pw.TextStyle(fontSize: 9),
+            ),
+            pw.Text(
+              entry.originalId,
               textDirection: pw.TextDirection.ltr,
               style: const pw.TextStyle(fontSize: 9),
             ),
@@ -179,35 +226,38 @@ class ArabicExports {
       pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
         margin: const pw.EdgeInsets.all(32),
-        maxPages: 1000,
+        maxPages: maxPdfPages,
         theme: pw.ThemeData.withFont(
           base: font,
           bold: fontBold,
           fontFallback: [pw.Font.ttf(latin)],
         ),
         textDirection: pw.TextDirection.rtl,
-        header: (context) => pw.Container(
-          padding: const pw.EdgeInsets.only(bottom: 12),
-          decoration: const pw.BoxDecoration(
-            border: pw.Border(bottom: pw.BorderSide(color: ink, width: 1)),
-          ),
-          child: pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.end,
-            children: [
-              pw.Text(
-                business,
-                style: pw.TextStyle(
-                  fontSize: 20,
-                  color: ink,
-                  fontWeight: pw.FontWeight.bold,
+        header: (context) => _checkedPdfHeader(
+          context,
+          pw.Container(
+            padding: const pw.EdgeInsets.only(bottom: 12),
+            decoration: const pw.BoxDecoration(
+              border: pw.Border(bottom: pw.BorderSide(color: ink, width: 1)),
+            ),
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.end,
+              children: [
+                pw.Text(
+                  business,
+                  style: pw.TextStyle(
+                    fontSize: 20,
+                    color: ink,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
                 ),
-              ),
-              pw.Text(title, style: const pw.TextStyle(fontSize: 15)),
-              pw.Text(
-                'من ${from ?? 'بداية السجل'} إلى ${to ?? 'آخر عملية'}',
-                style: const pw.TextStyle(fontSize: 10),
-              ),
-            ],
+                pw.Text(title, style: const pw.TextStyle(fontSize: 15)),
+                pw.Text(
+                  'من ${from ?? 'بداية السجل'} إلى ${to ?? 'آخر عملية'}',
+                  style: const pw.TextStyle(fontSize: 10),
+                ),
+              ],
+            ),
           ),
         ),
         footer: (context) => pw.Row(
@@ -229,9 +279,7 @@ class ArabicExports {
         build: (context) => [
           pw.SizedBox(height: 12),
           if (party != null)
-            pw.Text(
-              'الرصيد الافتتاحي: ${formatMoney(LedgerRules.statementOpeningBalance(party, entries, from: from))} ج.م',
-            ),
+            pw.Text('الرصيد الافتتاحي: ${formatMoney(opening!)} ج.م'),
           pw.Table(
             columnWidths: party == null
                 ? {
@@ -253,10 +301,10 @@ class ArabicExports {
           pw.SizedBox(height: 12),
           if (party != null)
             pw.Text(
-              'الرصيد حتى نهاية الفترة: ${formatMoney(LedgerRules.statementClosingBalance(party, entries, to: to))} ج.م',
+              'الرصيد حتى نهاية الفترة: ${formatMoney(closing!)} ج.م',
               style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
             ),
-          if (party == null)
+          if (party == null && !readOnlyArchive)
             pw.Text(
               'صافي الحركة النقدية المسجلة: ${formatMoney(LedgerRules.netRecordedCash(entries, from: from, to: to))} ج.م',
             ),
@@ -267,81 +315,174 @@ class ArabicExports {
         ],
       ),
     );
-    return doc.save();
+    return _boundedPdf(doc);
   }
 
   static String csv(List<LedgerEntry> entries) {
-    String quote(String s) {
-      if (RegExp(r'^[=+@\-\t\r]').hasMatch(s)) s = "'$s";
-      return '"${s.replaceAll('"', '""')}"';
+    if (entries.length > maxCsvRows) _exportLimit();
+    final tenantId = entries.firstOrNull?.tenantId;
+    if (entries.any((entry) => entry.tenantId != tenantId)) {
+      invalid('statement_scope', 'بيانات الجدول لا تخص المنشأة نفسها');
     }
+    final output = _CsvBuffer(_quoteCsv);
+    output.add([
+      'المعرف',
+      'التاريخ',
+      'النوع',
+      'الطرف',
+      'معرف الطرف',
+      'الكمية',
+      'الوحدة',
+      'الصنف',
+      'القيمة',
+      'سعر الوحدة',
+      'المدفوع',
+      'الفاتورة الأصلية أو التصحيح',
+      'الموظف',
+      'شهر الراتب',
+      'فئة المصروف',
+      'اتجاه التسوية',
+      'مسؤول الشحن',
+      'مرجع الشحنة',
+      'حالة الشحنة',
+      'ترتيب تحديث الشحنة',
+      'معرف المنشئ',
+      'ملاحظات',
+      'تاريخ العمل الأصلي للتسوية',
+      'معرف العملية الأصلية للتسوية',
+    ]);
+    for (final e in entries) {
+      output.add([
+        e.id,
+        e.date,
+        entryDescription(e),
+        e.partyName,
+        e.partyId,
+        formatQuantity(e.qtyMilli),
+        e.unit,
+        e.grade,
+        formatMoney(e.totalMinor),
+        formatMoney(e.priceMinor),
+        formatMoney(e.paidMinor),
+        e.originalId,
+        e.employeeId,
+        e.salaryMonth,
+        e.category,
+        e.adjustmentDirection == 'increase'
+            ? 'زيادة المديونية'
+            : e.adjustmentDirection == 'decrease'
+            ? 'خفض المديونية'
+            : '',
+        e.shippingEmployeeId,
+        e.shipmentRef,
+        const {
+              'pending': 'قيد التجهيز',
+              'in_transit': 'في الطريق',
+              'delivered': 'تم التسليم',
+            }[e.shipmentStatus] ??
+            '',
+        e.shipmentOrder == 0 ? '' : e.shipmentOrder.toString(),
+        e.creatorUid,
+        e.note,
+        e.originalBusinessDate,
+        e.correctionOfOperationId,
+      ]);
+    }
+    return output.finish();
+  }
 
-    final rows = [
-      [
-        'المعرف',
-        'التاريخ',
-        'النوع',
-        'الطرف',
-        'معرف الطرف',
-        'الكمية',
-        'الوحدة',
-        'الصنف',
-        'القيمة',
-        'سعر الوحدة',
-        'المدفوع',
-        'الفاتورة الأصلية أو التصحيح',
-        'الموظف',
-        'شهر الراتب',
-        'فئة المصروف',
-        'اتجاه التسوية',
-        'مسؤول الشحن',
-        'مرجع الشحنة',
-        'حالة الشحنة',
-        'ترتيب تحديث الشحنة',
-        'معرف المنشئ',
-        'ملاحظات',
-        'تاريخ العمل الأصلي للتسوية',
-        'معرف العملية الأصلية للتسوية',
-      ],
-      ...entries.map(
-        (e) => [
-          e.id,
-          e.date,
-          entryDescription(e),
-          e.partyName,
-          e.partyId,
-          formatQuantity(e.qtyMilli),
-          e.unit,
-          e.grade,
-          formatMoney(e.totalMinor),
-          formatMoney(e.priceMinor),
-          formatMoney(e.paidMinor),
-          e.originalId,
-          e.employeeId,
-          e.salaryMonth,
-          e.category,
-          e.adjustmentDirection == 'increase'
-              ? 'زيادة المديونية'
-              : e.adjustmentDirection == 'decrease'
-              ? 'خفض المديونية'
-              : '',
-          e.shippingEmployeeId,
-          e.shipmentRef,
-          const {
-                'pending': 'قيد التجهيز',
-                'in_transit': 'في الطريق',
-                'delivered': 'تم التسليم',
-              }[e.shipmentStatus] ??
-              '',
-          e.shipmentOrder == 0 ? '' : e.shipmentOrder.toString(),
-          e.creatorUid,
-          e.note,
-          e.originalBusinessDate,
-          e.correctionOfOperationId,
-        ],
-      ),
-    ];
-    return '\uFEFF${rows.map((r) => r.map(quote).join(',')).join('\r\n')}';
+  static String statementCsv({
+    required Party party,
+    required List<LedgerEntry> entries,
+    String? from,
+    String? to,
+  }) {
+    _checkStatementRequest(
+      entries,
+      party: party,
+      from: from,
+      to: to,
+      maxRows: maxCsvRows,
+    );
+    final lines = LedgerRules.statement(party, entries, from: from, to: to);
+    final opening = _statementOpening(party, entries, lines, from: from);
+    final closing = lines.lastOrNull?.balanceMinor ?? opening;
+    final output = _CsvBuffer(_quoteCsv);
+    output.add([
+      'كشف حساب',
+      party.name,
+      'معرف الطرف',
+      party.id,
+      'معرف المنشأة',
+      party.tenantId,
+    ]);
+    output.add(['من', from ?? '', 'إلى', to ?? '']);
+    output.add(['الرصيد الافتتاحي', formatMoney(opening)]);
+    output.add([
+      'المعرف',
+      'التاريخ',
+      'البيان',
+      'مدين',
+      'دائن',
+      'الرصيد',
+      'ملاحظات',
+      'القيد الأصلي',
+      'تاريخ العمل الأصلي للتسوية',
+      'معرف العملية الأصلية للتسوية',
+    ]);
+    for (final line in lines) {
+      output.add([
+        line.entry.id,
+        line.entry.date,
+        entryDescription(line.entry),
+        formatMoney(line.debitMinor),
+        formatMoney(line.creditMinor),
+        formatMoney(line.balanceMinor),
+        line.entry.note,
+        line.entry.originalId,
+        line.entry.originalBusinessDate,
+        line.entry.correctionOfOperationId,
+      ]);
+    }
+    output.add(['الرصيد الختامي', formatMoney(closing)]);
+    output.add(['من السجل المحلي؛ قد توجد عمليات لم يقبلها الخادم بعد']);
+    return output.finish();
+  }
+
+  static String statementText({
+    required Party party,
+    required List<LedgerEntry> entries,
+    String? from,
+    String? to,
+  }) {
+    _checkStatementRequest(
+      entries,
+      party: party,
+      from: from,
+      to: to,
+      maxRows: maxTextRows,
+    );
+    final lines = LedgerRules.statement(party, entries, from: from, to: to);
+    final opening = _statementOpening(party, entries, lines, from: from);
+    final closing = lines.lastOrNull?.balanceMinor ?? opening;
+    final output = _TextBuffer();
+    output.add(
+      'كشف حساب ${party.kind == 'supplier' ? 'المورد' : 'العميل'}: ${party.name}',
+    );
+    output.add('الفترة: ${from ?? 'بداية السجل'} إلى ${to ?? 'نهاية السجل'}');
+    output.add('الرصيد أول الفترة: ${formatMoney(opening)} ج.م');
+    if (lines.isEmpty) output.add('لا توجد حركة في الفترة المختارة.');
+    for (final line in lines) {
+      output.add(
+        '${line.entry.date} · ${kindLabels[line.entry.kind] ?? 'عملية'}\n'
+        'مدين ${formatMoney(line.debitMinor)} · دائن ${formatMoney(line.creditMinor)} · الرصيد ${formatMoney(line.balanceMinor)} ج.م',
+      );
+    }
+    output.add('الرصيد آخر الفترة: ${formatMoney(closing)} ج.م');
+    output.add(
+      'الكشف من السجل المحلي؛ قد توجد عمليات تنتظر المزامنة أو الاعتماد.',
+    );
+    return output.finish();
   }
 
   /// Uses the verified archive controls and period rows directly. Historical
@@ -352,6 +493,21 @@ class ArabicExports {
   }) async {
     if (!statement.found) {
       invalid('archive_export', 'لا يوجد كشف مؤرشف لهذا الطرف.');
+    }
+    final budget = _PdfBudget([
+      business,
+      statement.partyName,
+      statement.tenantId,
+      statement.partyId,
+      statement.runId,
+      statement.manifestSha256,
+    ]);
+    for (final row in statement.rows) {
+      budget.addEntry(row.entry, readOnlyArchive: true);
+    }
+    // Check immutable archive controls before allocating the PDF layout.
+    for (final account in statement.accounts) {
+      _archivedStatementLines(statement, account);
     }
     final regular = await rootBundle.load(
       'assets/fonts/NotoNaskhArabic-Regular.ttf',
@@ -566,34 +722,37 @@ class ArabicExports {
       pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
         margin: const pw.EdgeInsets.all(32),
-        maxPages: 1000,
+        maxPages: maxPdfPages,
         theme: pw.ThemeData.withFont(
           base: pw.Font.ttf(regular),
           bold: pw.Font.ttf(bold),
           fontFallback: [latin],
         ),
         textDirection: pw.TextDirection.rtl,
-        header: (context) => pw.Container(
-          width: double.infinity,
-          padding: const pw.EdgeInsets.only(bottom: 10),
-          decoration: const pw.BoxDecoration(
-            border: pw.Border(bottom: pw.BorderSide(color: ink)),
-          ),
-          child: pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              pw.Text(
-                business,
-                style: pw.TextStyle(
-                  color: ink,
-                  fontSize: 18,
-                  fontWeight: pw.FontWeight.bold,
+        header: (context) => _checkedPdfHeader(
+          context,
+          pw.Container(
+            width: double.infinity,
+            padding: const pw.EdgeInsets.only(bottom: 10),
+            decoration: const pw.BoxDecoration(
+              border: pw.Border(bottom: pw.BorderSide(color: ink)),
+            ),
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Text(
+                  business,
+                  style: pw.TextStyle(
+                    color: ink,
+                    fontSize: 18,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
                 ),
-              ),
-              text('كشف حساب مؤرشف للقراءة فقط', size: 14, strong: true),
-              text(statement.partyName, size: 12),
-              text('السنة المالية ${statement.year}', size: 10),
-            ],
+                text('كشف حساب مؤرشف للقراءة فقط', size: 14, strong: true),
+                text(statement.partyName, size: 12),
+                text('السنة المالية ${statement.year}', size: 10),
+              ],
+            ),
           ),
         ),
         footer: (context) => pw.Row(
@@ -613,55 +772,44 @@ class ArabicExports {
         build: (context) => sections,
       ),
     );
-    return doc.save();
+    return _boundedPdf(doc);
   }
 
   static String archivedStatementCsv(ArchivedPartyStatement statement) {
     if (!statement.found) {
       invalid('archive_export', 'لا يوجد كشف مؤرشف لهذا الطرف.');
     }
-    String quote(String value) {
-      // Canonical signed monetary strings remain usable as numbers. Other
-      // untrusted leading spreadsheet operators are always escaped as text.
-      if (RegExp(r'^[=+@\t\r]').hasMatch(value) ||
-          (value.startsWith('-') &&
-              !RegExp(r'^-\d+(\.\d+)?$').hasMatch(value))) {
-        value = "'$value";
-      }
-      return '"${value.replaceAll('"', '""')}"';
-    }
-
-    final rows = <List<String>>[
-      [
-        'تصنيف السطر',
-        'السنة المالية',
-        'معرف المنشأة',
-        'معرف الطرف',
-        'اسم الطرف',
-        'الدور',
-        'معرف الأرشيف',
-        'بصمة بيان الأرشيف',
-        'مؤشر الإقفال',
-        'إصدار الإقفال',
-        'من',
-        'حتى - غير شامل',
-        'المنطقة الزمنية',
-        'معرف القيد',
-        'تسلسل القيد',
-        'تاريخ القيد',
-        'البيان',
-        'الأثر - ج.م',
-        'الرصيد - ج.م',
-        'الرصيد الافتتاحي - ج.م',
-        'حركة الفترة - ج.م',
-        'الرصيد الختامي - ج.م',
-        'تاريخ العمل الأصلي للتسوية',
-        'معرف العملية الأصلية للتسوية',
-        'مرجع القيد الأصلي',
-        'ملاحظات',
-        'وضع المستند',
-      ],
-    ];
+    if (statement.rows.length > maxCsvRows) _exportLimit();
+    final output = _CsvBuffer(_quoteCsv);
+    output.add([
+      'تصنيف السطر',
+      'السنة المالية',
+      'معرف المنشأة',
+      'معرف الطرف',
+      'اسم الطرف',
+      'الدور',
+      'معرف الأرشيف',
+      'بصمة بيان الأرشيف',
+      'مؤشر الإقفال',
+      'إصدار الإقفال',
+      'من',
+      'حتى - غير شامل',
+      'المنطقة الزمنية',
+      'معرف القيد',
+      'تسلسل القيد',
+      'تاريخ القيد',
+      'البيان',
+      'الأثر - ج.م',
+      'الرصيد - ج.م',
+      'الرصيد الافتتاحي - ج.م',
+      'حركة الفترة - ج.م',
+      'الرصيد الختامي - ج.م',
+      'تاريخ العمل الأصلي للتسوية',
+      'معرف العملية الأصلية للتسوية',
+      'مرجع القيد الأصلي',
+      'ملاحظات',
+      'وضع المستند',
+    ]);
     List<String> prefix(String type, String role) => [
       type,
       '${statement.year}',
@@ -679,7 +827,7 @@ class ArabicExports {
     ];
     for (final account in statement.accounts) {
       final lines = _archivedStatementLines(statement, account);
-      rows.add([
+      output.add([
         ...prefix('أرصدة معتمدة', account.role),
         '',
         '',
@@ -698,7 +846,7 @@ class ArabicExports {
       ]);
       for (final line in lines) {
         final entry = line.row.entry;
-        rows.add([
+        output.add([
           ...prefix('حركة فترة', account.role),
           entry.id,
           '${line.row.sequence}',
@@ -717,7 +865,7 @@ class ArabicExports {
         ]);
       }
     }
-    return '\uFEFF${rows.map((row) => row.map(quote).join(',')).join('\r\n')}';
+    return output.finish();
   }
 
   static Future<void> shareBytes(
@@ -735,7 +883,7 @@ class ArabicExports {
   }
 
   static Future<void> shareText(String text, String filename, String mime) =>
-      shareBytes(Uint8List.fromList(utf8.encode(text)), filename, mime);
+      shareBytes(utf8.encode(text), filename, mime);
 }
 
 class _ArchivedStatementLine {
@@ -768,3 +916,200 @@ List<_ArchivedStatementLine> _archivedStatementLines(
 
 String _signedArchiveMoney(int value) =>
     '${value > 0 ? '+' : ''}${formatMoney(value)}';
+
+int _statementOpening(
+  Party party,
+  List<LedgerEntry> entries,
+  List<StatementLine> lines, {
+  String? from,
+}) => lines.isEmpty
+    ? LedgerRules.statementOpeningBalance(party, entries, from: from)
+    : lines.first.balanceMinor -
+          lines.first.debitMinor +
+          lines.first.creditMinor;
+
+Never _exportLimit({bool pdf = false}) => invalid(
+  'export_limit',
+  pdf
+      ? 'حجم كشف PDF أكبر من الحد الآمن. اختر فترة أصغر؛ للنصوص الطويلة استخدم جدول CSV.'
+      : 'حجم التصدير أكبر من الحد الآمن. اختر فترة أصغر وأعد المحاولة.',
+);
+
+void _checkStatementRequest(
+  List<LedgerEntry> entries, {
+  required int maxRows,
+  Party? party,
+  String? from,
+  String? to,
+  _PdfBudget? pdfBudget,
+  bool readOnlyArchive = false,
+}) {
+  if ((from != null && !validDate(from)) ||
+      (to != null && !validDate(to)) ||
+      (from != null && to != null && from.compareTo(to) > 0)) {
+    invalid('report_period', 'راجع بداية الفترة ونهايتها');
+  }
+  final tenantId = party?.tenantId ?? entries.firstOrNull?.tenantId;
+  if (party != null && party.name.length > 32768) _exportLimit();
+  if (entries.any((entry) => entry.tenantId != tenantId)) {
+    invalid('statement_scope', 'بيانات الكشف لا تخص المنشأة نفسها');
+  }
+  // Keep complete original references even when the reversal or return appears
+  // inside a narrower requested period. Filtering the input first is unsafe.
+  final byId = {for (final entry in entries) entry.id: entry};
+  if (byId.length != entries.length) {
+    invalid('statement_integrity', 'توجد معرفات مكررة في بيانات الكشف');
+  }
+  var count = 0;
+  for (final entry in entries) {
+    if (entry.kind == 'reversal' &&
+        !byId.containsKey(entry.originalId) &&
+        !(readOnlyArchive && party == null)) {
+      invalid('report_original', 'يلزم القيد الأصلي لحساب التصحيح');
+    }
+    if (party != null &&
+        entry.partyId != party.id &&
+        !(entry.kind == 'reversal' &&
+            byId[entry.originalId]?.partyId == party.id)) {
+      continue;
+    }
+    if ((from != null && entry.date.compareTo(from) < 0) ||
+        (to != null && entry.date.compareTo(to) > 0)) {
+      continue;
+    }
+    if (++count > maxRows) _exportLimit(pdf: pdfBudget != null);
+    pdfBudget?.addEntry(entry, readOnlyArchive: readOnlyArchive);
+  }
+}
+
+class _PdfBudget {
+  _PdfBudget(Iterable<String> headings) {
+    for (final text in headings) {
+      if (text.length > 1024 || '\n'.allMatches(text).length > 12) {
+        _exportLimit(pdf: true);
+      }
+      _characters += text.length;
+    }
+    _checkTotal();
+  }
+
+  int _characters = 0, _rows = 0;
+
+  void addEntry(LedgerEntry entry, {required bool readOnlyArchive}) {
+    if (++_rows > ArabicExports.maxPdfRows) _exportLimit(pdf: true);
+    final fields = [
+      entryDescription(entry),
+      entry.partyName,
+      entry.date,
+      entry.grade,
+      entry.unit,
+      entry.note,
+      entry.originalId,
+      if (readOnlyArchive) entry.id,
+    ];
+    var characters = 128, breaks = 0;
+    for (final text in fields) {
+      // This also bounds a single pathological row before a PDF text/layout
+      // object exists. A date range alone cannot shrink one multiline note.
+      if (text.length > ArabicExports.maxPdfRowCodeUnits) {
+        _exportLimit(pdf: true);
+      }
+      characters += text.length;
+      breaks += '\n'.allMatches(text).length + '\r'.allMatches(text).length;
+    }
+    if (characters > ArabicExports.maxPdfRowCodeUnits || breaks > 12) {
+      _exportLimit(pdf: true);
+    }
+    _characters += characters;
+    _checkTotal();
+  }
+
+  void _checkTotal() {
+    if (_characters > ArabicExports.maxPdfTextCodeUnits) {
+      _exportLimit(pdf: true);
+    }
+  }
+}
+
+Future<Uint8List> _boundedPdf(pw.Document document) async {
+  if (document.document.pdfPageList.pages.length > ArabicExports.maxPdfPages) {
+    _exportLimit(pdf: true);
+  }
+  final bytes = await document.save();
+  if (bytes.length > ArabicExports.maxPdfOutputBytes) {
+    _exportLimit(pdf: true);
+  }
+  return bytes;
+}
+
+pw.Widget _checkedPdfHeader(pw.Context context, pw.Widget header) {
+  // MultiPage.maxPages is an assertion in the PDF dependency. This check runs
+  // in release builds too, including when an oversized row cannot advance.
+  if (context.pageNumber > ArabicExports.maxPdfPages) _exportLimit(pdf: true);
+  return header;
+}
+
+String _quoteCsv(String value) {
+  // Preserve canonical negative numbers, but escape untrusted operators even
+  // when prefixed by whitespace. Encoding still quotes every complete cell.
+  if (RegExp(r'^[\t\r\n]|^\s*[=+@]').hasMatch(value) ||
+      (RegExp(r'^\s*-').hasMatch(value) &&
+          !RegExp(r'^-\d+(\.\d+)?$').hasMatch(value))) {
+    value = "'$value";
+  }
+  return '"${value.replaceAll('"', '""')}"';
+}
+
+/// CSV has no retained widget tree. Add one bounded encoded row at a time and
+/// refuse the complete export before crossing the shared output byte budget.
+class _CsvBuffer {
+  _CsvBuffer(this.quote);
+  final String Function(String) quote;
+  final StringBuffer _output = StringBuffer('\uFEFF');
+  int _bytes = 3, _rows = 0;
+
+  void add(List<String> fields) {
+    if (++_rows > ArabicExports.maxCsvRows + 6 || fields.length > 32) {
+      _exportLimit();
+    }
+    var rowBytes = 0;
+    final row = StringBuffer();
+    for (var i = 0; i < fields.length; i++) {
+      final field = fields[i];
+      if (field.length > 32768) _exportLimit();
+      final encoded = quote(field);
+      rowBytes += utf8.encode(encoded).length + (i == 0 ? 0 : 1);
+      if (rowBytes > 64 * 1024) _exportLimit();
+      if (i != 0) row.write(',');
+      row.write(encoded);
+    }
+    final separatorBytes = _rows == 1 ? 0 : 2;
+    if (_bytes + separatorBytes + rowBytes > ArabicExports.maxCsvBytes) {
+      _exportLimit();
+    }
+    if (_rows != 1) _output.write('\r\n');
+    _output.write(row);
+    _bytes += separatorBytes + rowBytes;
+  }
+
+  String finish() => _output.toString();
+}
+
+class _TextBuffer {
+  final _output = StringBuffer();
+  int _bytes = 0;
+
+  void add(String paragraph) {
+    if (paragraph.length > 32768) _exportLimit();
+    final bytes = utf8.encode(paragraph).length;
+    final separatorBytes = _bytes == 0 ? 0 : 2;
+    if (_bytes + separatorBytes + bytes > ArabicExports.maxTextBytes) {
+      _exportLimit();
+    }
+    if (separatorBytes != 0) _output.write('\n\n');
+    _output.write(paragraph);
+    _bytes += separatorBytes + bytes;
+  }
+
+  String finish() => _output.toString();
+}

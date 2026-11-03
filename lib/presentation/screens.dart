@@ -2450,8 +2450,20 @@ class StatementScreen extends StatefulWidget {
 }
 
 class _StatementScreenState extends State<StatementScreen> {
-  String? from, to;
+  final _fromController = TextEditingController();
+  final _toController = TextEditingController();
+  String? get from =>
+      _fromController.text.trim().isEmpty ? null : _fromController.text.trim();
+  String? get to =>
+      _toController.text.trim().isEmpty ? null : _toController.text.trim();
   bool busy = false;
+  @override
+  void dispose() {
+    _fromController.dispose();
+    _toController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: widget.app,
@@ -2459,7 +2471,22 @@ class _StatementScreenState extends State<StatementScreen> {
   );
 
   Widget _content(BuildContext context) {
-    final rangeValid = from == null || to == null || from!.compareTo(to!) <= 0;
+    if (!widget.app.hasDataAccess ||
+        !widget.app.manager ||
+        (widget.app.tenantId.isNotEmpty &&
+            widget.app.tenantId != widget.party.tenantId) ||
+        widget.app.entries.any((e) => e.tenantId != widget.party.tenantId)) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('كشف حساب')),
+        body: const Center(child: Text('الصلاحية غير متاحة لعرض كشف الحساب.')),
+      );
+    }
+    final fromValid = from == null || validDate(from!);
+    final toValid = to == null || validDate(to!);
+    final rangeValid =
+        fromValid &&
+        toValid &&
+        (from == null || to == null || from!.compareTo(to!) <= 0);
     final lines = rangeValid
         ? LedgerRules.statement(
             widget.party,
@@ -2469,176 +2496,236 @@ class _StatementScreenState extends State<StatementScreen> {
           )
         : <StatementLine>[];
     final isMerchant = widget.party.kind == 'merchant';
+    final controls = <Widget>[
+      Row(
+        children: [
+          Expanded(
+            child: OutlinedButton.icon(
+              onPressed: widget.app.allowed
+                  ? () => openEntry(
+                      context,
+                      widget.app,
+                      isMerchant ? 'sale' : 'purchase',
+                      draft: {
+                        'id': newId(),
+                        'kind': isMerchant ? 'sale' : 'purchase',
+                        'partyId': widget.party.id,
+                        'date': today(),
+                      },
+                    )
+                  : null,
+              icon: Icon(isMerchant ? Icons.north_east : Icons.south_west),
+              label: Text(isMerchant ? 'فاتورة بيع' : 'فاتورة شراء'),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: OutlinedButton.icon(
+              onPressed: widget.app.allowed
+                  ? () => openEntry(
+                      context,
+                      widget.app,
+                      isMerchant ? 'merchant_payment' : 'supplier_payment',
+                      draft: {
+                        'id': newId(),
+                        'kind': isMerchant
+                            ? 'merchant_payment'
+                            : 'supplier_payment',
+                        'partyId': widget.party.id,
+                        'date': today(),
+                      },
+                    )
+                  : null,
+              icon: const Icon(Icons.payments_outlined),
+              label: Text(isMerchant ? 'تحصيل دفعة' : 'سداد دفعة'),
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 12),
+      rangeValid
+          ? Text(
+              'رصيد أول الفترة: ${formatMoney(LedgerRules.statementOpeningBalance(widget.party, widget.app.entries, from: from))} ج.م',
+            )
+          : const SizedBox.shrink(),
+      Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              key: const ValueKey('statement-from'),
+              controller: _fromController,
+              decoration: InputDecoration(
+                labelText: 'من تاريخ',
+                hintText: 'YYYY-MM-DD',
+                errorText: fromValid ? null : 'تاريخ غير صالح',
+              ),
+              textDirection: TextDirection.ltr,
+              onChanged: (_) => setState(() {}),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: TextFormField(
+              key: const ValueKey('statement-to'),
+              controller: _toController,
+              decoration: InputDecoration(
+                labelText: 'إلى تاريخ',
+                hintText: 'YYYY-MM-DD',
+                errorText: toValid ? null : 'تاريخ غير صالح',
+              ),
+              textDirection: TextDirection.ltr,
+              onChanged: (_) => setState(() {}),
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 14),
+      rangeValid
+          ? const SizedBox.shrink()
+          : Text(
+              fromValid && toValid
+                  ? 'يجب أن يكون تاريخ النهاية بعد تاريخ البداية أو مساوياً له'
+                  : 'راجع التاريخين؛ يجب أن تكون النهاية بعد البداية أو مساوية لها',
+              style: const TextStyle(color: Colors.red),
+            ),
+      FilledButton.icon(
+        onPressed: busy || !rangeValid
+            ? null
+            : () async {
+                setState(() => busy = true);
+                await guard(context, () async {
+                  widget.app.requireDataAccess();
+                  final boundTenant = widget.app.tenantId;
+                  final boundUid = widget.app.uid;
+                  final boundStore = widget.app.store;
+                  final bytes = await ArabicExports.statement(
+                    business: widget.app.business,
+                    title: 'كشف حساب ${widget.party.name}',
+                    entries: widget.app.entries,
+                    party: widget.party,
+                    from: from,
+                    to: to,
+                  );
+                  widget.app.requireDataAccess();
+                  if (!mounted ||
+                      !widget.app.manager ||
+                      widget.app.tenantId != boundTenant ||
+                      widget.app.uid != boundUid ||
+                      !identical(widget.app.store, boundStore)) {
+                    invalid(
+                      'statement_scope',
+                      'تغير الحساب؛ افتح الكشف من جديد',
+                    );
+                  }
+                  await ArabicExports.shareBytes(
+                    bytes,
+                    'statement.pdf',
+                    'application/pdf',
+                  );
+                });
+                if (mounted) setState(() => busy = false);
+              },
+        icon: const Icon(Icons.picture_as_pdf),
+        label: const Text('مشاركة كشف حساب عربي'),
+      ),
+      const Text(
+        'PDF حتى 500 حركة ضمن حد النص الآمن. اختر فترة أصغر للكشوف الكبيرة؛ جدول CSV يدعم حتى 20000 حركة ضمن حد حجم الملف.',
+        style: TextStyle(fontSize: 12),
+      ),
+      OutlinedButton.icon(
+        onPressed: busy || !rangeValid
+            ? null
+            : () => guard(context, () async {
+                widget.app.requireDataAccess();
+                final csv = ArabicExports.statementCsv(
+                  party: widget.party,
+                  entries: widget.app.entries,
+                  from: from,
+                  to: to,
+                );
+                await ArabicExports.shareText(csv, 'statement.csv', 'text/csv');
+              }),
+        icon: const Icon(Icons.table_chart_outlined),
+        label: const Text('مشاركة كشف حساب CSV'),
+      ),
+      OutlinedButton.icon(
+        onPressed: widget.app.allowed
+            ? () => openEntry(
+                context,
+                widget.app,
+                'balance_adjustment',
+                draft: {
+                  'id': newId(),
+                  'kind': 'balance_adjustment',
+                  'partyId': widget.party.id,
+                  'date': today(),
+                },
+              )
+            : null,
+        icon: const Icon(Icons.balance),
+        label: const Text('تسوية رصيد موثقة'),
+      ),
+      OutlinedButton.icon(
+        onPressed: !rangeValid
+            ? null
+            : () => guard(context, () async {
+                widget.app.requireDataAccess();
+                await Clipboard.setData(
+                  ClipboardData(
+                    text: buildStatementText(
+                      widget.party,
+                      widget.app.entries,
+                      from: from,
+                      to: to,
+                    ),
+                  ),
+                );
+                if (context.mounted) {
+                  snack(
+                    context,
+                    'تم نسخ كشف الحساب؛ يمكنك لصقه ومشاركته بنفسك',
+                  );
+                }
+              }),
+        icon: const Icon(Icons.copy),
+        label: const Text('نسخ كشف الحساب للمشاركة'),
+      ),
+      const Text(
+        'النسخ النصي حتى 20000 حركة و4 ميجابايت. عند تجاوز الحد اختر فترة أصغر؛ لا يُحذف أي سطر من الكشف.',
+        style: TextStyle(fontSize: 12),
+      ),
+      heading('الحركة والرصيد الجاري'),
+    ];
+    Widget movement(StatementLine line) => Card(
+      key: ValueKey('statement-line:${line.entry.id}'),
+      child: ListTile(
+        title: Text('${kindLabels[line.entry.kind]} · ${line.entry.date}'),
+        subtitle: Text(
+          '${widget.app.entryActorLabel(line.entry)} · مدين ${formatMoney(line.debitMinor)} · دائن ${formatMoney(line.creditMinor)}',
+        ),
+        trailing: money(line.balanceMinor, size: 16),
+      ),
+    );
     return Scaffold(
       appBar: AppBar(title: Text('كشف حساب ${widget.party.name}')),
-      body: ListView(
+      body: ListView.builder(
         padding: const EdgeInsets.all(18),
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: widget.app.allowed
-                      ? () => openEntry(
-                          context,
-                          widget.app,
-                          isMerchant ? 'sale' : 'purchase',
-                          draft: {
-                            'id': newId(),
-                            'kind': isMerchant ? 'sale' : 'purchase',
-                            'partyId': widget.party.id,
-                            'date': today(),
-                          },
-                        )
-                      : null,
-                  icon: Icon(isMerchant ? Icons.north_east : Icons.south_west),
-                  label: Text(isMerchant ? 'فاتورة بيع' : 'فاتورة شراء'),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: widget.app.allowed
-                      ? () => openEntry(
-                          context,
-                          widget.app,
-                          isMerchant ? 'merchant_payment' : 'supplier_payment',
-                          draft: {
-                            'id': newId(),
-                            'kind': isMerchant
-                                ? 'merchant_payment'
-                                : 'supplier_payment',
-                            'partyId': widget.party.id,
-                            'date': today(),
-                          },
-                        )
-                      : null,
-                  icon: const Icon(Icons.payments_outlined),
-                  label: Text(isMerchant ? 'تحصيل دفعة' : 'سداد دفعة'),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          if (rangeValid)
-            Text(
-              'رصيد أول الفترة: ${formatMoney(LedgerRules.statementOpeningBalance(widget.party, widget.app.entries, from: from))} ج.م',
-            ),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  decoration: const InputDecoration(labelText: 'من تاريخ'),
-                  textDirection: TextDirection.ltr,
-                  onChanged: (v) =>
-                      setState(() => from = validDate(v) ? v : null),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: TextFormField(
-                  decoration: const InputDecoration(labelText: 'إلى تاريخ'),
-                  textDirection: TextDirection.ltr,
-                  onChanged: (v) =>
-                      setState(() => to = validDate(v) ? v : null),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          if (!rangeValid)
-            const Text(
-              'يجب أن يكون تاريخ النهاية بعد تاريخ البداية أو مساوياً له',
-              style: TextStyle(color: Colors.red),
-            ),
-          FilledButton.icon(
-            onPressed: busy || !rangeValid
-                ? null
-                : () async {
-                    setState(() => busy = true);
-                    await guard(context, () async {
-                      final bytes = await ArabicExports.statement(
-                        business: widget.app.business,
-                        title: 'كشف حساب ${widget.party.name}',
-                        entries: widget.app.entries,
-                        party: widget.party,
-                        from: from,
-                        to: to,
-                      );
-                      await ArabicExports.shareBytes(
-                        bytes,
-                        'statement.pdf',
-                        'application/pdf',
-                      );
-                    });
-                    if (mounted) setState(() => busy = false);
-                  },
-            icon: const Icon(Icons.picture_as_pdf),
-            label: const Text('مشاركة كشف حساب عربي'),
-          ),
-          OutlinedButton.icon(
-            onPressed: widget.app.allowed
-                ? () => openEntry(
-                    context,
-                    widget.app,
-                    'balance_adjustment',
-                    draft: {
-                      'id': newId(),
-                      'kind': 'balance_adjustment',
-                      'partyId': widget.party.id,
-                      'date': today(),
-                    },
-                  )
-                : null,
-            icon: const Icon(Icons.balance),
-            label: const Text('تسوية رصيد موثقة'),
-          ),
-          OutlinedButton.icon(
-            onPressed: !rangeValid
-                ? null
-                : () => guard(context, () async {
-                    widget.app.requireDataAccess();
-                    await Clipboard.setData(
-                      ClipboardData(
-                        text: buildStatementText(
-                          widget.party,
-                          widget.app.entries,
-                          from: from,
-                          to: to,
-                        ),
-                      ),
-                    );
-                    if (context.mounted) {
-                      snack(
-                        context,
-                        'تم نسخ كشف الحساب؛ يمكنك لصقه ومشاركته بنفسك',
-                      );
-                    }
-                  }),
-            icon: const Icon(Icons.copy),
-            label: const Text('نسخ كشف الحساب للمشاركة'),
-          ),
-          heading('الحركة والرصيد الجاري'),
-          ...lines.map(
-            (line) => Card(
-              child: ListTile(
-                title: Text(
-                  '${kindLabels[line.entry.kind]} · ${line.entry.date}',
-                ),
-                subtitle: Text(
-                  '${widget.app.entryActorLabel(line.entry)} · مدين ${formatMoney(line.debitMinor)} · دائن ${formatMoney(line.creditMinor)}',
-                ),
-                trailing: money(line.balanceMinor, size: 16),
-              ),
-            ),
-          ),
-          if (lines.isEmpty) empty('لا توجد حركة في الفترة المختارة'),
-          if (rangeValid)
-            Text(
-              'الرصيد حتى نهاية الفترة: ${formatMoney(LedgerRules.statementClosingBalance(widget.party, widget.app.entries, to: to))} ج.م',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-        ],
+        itemCount:
+            controls.length +
+            (lines.isEmpty ? 1 : lines.length) +
+            (rangeValid ? 1 : 0),
+        itemBuilder: (context, index) {
+          if (index < controls.length) return controls[index];
+          final lineIndex = index - controls.length;
+          if (lineIndex < lines.length) return movement(lines[lineIndex]);
+          if (lines.isEmpty && lineIndex == 0) {
+            return empty('لا توجد حركة في الفترة المختارة');
+          }
+          return Text(
+            'الرصيد حتى نهاية الفترة: ${formatMoney(LedgerRules.statementClosingBalance(widget.party, widget.app.entries, to: to))} ج.م',
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          );
+        },
       ),
     );
   }
@@ -3611,8 +3698,18 @@ class ReportsScreen extends StatefulWidget {
 }
 
 class _ReportsScreenState extends State<ReportsScreen> {
-  String from = '', to = '';
+  final _fromController = TextEditingController();
+  final _toController = TextEditingController();
+  String get from => _fromController.text.trim();
+  String get to => _toController.text.trim();
   bool busy = false;
+  @override
+  void dispose() {
+    _fromController.dispose();
+    _toController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: widget.app,
@@ -3620,14 +3717,27 @@ class _ReportsScreenState extends State<ReportsScreen> {
   );
 
   Widget _content(BuildContext context) {
-    final rangeValid = from.isEmpty || to.isEmpty || from.compareTo(to) <= 0;
-    final entries = widget.app.entries
-        .where(
-          (e) =>
-              (from.isEmpty || e.date.compareTo(from) >= 0) &&
-              (to.isEmpty || e.date.compareTo(to) <= 0),
-        )
-        .toList();
+    if (!widget.app.hasDataAccess ||
+        !widget.app.manager ||
+        (widget.app.tenantId.isNotEmpty &&
+            widget.app.entries.any((e) => e.tenantId != widget.app.tenantId))) {
+      return const Center(child: Text('الصلاحية غير متاحة لعرض التقارير.'));
+    }
+    final fromValid = from.isEmpty || validDate(from);
+    final toValid = to.isEmpty || validDate(to);
+    final rangeValid =
+        fromValid &&
+        toValid &&
+        (from.isEmpty || to.isEmpty || from.compareTo(to) <= 0);
+    final entries = rangeValid
+        ? widget.app.entries
+              .where(
+                (e) =>
+                    (from.isEmpty || e.date.compareTo(from) >= 0) &&
+                    (to.isEmpty || e.date.compareTo(to) <= 0),
+              )
+              .toList()
+        : <LedgerEntry>[];
     final period = rangeValid
         ? RecordedPeriod.fromEntries(
             widget.app.entries,
@@ -3642,25 +3752,39 @@ class _ReportsScreenState extends State<ReportsScreen> {
           children: [
             Expanded(
               child: TextField(
-                decoration: const InputDecoration(labelText: 'من تاريخ'),
+                key: const ValueKey('report-from'),
+                controller: _fromController,
+                decoration: InputDecoration(
+                  labelText: 'من تاريخ',
+                  hintText: 'YYYY-MM-DD',
+                  errorText: fromValid ? null : 'تاريخ غير صالح',
+                ),
                 textDirection: TextDirection.ltr,
-                onChanged: (v) => setState(() => from = validDate(v) ? v : ''),
+                onChanged: (_) => setState(() {}),
               ),
             ),
             const SizedBox(width: 10),
             Expanded(
               child: TextField(
-                decoration: const InputDecoration(labelText: 'إلى تاريخ'),
+                key: const ValueKey('report-to'),
+                controller: _toController,
+                decoration: InputDecoration(
+                  labelText: 'إلى تاريخ',
+                  hintText: 'YYYY-MM-DD',
+                  errorText: toValid ? null : 'تاريخ غير صالح',
+                ),
                 textDirection: TextDirection.ltr,
-                onChanged: (v) => setState(() => to = validDate(v) ? v : ''),
+                onChanged: (_) => setState(() {}),
               ),
             ),
           ],
         ),
         if (!rangeValid)
-          const Text(
-            'يجب أن يكون تاريخ النهاية بعد تاريخ البداية أو مساوياً له',
-            style: TextStyle(color: Colors.red),
+          Text(
+            fromValid && toValid
+                ? 'يجب أن يكون تاريخ النهاية بعد تاريخ البداية أو مساوياً له'
+                : 'راجع التاريخين؛ يجب أن تكون النهاية بعد البداية أو مساوية لها',
+            style: const TextStyle(color: Colors.red),
           ),
         if (period != null) ...[
           heading('مؤشرات الفترة'),
@@ -3701,6 +3825,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
               : () async {
                   setState(() => busy = true);
                   await guard(context, () async {
+                    widget.app.requireDataAccess();
+                    final boundTenant = widget.app.tenantId;
+                    final boundUid = widget.app.uid;
+                    final boundStore = widget.app.store;
                     final bytes = await ArabicExports.statement(
                       business: widget.app.business,
                       title: 'تقرير حركة السجل',
@@ -3708,6 +3836,17 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       from: from.isEmpty ? null : from,
                       to: to.isEmpty ? null : to,
                     );
+                    widget.app.requireDataAccess();
+                    if (!mounted ||
+                        !widget.app.manager ||
+                        widget.app.tenantId != boundTenant ||
+                        widget.app.uid != boundUid ||
+                        !identical(widget.app.store, boundStore)) {
+                      invalid(
+                        'statement_scope',
+                        'تغير الحساب؛ افتح التقرير من جديد',
+                      );
+                    }
                     await ArabicExports.shareBytes(
                       bytes,
                       'ledger.pdf',
@@ -3723,16 +3862,20 @@ class _ReportsScreenState extends State<ReportsScreen> {
         OutlinedButton.icon(
           onPressed: !rangeValid
               ? null
-              : () => guard(
-                  context,
-                  () => ArabicExports.shareText(
+              : () => guard(context, () async {
+                  widget.app.requireDataAccess();
+                  await ArabicExports.shareText(
                     ArabicExports.csv(entries),
                     'ledger.csv',
                     'text/csv',
-                  ),
-                ),
+                  );
+                }),
           icon: const Icon(Icons.table_chart_outlined),
           label: const Text('تصدير جدول العمليات'),
+        ),
+        const Text(
+          'PDF حتى 500 حركة ضمن حد النص الآمن؛ CSV حتى 20000 حركة و16 ميجابايت. اختر فترة أصغر عند تجاوز الحد؛ لا تُختصر البيانات.',
+          style: TextStyle(fontSize: 12),
         ),
       ],
     );

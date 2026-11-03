@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../application/app_controller.dart';
 import '../domain/ledger.dart';
+import '../services/exports.dart';
 import '../services/gateway.dart';
 
 String buildStatementText(
@@ -9,33 +10,12 @@ String buildStatementText(
   List<LedgerEntry> entries, {
   String? from,
   String? to,
-}) {
-  _validatePeriod(from, to);
-  if (entries.any((e) => e.tenantId != party.tenantId)) {
-    throw const LedgerException(
-      'statement_scope',
-      'بيانات الكشف لا تخص المنشأة نفسها',
-    );
-  }
-  final lines = LedgerRules.statement(party, entries, from: from, to: to);
-  final opening = LedgerRules.statementOpeningBalance(
-    party,
-    entries,
-    from: from,
-  );
-  final closing = LedgerRules.statementClosingBalance(party, entries, to: to);
-  return [
-    'كشف حساب ${party.kind == 'supplier' ? 'المورد' : 'العميل'}: ${party.name}',
-    'الفترة: ${from ?? 'بداية السجل'} إلى ${to ?? 'نهاية السجل'}',
-    'الرصيد أول الفترة: ${formatMoney(opening)} ج.م',
-    if (lines.isEmpty) 'لا توجد حركة في الفترة المختارة.',
-    for (final line in lines)
-      '${line.entry.date} · ${kindLabels[line.entry.kind] ?? 'عملية'}\n'
-          'مدين ${formatMoney(line.debitMinor)} · دائن ${formatMoney(line.creditMinor)} · الرصيد ${formatMoney(line.balanceMinor)} ج.م',
-    'الرصيد آخر الفترة: ${formatMoney(closing)} ج.م',
-    'الكشف من السجل المحلي؛ قد توجد عمليات تنتظر المزامنة أو الاعتماد.',
-  ].join('\n\n');
-}
+}) => ArabicExports.statementText(
+  party: party,
+  entries: entries,
+  from: from,
+  to: to,
+);
 
 void _validatePeriod(String? from, String? to) {
   if ((from != null && !validDate(from)) ||

@@ -513,7 +513,24 @@ class AppController extends ChangeNotifier {
     if (licenseSession == null) {
       throw const LicenseException('setup', 'أكمل إعداد الحساب الموثوق أولاً');
     }
-    license = await licenseSession!.importPackage(text);
+    final session = licenseSession!;
+    final previousRole = session.verifiedPackage?.membership.role;
+    license = await session.importPackage(text);
+    if (previousRole != null &&
+        previousRole != session.verifiedPackage?.membership.role) {
+      // A role change cannot retain an open database scoped to the old role.
+      // Revoke handles before persisting quarantine, including write failures.
+      license = LicenseStatus(
+        operationalAllowed: false,
+        code: 'account_disabled',
+        message: 'تغيرت صلاحية الحساب؛ يلزم تحقق موثوق قبل إعادة فتح السجل.',
+        license: license?.license,
+        role: license?.role,
+      );
+      _enforceRevocation();
+      license = await session.recordAccountDisabled();
+    }
+    _enforceRevocation();
     notifyListeners();
     unawaited(synchronize());
   }
@@ -720,14 +737,11 @@ class AppController extends ChangeNotifier {
           continue;
         }
         try {
-          final response = await gateway.send(tenantId, identity!.deviceId, {
-            'id': item['id'],
-            'entity': item['entity'],
-            'payload': item['payload'],
-            'expectedRevision': item['expectedRevision'] ?? 0,
-            if (item['correctionOfOperationId'] != null)
-              'correctionOfOperationId': item['correctionOfOperationId'],
-          });
+          final response = await gateway.send(
+            tenantId,
+            identity!.deviceId,
+            raw.toOperation(),
+          );
           if (epoch != _generation) return;
           final expectedStatus = item['entity'] == 'submission'
               ? 'awaiting_approval'
