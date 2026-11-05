@@ -74,7 +74,9 @@ export function createGateway({db,auth,now=Date.now,privateKey=()=>process.env.L
  }
  async function syncOperation(request){
   keys(request.data,['tenantId','deviceId','sessionToken','operation','syncProtocolVersion']);const protocol=syncProtocol(request.data);const c=await authority(request);requireProtocol(c.t,protocol);const op=object(request.data.operation);
-  keys(op,['id','entity','payload','expectedRevision','correctionOfOperationId']);if(op.correctionOfOperationId!==undefined){id(op.correctionOfOperationId);if(c.m.role!=='manager'||!['entry','review','salary_term'].includes(op.entity))fail('permission-denied');}id(op.id);if(!collections[op.entity])fail('invalid-argument');integer(op.expectedRevision??0,0,100000);object(op.payload);
+  keys(op,['id','entity','payload','expectedRevision','correctionOfOperationId','correctionReason']);if(op.correctionOfOperationId!==undefined){id(op.correctionOfOperationId);if(c.m.role!=='manager'||!['entry','review','salary_term'].includes(op.entity))fail('permission-denied');}id(op.id);if(!collections[op.entity])fail('invalid-argument');integer(op.expectedRevision??0,0,100000);object(op.payload);
+  if(op.correctionReason!==undefined&&(!op.correctionOfOperationId||op.entity!=='salary_term'))fail('invalid-argument');
+  if(op.correctionOfOperationId&&op.entity==='salary_term')text(op.correctionReason,1000);
   if(c.m.role==='employee'&&op.entity!=='submission')fail('permission-denied');
   if(c.m.role==='manager'&&op.entity==='submission')fail('permission-denied');
   if(op.payload.tenantId!==undefined&&op.payload.tenantId!==c.root.id)fail('permission-denied');
@@ -155,7 +157,7 @@ export function createGateway({db,auth,now=Date.now,privateKey=()=>process.env.L
      // Defer the unchanged rate prospectively. This does not invent or settle
      // a historical salary obligation and never restates a published close.
      if(payload.effectiveMonth!==month||!nt.archivePolicy?.closedThroughDate||payload.effectiveMonth+'-01'<nt.archivePolicy.closedThroughDate)fail('correction-period-not-open');
-     extra.push({ref:correctionRef,payload:{...correctionSource,status:'corrected',correctionOperationId:op.id,correctionTermId:payload.id,resolution:'prospective-unchanged-rate',resolvedAtMs:time,resolvedByUid:c.u.uid},noChange:true});
+     extra.push({ref:correctionRef,payload:{...correctionSource,status:'corrected',correctionOperationId:op.id,correctionTermId:payload.id,resolution:'prospective-unchanged-rate',resolutionNote:op.correctionReason.trim(),resolvedAtMs:time,resolvedByUid:c.u.uid},noChange:true});
      extra.push({ref:c.root.collection('lateCorrectionLocks').doc(op.correctionOfOperationId),payload:{operationId:op.id,termId:payload.id},noChange:true});
     }else{
     const oldEntry=original.entity==='entry'?original.payload:original.payload.entry;
@@ -202,10 +204,10 @@ export function createGateway({db,auth,now=Date.now,privateKey=()=>process.env.L
    tx.set(recordRef,payload);publish(op.entity,recordId,payload);
    for(const x of extra){tx.set(x.ref,x.payload);if(!x.noChange)publish(x.entity,x.id,x.payload,x.employeeUid);}
    const result={id:op.id,status:op.entity==='submission'?'awaiting_approval':'accepted',sequence,serverTimeMs:time,...(op.entity==='review'&&payload.decision==='approved'?{entry:extra.find(x=>x.entity==='entry').payload}:{})};
-   tx.set(c.root,{sequence,rateWindowMs:windowStart,rateCount:rate+1},{merge:true});tx.set(opRef,{digest,result,actorUid:c.u.uid});tx.set(c.root.collection('audit').doc(op.id),{action:op.entity==='review'?payload.decision:'create',entity:op.entity,recordId,actorUid:c.u.uid,creatorUid:payload.creatorUid||c.u.uid,atMs:time,operationId:op.id,...(op.correctionOfOperationId?{correctionOfOperationId:op.correctionOfOperationId}:{})});return result;
+   tx.set(c.root,{sequence,rateWindowMs:windowStart,rateCount:rate+1},{merge:true});tx.set(opRef,{digest,result,actorUid:c.u.uid});tx.set(c.root.collection('audit').doc(op.id),{action:op.entity==='review'?payload.decision:'create',entity:op.entity,recordId,actorUid:c.u.uid,creatorUid:payload.creatorUid||c.u.uid,atMs:time,operationId:op.id,...(op.correctionOfOperationId?{correctionOfOperationId:op.correctionOfOperationId}:{}),...(op.correctionReason?{correctionReason:op.correctionReason.trim()}:{})});return result;
   });
  }
- function syncProtocol(data){const version=data.syncProtocolVersion??1;if(![1,2].includes(version))fail('sync-upgrade-required');return version;}
+ function syncProtocol(data){const version=Object.hasOwn(data,'syncProtocolVersion')?data.syncProtocolVersion:1;if(![1,2].includes(version))fail('sync-upgrade-required');return version;}
  function requireProtocol(tenant,version){const minimum=integer(tenant.minimumSyncProtocol??1,1,2);if(version<minimum)fail('sync-upgrade-required');}
  async function pullChanges(request){
   keys(request.data,['tenantId','deviceId','sessionToken','afterSequence','limit','syncProtocolVersion']);const protocol=syncProtocol(request.data);const c=await authority(request,{license:false});requireProtocol(c.t,protocol);const after=integer(request.data.afterSequence??0,0,Number.MAX_SAFE_INTEGER),limit=integer(request.data.limit??200,1,500);

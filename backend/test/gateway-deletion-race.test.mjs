@@ -54,6 +54,16 @@ function fixture({role='manager',disabled=false,time=1_790_000_000_000,archiveVi
  return {gateway,request,authorized,proof,licensePackage,root,uid,tenantId,deviceId,rows,events,state,put,remove,db,auth,time};
 }
 
+test('only omitted or integer v1/v2 sync protocol fields are supported; explicit null is refused before I/O',async()=>{
+ const f=fixture();
+ for(const protocol of [null,undefined,0,3,'1','2',true,false,[],{}]){
+  for(const endpoint of ['syncOperation','pullChanges','getActiveSnapshot']){
+   await assert.rejects(f.gateway[endpoint](f.authorized({syncProtocolVersion:protocol})),/sync-upgrade-required/);
+  }
+ }
+ assert.equal(f.events.length,0,'Unsupported protocols do not query, mutate or acknowledge operations.');
+});
+
 test('bootstrap creates a challenge only after transactional parent and identity reads',async()=>{
  const f=fixture(),challenge=await f.gateway.bootstrap(f.request());
  assert.equal(challenge.requiresDeviceProof,true);assert.equal(f.state.attempts,1);
@@ -190,6 +200,34 @@ function closingFixture(options={}){
  f.put(f.root+'/parties/customer_a',{id:'customer_a',kind:'merchant',name:'عميل',openingMinor:0,revision:1});return f;
 }
 const operation=(id,payload,extra={})=>({id,entity:'entry',payload,expectedRevision:0,...extra});
+
+test('held salary resolution preserves its reason and original month without restating obligations',async()=>{
+ const f=closingFixture();f.put(f.root+'/employees/staff_a',{id:'staff_a',name:'موظف',active:true});
+ const original={id:'salary_late',entity:'salary_term',expectedRevision:0,payload:{id:'salary_late',employeeId:'staff_a',effectiveMonth:'2027-08',monthlyMinor:100000,revision:1}};
+ assert.equal((await f.gateway.syncOperation(f.authorized({operation:original}))).status,'needs_review');
+ const correction={id:'salary_current',entity:'salary_term',expectedRevision:0,payload:{...original.payload,id:'salary_current',effectiveMonth:'2027-09'},correctionOfOperationId:original.id,correctionReason:'توثيق المعدل الحالي دون تعديل استحقاق أغسطس'};
+ const before=f.rows.get(f.root).sequence;
+ const result=await f.gateway.syncOperation(f.authorized({operation:correction,syncProtocolVersion:2}));
+ assert.equal(result.status,'accepted');assert.equal(f.rows.get(f.root).sequence,before+1);
+ const evidence=f.rows.get(f.root+'/lateOperations/'+original.id);
+ assert.equal(evidence.originalBusinessDate,'2027-08-01');assert.equal(evidence.resolutionNote,correction.correctionReason);
+ assert.equal(evidence.operation.payload.effectiveMonth,'2027-08');assert.equal(evidence.correctionTermId,'salary_current');
+ assert.equal(f.rows.has(f.root+'/salaryTerms/salary_late'),false);assert.equal(f.rows.has(f.root+'/salaryLocks/staff_a_2027-08'),false);
+ assert.equal(f.rows.get(f.root+'/salaryTerms/salary_current').effectiveMonth,'2027-09');
+ assert.equal(f.rows.get(f.root+'/audit/salary_current').correctionReason,correction.correctionReason);
+ assert.deepEqual(await f.gateway.syncOperation(f.authorized({operation:correction,syncProtocolVersion:2})),result);
+ assert.equal((await f.gateway.syncOperation(f.authorized({operation:{...correction,correctionReason:'changed'},syncProtocolVersion:2}))).reason,'operation-id-reused');
+});
+
+test('salary resolution without an explicit bounded reason leaves evidence and balances untouched',async()=>{
+ for(const correctionReason of [undefined,'   ','x'.repeat(1001)]){
+  const f=closingFixture();f.put(f.root+'/employees/staff_a',{id:'staff_a',active:true});
+  const original={id:'salary_late',entity:'salary_term',expectedRevision:0,payload:{id:'salary_late',employeeId:'staff_a',effectiveMonth:'2027-08',monthlyMinor:100000,revision:1}};
+  await f.gateway.syncOperation(f.authorized({operation:original}));const before=f.rows.get(f.root).sequence;
+  await assert.rejects(f.gateway.syncOperation(f.authorized({operation:{...original,id:'salary_current',payload:{...original.payload,id:'salary_current',effectiveMonth:'2027-09'},correctionOfOperationId:original.id,...(correctionReason===undefined?{}:{correctionReason})}})),/invalid-argument/);
+  assert.equal(f.rows.get(f.root).sequence,before);assert.equal(f.rows.get(f.root+'/lateOperations/'+original.id).status,'needs_review');assert.equal(f.rows.has(f.root+'/salaryTerms/salary_current'),false);
+ }
+});
 
 test('session revocation during transaction conflicts and cannot commit a financial effect',async()=>{
  for(const phase of ['beforeTransaction','beforeCommit']){

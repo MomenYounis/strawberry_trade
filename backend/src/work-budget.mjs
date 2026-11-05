@@ -3,6 +3,7 @@ import {integer,id,canonical} from './validation.mjs';
 const resources=Object.freeze({firestoreReads:'America/Los_Angeles',firestoreWrites:'America/Los_Angeles',
   firestoreDeletes:'America/Los_Angeles',workerRequests:'UTC',r2ClassA:'UTC',r2ClassB:'UTC',downloadBytes:'UTC'});
 const safeAdd=(a,b)=>{const n=BigInt(a)+BigInt(b);if(n>BigInt(Number.MAX_SAFE_INTEGER))throw new Error('archive-budget-overflow');return Number(n);};
+const MAX_RESERVATION_ATTEMPTS=5;
 function windowKey(resource,now) {
   const formatter=new Intl.DateTimeFormat('en-CA',{timeZone:resources[resource],year:'numeric',month:'2-digit',day:'2-digit'});
   const p=Object.fromEntries(formatter.formatToParts(new Date(now)).map(v=>[v.type,v.value]));
@@ -19,6 +20,12 @@ export class ArchiveWorkBudget {
       if(!Object.hasOwn(resources,resource))throw new Error('unknown-budget-resource');
       this.limits[resource]=integer(limit,0,Number.MAX_SAFE_INTEGER);
     }
+    const overhead={...adapter.reservationCosts};
+    for(const [resource,cost] of Object.entries(overhead)) {
+      if(!Object.hasOwn(resources,resource))throw new Error('unknown-budget-resource');
+      integer(cost,0,Number.MAX_SAFE_INTEGER);
+    }
+    this.reservationCosts=Object.freeze(overhead);
   }
   async reserve({tenantId,stepId,costs}) {
     id(tenantId);id(stepId);
@@ -28,13 +35,26 @@ export class ArchiveWorkBudget {
       if(!Object.hasOwn(resources,resource)||!Object.hasOwn(this.limits,resource))throw new Error('unbudgeted-resource');
       integer(cost,0,Number.MAX_SAFE_INTEGER);
     }
+    // Reservation I/O belongs to the shared cap too, including an R2-only
+    // caller. The adapter declares its bounded worst case, not each caller.
+    // Snapshot the costs before awaiting the monitor so caller mutation cannot
+    // change a validated request. A request which cannot fit an empty window
+    // must fail before even the monitor or the Firestore budget transaction.
+    const accounted={...costs};
+    for(const [resource,cost] of Object.entries(this.reservationCosts)) {
+      if(!Object.hasOwn(this.limits,resource))throw new Error('unbudgeted-resource');
+      accounted[resource]=safeAdd(accounted[resource]??0,cost);
+    }
+    for(const [resource,cost] of Object.entries(accounted)) {
+      if(cost>this.limits[resource])throw new Error(`archive-budget-exhausted-${resource}`);
+    }
     // The monitor must use observed remaining quotas/live-trade reserves. No
     // monitor, stale observation, or inability to read usage means defer safely.
     if(await this.headroom()!==true)throw new Error('live-trade-headroom-unverified');
     const now=integer(this.now(),0,8_640_000_000_000_000);
     return this.adapter.transaction(async state=>{
       const usage={...(state.usage??{})},windows={};
-      for(const [resource,cost] of Object.entries(costs)) {
+      for(const [resource,cost] of Object.entries(accounted)) {
         const key=windowKey(resource,now);windows[resource]=key;
         const prior=usage[resource]?.window===key?integer(usage[resource].reserved,0,Number.MAX_SAFE_INTEGER):0;
         const reserved=safeAdd(prior,cost);
@@ -44,20 +64,29 @@ export class ArchiveWorkBudget {
       state.usage=usage;state.lastReservationAtMs=now;
       // No tenant payloads or credentials. stepId is diagnostic correlation only;
       // a retry that can repeat I/O must reserve again, not reuse free capacity.
-      return {tenantId,stepId,costs:{...costs},windows,reservedAtMs:now};
+      return {tenantId,stepId,costs:{...accounted},windows,reservedAtMs:now};
     });
   }
 }
 
 export class FirestoreWorkBudgetAdapter {
-  constructor(db,{scopeId='annual_archive_shared'}={}) {id(scopeId);this.ref=db.doc(`operatorArchiveBudgets/${scopeId}`);}
+  constructor(db,{scopeId='annual_archive_shared'}={}) {
+    id(scopeId);this.ref=db.doc(`operatorArchiveBudgets/${scopeId}`);
+    Object.defineProperty(this,'reservationCosts',{value:Object.freeze({
+      firestoreReads:MAX_RESERVATION_ATTEMPTS,firestoreWrites:MAX_RESERVATION_ATTEMPTS,
+    }),enumerable:true});
+  }
   transaction(fn) {
+    // A committed reservation covers this whole retry envelope. A quota check
+    // which aborts, or a transaction that exhausts its retries, can still incur
+    // reads without a committed counter update. The required observed-usage
+    // monitor must include admission failures; this is not a provider bill cap.
     return this.ref.firestore.runTransaction(async tx=>{
       const doc=await tx.get(this.ref),state=doc.exists?doc.data():{};
       const before=canonical(state),result=await fn(state);
       if(canonical(state)!==before)tx.set(this.ref,state);
       return result;
-    });
+    },{maxAttempts:MAX_RESERVATION_ATTEMPTS});
   }
 }
 export class SyntheticWorkBudgetAdapter {

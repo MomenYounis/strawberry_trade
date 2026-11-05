@@ -1,6 +1,6 @@
 import {createHash} from 'node:crypto';
-import {mkdtemp,open,rm} from 'node:fs/promises';
-import {tmpdir} from 'node:os';
+import {open} from 'node:fs/promises';
+import {createPrivateScratch} from './private-scratch.mjs';
 import {join} from 'node:path';
 import {canonical,integer} from './validation.mjs';
 import {ARCHIVE_LIMITS} from './archive-format.mjs';
@@ -77,10 +77,11 @@ export class MirroredArchiveStorage {
 
 // Development/private verifier sink only. No public directory, no live DB, no
 // user/account recreation. Process crashes can leave private temporary data;
-// production requires encrypted scratch storage + a startup sweeper before use.
+// production still requires accepted encrypted scratch storage; the marker sweeper
+// removes only sufficiently old scratch belonging to a dead process.
 export async function createTemporaryRestoreSink(){
-  const directory=await mkdtemp(join(tmpdir(),'strawberry-restore-'));
-  let file;try{file=await open(join(directory,'records.ndjson'),'wx',0o600);}catch(e){await rm(directory,{recursive:true,force:true});throw e;}
+  const scratch=await createPrivateScratch('archive_restore'),directory=scratch.directory;
+  let file;try{file=await open(join(directory,'records.ndjson'),'wx',0o600);}catch(e){await scratch.destroy();throw e;}
   let destroyed=false;
-  return {isolated:true,async append(record){if(destroyed)throw new Error('restore-sink-closed');await file.write(canonical(record)+'\n');},async destroy(){if(destroyed)return;destroyed=true;try{await file.close();}finally{await rm(directory,{recursive:true,force:true});}}};
+  return {isolated:true,async append(record){if(destroyed)throw new Error('restore-sink-closed');await file.write(canonical(record)+'\n');},async destroy(){if(destroyed)return;destroyed=true;try{await file.close();}finally{await scratch.destroy();}}};
 }

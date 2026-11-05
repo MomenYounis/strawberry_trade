@@ -4,6 +4,7 @@ import {canonical} from '../src/validation.mjs';
 import {snapshotHash} from '../src/active-snapshot-format.mjs';
 import {createActiveSnapshotProjection} from '../src/active-snapshot-projection.mjs';
 import {createFeedPrunePlan,verifyFeedPrunePlan,runFeedPruneStep,FirestoreFeedPruneAdapter,immutableFeedDocumentsForPlan} from '../src/feed-pruner.mjs';
+import {cleanupBlockers} from '../src/archive-state.mjs';
 
 // Explicit hypothetical eligible date; no current-date/production operation.
 const now=Date.parse('2027-12-01T00:00:00Z'),C=45,year=2026,tenantId='tenant',runId='annual_2026';
@@ -233,8 +234,12 @@ test('production adapter rejects synthetic, unaccepted storage or missing explic
  for(const scenario of [
   {storage:{kind:'synthetic',productionDurabilityAccepted:false},productionAcceptance:true,approvalId:'operator_acceptance'},
   {storage:{kind:'r2',productionDurabilityAccepted:false},productionAcceptance:true,approvalId:'operator_acceptance'},
+  {storage:{kind:'node-r2',productionDurabilityAccepted:false},productionAcceptance:true,approvalId:'operator_acceptance'},
   {storage:{kind:'r2',productionDurabilityAccepted:true},productionAcceptance:false,approvalId:'operator_acceptance'},
+  {storage:{kind:'node-r2',productionDurabilityAccepted:true},productionAcceptance:false,approvalId:'operator_acceptance'},
   {storage:{kind:'r2',productionDurabilityAccepted:true},productionAcceptance:true,approvalId:null},
+  {storage:{kind:'node-r2',productionDurabilityAccepted:true},productionAcceptance:true,approvalId:null},
+  {storage:{kind:'mirrored',productionDurabilityAccepted:true},productionAcceptance:true,approvalId:'operator_acceptance'},
  ]){
   const state=clone(f.state);Object.assign(state.run.evidence.cleanupAcceptance,{productionAcceptance:scenario.productionAcceptance,approvalId:scenario.approvalId});
   const db={doc:ref,runTransaction:async(fn,options)=>{
@@ -243,6 +248,26 @@ test('production adapter rejects synthetic, unaccepted storage or missing explic
   const adapter=new FirestoreFeedPruneAdapter(db);
   await assert.rejects(()=>step(f,adapter,{mode:'production',storage:scenario.storage}),/production-cleanup-not-accepted/);
  }
+ assert.equal(writes,0);
+});
+test('Node R2 transport kind preserves every cleanup gate; current unaccepted adapters cannot authorize any deletion',async t=>{
+ const f=await fixture(t);
+ const args={config:f.args.config,run:f.state.run,lease:f.args.lease,now,
+  independentRecovery:true,keyRecoveryTested:true,retentionChecked:true,dependenciesResolved:true,protocolAcceptance:true,
+  productionAcceptance:true,expectedCheckpoint:f.state.run.checkpoint};
+ assert.deepEqual(cleanupBlockers({...args,storage:{kind:'node-r2',productionDurabilityAccepted:true}}),[]);
+ for(const storage of [{kind:'node-r2',productionDurabilityAccepted:false},{kind:'mirrored',productionDurabilityAccepted:true},{kind:'synthetic',productionDurabilityAccepted:true}])assert.ok(cleanupBlockers({...args,storage}).includes('durable-storage-not-accepted'));
+ for(const key of ['independentRecovery','keyRecoveryTested','retentionChecked','dependenciesResolved','protocolAcceptance','productionAcceptance'])assert.ok(cleanupBlockers({...args,[key]:false,storage:{kind:'node-r2',productionDurabilityAccepted:true}}).length>0,key+' must remain required');
+ // Pure gate compatibility on an already completed fixture, with no write or
+ // delete possible. This is not accepted production storage or a live drill.
+ const state=clone(f.state);state.root.historyFloor=C;state.root.minimumSyncProtocol=2;
+ state.run.state='complete';state.run.pruneProgress={page:f.plan.manifest.pages.length,deleted:C,planSha256:f.saved.sha256};
+ Object.assign(state.run.evidence.cleanupAcceptance,{productionAcceptance:true,approvalId:'hypothetical_offline_gate_test'});
+ const ref=path=>({path,collection:name=>({doc:key=>ref(`${path}/${name}/${key}`)})});let writes=0;
+ const db={doc:ref,runTransaction:async fn=>fn({get:async value=>({exists:true,data:()=>clone(value.path.includes('/archiveRuns/')?state.run:state.root)}),update:()=>{writes++;},set:()=>{writes++;},delete:()=>{writes++;}})};
+ const adapter=new FirestoreFeedPruneAdapter(db);
+ assert.equal((await step(f,adapter,{mode:'production',storage:{kind:'node-r2',productionDurabilityAccepted:true}})).state,'complete');
+ await assert.rejects(step(f,adapter,{mode:'production',storage:{kind:'node-r2',productionDurabilityAccepted:false}}),/production-cleanup-not-accepted/);
  assert.equal(writes,0);
 });
 

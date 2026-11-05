@@ -3,14 +3,22 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "engines": {"node": ">=22"},
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "test": "node --test test/config.test.mjs",
+    "test": "node --test test/config.test.mjs test/emulator-firestore-auth.test.mjs test/request-forward.test.mjs",
     "dry-run": "wrangler deploy --env= --dry-run --outdir dist",
     "prepare:emulator": "node scripts/prepare-emulator.mjs",
     "dev:emulator": "wrangler dev --env emulator --local --ip 127.0.0.1 --port 8788",
-    "test:emulator": "node test/http-emulator.mjs"
+    "test:emulator": "node test/http-emulator.mjs",
+    "test:r2": "node --test test/archive-r2.integration.test.mjs"
   },
-  "dependencies": {"firebase-admin": "14.5.0"},
-  "devDependencies": {"wrangler": "4.151.2"}
+  "dependencies": {
+    "firebase-admin": "14.5.0",
+    "google-auth-library": "11.3.1"
+  },
+  "devDependencies": {
+    "wrangler": "4.151.2"
+  }
 }

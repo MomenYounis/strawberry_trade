@@ -6,6 +6,7 @@ import {createGateway} from '../src/gateway.mjs';
 import {acceptInvitation} from '../src/enrollment.mjs';
 import {createHttpGateway} from '../src/http-gateway.mjs';
 import {validateWorkerBindings,workerBindingFingerprint,WorkerConfigurationError} from './runtime-config.mjs';
+import {emulatorFirestoreSettings} from './emulator-firestore-auth.mjs';
 
 const runtimes=new Map();
 export function workerRuntime(env) {
@@ -24,6 +25,9 @@ export function workerRuntime(env) {
   const app=getApps().find(item=>item.name===name)||initializeApp({projectId:config.projectId,credential:cert(config.serviceAccount)},name);
   if (app.options.projectId !== config.projectId) throw new WorkerConfigurationError();
   const db=initializeFirestore(app,{preferRest:true}),auth=getAuth(app);
+  if(config.emulator)db.settings(emulatorFirestoreSettings(config.projectId,{
+    GCLOUD_PROJECT:config.projectId,FIRESTORE_EMULATOR_HOST:config.firestoreEmulator,
+    FIREBASE_AUTH_EMULATOR_HOST:config.authEmulator}));
   const gateway=createGateway({db,auth,privateKey:()=>config.privateKeyPem,
     publicKey:()=>config.publicKeyPem,kid:()=>config.kid});
   gateway.acceptInvitation=request=>acceptInvitation({db,auth,request});

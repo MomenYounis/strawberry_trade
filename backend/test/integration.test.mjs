@@ -27,7 +27,7 @@ test('actual original strict backend rejection and additive v9/v10/v11 protocol 
  const old=await gateway.syncOperation(req(a,{operation}));
  assert.equal(old.status,'accepted');
  for(const syncProtocolVersion of [1,2])assert.deepEqual(await gateway.syncOperation(req(a,{operation,syncProtocolVersion})),old);
- for(const protocol of [0,3,'2',true]){
+ for(const protocol of [null,0,3,'2',true]){
   await assert.rejects(gateway.syncOperation(req(a,{operation:{...operation,id:'unsupported'},syncProtocolVersion:protocol})),/sync-upgrade-required/);
   await assert.rejects(gateway.pullChanges(req(a,{afterSequence:0,syncProtocolVersion:protocol})),/sync-upgrade-required/);
  }
@@ -108,13 +108,15 @@ test('closed checkpoint keeps late evidence, concurrent new-year trade, duplicat
  assert.equal((await root.collection('salaryLocks').doc('staff_a_2027-08').get()).exists,false);
  assert.equal((await root.get()).data().sequence,before+2);
  const prospective={id:'prospective_term',entity:'salary_term',expectedRevision:0,
-  payload:{...lateTerm.payload,id:'prospective_term',effectiveMonth:'2027-09'},correctionOfOperationId:'closed_term'};
+  payload:{...lateTerm.payload,id:'prospective_term',effectiveMonth:'2027-09'},correctionOfOperationId:'closed_term',correctionReason:'توثيق المعدل الحالي فقط دون إعادة حساب أغسطس'};
  await assert.rejects(gateway.syncOperation(req(a,{operation:{...prospective,payload:{...prospective.payload,monthlyMinor:200000}}})),/correction-facts-changed/);
  const resolved=await gateway.syncOperation(req(a,{operation:prospective,syncProtocolVersion:2}));
  assert.equal(resolved.status,'accepted');assert.deepEqual(await gateway.syncOperation(req(a,{operation:prospective,syncProtocolVersion:2})),resolved);
  assert.equal((await root.collection('lateOperations').doc('closed_term').get()).data().resolution,'prospective-unchanged-rate');
  assert.equal((await root.collection('salaryTerms').doc('closed_term').get()).exists,false);
  assert.equal((await root.collection('salaryTerms').doc('prospective_term').get()).data().effectiveMonth,'2027-09');
+ assert.equal((await root.collection('lateOperations').doc('closed_term').get()).data().resolutionNote,prospective.correctionReason);
+ assert.equal((await root.collection('audit').doc('prospective_term').get()).data().correctionReason,prospective.correctionReason);
  const history=(await root.collection('changes').where('sequence','<=',before).orderBy('sequence').get()).docs;
  assert.equal(history.some(row=>['closed_old','closed_fixed','open_current'].includes(row.data().id)),false);
  await root.set({historyFloor:before},{merge:true});

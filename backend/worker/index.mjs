@@ -3,6 +3,7 @@
 import './private-stream-debug.mjs';
 import './compatibility.mjs';
 import {DurableObject} from 'cloudflare:workers';
+import {forwardGatewayRequest} from './request-forward.mjs';
 
 function unavailable() {
   return Response.json({error:{status:'UNAVAILABLE',message:'gateway-not-configured',
@@ -31,7 +32,7 @@ export default {
   async fetch(request,env) {
     try {
       // Fixed object name prevents caller-controlled per-tenant object creation.
-      return await env.GATEWAY.getByName('gateway-v1').fetch(request);
+      return await forwardGatewayRequest(request,env.GATEWAY.getByName('gateway-v1'));
     } catch {return unavailable();}
   }
 };

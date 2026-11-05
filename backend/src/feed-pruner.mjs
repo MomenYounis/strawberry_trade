@@ -92,7 +92,7 @@ function checkGates({root,run,lease,manifest,planSha256,config,storage,mode,now}
  if(!snapshot||snapshot.headerSha256!==manifest.snapshotHeaderSha256||snapshot.checkpointSequence!==manifest.checkpointSequence||snapshot.fromSequence!==manifest.fromSequence||snapshot.sourceDocumentHashesSha256!==manifest.sourceDocumentHashesSha256||snapshot.verified!==true)throw new Error('verified-active-snapshot-required');
  if(!accepted||accepted.planSha256!==planSha256||accepted.snapshotHeaderSha256!==manifest.snapshotHeaderSha256||accepted.manifestSha256!==run.manifest.sha256||accepted.closingSequence!==manifest.checkpointSequence||accepted.closingVersion!==run.checkpoint.version)throw new Error('cleanup-acceptance-mismatch');
  for(const key of ['independentRecovery','keyRecoveryTested','retentionChecked','dependenciesResolved','protocolAcceptance','clientInstallAcceptance'])if(accepted[key]!==true)throw new Error(`cleanup-${key}-required`);
- if(mode==='production'&&(storage?.kind!=='r2'||storage.productionDurabilityAccepted!==true||accepted.productionAcceptance!==true||!accepted.approvalId))throw new Error('production-cleanup-not-accepted');
+ if(mode==='production'&&(!['r2','node-r2'].includes(storage?.kind)||storage.productionDurabilityAccepted!==true||accepted.productionAcceptance!==true||!accepted.approvalId))throw new Error('production-cleanup-not-accepted');
  if(mode==='synthetic'&&(storage?.kind!=='synthetic'||accepted.synthetic!==true))throw new Error('synthetic-cleanup-boundary');
  if((root.historyFloor??0)>manifest.checkpointSequence||(root.historyFloor??0)<manifest.fromSequence)throw new Error('prune-history-floor-mismatch');
  // Any registered source consumer may still require this prefix. A closing

@@ -11,6 +11,7 @@ function checkedLease(lease,now) {
   if(!lease||!Number.isSafeInteger(lease.fence)||lease.fence<1||lease.expiresAtMs<=now) throw new Error('stale-archive-lease');
   return lease;
 }
+function assertActive(root){if(root?.enabled!==true||root.adminDeleting)throw new Error('tenant-not-active');}
 function assertFence(run,lease,now) {
   checkedLease(lease,now);
   if(!run?.lease||run.lease.owner!==lease.owner||run.lease.fence!==lease.fence||run.lease.expiresAtMs<=now) throw new Error('stale-archive-lease');
@@ -26,7 +27,7 @@ export class ArchiveStateStore {
   async create({tenantId,runId,year,explicitSelection=false}) {
     validateRun({tenantId,runId,year});
     return this.adapter.transaction(tenantId,year, async tx=>{
-      if(tx.run) {if(tx.run.runId!==runId)throw new Error('year-run-already-exists');return clone(tx.run);}
+      assertActive(tx.root);if(tx.run) {if(tx.run.runId!==runId)throw new Error('year-run-already-exists');return clone(tx.run);}
       const due=eligibleYears(this.now());
       if(!due.includes(year))throw new Error('year-not-eligible');
       const previousYear=tx.root.archivePolicy?.activeYearStart??2026;
@@ -39,7 +40,7 @@ export class ArchiveStateStore {
   async acquire(tenantId,year,owner,ttlMs=60_000) {
     id(owner);integer(ttlMs,1000,300_000);
     return this.adapter.transaction(tenantId,year,async tx=>{
-      if(!tx.run)throw new Error('archive-run-missing');
+      assertActive(tx.root);if(!tx.run)throw new Error('archive-run-missing');
       const now=this.now();validTime(now);
       if(tx.run.lease?.expiresAtMs>now)throw new Error('archive-lease-held');
       const fence=integer(tx.run.fence+1,1,Number.MAX_SAFE_INTEGER);
@@ -50,18 +51,40 @@ export class ArchiveStateStore {
   async renew(tenantId,year,lease,ttlMs=60_000) {
     integer(ttlMs,1000,300_000);
     return this.adapter.transaction(tenantId,year,async tx=>{
-      assertFence(tx.run,lease,this.now());tx.run.lease.expiresAtMs=this.now()+ttlMs;
+      assertActive(tx.root);assertFence(tx.run,lease,this.now());tx.run.lease.expiresAtMs=this.now()+ttlMs;
       return clone(tx.run.lease);
     });
   }
   async assertCurrent(tenantId,year,lease) {
-    return this.adapter.transaction(tenantId,year,async tx=>{assertFence(tx.run,lease,this.now());return clone(tx.run);});
+    return this.adapter.transaction(tenantId,year,async tx=>{assertActive(tx.root);assertFence(tx.run,lease,this.now());return clone(tx.run);});
+  }
+  async recordSourcePreparation(tenantId,year,lease,progress) {
+    if(!progress||Object.keys(progress).sort().join('|')!=='contextSha256|fromSequence|head|keyId|pageCount|seedSequence|seedSha256|sourceBytes|sourceCursor|version'||Buffer.byteLength(canonical(progress))>4000||progress.version!==1||!/^[a-f0-9]{64}$/.test(progress.contextSha256))throw new Error('invalid-source-preparation');
+    id(progress.keyId);integer(progress.fromSequence,0,Number.MAX_SAFE_INTEGER);integer(progress.sourceCursor,progress.fromSequence,Number.MAX_SAFE_INTEGER);
+    integer(progress.pageCount,0,10_000);integer(progress.sourceBytes,0,268_435_456);
+    if(progress.sourceCursor-progress.fromSequence>500_000||progress.seedSequence!==progress.fromSequence||!(progress.fromSequence===0?progress.seedSha256===null:/^[a-f0-9]{64}$/.test(progress.seedSha256)))throw Error('invalid-source-preparation');
+    return this.adapter.transaction(tenantId,year,async tx=>{
+      assertActive(tx.root);assertFence(tx.run,lease,this.now());
+      if(!['checkpointed','exporting'].includes(tx.run.state)||progress.sourceCursor>tx.run.checkpoint.sequence)throw new Error('invalid-archive-state');
+      if(progress.head!==null){const head=progress.head;
+        if(Object.keys(head).sort().join('|')!=='from|index|key|sha256|to'||!/^[a-f0-9]{64}$/.test(head.sha256)||head.key!==`archives/v1/${tenantId}/${year}/${tx.run.runId}/chunks/${head.sha256}`)throw Error('invalid-source-preparation');
+        integer(head.from,progress.fromSequence+1,progress.sourceCursor);integer(head.to,head.from,progress.sourceCursor);integer(head.index,0,9999);
+        if(head.to!==progress.sourceCursor||head.index!==progress.pageCount-1||progress.sourceBytes===0)throw Error('invalid-source-preparation');
+      }else if(progress.pageCount!==0||progress.sourceCursor!==progress.fromSequence||progress.sourceBytes!==0)throw Error('invalid-source-preparation');
+      const prior=tx.run.sourcePreparation;
+      if(prior){
+        if(prior.contextSha256!==progress.contextSha256||prior.keyId!==progress.keyId||prior.fromSequence!==progress.fromSequence||prior.seedSha256!==progress.seedSha256||prior.seedSequence!==progress.seedSequence)throw new Error('source-preparation-context');
+        if(canonical(prior)===canonical(progress))return clone(prior);
+        if(progress.pageCount!==prior.pageCount+1||progress.head?.from!==prior.sourceCursor+1||progress.head?.to!==progress.sourceCursor||progress.head?.index!==prior.pageCount||progress.sourceBytes<=prior.sourceBytes)throw new Error('source-preparation-regressed');
+      }else if(progress.pageCount!==0||progress.sourceCursor!==progress.fromSequence||progress.head!==null||progress.sourceBytes!==0)throw new Error('invalid-source-preparation');
+      tx.run.sourcePreparation=clone(progress);return clone(progress);
+    });
   }
   async checkpoint(tenantId,year,lease,{authorizedClose=false,exportEnabled=false,openingDateEvidence=null}={}) {
     if(!authorizedClose||!exportEnabled)throw new Error('financial-close-disabled');
     if(this.adapter.kind==='firestore'&&(!openingDateEvidence||openingDateEvidence.policy!=='dated-openings'||openingDateEvidence.tenantId!==tenantId||openingDateEvidence.year!==year||!/^[a-f0-9]{64}$/.test(openingDateEvidence.sha256)))throw new Error('opening-date-policy-required');
     return this.adapter.transaction(tenantId,year,async tx=>{
-      assertFence(tx.run,lease,this.now());
+      assertActive(tx.root);assertFence(tx.run,lease,this.now());
       if(tx.run.state!=='eligible') {if(tx.run.checkpoint)return clone(tx.run);throw new Error('invalid-archive-state');}
       if(tx.root.adminDeleting||tx.root.enabled!==true)throw new Error('tenant-not-active');
       if(!eligibleYears(this.now()).includes(year))throw new Error('year-not-eligible');
@@ -82,7 +105,7 @@ export class ArchiveStateStore {
     if(!['exporting','uploaded','verified','cleanup_pending'].includes(to)||ARCHIVE_STATES.indexOf(to)!==ARCHIVE_STATES.indexOf(from)+1)throw new Error('invalid-archive-transition');
     if(Buffer.byteLength(canonical(evidence))>32_000)throw new Error('archive-evidence-too-large');
     return this.adapter.transaction(tenantId,year,async tx=>{
-      assertFence(tx.run,lease,this.now());
+      assertActive(tx.root);assertFence(tx.run,lease,this.now());
       if(tx.run.state!==from)throw new Error('invalid-archive-state');
       if(to==='uploaded'&&(!/^[a-f0-9]{64}$/.test(evidence.sha256)||typeof evidence.key!=='string'||!evidence.key.endsWith('/manifests/'+evidence.sha256)||!evidence.keyId))throw new Error('uploaded-manifest-evidence-required');
       if(to==='verified') {
@@ -96,13 +119,13 @@ export class ArchiveStateStore {
   }
   async recordRetry(tenantId,year,lease,{code,retryAfterMs}) {
     id(code);validTime(retryAfterMs);
-    return this.adapter.transaction(tenantId,year,async tx=>{assertFence(tx.run,lease,this.now());tx.run.retry={code,retryAfterMs};return clone(tx.run);});
+    return this.adapter.transaction(tenantId,year,async tx=>{assertActive(tx.root);assertFence(tx.run,lease,this.now());tx.run.retry={code,retryAfterMs};return clone(tx.run);});
   }
   async recordExportCheckpoint(tenantId,year,lease,progress) {
     if(!Array.isArray(progress.chunks)||progress.chunks.length>1024||Buffer.byteLength(canonical(progress))>500_000)throw new Error('archive-progress-limit');
     integer(progress.recordCount,0,500_000);
     return this.adapter.transaction(tenantId,year,async tx=>{
-      assertFence(tx.run,lease,this.now());if(tx.run.state!=='exporting')throw new Error('invalid-archive-state');
+      assertActive(tx.root);assertFence(tx.run,lease,this.now());if(tx.run.state!=='exporting')throw new Error('invalid-archive-state');
       if((tx.run.exportProgress?.chunks.length??0)>progress.chunks.length)throw new Error('archive-progress-regression');
       const prior=tx.run.exportProgress?.chunks??[];
       if(canonical(prior)!==canonical(progress.chunks.slice(0,prior.length)))throw new Error('archive-progress-conflict');
@@ -114,7 +137,7 @@ export class ArchiveStateStore {
   async publishManifest(tenantId,year,lease,{key,sha256}) {
     if(typeof key!=='string'||key.length>512||!/^[a-f0-9]{64}$/.test(sha256))throw new Error('invalid-manifest-pointer');
     return this.adapter.transaction(tenantId,year,async tx=>{
-      assertFence(tx.run,lease,this.now());
+      assertActive(tx.root);assertFence(tx.run,lease,this.now());
       if(tx.run.state!=='uploaded')throw new Error('invalid-archive-state');
       if(tx.run.evidence?.uploaded?.key!==key||tx.run.evidence.uploaded.sha256!==sha256)throw new Error('manifest-evidence-mismatch');
       if(tx.run.manifest&&canonical(tx.run.manifest)!==canonical({key,sha256}))throw new Error('manifest-already-published');
@@ -163,7 +186,7 @@ export function cleanupBlockers({config=ARCHIVE_DEFAULTS,run,lease,now=Date.now(
   const verification=run?.evidence?.verified;
   if(!verification||verification.financialMatch!==true||verification.identitiesMatch!==true||verification.manifestSha256!==run?.manifest?.sha256)blockers.push('verification-required');
   if(!Number.isInteger(config.graceDays)||config.graceDays<1||config.graceDays>3650||!verification||!Number.isSafeInteger(verification.verifiedAtMs)||now-verification.verifiedAtMs<config.graceDays*86400000)blockers.push('retention-grace');
-  if(!storage||storage.kind!=='r2'||storage.productionDurabilityAccepted!==true)blockers.push('durable-storage-not-accepted');
+  if(!storage||!['r2','node-r2'].includes(storage.kind)||storage.productionDurabilityAccepted!==true)blockers.push('durable-storage-not-accepted');
   for(const [passed,label] of [[independentRecovery,'independent-recovery-required'],[keyRecoveryTested,'key-recovery-required'],[retentionChecked,'retention-review-required'],[dependenciesResolved,'unresolved-dependencies'],[protocolAcceptance,'protocol-acceptance-required'],[productionAcceptance,'production-acceptance-required']])if(passed!==true)blockers.push(label);
   if(!expectedCheckpoint||canonical(expectedCheckpoint)!==canonical(run?.checkpoint))blockers.push('checkpoint-mismatch');
   // Only the private, conditional manager-feed pruner exists. Financial records,

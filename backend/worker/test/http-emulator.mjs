@@ -8,11 +8,13 @@ import {getAuth} from 'firebase-admin/auth';
 import {provisionTenant} from '../../src/enrollment.mjs';
 import {canonical} from '../../src/validation.mjs';
 import {signPackage,verifyPackage} from '../../src/issuer.mjs';
+import {assertDemoOperatorEnvironment} from '../../src/demo-operator.mjs';
+import {emulatorFirestoreSettings} from '../emulator-firestore-auth.mjs';
 
 const projectId='demo-strawberry-flutter',base='http://127.0.0.1:8788';
-process.env.GCLOUD_PROJECT=projectId;
-process.env.FIRESTORE_EMULATOR_HOST='127.0.0.1:18080';
-process.env.FIREBASE_AUTH_EMULATOR_HOST='127.0.0.1:19099';
+assertDemoOperatorEnvironment(projectId,process.env);
+assert.equal(process.env.FIRESTORE_EMULATOR_HOST,'127.0.0.1:18080');
+assert.equal(process.env.FIREBASE_AUTH_EMULATOR_HOST,'127.0.0.1:19099');
 const text=await readFile(new URL('../.dev.vars.emulator',import.meta.url),'utf8');
 assert(text.startsWith('# Synthetic loopback fixtures. These are not Google credentials.'));
 const values=Object.fromEntries(text.split('\n').filter(line=>line&&!line.startsWith('#')).map(line=>{
@@ -24,6 +26,7 @@ assert.equal(account.project_id,projectId);
 assert.equal(account.client_email,'synthetic-worker@demo-strawberry-flutter.iam.gserviceaccount.com');
 const nonce=Date.now().toString(36),uid='worker_http_manager_'+nonce,employeeUid='worker_http_staff_'+nonce,tenantId='worker_http_'+nonce;
 const app=initializeApp({projectId,credential:cert(account)},'worker-http-test-'+nonce),db=initializeFirestore(app,{preferRest:true}),auth=getAuth(app);
+db.settings(emulatorFirestoreSettings(projectId,process.env));
 const checks=[];
 const check=(value,label)=>{assert.ok(value,label);checks.push(label);};
 const equal=(actual,expected,label)=>{assert.deepEqual(actual,expected,label);checks.push(label);};
@@ -47,6 +50,8 @@ try {
  const token=await login(email,password),claims=await auth.verifyIdToken(token,true);
  equal(claims.uid,uid,'Emulator Firebase token has expected verified UID');
  const session=await bootstrap(managerDevice,token);
+ equal(session.syncProtocolVersions,[1,2],'Authenticated bootstrap advertises both supported sync protocols');
+ equal(session.minimumSyncProtocol,1,'Unpruned tenant permits previous clients');
  const license=verifyPackage(session.licensePackage,values.LICENSE_PUBLIC_KEY_PEM,'worker-emulator-only');
  equal(license.membership.deviceId,managerDevice.deviceId,'P-256 challenge binds signed membership to installation');
  equal(license.entitlement.expiresAtMs-license.entitlement.trialStartMs,30*24*60*60*1000,'Signed trial exactly thirty days');
@@ -64,6 +69,42 @@ try {
  equal(invalid.status,'conflict','Invalid accounting retains conflict receipt');
  const pulled=await call('pullChanges',scoped({afterSequence:0,limit:500}),token);
  equal(pulled.changes.filter(change=>change.entity==='entry').length,1,'Pull includes one accepted invoice');
+ // Exact request contracts: v9 omits the field; v11 sends 1 or 2; v12 omits
+ // for a legacy bootstrap and sends 2 only after authenticated negotiation.
+ const invoiceOperation={id:'invoice_http_op',entity:'entry',payload:invoice,expectedRevision:0};
+ for(const protocol of [undefined,1,2]){
+  const fields=protocol===undefined?{}:{syncProtocolVersion:protocol};
+  equal(await call('syncOperation',scoped({operation:invoiceOperation,...fields}),token),first,'Mixed protocol '+(protocol??'omitted')+' retry returns identical receipt');
+  const page=await call('pullChanges',scoped({afterSequence:0,limit:500,...fields}),token);
+  equal(page.syncProtocolVersion,protocol??1,'Mixed protocol '+(protocol??'omitted')+' response contract');
+  equal(page.changes.filter(change=>change.entity==='entry').map(change=>change.id),[invoice.id],'Mixed protocol '+(protocol??'omitted')+' reads exactly one posting');
+ }
+ for(const protocol of [null,0,3,'2',true]){
+  for(const endpoint of ['syncOperation','pullChanges']){
+   const data=endpoint==='syncOperation'?{operation:{...invoiceOperation,id:'unsupported_http'}}:{afterSequence:0};
+   const rejected=await raw(endpoint,scoped({...data,syncProtocolVersion:protocol}),token);
+   equal(rejected.status,400,'Unsupported '+JSON.stringify(protocol)+' '+endpoint+' rejected over actual HTTP');
+   equal(rejected.body.error.details.reason,'sync-upgrade-required','Unsupported client receives actionable upgrade reason');
+  }
+ }
+ equal((await db.doc('tenants/'+tenantId+'/operations/unsupported_http').get()).exists,false,'Unsupported protocol writes no operation receipt');
+ const retainedOperation={id:'retained_protocol_queue',entity:'entry',expectedRevision:0,payload:{...invoice,id:'retained_protocol_queue'}};
+ const retainedBytes=canonical(retainedOperation),rootProtocol=db.doc('tenants/'+tenantId);
+ await rootProtocol.update({minimumSyncProtocol:2});
+ for(const protocol of [undefined,1]){
+  const fields=protocol===undefined?{}:{syncProtocolVersion:protocol};
+  const deniedSend=await raw('syncOperation',scoped({operation:retainedOperation,...fields}),token);
+  equal(deniedSend.body.error.details.reason,'sync-upgrade-required','Old client is refused when the tenant requires v2');
+  const deniedPull=await raw('pullChanges',scoped({afterSequence:0,...fields}),token);
+  equal(deniedPull.body.error.details.reason,'sync-upgrade-required','Old pull is refused before exposing pruned-history semantics');
+ }
+ equal((await rootProtocol.collection('operations').doc(retainedOperation.id).get()).exists,false,'Upgrade refusal does not consume a queued operation ID');
+ equal(canonical(retainedOperation),retainedBytes,'Retry uses byte-identical original operation payload');
+ const resumed=await call('syncOperation',scoped({operation:retainedOperation,syncProtocolVersion:2}),token);
+ equal(resumed.status,'accepted','Supported client resumes the original queued operation ID');
+ equal(await call('syncOperation',scoped({operation:retainedOperation,syncProtocolVersion:2}),token),resumed,'Lost-response retry remains exactly once after upgrade');
+ equal((await rootProtocol.collection('entries').where('id','==',retainedOperation.id).get()).size,1,'Retried queued operation has one financial posting');
+ await rootProtocol.update({minimumSyncProtocol:1});
  equal((await raw('pullChanges',{...scoped({afterSequence:0}),tenantId:'other_tenant'},token)).status,403,'Forged tenant denied');
  const employeeId='staff_http';
  equal((await send('staff_http_op','employee',{id:employeeId,name:'عامل تجريبي',phone:'',active:true})).status,'accepted','Employee directory write via HTTP');
@@ -146,6 +187,6 @@ try {
  equal(new Set([...page1.changes,...page2.changes].map(change=>change.sequence)).size,beforePages+600,'Two HTTP pages preserve all sequence IDs without duplication');
  equal(page2.lastSequence,beforePages+600,'HTTP page cursor reaches complete synthetic history');
  const summary={passed:true,checks:checks.length,assertions:checks,transport:'real local workerd Worker → one SQLite Durable Object → HTTP factory → emulator Admin SDK',projectId,firestore:'127.0.0.1:18080',auth:'127.0.0.1:19099',cloudDeployed:false,productionCredentialsUsed:false,cloudCpuQuotaMeasured:false};
- await writeFile(new URL('../test-results.local.json',import.meta.url),JSON.stringify(summary,null,2)+'\n');
+ await writeFile(process.env.STRAWBERRY_HTTP_TEST_RESULTS||new URL('../test-results.local.json',import.meta.url),JSON.stringify(summary,null,2)+'\n');
  console.log(JSON.stringify(summary));
 } finally {await db.terminate();await deleteApp(app);}

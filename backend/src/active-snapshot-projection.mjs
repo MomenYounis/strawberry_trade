@@ -1,8 +1,8 @@
 // Private preparation primitive. No routes, schedules, live mutations, key
 // creation, baseline posting, or production durability claim.
 import {DatabaseSync} from 'node:sqlite';
-import {mkdtemp,chmod,rm} from 'node:fs/promises';
-import {tmpdir} from 'node:os';
+import {chmod} from 'node:fs/promises';
+import {createPrivateScratch} from './private-scratch.mjs';
 import {join} from 'node:path';
 import {createHash,randomUUID} from 'node:crypto';
 import {canonical,id,integer,keys} from './validation.mjs';
@@ -50,17 +50,17 @@ export async function* immutableActiveChangesAtCheckpoint(db,{tenantId,checkpoin
 
 export async function createActiveSnapshotProjection({scope,seed=null,maxChanges=L.maxRecords,maxBytes=L.maxTotalBytes}){
  scope=Object.freeze(structuredClone(snapshotScope(scope)));integer(maxChanges,1,L.maxRecords);integer(maxBytes,1024,L.maxTotalBytes);
- const directory=await mkdtemp(join(tmpdir(),'strawberry-active-snapshot-'));await chmod(directory,0o700);let db;
+ const scratch=await createPrivateScratch('active_snapshot'),directory=scratch.directory;let db;
  try{db=new DatabaseSync(join(directory,'projection.sqlite'));await chmod(join(directory,'projection.sqlite'),0o600);
   db.exec('PRAGMA journal_mode=DELETE; PRAGMA synchronous=FULL; PRAGMA cache_size=-4096; CREATE TABLE records(entity TEXT NOT NULL,id TEXT NOT NULL,sequence INTEGER NOT NULL UNIQUE,payload TEXT NOT NULL,PRIMARY KEY(entity,id));');
- }catch(error){db?.close();await rm(directory,{recursive:true,force:true});throw error;}
+ }catch(error){db?.close();await scratch.destroy();throw error;}
  const get=db.prepare('SELECT sequence,payload FROM records WHERE entity=? AND id=?');
  const insert=db.prepare('INSERT INTO records(entity,id,sequence,payload) VALUES(?,?,?,?)');
  const save=db.prepare('INSERT INTO records(entity,id,sequence,payload) VALUES(?,?,?,?) ON CONFLICT(entity,id) DO UPDATE SET sequence=excluded.sequence,payload=excluded.payload');
  let sequence=0,changeCount=0,sourceBytes=0,recordCount=0,sealed=false,destroyed=false,failed=false,projection,sourceFeedSha256=null,sourceDocumentHashesSha256=null;
  const feedDigest=createHash('sha256'),documentHashesDigest=createHash('sha256');
  const managerScope={...scope,role:'manager'};
- const destroy=async()=>{if(destroyed)return;destroyed=true;if(projection){verifiedManagerProjections.delete(projection);sealedProjections.delete(projection);}try{db.close();}finally{await rm(directory,{recursive:true,force:true});}};
+ const destroy=async()=>{if(destroyed)return;destroyed=true;if(projection){verifiedManagerProjections.delete(projection);sealedProjections.delete(projection);}try{db.close();}finally{await scratch.destroy();}};
  try{
   if(seed){
    const header=validateSnapshotHeader(structuredClone(seed.header),{tenantId:scope.tenantId,role:'manager'});

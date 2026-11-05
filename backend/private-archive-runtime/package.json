@@ -1,0 +1,9 @@
+{
+  "name": "strawberry-private-archive-runtime",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {"node": ">=22"},
+  "scripts": {"test": "node --test ../test/node-r2-storage.test.mjs"},
+  "dependencies": {"@aws-sdk/client-s3": "3.1161.0", "@smithy/node-http-handler": "4.14.1"}
+}
