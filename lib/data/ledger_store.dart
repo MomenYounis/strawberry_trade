@@ -1868,6 +1868,11 @@ class LedgerStore {
           );
         }
         descriptors.add(page.descriptor);
+        // One bounded page per native database call. Sending every annual
+        // record separately through the Android platform channel makes the
+        // staging pass dominate recovery time. The batch remains inside the
+        // same atomic merge and returns no per-row result allocation.
+        final stagingBatch = tx.batch();
         for (final record in page.records) {
           final key = activeSnapshotRecordKey(record);
           if (previousKey != null && previousKey.compareTo(key) >= 0) {
@@ -1878,22 +1883,23 @@ class LedgerStore {
           }
           previousKey = key;
           final payload = Map<String, dynamic>.from(record['payload'] as Map);
-          try {
-            await tx.insert('snapshot_install_records', {
-              'entity': record['entity'],
-              'id': payload['id'],
-              'sequence': record['sequence'],
-              'dependency': order[record['entity']],
-              'payload': canonicalJson(payload),
-            });
-          } on DatabaseException catch (error) {
-            if (!error.isUniqueConstraintError()) rethrow;
-            invalid(
-              'snapshot_record_order',
-              'تكرار معرّف أو تسلسل في نسخة الاستعادة.',
-            );
-          }
+          stagingBatch.insert('snapshot_install_records', {
+            'entity': record['entity'],
+            'id': payload['id'],
+            'sequence': record['sequence'],
+            'dependency': order[record['entity']],
+            'payload': canonicalJson(payload),
+          });
           recordCount++;
+        }
+        try {
+          await stagingBatch.commit(noResult: true);
+        } on DatabaseException catch (error) {
+          if (!error.isUniqueConstraintError()) rethrow;
+          invalid(
+            'snapshot_record_order',
+            'تكرار معرّف أو تسلسل في نسخة الاستعادة.',
+          );
         }
       }
       if (recordCount != header.recordCount ||
