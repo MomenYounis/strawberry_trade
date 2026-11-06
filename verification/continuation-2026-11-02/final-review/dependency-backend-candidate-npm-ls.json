@@ -1,0 +1,12 @@
+{
+  "exitCode": 0,
+  "problems": [],
+  "rootDependencies": [
+    "@firebase/rules-unit-testing",
+    "acorn",
+    "firebase-admin",
+    "firebase-functions",
+    "firebase-tools",
+    "firebase"
+  ]
+}

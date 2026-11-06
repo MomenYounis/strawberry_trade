@@ -1,0 +1,17 @@
+✔ valid matching production bindings are checked locally without credential requests (15.82994ms)
+✔ wrong-project service account, wrong APK registration and mismatched issuer keys fail closed (10.092524ms)
+✔ missing or oversized secret binding is rejected before SDK initialization (10.388556ms)
+✔ emulator exemption requires the exact demo project and both loopback services (4.3042ms)
+✔ owner REST credential is scoped to the guarded demo environment (39.78917ms)
+✔ owner REST credential cannot be constructed for a live project or remote service (0.994724ms)
+✔ incoming chunked body is fully consumed before an early authorization response (121.588246ms)
+✔ oversize declared or chunked requests never reach the DO and cancel the input (8.266948ms)
+✔ exact maximum request remains intact and health without a body remains unchanged (4.912965ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 428.023789

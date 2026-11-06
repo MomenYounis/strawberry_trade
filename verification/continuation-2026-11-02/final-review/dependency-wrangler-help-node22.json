@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "exitCode": 0,
+  "nodeVersion": "v22.22.2",
+  "wranglerVersion": "4.151.2",
+  "finishedAt": "2026-11-06T12:15:36.675780+00:00",
+  "networkMutation": false,
+  "command": [
+    "/usr/bin/node",
+    "/home/younis/strawberry-trade-annual-review/backend/worker/node_modules/wrangler/bin/wrangler.js",
+    "--help"
+  ]
+}

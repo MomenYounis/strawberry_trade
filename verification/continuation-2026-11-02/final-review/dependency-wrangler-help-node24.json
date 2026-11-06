@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "exitCode": 0,
+  "nodeVersion": "v24.22.1",
+  "wranglerVersion": "4.151.2",
+  "finishedAt": "2026-11-06T12:15:38.063236+00:00",
+  "networkMutation": false,
+  "command": [
+    "/home/younis/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+    "/home/younis/strawberry-trade-annual-review/backend/worker/node_modules/wrangler/bin/wrangler.js",
+    "--help"
+  ]
+}

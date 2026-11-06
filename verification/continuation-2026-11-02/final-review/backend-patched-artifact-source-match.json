@@ -1,0 +1,108 @@
+{
+  "status": "PASS",
+  "sourceBaseRevision": "1f03cd51e98ecd24504d88bb55119e489acfe957",
+  "exactWorkingSource": [
+    {
+      "path": "backend/src/demo-operator.mjs",
+      "expectedSha256": "3cc24f1772db47f81d87774ee6654b0f6b6907b4c3267ed9c3a6f05e75c6aa3e",
+      "actualSha256": "3cc24f1772db47f81d87774ee6654b0f6b6907b4c3267ed9c3a6f05e75c6aa3e"
+    },
+    {
+      "path": "backend/src/enrollment.mjs",
+      "expectedSha256": "77c6fbbf4898607410cba6b6628aabe3cbacccea52baa2f5d6a11b66cdea7420",
+      "actualSha256": "77c6fbbf4898607410cba6b6628aabe3cbacccea52baa2f5d6a11b66cdea7420"
+    },
+    {
+      "path": "backend/src/gateway.mjs",
+      "expectedSha256": "0f02bad93ccc58d7b14e79bce3ed1b30c2b58c8981e2cdae8db478f6965f870a",
+      "actualSha256": "0f02bad93ccc58d7b14e79bce3ed1b30c2b58c8981e2cdae8db478f6965f870a"
+    },
+    {
+      "path": "backend/src/http-gateway.mjs",
+      "expectedSha256": "10350a6d84584fdec309b969b49296e642d9f9e504fa9548890b412334521a73",
+      "actualSha256": "10350a6d84584fdec309b969b49296e642d9f9e504fa9548890b412334521a73"
+    },
+    {
+      "path": "backend/src/issuer.mjs",
+      "expectedSha256": "9d6ebc9e8765fad1e8d73d4151d9e412ec81f32f65c876e502e372ef3dd061f3",
+      "actualSha256": "9d6ebc9e8765fad1e8d73d4151d9e412ec81f32f65c876e502e372ef3dd061f3"
+    },
+    {
+      "path": "backend/src/validation.mjs",
+      "expectedSha256": "921b874615e92a28159d1d994a390505eadf125ab8ee86b34ba1685974775c2f",
+      "actualSha256": "921b874615e92a28159d1d994a390505eadf125ab8ee86b34ba1685974775c2f"
+    },
+    {
+      "path": "backend/worker/compatibility.mjs",
+      "expectedSha256": "5bd005f0f313d09178c9f2b1954814f303dcc18a80760fca8d318260e3a63507",
+      "actualSha256": "5bd005f0f313d09178c9f2b1954814f303dcc18a80760fca8d318260e3a63507"
+    },
+    {
+      "path": "backend/worker/emulator-firestore-auth.mjs",
+      "expectedSha256": "fd3a635548928b658cda70583395224ebd8b6b7a88a1c08224f17289648aedf3",
+      "actualSha256": "fd3a635548928b658cda70583395224ebd8b6b7a88a1c08224f17289648aedf3"
+    },
+    {
+      "path": "backend/worker/index.mjs",
+      "expectedSha256": "e26708ad724adf6cf341c73d3a96a775d73aacbde68b360857ff78bb3fd624ad",
+      "actualSha256": "e26708ad724adf6cf341c73d3a96a775d73aacbde68b360857ff78bb3fd624ad"
+    },
+    {
+      "path": "backend/worker/package-lock.json",
+      "expectedSha256": "831aa09ce423c0250018aa4c32992b465217c7888ef9e502f2fa6e2e26ebd2ea",
+      "actualSha256": "831aa09ce423c0250018aa4c32992b465217c7888ef9e502f2fa6e2e26ebd2ea"
+    },
+    {
+      "path": "backend/worker/package.json",
+      "expectedSha256": "0c6e1b05deaa60aaba92ce9229557ec3e926e2687741395fa2b48c2baf3e5952",
+      "actualSha256": "0c6e1b05deaa60aaba92ce9229557ec3e926e2687741395fa2b48c2baf3e5952"
+    },
+    {
+      "path": "backend/worker/private-stream-debug.mjs",
+      "expectedSha256": "9eb76ed66e736c75dc3e0d747cbb49a9354739f21bea9eb1317c0ea2c603fc36",
+      "actualSha256": "9eb76ed66e736c75dc3e0d747cbb49a9354739f21bea9eb1317c0ea2c603fc36"
+    },
+    {
+      "path": "backend/worker/request-forward.mjs",
+      "expectedSha256": "173c2655b2e9c1512d1daf8a20d967f22520b9ae157b4341e653209e66945464",
+      "actualSha256": "173c2655b2e9c1512d1daf8a20d967f22520b9ae157b4341e653209e66945464"
+    },
+    {
+      "path": "backend/worker/runtime-config.mjs",
+      "expectedSha256": "2eb69290b04e884171143aaab85ecda0e333d66b3f3d78d5ab78638c6f0967eb",
+      "actualSha256": "2eb69290b04e884171143aaab85ecda0e333d66b3f3d78d5ab78638c6f0967eb"
+    },
+    {
+      "path": "backend/worker/runtime.mjs",
+      "expectedSha256": "5b6723899d548623346c8fc9c0467198b09cc7c6f9e470c868045c232ddd8525",
+      "actualSha256": "5b6723899d548623346c8fc9c0467198b09cc7c6f9e470c868045c232ddd8525"
+    },
+    {
+      "path": "backend/worker/test/config.test.mjs",
+      "expectedSha256": "07610c2dfa64d3228fb6018bcefe4358d47758dde68196acb20dfe7c6f1ff8eb",
+      "actualSha256": "07610c2dfa64d3228fb6018bcefe4358d47758dde68196acb20dfe7c6f1ff8eb"
+    },
+    {
+      "path": "backend/worker/test/emulator-firestore-auth.test.mjs",
+      "expectedSha256": "c61e901d89f393e4e86e759e19de8e20cde9f2dc88961d9028581a9631d2c0f0",
+      "actualSha256": "c61e901d89f393e4e86e759e19de8e20cde9f2dc88961d9028581a9631d2c0f0"
+    },
+    {
+      "path": "backend/worker/test/request-forward.test.mjs",
+      "expectedSha256": "7453f864ca1635167c74f3d33809b1c1e2a68b984d749afc974c1ecaad5d1951",
+      "actualSha256": "7453f864ca1635167c74f3d33809b1c1e2a68b984d749afc974c1ecaad5d1951"
+    },
+    {
+      "path": "backend/worker/wrangler.jsonc",
+      "expectedSha256": "8a15d7b8e8ca9ebc974e538ee2c116849f8da0608e6a3a0a07ded700148c4c11",
+      "actualSha256": "8a15d7b8e8ca9ebc974e538ee2c116849f8da0608e6a3a0a07ded700148c4c11"
+    },
+    {
+      "path": "config/wrangler.production.json",
+      "expectedSha256": "b309bf8d720db02c353ce639eacb10b5c06cdd77cc94706d6b4efdd7e0a53e99",
+      "actualSha256": "b309bf8d720db02c353ce639eacb10b5c06cdd77cc94706d6b4efdd7e0a53e99"
+    }
+  ],
+  "sourceFiles": 20,
+  "productionDeployed": false
+}

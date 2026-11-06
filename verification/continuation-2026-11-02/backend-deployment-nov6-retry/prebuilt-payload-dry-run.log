@@ -1,0 +1,15 @@
+
+ ⛅️ wrangler 4.151.2 (update available 4.158.0)
+───────────────────────────────────────────────
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m`--minify` and `--no-bundle` can't be used together. If you want to minify your Worker and disable Wrangler's bundling, please minify as part of your own bundling process.[0m
+
+
+Total Upload: 4468.41 KiB / gzip: 813.05 KiB
+Your Worker has access to the following bindings:
+Binding                                                                       Resource                  
+env.GATEWAY (TradingGateway)                                                  Durable Object            
+env.FIREBASE_PROJECT_ID ("strawberry-trade-261017-6a49b")                     Environment Variable      
+env.FIREBASE_ANDROID_APP_ID ("1:713439663809:android:c0565e7ada543b...")      Environment Variable      
+env.LICENSE_KEY_ID ("issuer-v1")                                              Environment Variable      
+
+--dry-run: exiting now.

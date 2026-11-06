@@ -1,0 +1,26 @@
+{
+  "promotedAt": "2026-11-05T19:01:22.419115+00:00",
+  "isolatedCandidate": "/tmp/strawberry-runtime-dependency-review-zwf_ylsl",
+  "files": {
+    "backend/package.json": {
+      "beforeSha256": "b898533a256f2d7f4456953dc11e7f5818a2f4ae05ea8e74c723aa5a4d9615e7",
+      "afterSha256": "e65e42e150fbe152f067b1e5bd0969361a336d0ba00f0637de9f7be983bb15a9",
+      "modeBefore": "0o755"
+    },
+    "backend/package-lock.json": {
+      "beforeSha256": "26c8c6266bbdb989f2c5444ef8acb950f1e97c0ae001727ea5978713826aa7f5",
+      "afterSha256": "2cb543e8662a62ea0e4ccd86bc8f37b003d212b38711c5c70554251491a924f7",
+      "modeBefore": "0o755"
+    },
+    "backend/worker/package.json": {
+      "beforeSha256": "ae4e615515e3b13f9ea41365b5d100e4e7ad727fa09927825bc3e5c14f1668c3",
+      "afterSha256": "0c6e1b05deaa60aaba92ce9229557ec3e926e2687741395fa2b48c2baf3e5952",
+      "modeBefore": "0o755"
+    },
+    "backend/worker/package-lock.json": {
+      "beforeSha256": "4f1ddf8aff5a8949e26c892cbc28284caee3a1c9e8bbc00b032514bd95a7f418",
+      "afterSha256": "831aa09ce423c0250018aa4c32992b465217c7888ef9e502f2fa6e2e26ebd2ea",
+      "modeBefore": "0o755"
+    }
+  }
+}

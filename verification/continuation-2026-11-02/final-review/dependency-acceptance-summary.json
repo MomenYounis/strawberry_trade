@@ -1,0 +1,98 @@
+{
+  "recordedAt": "2026-11-06T12:17:47.744774+00:00",
+  "sourceHead": "6383b1a52fc42cd2c8753fa0c6700c55fe29582b",
+  "packageHashes": {
+    "backend/package.json": "e65e42e150fbe152f067b1e5bd0969361a336d0ba00f0637de9f7be983bb15a9",
+    "backend/package-lock.json": "2cb543e8662a62ea0e4ccd86bc8f37b003d212b38711c5c70554251491a924f7",
+    "backend/worker/package.json": "0c6e1b05deaa60aaba92ce9229557ec3e926e2687741395fa2b48c2baf3e5952",
+    "backend/worker/package-lock.json": "831aa09ce423c0250018aa4c32992b465217c7888ef9e502f2fa6e2e26ebd2ea"
+  },
+  "productionNode": "22 (unchanged)",
+  "unitNode": "22.22.2",
+  "integrationDevelopmentNode": "24.22.1",
+  "integrationJava": "OpenJDK25.0.4",
+  "syntheticOnly": true,
+  "productionMutation": false,
+  "cloudDeployed": false,
+  "checks": {
+    "backendRuntimeAudit": {
+      "status": "PASS",
+      "findings": 0,
+      "evidence": "dependency-backend-workspace-runtime-audit.json"
+    },
+    "workerRuntimeAudit": {
+      "status": "PASS",
+      "findings": 0,
+      "evidence": "dependency-worker-final-runtime-audit.json"
+    },
+    "workerCompleteAudit": {
+      "status": "PASS",
+      "findings": 0,
+      "evidence": "dependency-worker-final-all-audit.json"
+    },
+    "backendCompleteAudit": {
+      "status": "FAIL",
+      "moderate": 11,
+      "high": 0,
+      "critical": 0,
+      "scope": "Developer-only Firebase CLI graph; major-upgrade compatibility work remains.",
+      "evidence": "dependency-backend-workspace-all-audit.json"
+    },
+    "backendNode22Unit": {
+      "status": "PASS",
+      "tests": 163,
+      "evidence": "dependency-backend-node22-workspace-unit.json"
+    },
+    "workerNode22Unit": {
+      "status": "PASS",
+      "tests": 9,
+      "evidence": "dependency-worker-node22-workspace-unit.json"
+    },
+    "workerActualHttp": {
+      "status": "PASS",
+      "assertions": 95,
+      "evidence": "dependency-worker-http-java25.json"
+    },
+    "financialAuthFirestore": {
+      "status": "PASS",
+      "tests": 41,
+      "evidence": "dependency-financial-invitations-java25.json"
+    },
+    "wranglerNode22": {
+      "status": "PASS",
+      "evidence": "dependency-wrangler-help-node22.json"
+    },
+    "wranglerNode24": {
+      "status": "PASS",
+      "evidence": "dependency-wrangler-help-node24.json"
+    },
+    "nativeExecutables": {
+      "status": "PASS",
+      "evidence": "dependency-worker-native-prerequisites.json"
+    },
+    "backendNpmLs": {
+      "status": "PASS",
+      "problems": 0,
+      "evidence": "dependency-backend-workspace-npm-ls.json"
+    },
+    "workerNpmLs": {
+      "status": "FAIL",
+      "problemScope": "Two extraneous inactive optional WASM artifacts after npm reify; exitCode0. Neither package removed because both remain in lock.",
+      "evidence": "dependency-worker-final-npm-ls.json"
+    }
+  },
+  "countsOverlap": true,
+  "privatePemMarkersInAcceptanceLogs": {
+    "dependency-worker-http-java25.log": 0,
+    "dependency-financial-invitations-java25.log": 0,
+    "dependency-backend-node22-workspace-unit.log": 0,
+    "dependency-worker-node22-workspace-unit.log": 0
+  },
+  "document": "docs/dependency-security-review.md",
+  "limitations": [
+    "Zero dated registry findings do not prove absence of unknown vulnerabilities.",
+    "Actual integration tests guarded package hashes before/after; complete backend source inventory is post-test.",
+    "Older Java17 prerequisite failure and transient audit/npm optional failures retained separately.",
+    "Complete backend developer-tool audit remains11moderate; no blind major override applied."
+  ]
+}

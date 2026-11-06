@@ -1,0 +1,122 @@
+i  emulators: Starting emulators: auth, functions, firestore
+i  emulators: Detected demo project ID "demo-strawberry-flutter", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 9173.
+i  functions: Watching "/tmp/strawberry-synthetic-emulators-mKtUis/functions" for Cloud Functions...
+⚠  functions: Your requested "node" version "22" doesn't match your global version "24". Using node@24 from host.
+Serving at port 8628
+
+✔  functions: Loaded functions definitions from source: acceptInvitation, activateLicense, bootstrap, createEmployeeInvitation, getActiveSnapshot, listArchives, pullChanges, readActiveSnapshotPage, readArchiveRecord, readArchiveStatement, setMemberActive, syncOperation.
+✔  functions[europe-west1-acceptInvitation]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/acceptInvitation).
+✔  functions[europe-west1-activateLicense]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/activateLicense).
+✔  functions[europe-west1-bootstrap]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/bootstrap).
+✔  functions[europe-west1-createEmployeeInvitation]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/createEmployeeInvitation).
+✔  functions[europe-west1-getActiveSnapshot]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/getActiveSnapshot).
+✔  functions[europe-west1-listArchives]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/listArchives).
+✔  functions[europe-west1-pullChanges]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/pullChanges).
+✔  functions[europe-west1-readActiveSnapshotPage]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/readActiveSnapshotPage).
+✔  functions[europe-west1-readArchiveRecord]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/readArchiveRecord).
+✔  functions[europe-west1-readArchiveStatement]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/readArchiveStatement).
+✔  functions[europe-west1-setMemberActive]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/setMemberActive).
+✔  functions[europe-west1-syncOperation]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/syncOperation).
+i  Running script: node --test --test-concurrency=1 test/integration.test.mjs test/shipment.test.mjs test/invitation-signup.integration.test.mjs test/commercial-workflows.integration.test.mjs
+(node:23921) MetadataLookupWarning: received unexpected error = All promises were rejected code = ETIMEDOUT, ENOTFOUND
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ independent financial oracle across two businesses, manager/employee devices, retries, returns, reversals, reviews and replacement enrollment (22520.832684ms)
+(node:24022) MetadataLookupWarning: received unexpected error = All promises were rejected code = ETIMEDOUT, ENOTFOUND
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual original strict backend rejection and additive v9/v10/v11 protocol compatibility (5289.281567ms)
+[2026-11-06T11:54:32.365Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x8d102c1a error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+[2026-11-06T11:54:32.387Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x8d102c1b error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+[2026-11-06T11:54:32.412Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x8d102c1c error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+[2026-11-06T11:54:32.435Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x8d102c1d error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+[2026-11-06T11:54:32.501Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x8d102c1f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+[2026-11-06T11:54:32.518Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x8d102c20 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+[2026-11-06T11:54:32.537Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x8d102c21 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+[2026-11-06T11:54:32.553Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x8d102c22 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+[2026-11-06T11:54:32.599Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x8d102c24 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+[2026-11-06T11:54:32.616Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x8d102c25 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+[2026-11-06T11:54:32.641Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x8d102c26 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+[2026-11-06T11:54:32.654Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x8d102c27 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+✔ direct access denied: two tenants, manager, employee, global legacy paths (962.684447ms)
+✔ trusted setup exact30d and refuses unverified existing account or trial restart (19.461925ms)
+✔ device proof rejects substituted tenant, wrong key, replay and session swap (158.734788ms)
+✔ ledger audit and operation acknowledgment exactly once under concurrent duplicate delivery (3446.290058ms)
+✔ forged party/tenant and invalid accounting cannot cross trust boundary (302.847741ms)
+✔ concurrent immutable edits preserve local change, remote original and reason (184.386974ms)
+✔ atomic concurrent returns reject combined over-return and wrong grade/unit (3297.090436ms)
+✔ employee joining day29 inherits trial; caches get sanitized directories only (314.724606ms)
+✔ employee impersonation or manager financial payload denied; submission accepted separately (151.573328ms)
+✔ concurrent approval exactly once preserves creator and employee cannot download prices (2952.715145ms)
+✔ partial cumulative rounding then final residual equals exact original amount (350.067797ms)
+✔ Dart zero-marker reversal preserves immutable history and releases reversed return capacity (495.008031ms)
+✔ payroll requires historical term, immutable effective month and separate employee attribution (220.600603ms)
+✔ expense categories, invoice shipment references and immutable debt adjustments validate end to end (580.502978ms)
+✔ employee submissions enforce party kinds and preserve expense categories at review (418.70403ms)
+✔ exact expiry stops manager and staff; renewal resumes same operation IDs; activation wrong-device denied (655.971457ms)
+✔ employee disabling separate; pagination retains every increment without duplication (833.457658ms)
+✔ revoked member receives signed disabled certificate while data remains denied (114.793904ms)
+i  functions: Beginning execution of "europe-west1-bootstrap"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "europe-west1-bootstrap" in 32.343109ms
+i  functions: Beginning execution of "europe-west1-bootstrap"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "europe-west1-bootstrap" in 429.839758ms
+i  functions: Beginning execution of "europe-west1-bootstrap"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "europe-west1-bootstrap" in 105.522863ms
+✔ actual Cloud Functions emulator callable authenticates and completes device proof (2270.878914ms)
+✔ closed checkpoint keeps late evidence, concurrent new-year trade, duplicate receipts and explicit correction in real Firestore (4239.622229ms)
+(node:24178) MetadataLookupWarning: received unexpected error = All promises were rejected code = ETIMEDOUT, ENOTFOUND
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ manager issues without an Auth UID; employee creates account afterward and gets employee-only original trial (3783.794277ms)
+✔ real Auth signup remains unclaimed while email unverified; verification permits same code (433.409169ms)
+✔ two concurrent verified accounts racing one code create exactly one membership/device/audit (3684.659353ms)
+✔ same UID and device can retry a lost acceptance response without extra devices, audit, epochs or trial (3916.883394ms)
+✔ reissue invalidates original code and concurrent issues leave only the current pending pointer usable (3705.872423ms)
+✔ employeeId account toggle still blocks replay/reissue and can re-enable the original linked account (423.96756ms)
+✔ disabled/deleted employee, manager, manager device, tenant and deleting tenant all refuse pending claims (1427.905737ms)
+✔ expired code, tenant substitution, forged key proof and disabled Auth cannot consume an invitation (255.211866ms)
+✔ existing legacy employee member with no lock prevents an invitation even while disabled (301.440694ms)
+✔ legacy UID-bound issuance/claim remain supported and now retain a durable employee lock (369.272787ms)
+✔ pre-update legacy invitation without version or account pointer remains claimable only by its UID (194.279688ms)
+✔ ambiguous duplicate legacy employee accounts cannot be toggled by employeeId or used for a second invitation (226.837375ms)
+(node:24268) MetadataLookupWarning: received unexpected error = All promises were rejected code = ETIMEDOUT, ENOTFOUND
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ shipment appends audited metadata without changing invoice financial facts (4649.20394ms)
+✔ concurrent duplicate shipment delivery creates one effect (3620.540323ms)
+✔ shipment cannot smuggle financial, counterparty or payroll effects (238.373698ms)
+✔ shipment invoice and active assignee are tenant scoped (427.874401ms)
+✔ employee cannot forge shipment entry (36.530815ms)
+✔ reversed invoices deny shipment updates; metadata corrections append another event (454.921329ms)
+✔ concurrent distinct same-order updates preserve conflict and advance once (3684.640118ms)
+ℹ tests 41
+ℹ suites 0
+ℹ pass 41
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 85889.705645
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  functions: Stopping Functions Emulator
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  eventarc: Stopping Eventarc Emulator
+i  tasks: Stopping Cloud Tasks Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

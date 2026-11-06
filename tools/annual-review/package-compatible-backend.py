@@ -99,7 +99,12 @@ try:
         if completed.returncode:
             raise RuntimeError(name + '-failed')
     worker = runtime / 'backend/worker'
-    run(['npm', 'ci', '--offline', '--ignore-scripts', '--no-audit', '--no-fund'], 'npm-ci-offline.log', worker)
+    run(['npm', 'ci', '--offline', '--ignore-scripts', '--include=optional', '--no-audit', '--no-fund'], 'npm-ci-offline.log', worker)
+    # npm may omit an unavailable optional platform archive while returning 0.
+    # Prove the locked native tools can execute before accepting installation.
+    for binary in ['workerd', 'esbuild', 'wrangler']:
+        run([str(worker / 'node_modules/.bin' / binary), '--version'],
+            binary + '-platform-check.log', worker, timeout=60)
     run(['npm', 'test'], 'worker-unit-final.log', worker)
     run([str(worker / 'node_modules/.bin/wrangler'), 'deploy', '--env=',
          '--config', '../../config/wrangler.production.json', '--dry-run',
@@ -141,7 +146,7 @@ try:
     (OUT / 'SHA256SUMS').write_text(''.join(value['sha256'] + '  ' + name + '\n'
         for name, value in result['artifacts'].items()))
     result.update(status='PASS', completedAtUtc=utc(),
-                  cleanOfflineInstall=True, workerUnitTests='PASS', productionConfigDryRun='PASS',
+                  cleanOfflineInstall=True, nativePlatformTools='PASS', workerUnitTests='PASS', productionConfigDryRun='PASS',
                   excluded=['credentials', '.env', '.dev.vars', 'source maps', 'node_modules',
                             'private annual Node SQLite source/preparation runners', 'R2 bindings', 'cron triggers'])
 except Exception as error:

@@ -1,0 +1,18 @@
+{
+  "message": "400 Bad Request - POST https://registry.npmjs.org/-/npm/v1/security/audits/quick - Bad Request",
+  "method": "POST",
+  "uri": "https://registry.npmjs.org/-/npm/v1/security/audits/quick",
+  "headers": {
+    "redacted": true
+  },
+  "statusCode": 400,
+  "body": {
+    "statusCode": 400,
+    "error": "Bad Request",
+    "message": "Invalid package tree, run  npm install  to rebuild your package-lock.json"
+  },
+  "error": {
+    "summary": "",
+    "detail": ""
+  }
+}

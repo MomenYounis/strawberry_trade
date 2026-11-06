@@ -1,0 +1,19 @@
+{
+  "status": "BLOCKED",
+  "requestedAtUtc": "2026-11-06T12:16:47.165341+00:00",
+  "readOnly": true,
+  "productionMutations": false,
+  "command": [
+    "./node_modules/.bin/wrangler",
+    "deployments",
+    "list",
+    "--env=",
+    "--config",
+    "../../config/wrangler.production.json",
+    "--json"
+  ],
+  "existingAuthenticationOnly": true,
+  "exitCode": 1,
+  "reason": "existing-cloud-authentication-unavailable",
+  "diagnosticWithheld": "Raw output retained only in process memory; no credentials or operator identities logged"
+}

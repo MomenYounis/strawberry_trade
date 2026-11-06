@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "productionDeployed": false,
+  "cloudAuthenticationUsed": false,
+  "startedAtUtc": "2026-11-06T12:17:58.872983+00:00",
+  "command": [
+    "/home/younis/strawberry-trade-annual-review/backend/worker/node_modules/.bin/wrangler",
+    "deploy",
+    "/tmp/strawberry-prebuilt-nov6-wj5q28wa/payload/index.js",
+    "--env=",
+    "--config",
+    "../../config/wrangler.production.json",
+    "--no-bundle",
+    "--dry-run",
+    "--no-upload-source-maps",
+    "--outdir",
+    "/tmp/strawberry-prebuilt-nov6-wj5q28wa/verified-payload"
+  ],
+  "exitCode": 0,
+  "expectedIndexJsSha256": "bc5ac4cc9285b0ef175a13f3f3e84fb376a368b5c5e504f59094f8617848b1ac",
+  "actualIndexJsSha256": "bc5ac4cc9285b0ef175a13f3f3e84fb376a368b5c5e504f59094f8617848b1ac",
+  "byteIdentical": true,
+  "finishedAtUtc": "2026-11-06T12:18:01.890797+00:00"
+}

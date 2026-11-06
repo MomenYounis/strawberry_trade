@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "testedAt": "2026-11-06T12:16:25.909962+00:00",
+  "checks": [
+    {
+      "name": "workerd",
+      "command": [
+        "/usr/bin/node",
+        "node_modules/workerd/bin/workerd",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "workerd 2026-10-19",
+      "stderr": ""
+    },
+    {
+      "name": "esbuild",
+      "command": [
+        "/usr/bin/node",
+        "node_modules/esbuild/bin/esbuild",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "0.28.2",
+      "stderr": ""
+    }
+  ]
+}

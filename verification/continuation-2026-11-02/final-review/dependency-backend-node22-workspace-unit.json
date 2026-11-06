@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "exitCode": 0,
+  "command": [
+    "npm",
+    "test"
+  ],
+  "cwd": "backend",
+  "startedAt": "2026-11-06T12:01:28.615541+00:00",
+  "finishedAt": "2026-11-06T12:01:36.366438+00:00",
+  "nodeVersion": "v22.22.2",
+  "sourceHead": "6383b1a52fc42cd2c8753fa0c6700c55fe29582b",
+  "packageHashesBefore": {
+    "backend/package.json": "e65e42e150fbe152f067b1e5bd0969361a336d0ba00f0637de9f7be983bb15a9",
+    "backend/package-lock.json": "2cb543e8662a62ea0e4ccd86bc8f37b003d212b38711c5c70554251491a924f7",
+    "backend/worker/package.json": "0c6e1b05deaa60aaba92ce9229557ec3e926e2687741395fa2b48c2baf3e5952",
+    "backend/worker/package-lock.json": "831aa09ce423c0250018aa4c32992b465217c7888ef9e502f2fa6e2e26ebd2ea"
+  },
+  "packageHashesAfter": {
+    "backend/package.json": "e65e42e150fbe152f067b1e5bd0969361a336d0ba00f0637de9f7be983bb15a9",
+    "backend/package-lock.json": "2cb543e8662a62ea0e4ccd86bc8f37b003d212b38711c5c70554251491a924f7",
+    "backend/worker/package.json": "0c6e1b05deaa60aaba92ce9229557ec3e926e2687741395fa2b48c2baf3e5952",
+    "backend/worker/package-lock.json": "831aa09ce423c0250018aa4c32992b465217c7888ef9e502f2fa6e2e26ebd2ea"
+  }
+}

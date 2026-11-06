@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "command": [
+    "npm",
+    "install",
+    "--ignore-scripts",
+    "--no-fund",
+    "--no-audit",
+    "--prefer-offline",
+    "--fetch-retries=1",
+    "--fetch-timeout=30000"
+  ],
+  "workingDirectory": "/home/younis/strawberry-trade-annual-review/backend",
+  "finishedAt": "2026-11-05T19:01:40.079842+00:00",
+  "durationSeconds": 3.274,
+  "exitCode": 0,
+  "packageFilesUnchanged": true,
+  "beforeSha256": {
+    "package.json": "e65e42e150fbe152f067b1e5bd0969361a336d0ba00f0637de9f7be983bb15a9",
+    "package-lock.json": "2cb543e8662a62ea0e4ccd86bc8f37b003d212b38711c5c70554251491a924f7"
+  },
+  "afterSha256": {
+    "package.json": "e65e42e150fbe152f067b1e5bd0969361a336d0ba00f0637de9f7be983bb15a9",
+    "package-lock.json": "2cb543e8662a62ea0e4ccd86bc8f37b003d212b38711c5c70554251491a924f7"
+  },
+  "evidenceLog": "dependency-backend-workspace-install.log"
+}

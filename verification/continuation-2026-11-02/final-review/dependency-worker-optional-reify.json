@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "exitCode": 0,
+  "command": [
+    "npm",
+    "install",
+    "--ignore-scripts",
+    "--no-fund",
+    "--no-audit",
+    "--include=optional",
+    "--prefer-offline",
+    "--fetch-retries=2",
+    "--fetch-timeout=120000"
+  ],
+  "startedAt": "2026-11-06T12:14:46.592656+00:00",
+  "finishedAt": "2026-11-06T12:15:15.256650+00:00",
+  "packageHashesBefore": {
+    "package.json": "0c6e1b05deaa60aaba92ce9229557ec3e926e2687741395fa2b48c2baf3e5952",
+    "package-lock.json": "831aa09ce423c0250018aa4c32992b465217c7888ef9e502f2fa6e2e26ebd2ea"
+  },
+  "packageHashesAfter": {
+    "package.json": "0c6e1b05deaa60aaba92ce9229557ec3e926e2687741395fa2b48c2baf3e5952",
+    "package-lock.json": "831aa09ce423c0250018aa4c32992b465217c7888ef9e502f2fa6e2e26ebd2ea"
+  }
+}

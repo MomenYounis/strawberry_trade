@@ -1,0 +1,98 @@
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-strawberry-flutter", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 9188.
+i  Running script: node /tmp/strawberry-worker-http-69Qlz7/backend/scripts/worker-http-test-runner.mjs --inside
+
+ ⛅️ wrangler 4.151.2
+────────────────────
+Using secrets defined in .dev.vars.emulator
+Your Worker has access to the following bindings:
+Binding                                                                         Resource                  Mode
+env.GATEWAY (TradingGateway)                                                    Durable Object            local
+env.WORKER_EMULATOR_ONLY ("true")                                               Environment Variable      local
+env.FIREBASE_PROJECT_ID ("demo-strawberry-flutter")                             Environment Variable      local
+env.FIREBASE_ANDROID_APP_ID ("1:123456789:android:1234567890abcdef")            Environment Variable      local
+env.FIRESTORE_EMULATOR_HOST ("127.0.0.1:18080")                                 Environment Variable      local
+env.FIREBASE_AUTH_EMULATOR_HOST ("127.0.0.1:19099")                             Environment Variable      local
+env.LICENSE_KEY_ID ("worker-emulator-only")                                     Environment Variable      local
+env.FIREBASE_SERVICE_ACCOUNT_JSON ("(hidden)")                                  Environment Variable      local
+env.LICENSE_PRIVATE_KEY_PEM ("(hidden)")                                        Environment Variable      local
+env.LICENSE_PUBLIC_KEY_PEM ("(hidden)")                                         Environment Variable      local
+
+⎔ Starting local server...
+[wrangler:info] Ready on http://127.0.0.1:8788
+[wrangler:info] GET /health 200 OK (1925ms)
+[wrangler:info] GET /health 200 OK (659ms)
+[wrangler:info] GET /health 200 OK (14ms)
+[wrangler:info] POST /bootstrap 401 Unauthorized (20ms)
+[wrangler:info] POST /bootstrap 401 Unauthorized (16ms)
+[wrangler:info] POST /bootstrap 200 OK (161ms)
+[wrangler:info] POST /bootstrap 200 OK (123ms)
+[wrangler:info] POST /syncOperation 200 OK (266ms)
+[wrangler:info] POST /syncOperation 200 OK (298ms)
+[wrangler:info] POST /syncOperation 200 OK (204ms)
+[wrangler:info] POST /syncOperation 200 OK (189ms)
+[wrangler:info] POST /pullChanges 200 OK (115ms)
+[wrangler:info] POST /syncOperation 200 OK (88ms)
+[wrangler:info] POST /pullChanges 200 OK (89ms)
+[wrangler:info] POST /syncOperation 200 OK (91ms)
+[wrangler:info] POST /pullChanges 200 OK (75ms)
+[wrangler:info] POST /syncOperation 200 OK (83ms)
+[wrangler:info] POST /pullChanges 200 OK (78ms)
+[wrangler:info] POST /syncOperation 400 Bad Request (10ms)
+[wrangler:info] POST /pullChanges 400 Bad Request (10ms)
+[wrangler:info] POST /syncOperation 400 Bad Request (14ms)
+[wrangler:info] POST /pullChanges 400 Bad Request (16ms)
+[wrangler:info] POST /syncOperation 400 Bad Request (22ms)
+[wrangler:info] POST /pullChanges 400 Bad Request (25ms)
+[wrangler:info] POST /syncOperation 400 Bad Request (25ms)
+[wrangler:info] POST /pullChanges 400 Bad Request (23ms)
+[wrangler:info] POST /syncOperation 400 Bad Request (23ms)
+[wrangler:info] POST /pullChanges 400 Bad Request (27ms)
+[wrangler:info] POST /syncOperation 400 Bad Request (102ms)
+[wrangler:info] POST /pullChanges 400 Bad Request (89ms)
+[wrangler:info] POST /syncOperation 400 Bad Request (74ms)
+[wrangler:info] POST /pullChanges 400 Bad Request (43ms)
+[wrangler:info] POST /syncOperation 200 OK (148ms)
+[wrangler:info] POST /syncOperation 200 OK (169ms)
+[wrangler:info] POST /pullChanges 403 Forbidden (71ms)
+[wrangler:info] POST /syncOperation 200 OK (229ms)
+[wrangler:info] POST /createEmployeeInvitation 200 OK (228ms)
+[wrangler:info] POST /acceptInvitation 200 OK (207ms)
+[wrangler:info] POST /bootstrap 200 OK (213ms)
+[wrangler:info] POST /bootstrap 200 OK (180ms)
+[wrangler:info] POST /pullChanges 200 OK (220ms)
+[wrangler:info] POST /syncOperation 200 OK (188ms)
+[wrangler:info] POST /createEmployeeInvitation 200 OK (86ms)
+[wrangler:info] POST /createEmployeeInvitation 200 OK (81ms)
+[wrangler:info] POST /acceptInvitation 403 Forbidden (11ms)
+[wrangler:info] POST /acceptInvitation 403 Forbidden (99ms)
+[wrangler:info] POST /acceptInvitation 200 OK (79ms)
+[wrangler:info] POST /acceptInvitation 200 OK (80ms)
+[wrangler:info] POST /bootstrap 200 OK (76ms)
+[wrangler:info] POST /bootstrap 200 OK (93ms)
+[wrangler:info] POST /createEmployeeInvitation 400 Bad Request (70ms)
+[wrangler:info] POST /acceptInvitation 403 Forbidden (77ms)
+[wrangler:info] POST /setMemberActive 200 OK (97ms)
+[wrangler:info] POST /acceptInvitation 403 Forbidden (75ms)
+[wrangler:info] POST /bootstrap 200 OK (76ms)
+[wrangler:info] POST /bootstrap 200 OK (84ms)
+[wrangler:info] POST /setMemberActive 200 OK (92ms)
+[wrangler:info] POST /bootstrap 200 OK (63ms)
+[wrangler:info] POST /bootstrap 200 OK (111ms)
+[wrangler:info] POST /activateLicense 200 OK (179ms)
+[wrangler:info] POST /setMemberActive 200 OK (169ms)
+[wrangler:info] POST /pullChanges 401 Unauthorized (13ms)
+[wrangler:info] POST /bootstrap 200 OK (88ms)
+[wrangler:info] POST /bootstrap 200 OK (98ms)
+[wrangler:info] POST /pullChanges 200 OK (355ms)
+[wrangler:info] POST /pullChanges 200 OK (131ms)
+{"passed":true,"checks":95,"assertions":["Durable Object HTTP health","Missing ID token rejected","Forged ID token rejected by real Admin verifier","Emulator Firebase token has expected verified UID","Authenticated bootstrap advertises both supported sync protocols","Unpruned tenant permits previous clients","P-256 challenge binds signed membership to installation","Signed trial exactly thirty days","Party committed through real HTTP gateway","Financial invoice accepted","Retry returns same receipt","Exactly one financial effect","Integer financial total preserved","Creator derived from verified token","Counterparty derived from tenant directory","Invalid accounting retains conflict receipt","Pull includes one accepted invoice","Mixed protocol omitted retry returns identical receipt","Mixed protocol omitted response contract","Mixed protocol omitted reads exactly one posting","Mixed protocol 1 retry returns identical receipt","Mixed protocol 1 response contract","Mixed protocol 1 reads exactly one posting","Mixed protocol 2 retry returns identical receipt","Mixed protocol 2 response contract","Mixed protocol 2 reads exactly one posting","Unsupported null syncOperation rejected over actual HTTP","Unsupported client receives actionable upgrade reason","Unsupported null pullChanges rejected over actual HTTP","Unsupported client receives actionable upgrade reason","Unsupported 0 syncOperation rejected over actual HTTP","Unsupported client receives actionable upgrade reason","Unsupported 0 pullChanges rejected over actual HTTP","Unsupported client receives actionable upgrade reason","Unsupported 3 syncOperation rejected over actual HTTP","Unsupported client receives actionable upgrade reason","Unsupported 3 pullChanges rejected over actual HTTP","Unsupported client receives actionable upgrade reason","Unsupported \"2\" syncOperation rejected over actual HTTP","Unsupported client receives actionable upgrade reason","Unsupported \"2\" pullChanges rejected over actual HTTP","Unsupported client receives actionable upgrade reason","Unsupported true syncOperation rejected over actual HTTP","Unsupported client receives actionable upgrade reason","Unsupported true pullChanges rejected over actual HTTP","Unsupported client receives actionable upgrade reason","Unsupported protocol writes no operation receipt","Old client is refused when the tenant requires v2","Old pull is refused before exposing pruned-history semantics","Old client is refused when the tenant requires v2","Old pull is refused before exposing pruned-history semantics","Upgrade refusal does not consume a queued operation ID","Retry uses byte-identical original operation payload","Supported client resumes the original queued operation ID","Lost-response retry remains exactly once after upgrade","Retried queued operation has one financial posting","Forged tenant denied","Employee directory write via HTTP","Verified-account employee invitation issued","Invitation acceptance has real Auth and device signature","Employee cannot self-promote","Employee feed omits manager prices","Self-signup employee directory committed","Manager creates versioned invitation without an account UID","Invitation supplies the canonical tenant selector","Invitation does not require a precreated account","Unverified self-registered email cannot consume invitation","Email verification refusal retains unused invitation","Reissued invitation invalidates the old pending code","Verified self-signup claims manager invitation through HTTP","Claim response returns authoritative tenant","Claim response returns authoritative business name","Exact claimant retries a lost response without a second enrollment","Employee account lock binds the first verified UID","Employee account lock binds original device","Self-signup receives employee-only membership","Employee self-signup preserves existing trial start","Employee self-signup preserves existing trial end","Linked employee cannot receive a replacement account invite","Consumed invitation cannot enroll a different verified account or device","Manager disables self-signup employee by directory ID","Consumed invitation retry cannot reactivate disabled employee","Denied invitation retry preserves disabled membership","Self-signup employee receives signed disabled membership","Manager reactivates same self-signup account by directory ID","Reactivation preserves original account binding","Reactivated employee resumes existing signed membership","External gateway verifies issuer-signed activation","Manager employee disable via HTTP","Disabled employee loses connected access","Known disabled device obtains signed revocation certificate","Durable Object serializes actual 500-record feed page","Cursor reports remaining records accurately","Two HTTP pages preserve all sequence IDs without duplication","HTTP page cursor reaches complete synthetic history"],"transport":"real local workerd Worker → one SQLite Durable Object → HTTP factory → emulator Admin SDK","projectId":"demo-strawberry-flutter","firestore":"127.0.0.1:18080","auth":"127.0.0.1:19099","cloudDeployed":false,"productionCredentialsUsed":false,"cloudCpuQuotaMeasured":false}
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

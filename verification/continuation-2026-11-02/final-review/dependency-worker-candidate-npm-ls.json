@@ -1,0 +1,14 @@
+{
+  "exitCode": 0,
+  "problems": [
+    "extraneous: @emnapi/runtime@1.11.3 /tmp/strawberry-runtime-dependency-review-zwf_ylsl/worker/node_modules/@emnapi/runtime",
+    "extraneous: @img/sharp-wasm32@0.35.5 /tmp/strawberry-runtime-dependency-review-zwf_ylsl/worker/node_modules/@img/sharp-wasm32"
+  ],
+  "rootDependencies": [
+    "@emnapi/runtime",
+    "@img/sharp-wasm32",
+    "firebase-admin",
+    "google-auth-library",
+    "wrangler"
+  ]
+}

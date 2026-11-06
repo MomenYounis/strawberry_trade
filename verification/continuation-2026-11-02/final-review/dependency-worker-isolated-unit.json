@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "workingDirectory": "/tmp/strawberry-runtime-dependency-review-zwf_ylsl/worker",
+  "startedAt": "2026-11-05T18:57:35.473907+00:00",
+  "finishedAt": "2026-11-05T18:57:37.024499+00:00",
+  "durationSeconds": 1.551,
+  "exitCode": 0,
+  "evidenceLog": "dependency-worker-isolated-unit.log",
+  "priorAttempt": "Fixture copy omitted ../src/demo-operator.mjs; retained attempt1 log then copied the unchanged pure local boundary helper into its required relative location."
+}

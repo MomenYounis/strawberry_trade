@@ -1,7 +1,7 @@
 // Host half of the disposable Android acceptance campaign. This cannot run
 // against production: every SDK endpoint/project and private runtime is checked
 // before initialization. Private jobs never appear in ordinary evidence logs.
-import {readFile,writeFile,stat,realpath} from 'node:fs/promises';
+import {readFile,writeFile,stat,realpath,mkdir} from 'node:fs/promises';
 import {resolve,join} from 'node:path';
 import {randomBytes,createPublicKey} from 'node:crypto';
 import {initializeApp,cert,deleteApp} from 'firebase-admin/app';
@@ -95,9 +95,13 @@ try{
     if(rows.filter(row=>row.id===operationId).length!==1||entry?.kind!=='sale'||entry.totalMinor!==2000||entry.paidMinor!==500||entry.creatorUid!==a.uid
       ||receipt?.result?.id!==operationId||receipt.result.status!=='accepted'||receipt.actorUid!==a.uid)throw Error('offline-original-operation-receipt-mismatch');
    }
-   const evidence={status:'PASS',synthetic:true,phase,customerMinor:customer,supplierMinor:supplier,recordedCashMinor:cash,secondTenantCustomerMinor:bDebt,acceptedEntries:rows.length,lostOnlyAbsent:true,returnCounterPreserved:true,productionDataUsed:false};
+   const evidence={status:'PASS',synthetic:true,phase,campaign:manifest.campaign,customerMinor:customer,supplierMinor:supplier,recordedCashMinor:cash,secondTenantCustomerMinor:bDebt,acceptedEntries:rows.length,lostOnlyAbsent:true,returnCounterPreserved:true,productionDataUsed:false};
    if(phase==='oracle-offline')Object.assign(evidence,{offlineOriginalOperationAcceptedOnce:true,acceptedReceiptBoundToOriginalId:true});
-   await writeFile(join(out,phase+'.json'),JSON.stringify(evidence,null,2)+'\n');console.log(JSON.stringify(evidence));
+   // Campaign-specific, create-only evidence keeps a later run from replacing
+   // the independent financial oracle of an earlier accepted campaign.
+   const evidenceDirectory=join(out,'campaigns',manifest.campaign);
+   await mkdir(evidenceDirectory,{recursive:true});
+   await writeFile(join(evidenceDirectory,phase+'.json'),JSON.stringify(evidence,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(evidence));
   }
   if(!phase.startsWith('oracle-'))console.log(JSON.stringify({status:'PASS',synthetic:true,phase,privateJobCreated:true}));
  }

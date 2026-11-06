@@ -1,0 +1,1498 @@
+{
+  "version": "1.0.0",
+  "name": "strawberry-tenant-gateway-worker",
+  "problems": [
+    "extraneous: @emnapi/runtime@1.11.3 /home/younis/strawberry-trade-annual-review/backend/worker/node_modules/@emnapi/runtime",
+    "extraneous: @img/sharp-wasm32@0.35.5 /home/younis/strawberry-trade-annual-review/backend/worker/node_modules/@img/sharp-wasm32"
+  ],
+  "dependencies": {
+    "@emnapi/runtime": {
+      "version": "1.11.3",
+      "resolved": "https://registry.npmjs.org/@emnapi/runtime/-/runtime-1.11.3.tgz",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @emnapi/runtime@1.11.3 /home/younis/strawberry-trade-annual-review/backend/worker/node_modules/@emnapi/runtime"
+      ],
+      "dependencies": {
+        "tslib": {
+          "version": "2.8.1",
+          "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz",
+          "overridden": false
+        }
+      }
+    },
+    "@img/sharp-wasm32": {
+      "version": "0.35.5",
+      "resolved": "https://registry.npmjs.org/@img/sharp-wasm32/-/sharp-wasm32-0.35.5.tgz",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @img/sharp-wasm32@0.35.5 /home/younis/strawberry-trade-annual-review/backend/worker/node_modules/@img/sharp-wasm32"
+      ],
+      "dependencies": {
+        "@emnapi/runtime": {
+          "version": "1.11.3"
+        }
+      }
+    },
+    "firebase-admin": {
+      "version": "14.5.0",
+      "resolved": "https://registry.npmjs.org/firebase-admin/-/firebase-admin-14.5.0.tgz",
+      "overridden": false,
+      "dependencies": {
+        "@fastify/busboy": {
+          "version": "3.2.3",
+          "resolved": "https://registry.npmjs.org/@fastify/busboy/-/busboy-3.2.3.tgz",
+          "overridden": false
+        },
+        "@firebase/database-compat": {
+          "version": "2.1.7",
+          "resolved": "https://registry.npmjs.org/@firebase/database-compat/-/database-compat-2.1.7.tgz",
+          "overridden": false,
+          "dependencies": {
+            "@firebase/app-compat": {},
+            "@firebase/app": {},
+            "@firebase/component": {
+              "version": "0.7.5",
+              "resolved": "https://registry.npmjs.org/@firebase/component/-/component-0.7.5.tgz",
+              "overridden": false,
+              "dependencies": {
+                "@firebase/util": {
+                  "version": "1.15.3"
+                },
+                "tslib": {
+                  "version": "2.8.1"
+                }
+              }
+            },
+            "@firebase/database-types": {
+              "version": "1.0.22"
+            },
+            "@firebase/database": {
+              "version": "1.1.5",
+              "resolved": "https://registry.npmjs.org/@firebase/database/-/database-1.1.5.tgz",
+              "overridden": false,
+              "dependencies": {
+                "@firebase/app-check-interop-types": {
+                  "version": "0.3.5",
+                  "resolved": "https://registry.npmjs.org/@firebase/app-check-interop-types/-/app-check-interop-types-0.3.5.tgz",
+                  "overridden": false
+                },
+                "@firebase/auth-interop-types": {
+                  "version": "0.2.6",
+                  "resolved": "https://registry.npmjs.org/@firebase/auth-interop-types/-/auth-interop-types-0.2.6.tgz",
+                  "overridden": false
+                },
+                "@firebase/component": {
+                  "version": "0.7.5"
+                },
+                "@firebase/logger": {
+                  "version": "0.5.2"
+                },
+                "@firebase/util": {
+                  "version": "1.15.3"
+                },
+                "faye-websocket": {
+                  "version": "0.11.4",
+                  "resolved": "https://registry.npmjs.org/faye-websocket/-/faye-websocket-0.11.4.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "websocket-driver": {
+                      "version": "0.7.5",
+                      "resolved": "https://registry.npmjs.org/websocket-driver/-/websocket-driver-0.7.5.tgz",
+                      "overridden": false,
+                      "dependencies": {
+                        "http-parser-js": {
+                          "version": "0.5.10",
+                          "resolved": "https://registry.npmjs.org/http-parser-js/-/http-parser-js-0.5.10.tgz",
+                          "overridden": false
+                        },
+                        "safe-buffer": {
+                          "version": "5.2.1"
+                        },
+                        "websocket-extensions": {
+                          "version": "0.1.4",
+                          "resolved": "https://registry.npmjs.org/websocket-extensions/-/websocket-extensions-0.1.4.tgz",
+                          "overridden": false
+                        }
+                      }
+                    }
+                  }
+                },
+                "tslib": {
+                  "version": "2.8.1"
+                }
+              }
+            },
+            "@firebase/logger": {
+              "version": "0.5.2",
+              "resolved": "https://registry.npmjs.org/@firebase/logger/-/logger-0.5.2.tgz",
+              "overridden": false,
+              "dependencies": {
+                "tslib": {
+                  "version": "2.8.1"
+                }
+              }
+            },
+            "@firebase/util": {
+              "version": "1.15.3",
+              "resolved": "https://registry.npmjs.org/@firebase/util/-/util-1.15.3.tgz",
+              "overridden": false,
+              "dependencies": {
+                "tslib": {
+                  "version": "2.8.1"
+                }
+              }
+            },
+            "tslib": {
+              "version": "2.8.1"
+            }
+          }
+        },
+        "@firebase/database-types": {
+          "version": "1.0.22",
+          "resolved": "https://registry.npmjs.org/@firebase/database-types/-/database-types-1.0.22.tgz",
+          "overridden": false,
+          "dependencies": {
+            "@firebase/app-types": {
+              "version": "0.9.6",
+              "resolved": "https://registry.npmjs.org/@firebase/app-types/-/app-types-0.9.6.tgz",
+              "overridden": false,
+              "dependencies": {
+                "@firebase/logger": {
+                  "version": "0.5.2"
+                }
+              }
+            },
+            "@firebase/util": {
+              "version": "1.15.3"
+            }
+          }
+        },
+        "@google-cloud/firestore": {
+          "version": "9.3.1",
+          "resolved": "https://registry.npmjs.org/@google-cloud/firestore/-/firestore-9.3.1.tgz",
+          "overridden": false,
+          "dependencies": {
+            "@google-cloud/firestore-api": {
+              "version": "0.2.0",
+              "resolved": "https://registry.npmjs.org/@google-cloud/firestore-api/-/firestore-api-0.2.0.tgz",
+              "overridden": false,
+              "dependencies": {
+                "google-gax": {
+                  "version": "5.0.8",
+                  "resolved": "https://registry.npmjs.org/google-gax/-/google-gax-5.0.8.tgz",
+                  "overridden": true,
+                  "dependencies": {
+                    "@grpc/grpc-js": {
+                      "version": "1.14.6"
+                    },
+                    "@grpc/proto-loader": {
+                      "version": "0.8.1"
+                    },
+                    "duplexify": {
+                      "version": "4.1.3"
+                    },
+                    "google-auth-library": {
+                      "version": "10.5.0",
+                      "resolved": "https://registry.npmjs.org/google-auth-library/-/google-auth-library-10.5.0.tgz",
+                      "overridden": false,
+                      "dependencies": {
+                        "base64-js": {
+                          "version": "1.5.1"
+                        },
+                        "ecdsa-sig-formatter": {
+                          "version": "1.0.11"
+                        },
+                        "gaxios": {
+                          "version": "7.1.3",
+                          "resolved": "https://registry.npmjs.org/gaxios/-/gaxios-7.1.3.tgz",
+                          "overridden": true,
+                          "dependencies": {
+                            "extend": {
+                              "version": "3.0.2"
+                            },
+                            "https-proxy-agent": {
+                              "version": "7.0.6"
+                            },
+                            "node-fetch": {
+                              "version": "3.3.2"
+                            },
+                            "rimraf": {
+                              "version": "6.1.4"
+                            }
+                          }
+                        },
+                        "gcp-metadata": {
+                          "version": "8.1.4",
+                          "resolved": "https://registry.npmjs.org/gcp-metadata/-/gcp-metadata-8.1.4.tgz",
+                          "overridden": false,
+                          "dependencies": {
+                            "gaxios": {
+                              "version": "7.1.3"
+                            },
+                            "google-logging-utils": {
+                              "version": "1.1.3"
+                            },
+                            "json-bigint": {
+                              "version": "1.0.0"
+                            }
+                          }
+                        },
+                        "google-logging-utils": {
+                          "version": "1.1.3"
+                        },
+                        "gtoken": {
+                          "version": "8.0.0",
+                          "resolved": "https://registry.npmjs.org/gtoken/-/gtoken-8.0.0.tgz",
+                          "overridden": false,
+                          "dependencies": {
+                            "gaxios": {
+                              "version": "7.1.3",
+                              "resolved": "https://registry.npmjs.org/gaxios/-/gaxios-7.1.3.tgz",
+                              "overridden": true,
+                              "dependencies": {
+                                "extend": {
+                                  "version": "3.0.2"
+                                },
+                                "https-proxy-agent": {
+                                  "version": "7.0.6"
+                                },
+                                "node-fetch": {
+                                  "version": "3.3.2"
+                                },
+                                "rimraf": {
+                                  "version": "6.1.4"
+                                }
+                              }
+                            },
+                            "jws": {
+                              "version": "4.0.1"
+                            }
+                          }
+                        },
+                        "jws": {
+                          "version": "4.0.1"
+                        }
+                      }
+                    },
+                    "google-logging-utils": {
+                      "version": "1.1.3",
+                      "resolved": "https://registry.npmjs.org/google-logging-utils/-/google-logging-utils-1.1.3.tgz",
+                      "overridden": false
+                    },
+                    "node-fetch": {
+                      "version": "3.3.2"
+                    },
+                    "object-hash": {
+                      "version": "3.0.0"
+                    },
+                    "proto3-json-serializer": {
+                      "version": "3.0.4",
+                      "resolved": "https://registry.npmjs.org/proto3-json-serializer/-/proto3-json-serializer-3.0.4.tgz",
+                      "overridden": false,
+                      "dependencies": {
+                        "protobufjs": {
+                          "version": "7.6.6"
+                        }
+                      }
+                    },
+                    "protobufjs": {
+                      "version": "7.6.6"
+                    },
+                    "retry-request": {
+                      "version": "8.0.4",
+                      "resolved": "https://registry.npmjs.org/retry-request/-/retry-request-8.0.4.tgz",
+                      "overridden": false,
+                      "dependencies": {
+                        "extend": {
+                          "version": "3.0.2"
+                        },
+                        "teeny-request": {
+                          "version": "10.1.4",
+                          "resolved": "https://registry.npmjs.org/teeny-request/-/teeny-request-10.1.4.tgz",
+                          "overridden": false,
+                          "dependencies": {
+                            "http-proxy-agent": {
+                              "version": "7.0.2"
+                            },
+                            "https-proxy-agent": {
+                              "version": "7.0.6"
+                            },
+                            "node-fetch": {
+                              "version": "3.3.2"
+                            },
+                            "stream-events": {
+                              "version": "1.0.5"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "rimraf": {
+                      "version": "6.1.4",
+                      "resolved": "https://registry.npmjs.org/rimraf/-/rimraf-6.1.4.tgz",
+                      "overridden": true,
+                      "dependencies": {
+                        "glob": {
+                          "version": "14.0.3",
+                          "resolved": "https://registry.npmjs.org/glob/-/glob-14.0.3.tgz",
+                          "overridden": false,
+                          "dependencies": {
+                            "minimatch": {
+                              "version": "11.0.4",
+                              "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-11.0.4.tgz",
+                              "overridden": false,
+                              "dependencies": {
+                                "@isaacs/nonrecursive-glob-match": {
+                                  "version": "1.0.3",
+                                  "resolved": "https://registry.npmjs.org/@isaacs/nonrecursive-glob-match/-/nonrecursive-glob-match-1.0.3.tgz",
+                                  "overridden": false
+                                },
+                                "brace-expansion": {
+                                  "version": "5.0.12",
+                                  "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-5.0.12.tgz",
+                                  "overridden": false,
+                                  "dependencies": {
+                                    "balanced-match": {
+                                      "version": "4.0.4",
+                                      "resolved": "https://registry.npmjs.org/balanced-match/-/balanced-match-4.0.4.tgz",
+                                      "overridden": false
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "minipass": {
+                              "version": "7.1.3",
+                              "resolved": "https://registry.npmjs.org/minipass/-/minipass-7.1.3.tgz",
+                              "overridden": false
+                            },
+                            "path-scurry": {
+                              "version": "3.0.0",
+                              "resolved": "https://registry.npmjs.org/path-scurry/-/path-scurry-3.0.0.tgz",
+                              "overridden": false,
+                              "dependencies": {
+                                "lru-cache": {
+                                  "version": "11.5.3"
+                                },
+                                "minipass": {
+                                  "version": "7.1.3"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "package-json-from-dist": {
+                          "version": "1.0.1",
+                          "resolved": "https://registry.npmjs.org/package-json-from-dist/-/package-json-from-dist-1.0.1.tgz",
+                          "overridden": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "@opentelemetry/api": {
+              "version": "1.9.1",
+              "resolved": "https://registry.npmjs.org/@opentelemetry/api/-/api-1.9.1.tgz",
+              "overridden": false
+            },
+            "fast-deep-equal": {
+              "version": "3.1.3"
+            },
+            "functional-red-black-tree": {
+              "version": "1.0.1",
+              "resolved": "https://registry.npmjs.org/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz",
+              "overridden": false
+            },
+            "google-gax": {
+              "version": "6.12.1",
+              "resolved": "https://registry.npmjs.org/google-gax/-/google-gax-6.12.1.tgz",
+              "overridden": false,
+              "dependencies": {
+                "@grpc/grpc-js": {
+                  "version": "1.14.6",
+                  "resolved": "https://registry.npmjs.org/@grpc/grpc-js/-/grpc-js-1.14.6.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "@grpc/proto-loader": {
+                      "version": "0.8.1"
+                    },
+                    "@js-sdsl/ordered-map": {
+                      "version": "4.4.2",
+                      "resolved": "https://registry.npmjs.org/@js-sdsl/ordered-map/-/ordered-map-4.4.2.tgz",
+                      "overridden": false
+                    }
+                  }
+                },
+                "@grpc/proto-loader": {
+                  "version": "0.8.1",
+                  "resolved": "https://registry.npmjs.org/@grpc/proto-loader/-/proto-loader-0.8.1.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "lodash.camelcase": {
+                      "version": "4.3.0",
+                      "resolved": "https://registry.npmjs.org/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz",
+                      "overridden": false
+                    },
+                    "long": {
+                      "version": "5.3.2"
+                    },
+                    "protobufjs": {
+                      "version": "7.6.6"
+                    },
+                    "yargs": {
+                      "version": "17.7.3",
+                      "resolved": "https://registry.npmjs.org/yargs/-/yargs-17.7.3.tgz",
+                      "overridden": false,
+                      "dependencies": {
+                        "cliui": {
+                          "version": "8.0.1",
+                          "resolved": "https://registry.npmjs.org/cliui/-/cliui-8.0.1.tgz",
+                          "overridden": false,
+                          "dependencies": {
+                            "string-width": {
+                              "version": "4.2.3"
+                            },
+                            "strip-ansi": {
+                              "version": "6.0.1",
+                              "resolved": "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz",
+                              "overridden": false,
+                              "dependencies": {
+                                "ansi-regex": {
+                                  "version": "5.0.1",
+                                  "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-5.0.1.tgz",
+                                  "overridden": false
+                                }
+                              }
+                            },
+                            "wrap-ansi": {
+                              "version": "7.0.0",
+                              "resolved": "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-7.0.0.tgz",
+                              "overridden": false,
+                              "dependencies": {
+                                "ansi-styles": {
+                                  "version": "4.3.0",
+                                  "resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-4.3.0.tgz",
+                                  "overridden": false,
+                                  "dependencies": {
+                                    "color-convert": {
+                                      "version": "2.0.1",
+                                      "resolved": "https://registry.npmjs.org/color-convert/-/color-convert-2.0.1.tgz",
+                                      "overridden": false,
+                                      "dependencies": {
+                                        "color-name": {
+                                          "version": "1.1.4",
+                                          "resolved": "https://registry.npmjs.org/color-name/-/color-name-1.1.4.tgz",
+                                          "overridden": false
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "string-width": {
+                                  "version": "4.2.3"
+                                },
+                                "strip-ansi": {
+                                  "version": "6.0.1"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "escalade": {
+                          "version": "3.2.0",
+                          "resolved": "https://registry.npmjs.org/escalade/-/escalade-3.2.0.tgz",
+                          "overridden": false
+                        },
+                        "get-caller-file": {
+                          "version": "2.0.5",
+                          "resolved": "https://registry.npmjs.org/get-caller-file/-/get-caller-file-2.0.5.tgz",
+                          "overridden": false
+                        },
+                        "require-directory": {
+                          "version": "2.1.1",
+                          "resolved": "https://registry.npmjs.org/require-directory/-/require-directory-2.1.1.tgz",
+                          "overridden": false
+                        },
+                        "string-width": {
+                          "version": "4.2.3",
+                          "resolved": "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz",
+                          "overridden": false,
+                          "dependencies": {
+                            "emoji-regex": {
+                              "version": "8.0.0",
+                              "resolved": "https://registry.npmjs.org/emoji-regex/-/emoji-regex-8.0.0.tgz",
+                              "overridden": false
+                            },
+                            "is-fullwidth-code-point": {
+                              "version": "3.0.0",
+                              "resolved": "https://registry.npmjs.org/is-fullwidth-code-point/-/is-fullwidth-code-point-3.0.0.tgz",
+                              "overridden": false
+                            },
+                            "strip-ansi": {
+                              "version": "6.0.1"
+                            }
+                          }
+                        },
+                        "y18n": {
+                          "version": "5.0.8",
+                          "resolved": "https://registry.npmjs.org/y18n/-/y18n-5.0.8.tgz",
+                          "overridden": false
+                        },
+                        "yargs-parser": {
+                          "version": "21.1.1",
+                          "resolved": "https://registry.npmjs.org/yargs-parser/-/yargs-parser-21.1.1.tgz",
+                          "overridden": false
+                        }
+                      }
+                    }
+                  }
+                },
+                "@opentelemetry/api": {
+                  "version": "1.9.1"
+                },
+                "duplexify": {
+                  "version": "4.1.3"
+                },
+                "google-auth-library": {
+                  "version": "11.3.1"
+                },
+                "google-logging-utils": {
+                  "version": "2.1.0"
+                },
+                "node-fetch": {
+                  "version": "3.3.2"
+                },
+                "object-hash": {
+                  "version": "3.0.0",
+                  "resolved": "https://registry.npmjs.org/object-hash/-/object-hash-3.0.0.tgz",
+                  "overridden": false
+                },
+                "proto3-json-serializer": {
+                  "version": "4.1.0",
+                  "resolved": "https://registry.npmjs.org/proto3-json-serializer/-/proto3-json-serializer-4.1.0.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "protobufjs": {
+                      "version": "7.6.6"
+                    }
+                  }
+                },
+                "protobufjs": {
+                  "version": "7.6.6"
+                },
+                "retry-request": {
+                  "version": "9.1.0"
+                }
+              }
+            },
+            "protobufjs": {
+              "version": "7.6.6",
+              "resolved": "https://registry.npmjs.org/protobufjs/-/protobufjs-7.6.6.tgz",
+              "overridden": false,
+              "dependencies": {
+                "@protobufjs/aspromise": {
+                  "version": "1.1.2",
+                  "resolved": "https://registry.npmjs.org/@protobufjs/aspromise/-/aspromise-1.1.2.tgz",
+                  "overridden": false
+                },
+                "@protobufjs/base64": {
+                  "version": "1.1.2",
+                  "resolved": "https://registry.npmjs.org/@protobufjs/base64/-/base64-1.1.2.tgz",
+                  "overridden": false
+                },
+                "@protobufjs/codegen": {
+                  "version": "2.0.5",
+                  "resolved": "https://registry.npmjs.org/@protobufjs/codegen/-/codegen-2.0.5.tgz",
+                  "overridden": false
+                },
+                "@protobufjs/eventemitter": {
+                  "version": "1.1.1",
+                  "resolved": "https://registry.npmjs.org/@protobufjs/eventemitter/-/eventemitter-1.1.1.tgz",
+                  "overridden": false
+                },
+                "@protobufjs/fetch": {
+                  "version": "1.1.1",
+                  "resolved": "https://registry.npmjs.org/@protobufjs/fetch/-/fetch-1.1.1.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "@protobufjs/aspromise": {
+                      "version": "1.1.2"
+                    }
+                  }
+                },
+                "@protobufjs/float": {
+                  "version": "1.0.2",
+                  "resolved": "https://registry.npmjs.org/@protobufjs/float/-/float-1.0.2.tgz",
+                  "overridden": false
+                },
+                "@protobufjs/path": {
+                  "version": "1.1.2",
+                  "resolved": "https://registry.npmjs.org/@protobufjs/path/-/path-1.1.2.tgz",
+                  "overridden": false
+                },
+                "@protobufjs/pool": {
+                  "version": "1.1.0",
+                  "resolved": "https://registry.npmjs.org/@protobufjs/pool/-/pool-1.1.0.tgz",
+                  "overridden": false
+                },
+                "@protobufjs/utf8": {
+                  "version": "1.1.2",
+                  "resolved": "https://registry.npmjs.org/@protobufjs/utf8/-/utf8-1.1.2.tgz",
+                  "overridden": false
+                },
+                "@types/node": {
+                  "version": "26.6.5",
+                  "resolved": "https://registry.npmjs.org/@types/node/-/node-26.6.5.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "undici-types": {
+                      "version": "8.9.0",
+                      "resolved": "https://registry.npmjs.org/undici-types/-/undici-types-8.9.0.tgz",
+                      "overridden": false
+                    }
+                  }
+                },
+                "long": {
+                  "version": "5.3.2",
+                  "resolved": "https://registry.npmjs.org/long/-/long-5.3.2.tgz",
+                  "overridden": false
+                }
+              }
+            }
+          }
+        },
+        "@google-cloud/storage": {
+          "version": "8.4.0",
+          "resolved": "https://registry.npmjs.org/@google-cloud/storage/-/storage-8.4.0.tgz",
+          "overridden": false,
+          "dependencies": {
+            "@google-cloud/paginator": {
+              "version": "7.2.0",
+              "resolved": "https://registry.npmjs.org/@google-cloud/paginator/-/paginator-7.2.0.tgz",
+              "overridden": false,
+              "dependencies": {
+                "extend": {
+                  "version": "3.0.2"
+                }
+              }
+            },
+            "@google-cloud/projectify": {
+              "version": "6.2.0",
+              "resolved": "https://registry.npmjs.org/@google-cloud/projectify/-/projectify-6.2.0.tgz",
+              "overridden": false
+            },
+            "@google-cloud/promisify": {
+              "version": "6.2.0",
+              "resolved": "https://registry.npmjs.org/@google-cloud/promisify/-/promisify-6.2.0.tgz",
+              "overridden": false
+            },
+            "abort-controller": {
+              "version": "3.0.0",
+              "resolved": "https://registry.npmjs.org/abort-controller/-/abort-controller-3.0.0.tgz",
+              "overridden": false,
+              "dependencies": {
+                "event-target-shim": {
+                  "version": "5.0.1",
+                  "resolved": "https://registry.npmjs.org/event-target-shim/-/event-target-shim-5.0.1.tgz",
+                  "overridden": false
+                }
+              }
+            },
+            "async-retry": {
+              "version": "1.3.3",
+              "resolved": "https://registry.npmjs.org/async-retry/-/async-retry-1.3.3.tgz",
+              "overridden": false,
+              "dependencies": {
+                "retry": {
+                  "version": "0.13.1",
+                  "resolved": "https://registry.npmjs.org/retry/-/retry-0.13.1.tgz",
+                  "overridden": false
+                }
+              }
+            },
+            "duplexify": {
+              "version": "4.1.3",
+              "resolved": "https://registry.npmjs.org/duplexify/-/duplexify-4.1.3.tgz",
+              "overridden": false,
+              "dependencies": {
+                "end-of-stream": {
+                  "version": "1.4.5",
+                  "resolved": "https://registry.npmjs.org/end-of-stream/-/end-of-stream-1.4.5.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "once": {
+                      "version": "1.4.0",
+                      "resolved": "https://registry.npmjs.org/once/-/once-1.4.0.tgz",
+                      "overridden": false,
+                      "dependencies": {
+                        "wrappy": {
+                          "version": "1.0.2",
+                          "resolved": "https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz",
+                          "overridden": false
+                        }
+                      }
+                    }
+                  }
+                },
+                "inherits": {
+                  "version": "2.0.4",
+                  "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz",
+                  "overridden": false
+                },
+                "readable-stream": {
+                  "version": "3.6.2",
+                  "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-3.6.2.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "inherits": {
+                      "version": "2.0.4"
+                    },
+                    "string_decoder": {
+                      "version": "1.3.0",
+                      "resolved": "https://registry.npmjs.org/string_decoder/-/string_decoder-1.3.0.tgz",
+                      "overridden": false,
+                      "dependencies": {
+                        "safe-buffer": {
+                          "version": "5.2.1"
+                        }
+                      }
+                    },
+                    "util-deprecate": {
+                      "version": "1.0.2",
+                      "resolved": "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz",
+                      "overridden": false
+                    }
+                  }
+                },
+                "stream-shift": {
+                  "version": "1.0.3",
+                  "resolved": "https://registry.npmjs.org/stream-shift/-/stream-shift-1.0.3.tgz",
+                  "overridden": false
+                }
+              }
+            },
+            "fast-xml-parser": {
+              "version": "5.11.2",
+              "resolved": "https://registry.npmjs.org/fast-xml-parser/-/fast-xml-parser-5.11.2.tgz",
+              "overridden": false,
+              "dependencies": {
+                "@nodable/entities": {
+                  "version": "3.1.0",
+                  "resolved": "https://registry.npmjs.org/@nodable/entities/-/entities-3.1.0.tgz",
+                  "overridden": false
+                },
+                "fast-xml-builder": {
+                  "version": "1.3.1",
+                  "resolved": "https://registry.npmjs.org/fast-xml-builder/-/fast-xml-builder-1.3.1.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "path-expression-matcher": {
+                      "version": "1.6.2"
+                    },
+                    "xml-naming": {
+                      "version": "0.3.0"
+                    }
+                  }
+                },
+                "is-unsafe": {
+                  "version": "2.0.2",
+                  "resolved": "https://registry.npmjs.org/is-unsafe/-/is-unsafe-2.0.2.tgz",
+                  "overridden": false
+                },
+                "path-expression-matcher": {
+                  "version": "1.6.2",
+                  "resolved": "https://registry.npmjs.org/path-expression-matcher/-/path-expression-matcher-1.6.2.tgz",
+                  "overridden": false
+                },
+                "strnum": {
+                  "version": "2.5.1",
+                  "resolved": "https://registry.npmjs.org/strnum/-/strnum-2.5.1.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "anynum": {
+                      "version": "1.0.1",
+                      "resolved": "https://registry.npmjs.org/anynum/-/anynum-1.0.1.tgz",
+                      "overridden": false
+                    }
+                  }
+                },
+                "xml-naming": {
+                  "version": "0.3.0",
+                  "resolved": "https://registry.npmjs.org/xml-naming/-/xml-naming-0.3.0.tgz",
+                  "overridden": false
+                }
+              }
+            },
+            "gaxios": {
+              "version": "7.3.1",
+              "resolved": "https://registry.npmjs.org/gaxios/-/gaxios-7.3.1.tgz",
+              "overridden": true,
+              "dependencies": {
+                "extend": {
+                  "version": "3.0.2"
+                },
+                "https-proxy-agent": {
+                  "version": "7.0.6"
+                },
+                "node-fetch": {
+                  "version": "3.3.2"
+                }
+              }
+            },
+            "google-auth-library": {
+              "version": "11.3.1"
+            },
+            "html-entities": {
+              "version": "2.6.0",
+              "resolved": "https://registry.npmjs.org/html-entities/-/html-entities-2.6.0.tgz",
+              "overridden": false
+            },
+            "mime": {
+              "version": "3.0.0",
+              "resolved": "https://registry.npmjs.org/mime/-/mime-3.0.0.tgz",
+              "overridden": false
+            },
+            "p-limit": {
+              "version": "3.1.0",
+              "resolved": "https://registry.npmjs.org/p-limit/-/p-limit-3.1.0.tgz",
+              "overridden": false,
+              "dependencies": {
+                "yocto-queue": {
+                  "version": "0.1.0",
+                  "resolved": "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz",
+                  "overridden": false
+                }
+              }
+            },
+            "retry-request": {
+              "version": "9.1.0",
+              "resolved": "https://registry.npmjs.org/retry-request/-/retry-request-9.1.0.tgz",
+              "overridden": false,
+              "dependencies": {
+                "extend": {
+                  "version": "3.0.2"
+                }
+              }
+            },
+            "teeny-request": {
+              "version": "11.1.1",
+              "resolved": "https://registry.npmjs.org/teeny-request/-/teeny-request-11.1.1.tgz",
+              "overridden": false,
+              "dependencies": {
+                "http-proxy-agent": {
+                  "version": "7.0.2",
+                  "resolved": "https://registry.npmjs.org/http-proxy-agent/-/http-proxy-agent-7.0.2.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "agent-base": {
+                      "version": "7.1.4"
+                    },
+                    "debug": {
+                      "version": "4.4.3"
+                    }
+                  }
+                },
+                "https-proxy-agent": {
+                  "version": "7.0.6"
+                },
+                "node-fetch": {
+                  "version": "3.3.2"
+                },
+                "stream-events": {
+                  "version": "1.0.5",
+                  "resolved": "https://registry.npmjs.org/stream-events/-/stream-events-1.0.5.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "stubs": {
+                      "version": "3.0.0",
+                      "resolved": "https://registry.npmjs.org/stubs/-/stubs-3.0.0.tgz",
+                      "overridden": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "fast-deep-equal": {
+          "version": "3.1.3",
+          "resolved": "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz",
+          "overridden": false
+        },
+        "google-auth-library": {
+          "version": "11.3.1"
+        },
+        "jsonwebtoken": {
+          "version": "9.0.3",
+          "resolved": "https://registry.npmjs.org/jsonwebtoken/-/jsonwebtoken-9.0.3.tgz",
+          "overridden": false,
+          "dependencies": {
+            "jws": {
+              "version": "4.0.1"
+            },
+            "lodash.includes": {
+              "version": "4.3.0",
+              "resolved": "https://registry.npmjs.org/lodash.includes/-/lodash.includes-4.3.0.tgz",
+              "overridden": false
+            },
+            "lodash.isboolean": {
+              "version": "3.0.3",
+              "resolved": "https://registry.npmjs.org/lodash.isboolean/-/lodash.isboolean-3.0.3.tgz",
+              "overridden": false
+            },
+            "lodash.isinteger": {
+              "version": "4.0.4",
+              "resolved": "https://registry.npmjs.org/lodash.isinteger/-/lodash.isinteger-4.0.4.tgz",
+              "overridden": false
+            },
+            "lodash.isnumber": {
+              "version": "3.0.3",
+              "resolved": "https://registry.npmjs.org/lodash.isnumber/-/lodash.isnumber-3.0.3.tgz",
+              "overridden": false
+            },
+            "lodash.isplainobject": {
+              "version": "4.0.6",
+              "resolved": "https://registry.npmjs.org/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz",
+              "overridden": false
+            },
+            "lodash.isstring": {
+              "version": "4.0.1",
+              "resolved": "https://registry.npmjs.org/lodash.isstring/-/lodash.isstring-4.0.1.tgz",
+              "overridden": false
+            },
+            "lodash.once": {
+              "version": "4.1.1",
+              "resolved": "https://registry.npmjs.org/lodash.once/-/lodash.once-4.1.1.tgz",
+              "overridden": false
+            },
+            "ms": {
+              "version": "2.1.3",
+              "resolved": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz",
+              "overridden": false
+            },
+            "semver": {
+              "version": "7.8.5",
+              "resolved": "https://registry.npmjs.org/semver/-/semver-7.8.5.tgz",
+              "overridden": false
+            }
+          }
+        },
+        "jwks-rsa": {
+          "version": "4.1.0",
+          "resolved": "https://registry.npmjs.org/jwks-rsa/-/jwks-rsa-4.1.0.tgz",
+          "overridden": false,
+          "dependencies": {
+            "@types/jsonwebtoken": {
+              "version": "9.0.10",
+              "resolved": "https://registry.npmjs.org/@types/jsonwebtoken/-/jsonwebtoken-9.0.10.tgz",
+              "overridden": false,
+              "dependencies": {
+                "@types/ms": {
+                  "version": "2.1.0",
+                  "resolved": "https://registry.npmjs.org/@types/ms/-/ms-2.1.0.tgz",
+                  "overridden": false
+                },
+                "@types/node": {
+                  "version": "26.6.5"
+                }
+              }
+            },
+            "debug": {
+              "version": "4.4.3",
+              "resolved": "https://registry.npmjs.org/debug/-/debug-4.4.3.tgz",
+              "overridden": false,
+              "dependencies": {
+                "ms": {
+                  "version": "2.1.3"
+                }
+              }
+            },
+            "jose": {
+              "version": "6.2.12",
+              "resolved": "https://registry.npmjs.org/jose/-/jose-6.2.12.tgz",
+              "overridden": false
+            },
+            "limiter": {
+              "version": "1.1.5",
+              "resolved": "https://registry.npmjs.org/limiter/-/limiter-1.1.5.tgz",
+              "overridden": false
+            },
+            "lru-cache": {
+              "version": "11.5.3",
+              "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-11.5.3.tgz",
+              "overridden": false
+            },
+            "lru-memoizer": {
+              "version": "3.0.0",
+              "resolved": "https://registry.npmjs.org/lru-memoizer/-/lru-memoizer-3.0.0.tgz",
+              "overridden": false,
+              "dependencies": {
+                "lodash.clonedeep": {
+                  "version": "4.5.0",
+                  "resolved": "https://registry.npmjs.org/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz",
+                  "overridden": false
+                },
+                "lru-cache": {
+                  "version": "11.5.3"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "google-auth-library": {
+      "version": "11.3.1",
+      "resolved": "https://registry.npmjs.org/google-auth-library/-/google-auth-library-11.3.1.tgz",
+      "overridden": false,
+      "dependencies": {
+        "base64-js": {
+          "version": "1.5.1",
+          "resolved": "https://registry.npmjs.org/base64-js/-/base64-js-1.5.1.tgz",
+          "overridden": false
+        },
+        "ecdsa-sig-formatter": {
+          "version": "1.0.11",
+          "resolved": "https://registry.npmjs.org/ecdsa-sig-formatter/-/ecdsa-sig-formatter-1.0.11.tgz",
+          "overridden": false,
+          "dependencies": {
+            "safe-buffer": {
+              "version": "5.2.1",
+              "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.1.tgz",
+              "overridden": false
+            }
+          }
+        },
+        "gaxios": {
+          "version": "8.3.1",
+          "resolved": "https://registry.npmjs.org/gaxios/-/gaxios-8.3.1.tgz",
+          "overridden": false,
+          "dependencies": {
+            "extend": {
+              "version": "3.0.2",
+              "resolved": "https://registry.npmjs.org/extend/-/extend-3.0.2.tgz",
+              "overridden": false
+            },
+            "https-proxy-agent": {
+              "version": "7.0.6",
+              "resolved": "https://registry.npmjs.org/https-proxy-agent/-/https-proxy-agent-7.0.6.tgz",
+              "overridden": false,
+              "dependencies": {
+                "agent-base": {
+                  "version": "7.1.4",
+                  "resolved": "https://registry.npmjs.org/agent-base/-/agent-base-7.1.4.tgz",
+                  "overridden": false
+                },
+                "debug": {
+                  "version": "4.4.3"
+                }
+              }
+            },
+            "node-fetch": {
+              "version": "3.3.2",
+              "resolved": "https://registry.npmjs.org/node-fetch/-/node-fetch-3.3.2.tgz",
+              "overridden": false,
+              "dependencies": {
+                "data-uri-to-buffer": {
+                  "version": "4.0.1",
+                  "resolved": "https://registry.npmjs.org/data-uri-to-buffer/-/data-uri-to-buffer-4.0.1.tgz",
+                  "overridden": false
+                },
+                "fetch-blob": {
+                  "version": "3.2.0",
+                  "resolved": "https://registry.npmjs.org/fetch-blob/-/fetch-blob-3.2.0.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "node-domexception": {
+                      "version": "1.0.0",
+                      "resolved": "https://registry.npmjs.org/node-domexception/-/node-domexception-1.0.0.tgz",
+                      "overridden": false
+                    },
+                    "web-streams-polyfill": {
+                      "version": "3.3.3",
+                      "resolved": "https://registry.npmjs.org/web-streams-polyfill/-/web-streams-polyfill-3.3.3.tgz",
+                      "overridden": false
+                    }
+                  }
+                },
+                "formdata-polyfill": {
+                  "version": "4.0.10",
+                  "resolved": "https://registry.npmjs.org/formdata-polyfill/-/formdata-polyfill-4.0.10.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "fetch-blob": {
+                      "version": "3.2.0"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "gcp-metadata": {
+          "version": "9.2.1",
+          "resolved": "https://registry.npmjs.org/gcp-metadata/-/gcp-metadata-9.2.1.tgz",
+          "overridden": false,
+          "dependencies": {
+            "gaxios": {
+              "version": "8.3.1",
+              "resolved": "https://registry.npmjs.org/gaxios/-/gaxios-8.3.1.tgz",
+              "overridden": false,
+              "dependencies": {
+                "extend": {
+                  "version": "3.0.2"
+                },
+                "https-proxy-agent": {
+                  "version": "7.0.6"
+                },
+                "node-fetch": {
+                  "version": "3.3.2"
+                }
+              }
+            },
+            "google-logging-utils": {
+              "version": "2.1.0"
+            },
+            "json-bigint": {
+              "version": "1.0.0",
+              "resolved": "https://registry.npmjs.org/json-bigint/-/json-bigint-1.0.0.tgz",
+              "overridden": false,
+              "dependencies": {
+                "bignumber.js": {
+                  "version": "9.3.1",
+                  "resolved": "https://registry.npmjs.org/bignumber.js/-/bignumber.js-9.3.1.tgz",
+                  "overridden": false
+                }
+              }
+            }
+          }
+        },
+        "google-logging-utils": {
+          "version": "2.1.0",
+          "resolved": "https://registry.npmjs.org/google-logging-utils/-/google-logging-utils-2.1.0.tgz",
+          "overridden": false
+        },
+        "jws": {
+          "version": "4.0.1",
+          "resolved": "https://registry.npmjs.org/jws/-/jws-4.0.1.tgz",
+          "overridden": false,
+          "dependencies": {
+            "jwa": {
+              "version": "2.0.1",
+              "resolved": "https://registry.npmjs.org/jwa/-/jwa-2.0.1.tgz",
+              "overridden": false,
+              "dependencies": {
+                "buffer-equal-constant-time": {
+                  "version": "1.0.1",
+                  "resolved": "https://registry.npmjs.org/buffer-equal-constant-time/-/buffer-equal-constant-time-1.0.1.tgz",
+                  "overridden": false
+                },
+                "ecdsa-sig-formatter": {
+                  "version": "1.0.11"
+                },
+                "safe-buffer": {
+                  "version": "5.2.1"
+                }
+              }
+            },
+            "safe-buffer": {
+              "version": "5.2.1"
+            }
+          }
+        }
+      }
+    },
+    "wrangler": {
+      "version": "4.151.2",
+      "resolved": "https://registry.npmjs.org/wrangler/-/wrangler-4.151.2.tgz",
+      "overridden": false,
+      "dependencies": {
+        "@cloudflare/kv-asset-handler": {
+          "version": "0.5.0",
+          "resolved": "https://registry.npmjs.org/@cloudflare/kv-asset-handler/-/kv-asset-handler-0.5.0.tgz",
+          "overridden": false
+        },
+        "@cloudflare/unenv-preset": {
+          "version": "2.16.2",
+          "resolved": "https://registry.npmjs.org/@cloudflare/unenv-preset/-/unenv-preset-2.16.2.tgz",
+          "overridden": false,
+          "dependencies": {
+            "unenv": {
+              "version": "2.0.0-rc.24"
+            },
+            "workerd": {
+              "version": "1.20261019.1"
+            }
+          }
+        },
+        "@cloudflare/workers-types": {},
+        "blake3-wasm": {
+          "version": "2.1.5",
+          "resolved": "https://registry.npmjs.org/blake3-wasm/-/blake3-wasm-2.1.5.tgz",
+          "overridden": false
+        },
+        "esbuild": {
+          "version": "0.28.2",
+          "resolved": "https://registry.npmjs.org/esbuild/-/esbuild-0.28.2.tgz",
+          "overridden": false,
+          "dependencies": {
+            "@esbuild/aix-ppc64": {},
+            "@esbuild/android-arm": {},
+            "@esbuild/android-arm64": {},
+            "@esbuild/android-x64": {},
+            "@esbuild/darwin-arm64": {},
+            "@esbuild/darwin-x64": {},
+            "@esbuild/freebsd-arm64": {},
+            "@esbuild/freebsd-x64": {},
+            "@esbuild/linux-arm": {},
+            "@esbuild/linux-arm64": {},
+            "@esbuild/linux-ia32": {},
+            "@esbuild/linux-loong64": {},
+            "@esbuild/linux-mips64el": {},
+            "@esbuild/linux-ppc64": {},
+            "@esbuild/linux-riscv64": {},
+            "@esbuild/linux-s390x": {},
+            "@esbuild/linux-x64": {
+              "version": "0.28.2",
+              "resolved": "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.28.2.tgz",
+              "overridden": false
+            },
+            "@esbuild/netbsd-arm64": {},
+            "@esbuild/netbsd-x64": {},
+            "@esbuild/openbsd-arm64": {},
+            "@esbuild/openbsd-x64": {},
+            "@esbuild/openharmony-arm64": {},
+            "@esbuild/sunos-x64": {},
+            "@esbuild/win32-arm64": {},
+            "@esbuild/win32-ia32": {},
+            "@esbuild/win32-x64": {}
+          }
+        },
+        "fsevents": {},
+        "miniflare": {
+          "version": "5.20261019.0-beta",
+          "resolved": "https://registry.npmjs.org/miniflare/-/miniflare-5.20261019.0-beta.tgz",
+          "overridden": true,
+          "dependencies": {
+            "@cspotcode/source-map-support": {
+              "version": "0.8.1",
+              "resolved": "https://registry.npmjs.org/@cspotcode/source-map-support/-/source-map-support-0.8.1.tgz",
+              "overridden": false,
+              "dependencies": {
+                "@jridgewell/trace-mapping": {
+                  "version": "0.3.9",
+                  "resolved": "https://registry.npmjs.org/@jridgewell/trace-mapping/-/trace-mapping-0.3.9.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "@jridgewell/resolve-uri": {
+                      "version": "3.1.2",
+                      "resolved": "https://registry.npmjs.org/@jridgewell/resolve-uri/-/resolve-uri-3.1.2.tgz",
+                      "overridden": false
+                    },
+                    "@jridgewell/sourcemap-codec": {
+                      "version": "1.6.0",
+                      "resolved": "https://registry.npmjs.org/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.6.0.tgz",
+                      "overridden": false
+                    }
+                  }
+                }
+              }
+            },
+            "sharp": {
+              "version": "0.35.5",
+              "resolved": "https://registry.npmjs.org/sharp/-/sharp-0.35.5.tgz",
+              "overridden": false,
+              "dependencies": {
+                "@img/colour": {
+                  "version": "1.1.0",
+                  "resolved": "https://registry.npmjs.org/@img/colour/-/colour-1.1.0.tgz",
+                  "overridden": false
+                },
+                "@img/sharp-darwin-arm64": {},
+                "@img/sharp-darwin-x64": {},
+                "@img/sharp-freebsd-wasm32": {},
+                "@img/sharp-libvips-darwin-arm64": {},
+                "@img/sharp-libvips-darwin-x64": {},
+                "@img/sharp-libvips-linux-arm": {},
+                "@img/sharp-libvips-linux-arm64": {},
+                "@img/sharp-libvips-linux-ppc64": {},
+                "@img/sharp-libvips-linux-riscv64": {},
+                "@img/sharp-libvips-linux-s390x": {},
+                "@img/sharp-libvips-linux-x64": {
+                  "version": "1.3.4",
+                  "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-x64/-/sharp-libvips-linux-x64-1.3.4.tgz",
+                  "overridden": false
+                },
+                "@img/sharp-libvips-linuxmusl-arm64": {},
+                "@img/sharp-libvips-linuxmusl-x64": {
+                  "version": "1.3.4",
+                  "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linuxmusl-x64/-/sharp-libvips-linuxmusl-x64-1.3.4.tgz",
+                  "overridden": false
+                },
+                "@img/sharp-linux-arm": {},
+                "@img/sharp-linux-arm64": {},
+                "@img/sharp-linux-ppc64": {},
+                "@img/sharp-linux-riscv64": {},
+                "@img/sharp-linux-s390x": {},
+                "@img/sharp-linux-x64": {
+                  "version": "0.35.5",
+                  "resolved": "https://registry.npmjs.org/@img/sharp-linux-x64/-/sharp-linux-x64-0.35.5.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "@img/sharp-libvips-linux-x64": {
+                      "version": "1.3.4"
+                    }
+                  }
+                },
+                "@img/sharp-linuxmusl-arm64": {},
+                "@img/sharp-linuxmusl-x64": {
+                  "version": "0.35.5",
+                  "resolved": "https://registry.npmjs.org/@img/sharp-linuxmusl-x64/-/sharp-linuxmusl-x64-0.35.5.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "@img/sharp-libvips-linuxmusl-x64": {
+                      "version": "1.3.4"
+                    }
+                  }
+                },
+                "@img/sharp-webcontainers-wasm32": {},
+                "@img/sharp-win32-arm64": {},
+                "@img/sharp-win32-ia32": {},
+                "@img/sharp-win32-x64": {},
+                "detect-libc": {
+                  "version": "2.1.2",
+                  "resolved": "https://registry.npmjs.org/detect-libc/-/detect-libc-2.1.2.tgz",
+                  "overridden": false
+                },
+                "semver": {
+                  "version": "7.8.5"
+                }
+              }
+            },
+            "undici": {
+              "version": "7.30.1",
+              "resolved": "https://registry.npmjs.org/undici/-/undici-7.30.1.tgz",
+              "overridden": true
+            },
+            "workerd": {
+              "version": "1.20261019.1"
+            },
+            "ws": {
+              "version": "8.21.0",
+              "resolved": "https://registry.npmjs.org/ws/-/ws-8.21.0.tgz",
+              "overridden": false,
+              "dependencies": {
+                "bufferutil": {},
+                "utf-8-validate": {}
+              }
+            },
+            "youch": {
+              "version": "4.1.0-beta.10",
+              "resolved": "https://registry.npmjs.org/youch/-/youch-4.1.0-beta.10.tgz",
+              "overridden": false,
+              "dependencies": {
+                "@poppinss/colors": {
+                  "version": "4.1.6",
+                  "resolved": "https://registry.npmjs.org/@poppinss/colors/-/colors-4.1.6.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "kleur": {
+                      "version": "4.1.5",
+                      "resolved": "https://registry.npmjs.org/kleur/-/kleur-4.1.5.tgz",
+                      "overridden": false
+                    }
+                  }
+                },
+                "@poppinss/dumper": {
+                  "version": "0.6.5",
+                  "resolved": "https://registry.npmjs.org/@poppinss/dumper/-/dumper-0.6.5.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "@poppinss/colors": {
+                      "version": "4.1.6"
+                    },
+                    "@sindresorhus/is": {
+                      "version": "7.2.0",
+                      "resolved": "https://registry.npmjs.org/@sindresorhus/is/-/is-7.2.0.tgz",
+                      "overridden": false
+                    },
+                    "supports-color": {
+                      "version": "10.2.2",
+                      "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-10.2.2.tgz",
+                      "overridden": false
+                    }
+                  }
+                },
+                "@speed-highlight/core": {
+                  "version": "1.2.24",
+                  "resolved": "https://registry.npmjs.org/@speed-highlight/core/-/core-1.2.24.tgz",
+                  "overridden": false
+                },
+                "cookie": {
+                  "version": "1.1.1",
+                  "resolved": "https://registry.npmjs.org/cookie/-/cookie-1.1.1.tgz",
+                  "overridden": false
+                },
+                "youch-core": {
+                  "version": "0.3.3",
+                  "resolved": "https://registry.npmjs.org/youch-core/-/youch-core-0.3.3.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "@poppinss/exception": {
+                      "version": "1.2.3",
+                      "resolved": "https://registry.npmjs.org/@poppinss/exception/-/exception-1.2.3.tgz",
+                      "overridden": false
+                    },
+                    "error-stack-parser-es": {
+                      "version": "1.0.5",
+                      "resolved": "https://registry.npmjs.org/error-stack-parser-es/-/error-stack-parser-es-1.0.5.tgz",
+                      "overridden": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "path-to-regexp": {
+          "version": "6.3.0",
+          "resolved": "https://registry.npmjs.org/path-to-regexp/-/path-to-regexp-6.3.0.tgz",
+          "overridden": false
+        },
+        "unenv": {
+          "version": "2.0.0-rc.24",
+          "resolved": "https://registry.npmjs.org/unenv/-/unenv-2.0.0-rc.24.tgz",
+          "overridden": false,
+          "dependencies": {
+            "pathe": {
+              "version": "2.0.3",
+              "resolved": "https://registry.npmjs.org/pathe/-/pathe-2.0.3.tgz",
+              "overridden": false
+            }
+          }
+        },
+        "workerd": {
+          "version": "1.20261019.1",
+          "resolved": "https://registry.npmjs.org/workerd/-/workerd-1.20261019.1.tgz",
+          "overridden": false,
+          "dependencies": {
+            "@cloudflare/workerd-darwin-64": {},
+            "@cloudflare/workerd-darwin-arm64": {},
+            "@cloudflare/workerd-linux-64": {
+              "version": "1.20261019.1",
+              "resolved": "https://registry.npmjs.org/@cloudflare/workerd-linux-64/-/workerd-linux-64-1.20261019.1.tgz",
+              "overridden": false
+            },
+            "@cloudflare/workerd-linux-arm64": {},
+            "@cloudflare/workerd-windows-64": {}
+          }
+        }
+      }
+    }
+  }
+}

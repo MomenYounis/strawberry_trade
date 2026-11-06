@@ -1,0 +1,289 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@google-cloud/pubsub": {
+      "name": "@google-cloud/pubsub",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@opentelemetry/core"
+      ],
+      "effects": [
+        "firebase-tools"
+      ],
+      "range": "5.1.0 - 6.0.0",
+      "nodes": [
+        "node_modules/@google-cloud/pubsub"
+      ],
+      "fixAvailable": {
+        "name": "firebase-tools",
+        "version": "13.11.2",
+        "isSemVerMajor": true
+      }
+    },
+    "@opentelemetry/core": {
+      "name": "@opentelemetry/core",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1153174,
+          "name": "@opentelemetry/core",
+          "dependency": "@opentelemetry/core",
+          "title": "OpenTelemetry Core: Unbounded memory allocation in W3C Baggage propagation",
+          "url": "https://github.com/advisories/GHSA-8988-4f7v-96qf",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 5.3,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+          },
+          "range": "<2.8.0"
+        }
+      ],
+      "effects": [
+        "@google-cloud/pubsub"
+      ],
+      "range": "<2.8.0",
+      "nodes": [
+        "node_modules/@opentelemetry/core"
+      ],
+      "fixAvailable": {
+        "name": "firebase-tools",
+        "version": "13.11.2",
+        "isSemVerMajor": true
+      }
+    },
+    "archiver": {
+      "name": "archiver",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "archiver-utils",
+        "zip-stream"
+      ],
+      "effects": [],
+      "range": "7.0.0 - 7.0.1",
+      "nodes": [
+        "node_modules/archiver"
+      ],
+      "fixAvailable": true
+    },
+    "archiver-utils": {
+      "name": "archiver-utils",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "glob"
+      ],
+      "effects": [
+        "archiver",
+        "zip-stream"
+      ],
+      "range": ">=5.0.1",
+      "nodes": [
+        "node_modules/archiver-utils"
+      ],
+      "fixAvailable": true
+    },
+    "exegesis": {
+      "name": "exegesis",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "glob"
+      ],
+      "effects": [],
+      "range": ">=4.1.2",
+      "nodes": [
+        "node_modules/exegesis"
+      ],
+      "fixAvailable": true
+    },
+    "firebase-tools": {
+      "name": "firebase-tools",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@google-cloud/pubsub",
+        "archiver",
+        "exegesis",
+        "gaxios",
+        "glob"
+      ],
+      "effects": [],
+      "range": ">=13.11.3",
+      "nodes": [
+        "node_modules/firebase-tools"
+      ],
+      "fixAvailable": {
+        "name": "firebase-tools",
+        "version": "13.11.2",
+        "isSemVerMajor": true
+      }
+    },
+    "gaxios": {
+      "name": "gaxios",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "uuid"
+      ],
+      "effects": [
+        "firebase-tools"
+      ],
+      "range": "6.4.0 - 6.7.1",
+      "nodes": [
+        "node_modules/firebase-tools/node_modules/gaxios"
+      ],
+      "fixAvailable": {
+        "name": "firebase-tools",
+        "version": "13.11.2",
+        "isSemVerMajor": true
+      }
+    },
+    "glob": {
+      "name": "glob",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1244013,
+          "name": "glob",
+          "dependency": "glob",
+          "title": "Glob: AbortSignal cancellation bypass allows post-timeout filesystem traversal",
+          "url": "https://github.com/advisories/GHSA-3g3m-2fjr-6pw4",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-400"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=9.0.0 <=14.0.1"
+        },
+        "minimatch"
+      ],
+      "effects": [
+        "archiver-utils",
+        "exegesis",
+        "firebase-tools"
+      ],
+      "range": "9.0.0 - 14.0.1",
+      "nodes": [
+        "node_modules/glob"
+      ],
+      "fixAvailable": {
+        "name": "firebase-tools",
+        "version": "13.11.2",
+        "isSemVerMajor": true
+      }
+    },
+    "minimatch": {
+      "name": "minimatch",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1244623,
+          "name": "minimatch",
+          "dependency": "minimatch",
+          "title": "minimatch has potential denial of service via globparts amplification",
+          "url": "https://github.com/advisories/GHSA-g3hv-75wg-m249",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-405"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=7.0.0 <11.0.1"
+        }
+      ],
+      "effects": [
+        "glob"
+      ],
+      "range": "7.0.0 - 11.0.0",
+      "nodes": [
+        "node_modules/glob/node_modules/minimatch"
+      ],
+      "fixAvailable": {
+        "name": "firebase-tools",
+        "version": "13.11.2",
+        "isSemVerMajor": true
+      }
+    },
+    "uuid": {
+      "name": "uuid",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1119441,
+          "name": "uuid",
+          "dependency": "uuid",
+          "title": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+          "url": "https://github.com/advisories/GHSA-w5hq-g745-h8pq",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-787",
+            "CWE-1285"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+          },
+          "range": "<11.1.1"
+        }
+      ],
+      "effects": [
+        "gaxios"
+      ],
+      "range": "<11.1.1",
+      "nodes": [
+        "node_modules/uuid"
+      ],
+      "fixAvailable": {
+        "name": "firebase-tools",
+        "version": "13.11.2",
+        "isSemVerMajor": true
+      }
+    },
+    "zip-stream": {
+      "name": "zip-stream",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "archiver-utils"
+      ],
+      "effects": [],
+      "range": "6.0.0 - 6.0.1",
+      "nodes": [
+        "node_modules/zip-stream"
+      ],
+      "fixAvailable": true
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 11,
+      "high": 0,
+      "critical": 0,
+      "total": 11
+    },
+    "dependencies": {
+      "prod": 201,
+      "dev": 542,
+      "optional": 59,
+      "peer": 0,
+      "peerOptional": 0,
+      "total": 782
+    }
+  }
+}

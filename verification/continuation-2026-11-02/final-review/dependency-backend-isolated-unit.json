@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "workingDirectory": "/tmp/strawberry-runtime-dependency-review-zwf_ylsl/backend",
+  "startedAt": "2026-11-05T18:56:57.152553+00:00",
+  "finishedAt": "2026-11-05T18:57:08.885170+00:00",
+  "durationSeconds": 11.733,
+  "exitCode": 0,
+  "evidenceLog": "dependency-backend-isolated-unit.log"
+}

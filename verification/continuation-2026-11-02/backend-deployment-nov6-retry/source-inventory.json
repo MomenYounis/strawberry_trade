@@ -1,0 +1,102 @@
+[
+  {
+    "path": "backend/src/demo-operator.mjs",
+    "sha256": "3cc24f1772db47f81d87774ee6654b0f6b6907b4c3267ed9c3a6f05e75c6aa3e",
+    "bytes": 1224
+  },
+  {
+    "path": "backend/src/enrollment.mjs",
+    "sha256": "77c6fbbf4898607410cba6b6628aabe3cbacccea52baa2f5d6a11b66cdea7420",
+    "bytes": 10110
+  },
+  {
+    "path": "backend/src/gateway.mjs",
+    "sha256": "0f02bad93ccc58d7b14e79bce3ed1b30c2b58c8981e2cdae8db478f6965f870a",
+    "bytes": 37205
+  },
+  {
+    "path": "backend/src/http-gateway.mjs",
+    "sha256": "10350a6d84584fdec309b969b49296e642d9f9e504fa9548890b412334521a73",
+    "bytes": 7794
+  },
+  {
+    "path": "backend/src/issuer.mjs",
+    "sha256": "9d6ebc9e8765fad1e8d73d4151d9e412ec81f32f65c876e502e372ef3dd061f3",
+    "bytes": 5688
+  },
+  {
+    "path": "backend/src/validation.mjs",
+    "sha256": "921b874615e92a28159d1d994a390505eadf125ab8ee86b34ba1685974775c2f",
+    "bytes": 7357
+  },
+  {
+    "path": "backend/worker/compatibility.mjs",
+    "sha256": "5bd005f0f313d09178c9f2b1954814f303dcc18a80760fca8d318260e3a63507",
+    "bytes": 2703
+  },
+  {
+    "path": "backend/worker/emulator-firestore-auth.mjs",
+    "sha256": "fd3a635548928b658cda70583395224ebd8b6b7a88a1c08224f17289648aedf3",
+    "bytes": 679
+  },
+  {
+    "path": "backend/worker/index.mjs",
+    "sha256": "e26708ad724adf6cf341c73d3a96a775d73aacbde68b360857ff78bb3fd624ad",
+    "bytes": 1565
+  },
+  {
+    "path": "backend/worker/package-lock.json",
+    "sha256": "831aa09ce423c0250018aa4c32992b465217c7888ef9e502f2fa6e2e26ebd2ea",
+    "bytes": 116848
+  },
+  {
+    "path": "backend/worker/package.json",
+    "sha256": "0c6e1b05deaa60aaba92ce9229557ec3e926e2687741395fa2b48c2baf3e5952",
+    "bytes": 962
+  },
+  {
+    "path": "backend/worker/private-stream-debug.mjs",
+    "sha256": "9eb76ed66e736c75dc3e0d747cbb49a9354739f21bea9eb1317c0ea2c603fc36",
+    "bytes": 950
+  },
+  {
+    "path": "backend/worker/request-forward.mjs",
+    "sha256": "173c2655b2e9c1512d1daf8a20d967f22520b9ae157b4341e653209e66945464",
+    "bytes": 1350
+  },
+  {
+    "path": "backend/worker/runtime-config.mjs",
+    "sha256": "2eb69290b04e884171143aaab85ecda0e333d66b3f3d78d5ab78638c6f0967eb",
+    "bytes": 3709
+  },
+  {
+    "path": "backend/worker/runtime.mjs",
+    "sha256": "5b6723899d548623346c8fc9c0467198b09cc7c6f9e470c868045c232ddd8525",
+    "bytes": 2423
+  },
+  {
+    "path": "backend/worker/test/config.test.mjs",
+    "sha256": "07610c2dfa64d3228fb6018bcefe4358d47758dde68196acb20dfe7c6f1ff8eb",
+    "bytes": 3443
+  },
+  {
+    "path": "backend/worker/test/emulator-firestore-auth.test.mjs",
+    "sha256": "c61e901d89f393e4e86e759e19de8e20cde9f2dc88961d9028581a9631d2c0f0",
+    "bytes": 1239
+  },
+  {
+    "path": "backend/worker/test/request-forward.test.mjs",
+    "sha256": "7453f864ca1635167c74f3d33809b1c1e2a68b984d749afc974c1ecaad5d1951",
+    "bytes": 2214
+  },
+  {
+    "path": "backend/worker/wrangler.jsonc",
+    "sha256": "8a15d7b8e8ca9ebc974e538ee2c116849f8da0608e6a3a0a07ded700148c4c11",
+    "bytes": 1012
+  },
+  {
+    "path": "config/wrangler.production.json",
+    "sha256": "b309bf8d720db02c353ce639eacb10b5c06cdd77cc94706d6b4efdd7e0a53e99",
+    "bytes": 777
+  }
+]
