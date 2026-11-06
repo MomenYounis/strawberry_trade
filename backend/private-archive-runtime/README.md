@@ -53,4 +53,3 @@ and [atomic conditional PUT semantics](https://developers.cloudflare.com/r2/api/
 The adapter uses the official AWS SDK rather than implementing its own signing.
 AWS documents [request-handler bounds](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/node-configuring-maxsockets.html)
 and [retry/redirect behavior](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/migrate-client-constructors.html).
-

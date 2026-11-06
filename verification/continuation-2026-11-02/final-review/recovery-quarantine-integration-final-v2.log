@@ -1,0 +1,152 @@
+(node:123934) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+i  emulators: Starting emulators: auth, functions, firestore
+i  emulators: Detected demo project ID "demo-strawberry-flutter", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 9173.
+i  functions: Watching "/tmp/strawberry-synthetic-emulators-8Jtlth/functions" for Cloud Functions...
+✔  functions: Using node@22 from host.
+Serving at port 8411
+
+✔  functions: Loaded functions definitions from source: acceptInvitation, activateLicense, bootstrap, createEmployeeInvitation, getActiveSnapshot, listArchives, pullChanges, readActiveSnapshotPage, readArchiveRecord, readArchiveStatement, setMemberActive, syncOperation.
+✔  functions[europe-west1-acceptInvitation]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/acceptInvitation).
+✔  functions[europe-west1-activateLicense]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/activateLicense).
+✔  functions[europe-west1-bootstrap]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/bootstrap).
+✔  functions[europe-west1-createEmployeeInvitation]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/createEmployeeInvitation).
+✔  functions[europe-west1-getActiveSnapshot]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/getActiveSnapshot).
+✔  functions[europe-west1-listArchives]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/listArchives).
+✔  functions[europe-west1-pullChanges]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/pullChanges).
+✔  functions[europe-west1-readActiveSnapshotPage]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/readActiveSnapshotPage).
+✔  functions[europe-west1-readArchiveRecord]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/readArchiveRecord).
+✔  functions[europe-west1-readArchiveStatement]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/readArchiveStatement).
+✔  functions[europe-west1-setMemberActive]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/setMemberActive).
+✔  functions[europe-west1-syncOperation]: http function initialized (http://127.0.0.1:15101/demo-strawberry-flutter/europe-west1/syncOperation).
+i  Running script: node --test --test-concurrency=1 test/tenant-recovery.integration.test.mjs test/firestore-recovery-quarantine.integration.test.mjs
+TAP version 13
+# Subtest: fixed-time provider image recovers exact financial/receipt/lock/member state only into disabled demo quarantine
+ok 1 - fixed-time provider image recovers exact financial/receipt/lock/member state only into disabled demo quarantine
+  ---
+  duration_ms: 5922.013496
+  type: 'test'
+  ...
+# Subtest: process loss in the middle of an encrypted page resumes the exact prefix without reposting
+ok 2 - process loss in the middle of an encrypted page resumes the exact prefix without reposting
+  ---
+  duration_ms: 1360.563254
+  type: 'test'
+  ...
+# Subtest: actual SIGKILL after a committed partial page resumes with identical prior revisions and receipts
+ok 3 - actual SIGKILL after a committed partial page resumes with identical prior revisions and receipts
+  ---
+  duration_ms: 3509.385225
+  type: 'test'
+  ...
+# Subtest: root-only image is a complete disabled quarantine and hostile progress journals never advance
+ok 4 - root-only image is a complete disabled quarantine and hostile progress journals never advance
+  ---
+  duration_ms: 4312.887704
+  type: 'test'
+  ...
+# Subtest: byte-sized batches and competing restorers retain create-only progress without duplicate receipts
+ok 5 - byte-sized batches and competing restorers retain create-only progress without duplicate receipts
+  ---
+  duration_ms: 5344.327524
+  type: 'test'
+  ...
+# Subtest: explicit batch budget reports staging, resumes once and never pretends a partial image is verified
+ok 6 - explicit batch budget reports staging, resumes once and never pretends a partial image is verified
+  ---
+  duration_ms: 1329.503425
+  type: 'test'
+  ...
+# Subtest: wrong key, corrupted pages and an existing target refuse without overwrite or source/Auth mutation
+ok 7 - wrong key, corrupted pages and an existing target refuse without overwrite or source/Auth mutation
+  ---
+  duration_ms: 219.057346
+  type: 'test'
+  ...
+# Subtest: changed prefix, extra/orphan/nested target documents and verified-target tampering fail reconciliation
+ok 8 - changed prefix, extra/orphan/nested target documents and verified-target tampering fail reconciliation
+  ---
+  duration_ms: 6965.936424
+  type: 'test'
+  ...
+# Subtest: remote/different project endpoints reject before any SDK method or image access
+ok 9 - remote/different project endpoints reject before any SDK method or image access
+  ---
+  duration_ms: 4.059676
+  type: 'test'
+  ...
+# Subtest: encrypted dependency-complete image restores exact scoped state into disabled separate quarantine only
+ok 10 - encrypted dependency-complete image restores exact scoped state into disabled separate quarantine only
+  ---
+  duration_ms: 16886.801787
+  type: 'test'
+  ...
+# Subtest: crash after committed page and after final page resumes journal without duplicate creates
+ok 11 - crash after committed page and after final page resumes journal without duplicate creates
+  ---
+  duration_ms: 8419.418106
+  type: 'test'
+  ...
+# Subtest: wrong key/context, changed ciphertext and missing pages refuse and preserve source
+ok 12 - wrong key/context, changed ciphertext and missing pages refuse and preserve source
+  ---
+  duration_ms: 4335.314578
+  type: 'test'
+  ...
+# Subtest: preexisting target documents and altered journals/complete targets are never overwritten
+ok 13 - preexisting target documents and altered journals/complete targets are never overwritten
+  ---
+  duration_ms: 14030.53716
+  type: 'test'
+  ...
+# Subtest: unknown collections, nested metadata and unsupported Firestore types fail instead of being omitted
+ok 14 - unknown collections, nested metadata and unsupported Firestore types fail instead of being omitted
+  ---
+  duration_ms: 102.903811
+  type: 'test'
+  ...
+# Subtest: source changes during export leave only unreferenced encrypted pages and no accepted manifest
+ok 15 - source changes during export leave only unreferenced encrypted pages and no accepted manifest
+  ---
+  duration_ms: 5599.879671
+  type: 'test'
+  ...
+# Subtest: production, remote endpoints, unbranded sources and cloned manifests are refused before activation
+ok 16 - production, remote endpoints, unbranded sources and cloned manifests are refused before activation
+  ---
+  duration_ms: 4487.990443
+  type: 'test'
+  ...
+# Subtest: racing restorers serialize create-only progress and retain one copy of every receipt
+ok 17 - racing restorers serialize create-only progress and retain one copy of every receipt
+  ---
+  duration_ms: 11053.067514
+  type: 'test'
+  ...
+# Subtest: a changed authenticated-manifest body and byte/record limits cannot become accepted recovery evidence
+ok 18 - a changed authenticated-manifest body and byte/record limits cannot become accepted recovery evidence
+  ---
+  duration_ms: 4801.350177
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 101635.159136
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  functions: Stopping Functions Emulator
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  eventarc: Stopping Eventarc Emulator
+i  tasks: Stopping Cloud Tasks Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

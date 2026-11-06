@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "reviewedAt": "2026-11-05T19:00:46.402053+00:00",
+  "scope": "Provider-shaped local capture plus dedicated demo quarantine; no provider consistency/durability/activation acceptance. PASS counts overlap earlier synthetic recovery results.",
+  "testCounts": {
+    "tests": 18,
+    "pass": 18,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "checks": {
+    "integrationStatus": "PASS",
+    "sourceUnchanged": true,
+    "expectedCounts": true,
+    "actualSigkillProofPassed": true,
+    "existingSyntheticImporterUnchanged": true,
+    "missingLocalLinks": [],
+    "trailingWhitespace": [],
+    "privatePemMarkersInFinalLog": []
+  },
+  "sourceAndDocsSha256": {
+    "backend/src/firestore-recovery-quarantine.mjs": "bad2c8d8c15d9ad4b5c0c598264873e753941af63744f40ff94fedb37c32cae9",
+    "backend/test/firestore-recovery-quarantine.integration.test.mjs": "ad07c41d57772f5b7dab6124dff5d23afcc950e582671719af085a2f6e78a8a0",
+    "backend/scripts/test-tenant-recovery-emulators.mjs": "4c00b14ee2c1e36d62b53d3d80ef22af4fb023bb83b3232463700fe642fd7bb3",
+    "docs/server-recovery-capture.md": "83f2e0e99e6af9a77871adda412a10316239f776ba288ae177671d4ef0eb1cbf",
+    "docs/annual-backend-local-verification.md": "ab3e3fdfdd5a415cadc4fa0a7f39b04a712b293110ac8454b7de867064ffbc53"
+  },
+  "historicalDiagnosticFailures": [
+    "recovery-quarantine-integration-final.log",
+    "recovery-quarantine-integration-reviewed.log"
+  ],
+  "dependencyLockDuringTestSha256": "26c8c6266bbdb989f2c5444ef8acb950f1e97c0ae001727ea5978713826aa7f5"
+}

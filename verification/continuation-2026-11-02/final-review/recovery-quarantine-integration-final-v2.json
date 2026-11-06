@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "startedAt": "2026-11-05T18:57:57.975155+00:00",
+  "completedAt": "2026-11-05T19:00:05.842084+00:00",
+  "command": "node scripts/test-tenant-recovery-emulators.mjs",
+  "cwd": "/home/younis/strawberry-trade-annual-review/backend",
+  "exitCode": 0,
+  "sourceUnchanged": true,
+  "log": "verification/continuation-2026-11-02/final-review/recovery-quarantine-integration-final-v2.log",
+  "logSha256": "0ae23fa12800372d893a7263117094598f03e9dcf7ce626857dbe5f50ecc91dd",
+  "sourceSha256": {
+    "backend/src/firestore-recovery-quarantine.mjs": "bad2c8d8c15d9ad4b5c0c598264873e753941af63744f40ff94fedb37c32cae9",
+    "backend/test/firestore-recovery-quarantine.integration.test.mjs": "ad07c41d57772f5b7dab6124dff5d23afcc950e582671719af085a2f6e78a8a0",
+    "backend/scripts/test-tenant-recovery-emulators.mjs": "4c00b14ee2c1e36d62b53d3d80ef22af4fb023bb83b3232463700fe642fd7bb3",
+    "backend/src/firestore-recovery-source.mjs": "8da4c7088a9230a52fd97f9e9135b691e6e756e79dc5dc965a40256ca4bebe9a",
+    "backend/src/firestore-recovery-image.mjs": "a1e00b1f3b3557832194e471b9c67ba3f5a695ce772b9bd0ebe305e6c65d9a82",
+    "backend/src/recovery-dependency-plan.mjs": "ec9be410b6cdeb7015b80df35b6da1988faea8a73d00c498e8714e120b38c836"
+  },
+  "sourceAfterSha256": {
+    "backend/src/firestore-recovery-quarantine.mjs": "bad2c8d8c15d9ad4b5c0c598264873e753941af63744f40ff94fedb37c32cae9",
+    "backend/test/firestore-recovery-quarantine.integration.test.mjs": "ad07c41d57772f5b7dab6124dff5d23afcc950e582671719af085a2f6e78a8a0",
+    "backend/scripts/test-tenant-recovery-emulators.mjs": "4c00b14ee2c1e36d62b53d3d80ef22af4fb023bb83b3232463700fe642fd7bb3",
+    "backend/src/firestore-recovery-source.mjs": "8da4c7088a9230a52fd97f9e9135b691e6e756e79dc5dc965a40256ca4bebe9a",
+    "backend/src/firestore-recovery-image.mjs": "a1e00b1f3b3557832194e471b9c67ba3f5a695ce772b9bd0ebe305e6c65d9a82",
+    "backend/src/recovery-dependency-plan.mjs": "ec9be410b6cdeb7015b80df35b6da1988faea8a73d00c498e8714e120b38c836"
+  },
+  "scope": "Synthetic demo Auth/Firestore emulators only; provider-shaped capture source is a local HTTP fixture. No real provider acceptance, Auth restore or production activation."
+}
