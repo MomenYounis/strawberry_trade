@@ -1,0 +1,5 @@
+Analyzing strawberry-trade-annual-review...                     
+
+warning • The '!' will have no effect because the receiver can't be null. Try removing the '!' operator • integration_test/native_annual_scale_test.dart:526:36 • unnecessary_non_null_assertion
+
+1 issue found. (ran in 9.9s)

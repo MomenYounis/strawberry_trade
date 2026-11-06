@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "beforeSha256": "bd7764eb609c012724c25bacfb1169706c60ec4725cdf1789971500b7036fef1",
+  "afterTestSha256": "5e56b4539757342b91aeaac0551ebc1dfdfe64ab0f2567414d15dd399c1871e4",
+  "restoredSha256": "bd7764eb609c012724c25bacfb1169706c60ec4725cdf1789971500b7036fef1",
+  "preservedMode": "0o755",
+  "scope": "Known generated test PDF only"
+}

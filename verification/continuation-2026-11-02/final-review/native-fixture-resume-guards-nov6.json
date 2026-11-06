@@ -1,0 +1,51 @@
+{
+  "status": "PASS",
+  "startedAtUtc": "2026-11-06T19:34:24.346069+00:00",
+  "syntheticHostOnly": true,
+  "deviceCalls": false,
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "tools/annual-review/native_device_guards.test.py"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/annual-review/native_fixture_signing.test.py"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/annual-review/native_network_isolation.test.py"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/annual-review/prepare-legacy-native.test.py"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/annual-review/release_build_validation.test.py"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "sourceHashes": {
+    "integration_test/native_annual_scale_test.dart": "819b097253710f4ee7e26ca0da5966b0ea88747682aa2782bc6f1ef866911cb2",
+    "tools/annual-review/launch-native-drive.py": "3964ddc13adc8e2344a152e670b5aefceef8cc98a72cc21bb82b8cbc06f1fc9c",
+    "tools/annual-review/native-commercial-device.py": "cf373fd5362e8c4895bfb1c1af51820ad9a212c29c54f10a48380bdacb95f6fa",
+    "tools/annual-review/native_fixture_signing.py": "ed8885c79219e9a3974ab5741100fd670d924d702f88540ae12bee2cbe696653",
+    "tools/annual-review/sign-native-fixture.py": "541ed89d88960d36120550d3a23075e794ca1d209dec9c3725f61dcd694ffbdb"
+  },
+  "finishedAtUtc": "2026-11-06T19:34:28.739935+00:00"
+}

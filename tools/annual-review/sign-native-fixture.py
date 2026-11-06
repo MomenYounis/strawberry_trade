@@ -11,7 +11,7 @@ import pathlib
 import re
 import subprocess
 import sys
-from native_fixture_signing import LEGACY_PHASES, check_badging, check_kernel, file_sha256, fixture_input
+from native_fixture_signing import LEGACY_PHASES, check_annual_campaign, check_badging, check_kernel, file_sha256, fixture_input
 
 root = pathlib.Path(__file__).resolve().parents[2]
 parser = argparse.ArgumentParser()
@@ -19,7 +19,10 @@ parser.add_argument('phase', choices=['seed-v2', 'verify', 'recovery-seed', 'rec
 parser.add_argument('--evidence-dir', default='verification/annual-2026-11-02/native')
 parser.add_argument('--source-folder', type=pathlib.Path)
 parser.add_argument('--input-apk', type=pathlib.Path)
+parser.add_argument('--annual-campaign', help='Exact NATIVE_ANNUAL_CAMPAIGN used for an annual DEBUG build')
 args = parser.parse_args()
+if args.annual_campaign is not None and args.phase != 'annual':
+    parser.error('--annual-campaign is only supported for the annual fixture')
 out = (root / args.evidence_dir).resolve()
 if not out.is_relative_to(root / 'verification'):
     raise SystemExit('verification-output-required')
@@ -43,6 +46,8 @@ try:
             result['sourceCommit'] = provenance['sourceOrigin']['revision']
     input_sha256 = file_sha256(source)
     check_kernel(source, args.phase)
+    if args.phase == 'annual':
+        result.update(check_annual_campaign(source, args.annual_campaign or 'v12'))
     env = os.environ.copy()
     env['JAVA_HOME'] = '/usr/lib/jvm/java-17-temurin-jdk'
     env['PATH'] = env['JAVA_HOME'] + '/bin:' + env['PATH']

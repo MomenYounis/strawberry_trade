@@ -1,0 +1,250 @@
+00:00 +0: loading /home/younis/strawberry-trade-annual-review/test/controller_test.dart
+00:00 +0: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (setUpAll)
+00:00 +1: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (setUpAll)
+00:00 +2: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (setUpAll)
+00:00 +3: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (setUpAll)
+00:00 +3: /home/younis/strawberry-trade-annual-review/test/domain_test.dart: Period statements and cash preserve historical facts and dated corrections
+00:00 +4: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +5: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +6: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +7: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +8: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +9: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +10: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +11: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +12: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +13: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +14: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +15: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +16: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +17: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +18: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +19: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +20: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: failed transmission preserves stable payload and retry metadata across disk reopen
+00:00 +21: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: overlapping synchronization triggers use one sender and acknowledge once
+00:00 +22: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: late acknowledgment after sign-out cannot modify another tenant with the same operation ID
+00:00 +23: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: disposing during a delayed send preserves the pending disk operation and ignores its late acknowledgment
+00:00 +24: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: known expiry retains the queue and renewal sends the original operation exactly once
+00:01 +25: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: explicit Auth account disable also clears cached data and invalidates stale storage access
+00:01 +26: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: ordinary auth-token expiry preserves offline authority and the original queued operation
+00:01 +27: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: a server authorization denial blocks the retained operation using its machine reason
+00:01 +28: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: unsupported authenticated bootstrap preserves the untouched durable queue before any send
+00:01 +29: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: server protocol upgrade refusal blocks original bytes and resumes the same ID only after compatible retry
+00:01 +30: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: renewal automatically resumes a server-expiry block with the preserved operation ID
+00:01 +31: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: a timed-out acknowledgment retains the same ID and clears only on a valid retry response
+00:02 +32: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: an unrecognized send response cannot acknowledge and discard a durable operation
+00:02 +33: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: a signed live revocation clears exposed data and invalidates stale store handles without deleting the queue
+00:02 +34: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: closed-period staging is retained across reopen and excluded from financial reports
+00:02 +35: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: held historical salary evidence stays durable without changing active obligations
+00:02 +36: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: normal synchronization delivers the manager reason for a prospective salary correction
+00:02 +37: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: malformed and history-floor pages preserve cursor and unsent work
+00:02 +38: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: bounded paging does not label unfinished history as synchronized
+00:03 +39: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: signed-session snapshot recovery retains a deferred queued ID and applies only post-checkpoint deltas
+00:04 +40: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: snapshot recovery downloads at most sixteen pages and resumes across a fresh signed bootstrap epoch
+00:04 +41: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: snapshot page response after sign-out cannot install into either account
+00:04 +42: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: wrong snapshot response epoch or page digest preserves active cursor and retry work
+00:04 +43: /home/younis/strawberry-trade-annual-review/test/controller_test.dart: (tearDownAll)
+00:09 +43: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +44: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +45: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +46: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +47: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:09 +48: /home/younis/strawberry-trade-annual-review/test/employee_onboarding_widget_test.dart: new employee confirms email before any invitation acceptance
+00:12 +49: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:12 +50: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:13 +51: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:13 +52: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:14 +53: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:14 +54: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:14 +55: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:14 +56: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:14 +57: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: Arabic PDF uses bundled fonts offline and paginates a long ledger
+00:14 +58: /home/younis/strawberry-trade-annual-review/test/exports_test.dart: CSV has Arabic headers and prevents spreadsheet formula injection
+00:15 +59: /home/younis/strawberry-trade-annual-review/test/gateway_enrollment_test.dart: employee account errors explain the enrollment state to its manager
+00:15 +60: /home/younis/strawberry-trade-annual-review/test/gateway_enrollment_test.dart: Invitation device proof matches canonical server contract and binds every enrollment scope
+00:15 +61: /home/younis/strawberry-trade-annual-review/test/license_test.dart: (setUpAll)
+00:15 +61: /home/younis/strawberry-trade-annual-review/test/license_test.dart: canonical JSON rejects signed minimum and unsafe integers
+00:15 +62: /home/younis/strawberry-trade-annual-review/test/license_test.dart: Node issuer fixture verifies in Dart; fixture trust is explicitly supplied only by test
+00:15 +63: /home/younis/strawberry-trade-annual-review/test/license_test.dart: wrong tenant, user and installation are denied
+00:15 +64: /home/younis/strawberry-trade-annual-review/test/license_test.dart: tampered bytes and unknown issuer cannot grant activation
+00:15 +65: /home/younis/strawberry-trade-annual-review/test/license_test.dart: issuer-signed malformed trial or mismatched entitlement is still invalid
+00:15 +66: /home/younis/strawberry-trade-annual-review/test/license_test.dart: canonical signature format rejects padding and noncanonical JSON
+00:15 +67: /home/younis/strawberry-trade-annual-review/test/license_test.dart: employee joining day29 inherits original tenant expiration to exact millisecond
+00:15 +68: /home/younis/strawberry-trade-annual-review/test/license_test.dart: offline app reopening keeps entitlement, clock and no daily lease
+00:15 +69: /home/younis/strawberry-trade-annual-review/test/license_test.dart: re-imported package cannot rewind clock; expiry lock survives process restart
+00:15 +70: /home/younis/strawberry-trade-annual-review/test/license_test.dart: lower epoch and changed same-epoch payloads are denied; renewal resumes
+00:15 +71: /home/younis/strawberry-trade-annual-review/test/license_test.dart: disabled employee remains separate from active business entitlement
+00:15 +72: /home/younis/strawberry-trade-annual-review/test/license_test.dart: failed secure persistence does not report activation success
+00:15 +73: /home/younis/strawberry-trade-annual-review/test/license_test.dart: concurrent old check and renewal serialize without restoring an old package
+00:15 +74: /home/younis/strawberry-trade-annual-review/test/preference_backup_test.dart: Backup restores only scoped non-authority preferences and never a sync cursor or entitlement
+00:16 +75: /home/younis/strawberry-trade-annual-review/test/preference_backup_test.dart: Backup restores only scoped non-authority preferences and never a sync cursor or entitlement
+00:16 +76: /home/younis/strawberry-trade-annual-review/test/preference_backup_test.dart: Backup restores only scoped non-authority preferences and never a sync cursor or entitlement
+00:16 +77: /home/younis/strawberry-trade-annual-review/test/preference_backup_test.dart: Backup restores only scoped non-authority preferences and never a sync cursor or entitlement
+00:16 +78: /home/younis/strawberry-trade-annual-review/test/license_test.dart: paid activation survives restart and redeems before stale trial bootstrap import
+00:16 +79: /home/younis/strawberry-trade-annual-review/test/license_test.dart: activation disconnect retains signed pending package and local entitlement
+00:16 +80: /home/younis/strawberry-trade-annual-review/test/license_test.dart: signed disable from older server entitlement overrides unredeemed paid package
+00:16 +81: /home/younis/strawberry-trade-annual-review/test/license_test.dart: employee offline renewal keeps authentic newer entitlement until manager redeems
+00:16 +82: /home/younis/strawberry-trade-annual-review/test/license_test.dart: live signed role change locks the old local store before any activation or ledger sync
+00:16 +83: /home/younis/strawberry-trade-annual-review/test/license_test.dart: an older redemption cannot clear a newer package imported while activation is in flight
+00:16 +84: /home/younis/strawberry-trade-annual-review/test/license_test.dart: trusted monotonic time timezone and wall-clock changes do not change elapsed validity inside boot
+00:16 +85: /home/younis/strawberry-trade-annual-review/test/license_test.dart: trusted monotonic time sane restart carries accepted elapsed wall time forward
+00:16 +86: /home/younis/strawberry-trade-annual-review/test/license_test.dart: trusted monotonic time rollback after reboot and missing boot counter require trusted time
+00:16 +87: /home/younis/strawberry-trade-annual-review/test/license_test.dart: trusted monotonic time rollback in same boot stays detectable if user reboots
+00:16 +88: /home/younis/strawberry-trade-annual-review/test/license_test.dart: trusted monotonic time replayed signed timestamp cannot repair rollback; a new signed response can
+00:16 +89: /home/younis/strawberry-trade-annual-review/test/license_test.dart: trusted monotonic time fresh trusted reboot recovery preserves an equal or later high-water mark
+00:16 +90: /home/younis/strawberry-trade-annual-review/test/license_test.dart: (tearDownAll)
+00:16 +90: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: (setUpAll)
+00:16 +90: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A remote page validates dependencies from earlier events and notifies once after commit
+00:17 +91: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: Invalid last event or cross-tenant event rolls back the entire page and its audit
+00:17 +92: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: Revocation arriving after the last batch audit still rolls the complete page back before commit
+00:17 +93: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: Employee page cannot partly import a directory before forbidden financial data
+00:17 +94: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: Batch duplicate and immutable conflict handling preserve the original ledger and queue IDs
+00:17 +95: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page validates with indexed dependencies and causes one complete UI snapshot
+00:17 +96: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page validates with indexed dependencies and causes one complete UI snapshot
+00:17 +97: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page validates with indexed dependencies and causes one complete UI snapshot
+00:17 +98: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page validates with indexed dependencies and causes one complete UI snapshot
+00:17 +99: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page validates with indexed dependencies and causes one complete UI snapshot
+00:17 +100: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page validates with indexed dependencies and causes one complete UI snapshot
+00:20 +101: /home/younis/strawberry-trade-annual-review/test/remote_batch_test.dart: A 500-event page validates with indexed dependencies and causes one complete UI snapshot
+REMOTE_PAGE_VERIFICATION {"individual":{"milliseconds":4671,"completeEntryScans":500,"allQueryCalls":4000,"uiRefreshCalls":500,"events":500},"batch":{"milliseconds":612,"completeEntryScans":1,"allQueryCalls":507,"uiRefreshCalls":1,"events":500}}
+00:22 +102: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:22 +103: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:23 +104: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:23 +105: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:23 +106: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +107: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +108: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +109: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +110: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +111: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +112: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +113: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +114: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +115: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +116: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +117: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +118: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +119: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +120: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +121: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +122: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +123: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +124: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +125: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:24 +126: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:25 +127: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:25 +128: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:25 +129: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:28 +130: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:28 +131: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:29 +132: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:30 +133: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:31 +134: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:32 +135: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:32 +136: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:32 +137: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:33 +138: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:34 +139: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:35 +140: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:36 +141: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:36 +142: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:36 +143: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:36 +144: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+00:36 +145: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Ten seasons and 10000 immutable facts remain queryable with stable pending IDs after disk reopen
+STORAGE_SCALE_VERIFICATION {"entryCount":10000,"partyCount":20,"seasons":10,"validatedImportMs":14785,"reopenMs":3,"read10000Ms":422,"historicalPaginationMs":74,"accountSearchAndStatementMs":17,"fileBytes":8134656}
+00:37 +146: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: Actual SQLITE_FULL rolls back financial and queue writes and preserves saved drafts through reopen
+SQLITE_FULL_VERIFICATION {"resultCode":13,"pageLimit":128,"pageSize":1024,"fileBytes":131072,"pressureRows":77,"recoverySucceeded":true}
+00:37 +147: /home/younis/strawberry-trade-annual-review/test/scale_storage_test.dart: (tearDownAll)
+00:37 +147: /home/younis/strawberry-trade-annual-review/test/annual_financial_reference_test.dart: two year boundaries conserve receivable/payable and separate recorded cash
+00:37 +148: /home/younis/strawberry-trade-annual-review/test/annual_financial_reference_test.dart: signed advances and current-period reversal never rewrite prior close
+00:38 +149: /home/younis/strawberry-trade-annual-review/test/archive_reader_test.dart: repeated read-only record parsing/export has no financial posting
+00:38 +150: /home/younis/strawberry-trade-annual-review/test/archive_reader_test.dart: wrong tenant, year, id and writable record fail closed
+00:38 +151: /home/younis/strawberry-trade-annual-review/test/archive_reader_test.dart: bounded scan resumes only on a strictly advancing chunk cursor
+00:38 +152: /home/younis/strawberry-trade-annual-review/test/archive_reader_test.dart: archive catalogue pages move towards older years without repeats
+00:38 +153: /home/younis/strawberry-trade-annual-review/test/archive_reader_test.dart: CSV distinguishes trusted original business date from posting date
+00:38 +154: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +155: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +156: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +157: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +158: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +159: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +160: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +161: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +162: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +163: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +164: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +165: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +166: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +167: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +168: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +169: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:39 +170: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:40 +171: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: manager can read and repeat a validated archived party statement
+00:40 +172: /home/younis/strawberry-trade-annual-review/test/archive_screen_test.dart: revocation removes cached archive state and ignores a pending response
+00:40 +173: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: (setUpAll)
+00:40 +173: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: interrupted any-order staging survives reopen and leaves active readers unchanged until atomic install
+00:41 +174: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: queued accepted IDs, provisional facts, retries, drafts and conflicts survive byte-for-byte
+00:41 +175: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: immutable collision aborts every installed row and cursor without adding conflicts or touching staging
+00:41 +176: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: last invalid accounting event rolls back dependencies and cursor
+00:41 +177: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: scope, epoch and authenticated header digest are required for all stages and install
+00:41 +178: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: fresh epoch-bound header resumes matching content without copying unverified or other-scope bytes
+00:41 +179: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: page tamper, immutable page/header replacement, descriptor digest and duplicate records reject
+00:41 +180: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: cross-page order and duplicate authoritative sequence reject before any active write
+00:41 +181: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: employee snapshot stores only sanitized directory and own submissions
+00:41 +182: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: persisted page corruption and revoked store abort install without active changes
+00:41 +183: /home/younis/strawberry-trade-annual-review/test/archive_statement_exports_test.dart: CSV exports authoritative role controls and signed running balances without posting references
+00:41 +184: /home/younis/strawberry-trade-annual-review/test/archive_statement_exports_test.dart: CSV exports authoritative role controls and signed running balances without posting references
+00:41 +185: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: 20001 records install with bounded staging and interruption rolls back ledger and cursor
+00:41 +186: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: 20001 records install with bounded staging and interruption rolls back ledger and cursor
+00:41 +187: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: 20001 records install with bounded staging and interruption rolls back ledger and cursor
+00:42 +188: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: 20001 records install with bounded staging and interruption rolls back ledger and cursor
+00:42 +189: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: 20001 records install with bounded staging and interruption rolls back ledger and cursor
+00:44 +190: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: 20001 records install with bounded staging and interruption rolls back ledger and cursor
+00:44 +191: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: 20001 records install with bounded staging and interruption rolls back ledger and cursor
+00:50 +192: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: 20001 records install with bounded staging and interruption rolls back ledger and cursor
+00:53 +193: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: 20001 records install with bounded staging and interruption rolls back ledger and cursor
+00:53 +194: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: 20001 records install with bounded staging and interruption rolls back ledger and cursor
+00:53 +195: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: 20001 records install with bounded staging and interruption rolls back ledger and cursor
+00:53 +196: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: 20001 records install with bounded staging and interruption rolls back ledger and cursor
+00:57 +197: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: 20001 records install with bounded staging and interruption rolls back ledger and cursor
+01:01 +198: /home/younis/strawberry-trade-annual-review/test/recovery_backup_test.dart: wrong phrase, tampering and unbounded KDF parameters fail before restore
+01:01 +199: /home/younis/strawberry-trade-annual-review/test/recovery_backup_test.dart: wrong phrase, tampering and unbounded KDF parameters fail before restore
+01:01 +200: /home/younis/strawberry-trade-annual-review/test/recovery_backup_test.dart: wrong phrase, tampering and unbounded KDF parameters fail before restore
+01:01 +201: /home/younis/strawberry-trade-annual-review/test/recovery_backup_test.dart: wrong phrase, tampering and unbounded KDF parameters fail before restore
+01:01 +202: /home/younis/strawberry-trade-annual-review/test/recovery_backup_test.dart: wrong phrase, tampering and unbounded KDF parameters fail before restore
+01:01 +203: /home/younis/strawberry-trade-annual-review/test/recovery_backup_test.dart: wrong phrase, tampering and unbounded KDF parameters fail before restore
+01:01 +204: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: abandoned staging eviction is oldest-first, epoch-fenced and leaves current transfer, ledger and outbox intact
+01:01 +205: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: failed page rebinding retains previous staged bytes atomically
+01:01 +206: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: installed proof survives cache reclamation and fresh epoch binding; proof history and download bytes stay bounded
+01:01 +207: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: header-write failure rolls back abandoned-cache eviction in the same transaction
+01:01 +208: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: older epoch cannot retire newer installed proof even with a higher checkpoint
+01:01 +209: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: (tearDownAll)
+01:02 +209: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: (setUpAll)
+01:02 +209: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:04 +210: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:23 +211: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:25 +212: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:27 +213: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:27 +214: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:27 +215: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:28 +216: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:28 +217: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:28 +218: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:29 +219: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:29 +220: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:29 +221: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:29 +222: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:31 +223: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:32 +224: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:32 +225: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:32 +226: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:33 +227: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:34 +228: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:34 +229: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:36 +230: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:36 +231: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:36 +232: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:36 +233: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+01:36 +234: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: 73000 annual financial facts, interrupted install and 10 percent growth reconcile without full projection loading
+04:26 +235: /home/younis/strawberry-trade-annual-review/test/snapshot_annual_scale_test.dart: (tearDownAll)
+04:26 +235: All tests passed!

@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "command": [
+    "/home/younis/flutter/bin/flutter",
+    "test",
+    "--no-pub",
+    "--concurrency=2"
+  ],
+  "startedAtUtc": "2026-11-06T12:17:32.882175+00:00",
+  "baseRevision": "6383b1a52fc42cd2c8753fa0c6700c55fe29582b",
+  "ledgerStoreSha256": "cd8bb83e3abff2b00951011946b1be128eed2a8226328252740a4b3d97607b62",
+  "overlappingSuitesNotSummed": true,
+  "exitCode": 0,
+  "finishedAtUtc": "2026-11-06T12:22:05.693956+00:00",
+  "sourceUnchanged": true,
+  "testsPassed": 235
+}

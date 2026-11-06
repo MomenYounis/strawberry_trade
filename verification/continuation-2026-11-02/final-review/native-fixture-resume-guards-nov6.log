@@ -1,0 +1,60 @@
+test_exact_rules_repair_late_hooks_before_network_enable_for_both_families (__main__.CommercialNetworkGuardsTest.test_exact_rules_repair_late_hooks_before_network_enable_for_both_families) ... ok
+test_extra_chain_rule_in_either_family_keeps_network_disabled (__main__.CommercialNetworkGuardsTest.test_extra_chain_rule_in_either_family_keeps_network_disabled) ... ok
+test_hook_insertion_not_confirmed_keeps_network_disabled (__main__.CommercialNetworkGuardsTest.test_hook_insertion_not_confirmed_keeps_network_disabled) ... ok
+test_unconfirmed_offline_fails_before_root_and_network_enable (__main__.CommercialNetworkGuardsTest.test_unconfirmed_offline_fails_before_root_and_network_enable) ... ok
+test_atomic_receipt_never_replaces_existing_evidence (__main__.DetachedLaunchGuardsTest.test_atomic_receipt_never_replaces_existing_evidence) ... ok
+test_detached_child_only_runs_after_receipt_and_holds_lock_until_exit (__main__.DetachedLaunchGuardsTest.test_detached_child_only_runs_after_receipt_and_holds_lock_until_exit) ... ok
+test_failed_receipt_publication_closes_gate_before_any_child_action (__main__.DetachedLaunchGuardsTest.test_failed_receipt_publication_closes_gate_before_any_child_action) ... ok
+test_historical_running_drive_requires_exact_arguments_and_live_process (__main__.DetachedLaunchGuardsTest.test_historical_running_drive_requires_exact_arguments_and_live_process) ... ok
+test_unrelated_inhibitor_or_incomplete_receipts_do_not_block_a_device (__main__.DetachedLaunchGuardsTest.test_unrelated_inhibitor_or_incomplete_receipts_do_not_block_a_device) ... ok
+test_actual_signature_and_debug_package_must_match_receipt (__main__.NativeDeviceGuardsTest.test_actual_signature_and_debug_package_must_match_receipt) ... ok
+test_annual_result_path_is_bound_to_safe_campaign_and_label_requires_its_phase (__main__.NativeDeviceGuardsTest.test_annual_result_path_is_bound_to_safe_campaign_and_label_requires_its_phase) ... ok
+test_installed_proof_hashes_only_single_safe_base_apk_and_reads_actual_version (__main__.NativeDeviceGuardsTest.test_installed_proof_hashes_only_single_safe_base_apk_and_reads_actual_version) ... ok
+test_installed_split_unsafe_path_wrong_digest_or_version_fail_closed (__main__.NativeDeviceGuardsTest.test_installed_split_unsafe_path_wrong_digest_or_version_fail_closed) ... ok
+test_non_test_wrong_certificate_and_bad_version_receipts_fail_before_tools (__main__.NativeDeviceGuardsTest.test_non_test_wrong_certificate_and_bad_version_receipts_fail_before_tools) ... ok
+test_receipt_and_artifact_symlinks_or_outside_verification_are_refused (__main__.NativeDeviceGuardsTest.test_receipt_and_artifact_symlinks_or_outside_verification_are_refused) ... ok
+test_receipt_requires_exact_artifact_and_independent_certificate_package_checks (__main__.NativeDeviceGuardsTest.test_receipt_requires_exact_artifact_and_independent_certificate_package_checks) ... ok
+test_runtime_guard_binds_exact_name_path_serial_and_process_port (__main__.NativeDeviceGuardsTest.test_runtime_guard_binds_exact_name_path_serial_and_process_port) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.291s
+
+OK
+test_annual_campaign_is_bounded_and_bound_to_actual_kernel_constant (__main__.NativeFixtureSigningInputTest.test_annual_campaign_is_bounded_and_bound_to_actual_kernel_constant) ... ok
+test_badging_requires_existing_package_debuggable_and_exact_version (__main__.NativeFixtureSigningInputTest.test_badging_requires_existing_package_debuggable_and_exact_version) ... ok
+test_existing_phases_retain_their_exact_entrypoint_markers (__main__.NativeFixtureSigningInputTest.test_existing_phases_retain_their_exact_entrypoint_markers) ... ok
+test_historical_clients_require_a_verified_private_source_folder (__main__.NativeFixtureSigningInputTest.test_historical_clients_require_a_verified_private_source_folder) ... ok
+test_historical_provenance_and_exact_build_output_are_enforced (__main__.NativeFixtureSigningInputTest.test_historical_provenance_and_exact_build_output_are_enforced) ... ok
+test_kernel_marker_scanning_handles_chunk_boundaries_and_refuses_other_targets (__main__.NativeFixtureSigningInputTest.test_kernel_marker_scanning_handles_chunk_boundaries_and_refuses_other_targets) ... ok
+test_ordinary_phases_cannot_sign_an_external_apk (__main__.NativeFixtureSigningInputTest.test_ordinary_phases_cannot_sign_an_external_apk) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.531s
+
+OK
+test_already_first_hook_is_verified_without_duplicate (__main__.IsolationTest.test_already_first_hook_is_verified_without_duplicate) ... ok
+test_existing_chain_without_hook_is_repaired_for_both_protocols (__main__.IsolationTest.test_existing_chain_without_hook_is_repaired_for_both_protocols) ... ok
+test_existing_late_hook_is_promoted_before_any_allow_rule (__main__.IsolationTest.test_existing_late_hook_is_promoted_before_any_allow_rule) ... ok
+test_unconfirmed_hook_fails_closed (__main__.IsolationTest.test_unconfirmed_hook_fails_closed) ... ok
+test_unexpected_chain_rules_fail_before_any_hook_is_published (__main__.IsolationTest.test_unexpected_chain_rules_fail_before_any_hook_is_published) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.005s
+
+OK
+test_changed_library_cannot_be_hidden_by_rewriting_its_manifest (__main__.LegacySourcePreparationTest.test_changed_library_cannot_be_hidden_by_rewriting_its_manifest) ... ok
+test_delivered_v9_is_distinct_from_later_git_baseline (__main__.LegacySourcePreparationTest.test_delivered_v9_is_distinct_from_later_git_baseline) ... ok
+test_extra_library_file_is_refused (__main__.LegacySourcePreparationTest.test_extra_library_file_is_refused) ... ok
+test_fixture_keeps_the_actual_historical_cursor_path (__main__.LegacySourcePreparationTest.test_fixture_keeps_the_actual_historical_cursor_path) ... ok
+test_source_credentials_and_unsafe_paths_are_refused (__main__.LegacySourcePreparationTest.test_source_credentials_and_unsafe_paths_are_refused) ... ok
+test_v11_client_implementation_is_exact_recorded_commit (__main__.LegacySourcePreparationTest.test_v11_client_implementation_is_exact_recorded_commit) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.981s
+
+OK
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.023s
+
+OK

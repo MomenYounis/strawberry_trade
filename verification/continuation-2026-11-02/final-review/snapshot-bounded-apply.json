@@ -1,0 +1,59 @@
+{
+  "startedAtUtc": "2026-11-06T12:17:20.742347+00:00",
+  "headAtRun": "6383b1a52fc42cd2c8753fa0c6700c55fe29582b",
+  "sourceSha256Before": {
+    "lib/data/ledger_store.dart": "cd8bb83e3abff2b00951011946b1be128eed2a8226328252740a4b3d97607b62",
+    "test/snapshot_bounded_apply_test.dart": "66ce066df689e924c2777dfb5880b910654a515cbc6ce80f3f2074072f5ad538",
+    "test/active_snapshot_test.dart": "038a493c1aabaa82658ea8b09fff168c7088b12e92592b4d4ff2566351639b3d",
+    "lib/domain/ledger.dart": "4fe212cb825f67ced91302fcb791d30a27756e67b662d7fff5050baee8c4af10"
+  },
+  "scope": "Real SQLite FFI regression and scoped Dart analysis; native Android annual acceptance remains separate.",
+  "runs": [
+    {
+      "command": [
+        "/home/younis/flutter/bin/flutter",
+        "test",
+        "--no-pub",
+        "test/snapshot_bounded_apply_test.dart",
+        "test/active_snapshot_test.dart"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 27.926
+    },
+    {
+      "command": [
+        "/home/younis/flutter/bin/cache/dart-sdk/bin/dart",
+        "analyze",
+        "lib/data/ledger_store.dart",
+        "test/snapshot_bounded_apply_test.dart"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 4.532
+    }
+  ],
+  "sourceSha256After": {
+    "lib/data/ledger_store.dart": "cd8bb83e3abff2b00951011946b1be128eed2a8226328252740a4b3d97607b62",
+    "test/snapshot_bounded_apply_test.dart": "66ce066df689e924c2777dfb5880b910654a515cbc6ce80f3f2074072f5ad538",
+    "test/active_snapshot_test.dart": "038a493c1aabaa82658ea8b09fff168c7088b12e92592b4d4ff2566351639b3d",
+    "lib/domain/ledger.dart": "4fe212cb825f67ced91302fcb791d30a27756e67b662d7fff5050baee8c4af10"
+  },
+  "sourceUnchanged": true,
+  "finishedAtUtc": "2026-11-06T12:17:53.208197+00:00",
+  "status": "PASS",
+  "assertions": {
+    "focusedTests": 5,
+    "existingSnapshotTests": 22,
+    "totalTests": 27,
+    "newEntryBatchRecordsMax": 16,
+    "newEntryWriteBatchOperationsMax": 32,
+    "annualInvoiceCounts": [
+      64,
+      96
+    ],
+    "fullTransactionRollback": true,
+    "pendingWireRetryDraftAndAuditPreserved": true,
+    "correctionProvenanceAndRevocationChecked": true,
+    "complexReturnReversalShipmentPayrollFallbackChecked": true,
+    "existingEmployeeSnapshotPrivacyCoverage": true
+  }
+}

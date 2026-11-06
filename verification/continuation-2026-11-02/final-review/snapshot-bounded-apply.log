@@ -1,0 +1,35 @@
+{"command": ["/home/younis/flutter/bin/flutter", "test", "--no-pub", "test/snapshot_bounded_apply_test.dart", "test/active_snapshot_test.dart"]}
+00:00 +0: loading /home/younis/strawberry-trade-annual-review/test/snapshot_bounded_apply_test.dart
+00:00 +0: /home/younis/strawberry-trade-annual-review/test/snapshot_bounded_apply_test.dart: (setUpAll)
+00:00 +0: /home/younis/strawberry-trade-annual-review/test/snapshot_bounded_apply_test.dart: annual invoices and growth use bounded bulk reads and native write batches
+00:00 +1: /home/younis/strawberry-trade-annual-review/test/snapshot_bounded_apply_test.dart: annual invoices and growth use bounded bulk reads and native write batches
+00:00 +2: /home/younis/strawberry-trade-annual-review/test/snapshot_bounded_apply_test.dart: annual invoices and growth use bounded bulk reads and native write batches
+00:01 +3: /home/younis/strawberry-trade-annual-review/test/snapshot_bounded_apply_test.dart: annual invoices and growth use bounded bulk reads and native write batches
+00:01 +4: /home/younis/strawberry-trade-annual-review/test/snapshot_bounded_apply_test.dart: annual invoices and growth use bounded bulk reads and native write batches
+00:01 +5: /home/younis/strawberry-trade-annual-review/test/snapshot_bounded_apply_test.dart: annual invoices and growth use bounded bulk reads and native write batches
+00:01 +6: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: fresh epoch-bound header resumes matching content without copying unverified or other-scope bytes
+00:01 +7: /home/younis/strawberry-trade-annual-review/test/snapshot_bounded_apply_test.dart: linked returns, reversed returns, shipment updates and payroll observe preceding bulk inserts
+00:01 +8: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: page tamper, immutable page/header replacement, descriptor digest and duplicate records reject
+00:01 +9: /home/younis/strawberry-trade-annual-review/test/snapshot_bounded_apply_test.dart: a late batch collision rolls back prior batches without changing pending wire, retries, drafts or audits
+00:01 +10: /home/younis/strawberry-trade-annual-review/test/snapshot_bounded_apply_test.dart: a late batch collision rolls back prior batches without changing pending wire, retries, drafts or audits
+00:01 +11: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: employee snapshot stores only sanitized directory and own submissions
+00:02 +12: /home/younis/strawberry-trade-annual-review/test/snapshot_bounded_apply_test.dart: matching pending entries retain receipt state and attach immutable server correction provenance
+00:02 +13: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: persisted page corruption and revoked store abort install without active changes
+00:02 +14: /home/younis/strawberry-trade-annual-review/test/snapshot_bounded_apply_test.dart: revocation after the native batch executes still rolls all financial facts back
+00:02 +15: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: empty retained snapshot is valid and cannot rewind a newer cursor
+00:02 +16: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: 20001 records install with bounded staging and interruption rolls back ledger and cursor
+00:22 +17: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: strict JSON, safe integers, schema and page byte limits are enforced
+00:22 +18: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: captured immutable review ID cannot change through normal feed or full snapshot
+00:22 +19: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: snapshot compares queued review IDs while preserving matching local review payload and provisional state
+00:22 +20: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: snapshot compares full provisional approval entry bytes before installing the accepted entry ID
+00:22 +21: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: indexed snapshot validation preserves purchase-return residuals across batched siblings and reversed returns
+00:23 +22: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: abandoned staging eviction is oldest-first, epoch-fenced and leaves current transfer, ledger and outbox intact
+00:23 +23: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: failed page rebinding retains previous staged bytes atomically
+00:23 +24: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: installed proof survives cache reclamation and fresh epoch binding; proof history and download bytes stay bounded
+00:23 +25: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: header-write failure rolls back abandoned-cache eviction in the same transaction
+00:23 +26: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: older epoch cannot retire newer installed proof even with a higher checkpoint
+00:23 +27: /home/younis/strawberry-trade-annual-review/test/active_snapshot_test.dart: (tearDownAll)
+00:23 +27: All tests passed!
+{"command": ["/home/younis/flutter/bin/cache/dart-sdk/bin/dart", "analyze", "lib/data/ledger_store.dart", "test/snapshot_bounded_apply_test.dart"]}
+Analyzing ledger_store.dart, snapshot_bounded_apply_test.dart...
+No issues found!

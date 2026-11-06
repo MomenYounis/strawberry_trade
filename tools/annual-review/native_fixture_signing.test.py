@@ -79,6 +79,23 @@ class NativeFixtureSigningInputTest(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, 'persistence-test-entrypoint-required'):
                 signing.check_kernel(path, 'commercial')
 
+    def test_annual_campaign_is_bounded_and_bound_to_actual_kernel_constant(self):
+        with tempfile.TemporaryDirectory(prefix='strawberry-annual-campaign-unit-') as directory:
+            path = Path(directory) / 'synthetic-not-installable.zip'
+            with zipfile.ZipFile(path, 'w') as archive:
+                archive.writestr('assets/flutter_assets/kernel_blob.bin',
+                                 b'0' * (1024 * 1024 - 10) + b'NATIVE_ANNUAL_CAMPAIGN=nov6batch;')
+            receipt = signing.check_annual_campaign(path, 'nov6batch')
+            self.assertEqual(receipt, {'annualCampaign': 'nov6batch',
+                'annualCampaignMarkerVerified': True,
+                'annualResultsPath': 'native-annual-nov6batch/results.json'})
+            for campaign in ['v12', 'nov6', 'nov6batch-longer']:
+                with self.subTest(campaign=campaign), self.assertRaisesRegex(RuntimeError, 'compiled-annual'):
+                    signing.check_annual_campaign(path, campaign)
+            for campaign in ['', '../owner', 'UPPER', 'x' * 33, None]:
+                with self.subTest(campaign=campaign), self.assertRaisesRegex(RuntimeError, 'bounded-safe'):
+                    signing.check_annual_campaign(path, campaign)
+
     def test_badging_requires_existing_package_debuggable_and_exact_version(self):
         valid = "package: name='com.strawberrytrade.strawberry_trade' versionCode='12'\napplication-debuggable\n"
         signing.check_badging(valid, '12')

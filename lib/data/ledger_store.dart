@@ -577,24 +577,26 @@ class LedgerStore {
     String state = 'pending',
   }) async {
     _validateProvenance(entry);
-    await tx.insert('entries', {
-      'id': entry.id,
-      'kind': entry.kind,
-      'date': entry.date,
-      'party_id': entry.partyId.isEmpty ? null : entry.partyId,
-      'employee_id': entry.employeeId.isEmpty ? null : entry.employeeId,
-      'original_id': entry.originalId.isEmpty ? null : entry.originalId,
-      'original_business_date': entry.originalBusinessDate.isEmpty
-          ? null
-          : entry.originalBusinessDate,
-      'correction_of_operation_id': entry.correctionOfOperationId.isEmpty
-          ? null
-          : entry.correctionOfOperationId,
-      'payload': jsonEncode(entry.toJson()),
-      'state': state,
-    });
+    await tx.insert('entries', _entryValues(entry, state));
     if (enqueue) await _enqueue(tx, entry.id, 'entry', entry.toJson());
   }
+
+  static Map<String, Object?> _entryValues(LedgerEntry entry, String state) => {
+    'id': entry.id,
+    'kind': entry.kind,
+    'date': entry.date,
+    'party_id': entry.partyId.isEmpty ? null : entry.partyId,
+    'employee_id': entry.employeeId.isEmpty ? null : entry.employeeId,
+    'original_id': entry.originalId.isEmpty ? null : entry.originalId,
+    'original_business_date': entry.originalBusinessDate.isEmpty
+        ? null
+        : entry.originalBusinessDate,
+    'correction_of_operation_id': entry.correctionOfOperationId.isEmpty
+        ? null
+        : entry.correctionOfOperationId,
+    'payload': jsonEncode(entry.toJson()),
+    'state': state,
+  };
 
   Future<void> saveEntry(LedgerEntry entry) async {
     _manager();
@@ -1959,15 +1961,20 @@ class LedgerStore {
             limit: 16,
           );
           if (batch.isEmpty) break;
-          for (final record in batch) {
-            await _applyRemote(
-              tx,
-              record['entity']! as String,
-              _payload(record),
-              null,
-              snapshotInstall: true,
-            );
-            applied++;
+          if (dependency == order['entry']) {
+            await _applySnapshotEntryBatch(tx, batch);
+            applied += batch.length;
+          } else {
+            for (final record in batch) {
+              await _applyRemote(
+                tx,
+                record['entity']! as String,
+                _payload(record),
+                null,
+                snapshotInstall: true,
+              );
+              applied++;
+            }
           }
           after = batch.last['sequence']! as int;
           await onProgress?.call(applied);
@@ -1995,6 +2002,140 @@ class LedgerStore {
       await _audit(tx, snapshotId, 'active_snapshot_installed');
     });
     _notify();
+  }
+
+  /// Only independent entries can share validation reads and a native write
+  /// batch. Flush before every linked return, reversal, shipment or payroll so
+  /// its unchanged indexed validator observes all preceding accepted facts.
+  /// Both the input and every query/write batch contain at most 16 records.
+  Future<void> _applySnapshotEntryBatch(
+    Transaction tx,
+    List<Map<String, Object?>> records,
+  ) async {
+    final independent = <LedgerEntry>[];
+    Future<void> flush() async {
+      if (independent.isEmpty) return;
+      await _applyIndependentSnapshotEntries(tx, independent);
+      independent.clear();
+    }
+
+    for (final record in records) {
+      _ready();
+      final payload = _payload(record);
+      final entry = LedgerEntry.fromJson(payload);
+      if (entry.originalId.isEmpty &&
+          entry.employeeId.isEmpty &&
+          entry.shippingEmployeeId.isEmpty &&
+          !{'reversal', 'shipment_update', 'payroll'}.contains(entry.kind)) {
+        independent.add(entry);
+      } else {
+        await flush();
+        await _applyRemote(tx, 'entry', payload, null, snapshotInstall: true);
+      }
+    }
+    await flush();
+  }
+
+  Future<void> _applyIndependentSnapshotEntries(
+    Transaction tx,
+    List<LedgerEntry> entries,
+  ) async {
+    _ready();
+    if (entries.length > 16) throw StateError('Unbounded snapshot entry batch');
+    for (final entry in entries) {
+      _scope(entry.tenantId);
+      safeId(entry.id);
+      _validateProvenance(entry);
+      if (role == 'employee') {
+        invalid(
+          'private_data',
+          'رفض تنزيل بيانات غير مصرح بها إلى جهاز الموظف',
+        );
+      }
+    }
+    final placeholders = List.filled(entries.length, '?').join(',');
+    final ids = entries.map((entry) => entry.id).toList();
+    final existing = {
+      for (final row in await tx.query(
+        'entries',
+        where: 'id IN ($placeholders)',
+        whereArgs: ids,
+      ))
+        row['id']! as String: row,
+    };
+    final partyIds = entries
+        .where((entry) => !existing.containsKey(entry.id))
+        .map((entry) => entry.partyId)
+        .where((id) => id.isNotEmpty)
+        .toSet();
+    final parties = partyIds.isEmpty
+        ? <Party>[]
+        : (await tx.query(
+            'parties',
+            where: 'id IN (${List.filled(partyIds.length, '?').join(',')})',
+            whereArgs: partyIds.toList(),
+          )).map((row) => Party.fromJson(_payload(row))).toList();
+    final queuedIds = existing.isEmpty
+        ? <String>{}
+        : (await tx.query(
+            'outbox',
+            columns: ['id'],
+            where: 'id IN ($placeholders)',
+            whereArgs: ids,
+          )).map((row) => row['id']! as String).toSet();
+    final writes = tx.batch();
+    for (final entry in entries) {
+      _ready();
+      final prior = existing[entry.id];
+      if (prior != null) {
+        if (canonicalJson(_normalized('entries', _payload(prior))) !=
+            canonicalJson(entry.toJson())) {
+          invalid(
+            'snapshot_immutable_conflict',
+            'تعارض سجل ثابت؛ بقيت النسخة المحلية ومؤشرها دون تغيير.',
+          );
+        }
+        if (entry.correctionOfOperationId.isNotEmpty) {
+          final priorEntry = _entryFromRow(prior);
+          if (priorEntry.correctionOfOperationId.isNotEmpty &&
+              (priorEntry.correctionOfOperationId !=
+                      entry.correctionOfOperationId ||
+                  priorEntry.originalBusinessDate !=
+                      entry.originalBusinessDate)) {
+            invalid(
+              'correction_provenance',
+              'تعارض في أصل التسوية؛ احتُفظ بالدليل المحلي.',
+            );
+          }
+        }
+        final updates = <String, Object?>{
+          if (entry.correctionOfOperationId.isNotEmpty)
+            'original_business_date': entry.originalBusinessDate,
+          if (entry.correctionOfOperationId.isNotEmpty)
+            'correction_of_operation_id': entry.correctionOfOperationId,
+          // Matching snapshot facts are not a receipt for a pending operation.
+          if (!queuedIds.contains(entry.id)) 'state': 'server_accepted',
+        };
+        if (updates.isNotEmpty) {
+          writes.update(
+            'entries',
+            updates,
+            where: 'id=?',
+            whereArgs: [entry.id],
+          );
+        }
+        continue;
+      }
+      LedgerRules.validateEntry(entry, const [], parties, const [], const []);
+      writes.insert('entries', _entryValues(entry, 'server_accepted'));
+      writes.insert('audit', {
+        'operation_id': entry.id,
+        'actor_uid': userId,
+        'action': 'remote_entry',
+        'created_ms': DateTime.now().millisecondsSinceEpoch,
+      });
+    }
+    await writes.commit(noResult: true);
   }
 
   /// Minimal indexed dependency projection, not a full-ledger cache. All

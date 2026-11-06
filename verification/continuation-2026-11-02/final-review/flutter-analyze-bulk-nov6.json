@@ -1,0 +1,15 @@
+{
+  "status": "FAIL",
+  "command": [
+    "/home/younis/flutter/bin/flutter",
+    "analyze",
+    "--no-pub"
+  ],
+  "startedAtUtc": "2026-11-06T12:22:05.697740+00:00",
+  "baseRevision": "6383b1a52fc42cd2c8753fa0c6700c55fe29582b",
+  "ledgerStoreSha256": "cd8bb83e3abff2b00951011946b1be128eed2a8226328252740a4b3d97607b62",
+  "overlappingSuitesNotSummed": true,
+  "exitCode": 1,
+  "finishedAtUtc": "2026-11-06T12:22:17.249952+00:00",
+  "sourceUnchanged": true
+}

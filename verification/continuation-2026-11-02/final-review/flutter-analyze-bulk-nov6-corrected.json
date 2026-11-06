@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "command": [
+    "/home/younis/flutter/bin/flutter",
+    "analyze",
+    "--no-pub"
+  ],
+  "observedAtUtc": "2026-11-06T19:34:46.219606+00:00",
+  "exitCode": 0,
+  "issues": 0,
+  "correction": "Removed unnecessary non-null assertion in the new annual fixture; preceding failed analysis receipt retained. No application runtime change.",
+  "ledgerStoreSha256": "cd8bb83e3abff2b00951011946b1be128eed2a8226328252740a4b3d97607b62",
+  "annualFixtureSha256": "819b097253710f4ee7e26ca0da5966b0ea88747682aa2782bc6f1ef866911cb2"
+}

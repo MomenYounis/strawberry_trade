@@ -2,6 +2,7 @@
 import hashlib
 import importlib.util
 import json
+import re
 from pathlib import Path
 import subprocess
 import zipfile
@@ -138,3 +139,26 @@ def check_badging(badging, version):
             or f"versionCode='{version}'" not in badging
             or 'application-debuggable' not in badging):
         raise RuntimeError('synthetic-debug-package-version-required')
+
+
+def check_annual_campaign(source, campaign):
+    """Bind a safe result namespace to the constant in the actual DEBUG kernel."""
+    if not isinstance(campaign, str) or not re.fullmatch('[a-z0-9][a-z0-9-]{0,31}', campaign):
+        raise RuntimeError('bounded-safe-annual-campaign-required')
+    marker = ('NATIVE_ANNUAL_CAMPAIGN=' + campaign + ';').encode()
+    if source.stat().st_size > 256 * 1024 * 1024:
+        raise RuntimeError('bounded-synthetic-debug-apk-required')
+    with zipfile.ZipFile(source) as archive:
+        info = archive.getinfo('assets/flutter_assets/kernel_blob.bin')
+        if info.file_size > 128 * 1024 * 1024:
+            raise RuntimeError('bounded-synthetic-debug-kernel-required')
+        tail, found = b'', False
+        with archive.open(info) as kernel:
+            while chunk := kernel.read(1024 * 1024):
+                combined = tail + chunk
+                found = found or marker in combined
+                tail = combined[-len(marker):]
+        if not found:
+            raise RuntimeError('compiled-annual-campaign-marker-required')
+    return {'annualCampaign': campaign, 'annualCampaignMarkerVerified': True,
+            'annualResultsPath': 'native-annual-' + campaign + '/results.json'}
