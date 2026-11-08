@@ -78,14 +78,35 @@ class _ObservedFirebaseGateway extends FirebaseGateway {
 String _digest(Object? value) =>
     sha256.convert(utf8.encode(canonicalJson(value))).toString();
 
+final _explicitNativeTransportCause = RegExp(
+  r'network error|network.*(?:unreachable|failed)|unable to resolve host|'
+  r'failed to connect|connect failed|connection (?:refused|reset|timed out|closed)|'
+  r'no route to host|connectexception|socketexception|unknownhostexception|'
+  r'econnrefused|enetunreach|ehostunreach|etimedout',
+  caseSensitive: false,
+);
+
 String? _networkFailureCode(Object? error) {
-  if (error is FirebaseAuthException &&
-      error.code == 'network-request-failed') {
-    return error.code;
+  if (error is FirebaseAuthException) {
+    if (error.code == 'network-request-failed') return error.code;
+    // Some emulator/native SDK combinations wrap the same network cause with
+    // a generic Auth code. Accept only an explicit transport cause in the
+    // native SDK message; a generic internal/unknown error is not proof.
+    if (_explicitNativeTransportCause.hasMatch(
+      '${error.message ?? ''} $error',
+    )) {
+      return '${error.code}:native-network-cause';
+    }
   }
-  if (error is FirebaseFunctionsException &&
-      {'unavailable', 'deadline-exceeded'}.contains(error.code)) {
-    return error.code;
+  if (error is FirebaseFunctionsException) {
+    if ({'unavailable', 'deadline-exceeded'}.contains(error.code)) {
+      return error.code;
+    }
+    if (_explicitNativeTransportCause.hasMatch(
+      '${error.message ?? ''} ${error.details ?? ''} $error',
+    )) {
+      return '${error.code}:native-network-cause';
+    }
   }
   return null;
 }
@@ -846,11 +867,18 @@ void main() {
       result['backedPendingPreservedAndAcceptedOnce'] = true;
       result['lostOnlyNotRecoverable'] = true;
       result['expectedCustomerMinor'] = 18500;
-    } else if (phase == 'offline_transport') {
+    } else if (phase == 'offline_transport' ||
+        phase == 'offline_transport_resume') {
+      final resumePending = phase == 'offline_transport_resume';
       // Establish the actual native Auth session before the host disconnects
       // radios. The later failure must arise from a real SDK network request.
       await login('managerA');
-      expect(await offlineState.exists(), isFalse);
+      expect(await offlineState.exists(), resumePending);
+      final retainedState = resumePending ? await readOfflineState() : null;
+      if (resumePending) {
+        expect(retainedState!['transportFailureObserved'], isFalse);
+        expect(retainedState['rebootVerified'], isFalse);
+      }
       final ready = File('${directory.path}/commercial-network-ready.json');
       final disconnected = File(
         '${directory.path}/commercial-network-disconnected.flag',
@@ -867,7 +895,11 @@ void main() {
       try {
         expect(controller.store, same(store));
         expect(controller.allowed, isTrue);
-        expect(await store.listOutbox(), isEmpty);
+        if (resumePending) {
+          await expectOfflinePending(store, retainedState!);
+        } else {
+          expect(await store.listOutbox(), isEmpty);
+        }
         expect(
           LedgerRules.partyBalance(
             (await store.listParties()).singleWhere(
@@ -875,14 +907,17 @@ void main() {
             ),
             await store.listEntries(),
           ),
-          18500,
+          resumePending ? 20000 : 18500,
         );
-        expect(LedgerRules.netRecordedCash(await store.listEntries()), -7200);
+        expect(
+          LedgerRules.netRecordedCash(await store.listEntries()),
+          resumePending ? -6700 : -7200,
+        );
         await controller.refresh();
         await ready.writeAsString(
           jsonEncode({
             'synthetic': true,
-            'phase': 'offline_transport',
+            'phase': phase,
             'campaign': campaign,
             'deviceId': identity.deviceId,
             'operationId': 'replacement_offline_pending',
@@ -901,29 +936,46 @@ void main() {
         // Exercise the normal application save only after the host confirms
         // radios are off. It checks the cached license, commits the queue and
         // starts the real controller sync; no response or error is injected.
-        await controller.saveEntry(
-          invoice(store.tenantId, store.userId, 'replacement_offline_pending'),
-        );
+        if (resumePending) {
+          // Retry the exact already durable queue item. Never recreate it or
+          // reset its retry state after a preceding test assertion failure.
+          await expectOfflinePending(store, retainedState!);
+          await controller.synchronize();
+        } else {
+          await controller.saveEntry(
+            invoice(
+              store.tenantId,
+              store.userId,
+              'replacement_offline_pending',
+            ),
+          );
+        }
         final pending = (await store.listOutbox()).single;
         final draft = (await store.listDrafts()).single;
         expect(draft['id'], 'unfinished_draft');
         final beforeBoot = await _security.platformClock();
-        final state = <String, dynamic>{
-          'synthetic': true,
-          'campaign': campaign,
-          'deviceId': identity.deviceId,
-          'tenantId': store.tenantId,
-          'uid': store.userId,
-          'operation': pending.toOperation(),
-          'operationSha256': _digest(pending.toOperation()),
-          'cursor': await store.preference('cursor'),
-          'draft': draft,
-          'draftSha256': _digest(draft),
-          'sourceBootCount': beforeBoot.bootCount,
-          'savedThroughControllerWhileDisconnected': true,
-          'transportFailureObserved': false,
-          'rebootVerified': false,
-        };
+        final state =
+            retainedState ??
+            <String, dynamic>{
+              'synthetic': true,
+              'campaign': campaign,
+              'deviceId': identity.deviceId,
+              'tenantId': store.tenantId,
+              'uid': store.userId,
+              'operation': pending.toOperation(),
+              'operationSha256': _digest(pending.toOperation()),
+              'cursor': await store.preference('cursor'),
+              'draft': draft,
+              'draftSha256': _digest(draft),
+              'sourceBootCount': beforeBoot.bootCount,
+              'savedThroughControllerWhileDisconnected': true,
+              'transportFailureObserved': false,
+              'rebootVerified': false,
+            };
+        if (resumePending) {
+          state['priorSourceBootCount'] = state['sourceBootCount'];
+          state['sourceBootCount'] = beforeBoot.bootCount;
+        }
         await expectOfflinePending(store, state);
         await offlineState.writeAsString(jsonEncode(state), flush: true);
         // saveEntry already requested one automatic synchronize(). Waiting on
@@ -941,7 +993,30 @@ void main() {
         expect(controller.syncing, isFalse);
         expect(transport.bootstrapCalls, 1);
         expect(transport.successfulBootstraps, 0);
-        final failureCode = _networkFailureCode(transport.bootstrapError);
+        final failure = transport.bootstrapError;
+        state['lastNativeFailureType'] = failure.runtimeType.toString();
+        final diagnostic = failure.toString();
+        state['lastNativeFailureDiagnostic'] = diagnostic.substring(
+          0,
+          diagnostic.length.clamp(0, 1024),
+        );
+        if (failure is FirebaseAuthException) {
+          state['lastNativeFailureCode'] = failure.code;
+          state['lastNativeFailureMessage'] = (failure.message ?? '').substring(
+            0,
+            (failure.message ?? '').length.clamp(0, 1024),
+          );
+        } else if (failure is FirebaseFunctionsException) {
+          state['lastNativeFailureCode'] = failure.code;
+          state['lastNativeFailureMessage'] = (failure.message ?? '').substring(
+            0,
+            (failure.message ?? '').length.clamp(0, 1024),
+          );
+        }
+        // Persist bounded diagnostics privately even if classification fails;
+        // a future resume must preserve this same operation and draft.
+        await offlineState.writeAsString(jsonEncode(state), flush: true);
+        final failureCode = _networkFailureCode(failure);
         expect(
           failureCode,
           isNotNull,
@@ -961,6 +1036,7 @@ void main() {
         await offlineState.writeAsString(jsonEncode(state), flush: true);
         result.addAll({
           'savedThroughControllerWhileDisconnected': true,
+          'samePendingOperationResumed': resumePending,
           'actualControllerTransportFailedOffline': true,
           'networkFailureCode': failureCode,
           'bootstrapCalls': 1,

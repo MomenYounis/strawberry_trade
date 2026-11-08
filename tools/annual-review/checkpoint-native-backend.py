@@ -5,7 +5,11 @@ ROOT=pathlib.Path(__file__).resolve().parents[2];OUT=ROOT/'verification/continua
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('label');a=p.parse_args()
 if not re.fullmatch('[a-z][a-z0-9-]{0,35}',a.label):raise SystemExit('bounded-local-label-required')
 ready=None
-for line in (OUT/'local-backend-serve.log').read_text().splitlines():
+log_name=os.environ.get('STRAWBERRY_NATIVE_BACKEND_LOG','local-backend-serve.log')
+if not re.fullmatch(r'local-backend-serve(?:-[a-z0-9-]+)?\.log',log_name):raise SystemExit('known-local-backend-log-name-required')
+log_path=OUT/log_name
+if log_path.is_symlink() or log_path.stat().st_size>32*1024*1024:raise SystemExit('bounded-ordinary-backend-log-required')
+for line in log_path.read_text().splitlines():
  try:
   value=json.loads(line)
   if value.get('state')=='ready':ready=value

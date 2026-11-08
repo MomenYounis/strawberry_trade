@@ -107,25 +107,48 @@ def require_offline(shell_command):
  if state!={'airplane_mode_on':'1','wifi_on':'0','mobile_data':'0'}:raise RuntimeError('offline-required')
  return state
 
-def ensure_commercial_firewall(shell_command):
+def ensure_commercial_firewall(shell_command, *, disconnected=False):
  """Repair interrupted setup and prove exact rules before any network enable."""
  chain='STRAWBERRY_LOCAL_ACCEPTANCE'
+ stage='STRAWBERRY_LOCAL_STAGE'
+ def expected_rules(binary,target):
+  expected=[['-N',target],['-A',target,'-o','lo','-j','ACCEPT']]
+  if binary=='iptables' and not disconnected:expected.append(['-A',target,'-d','10.0.2.2/32','-p','tcp','-m','multiport','--dports','8788,9099','-j','ACCEPT'])
+  expected.append(['-A',target,'-j','REJECT', '--reject-with', 'icmp-port-unreachable' if binary=='iptables' else 'icmp6-port-unreachable'] if disconnected else ['-A',target,'-j','DROP'])
+  return expected
+ def populate(binary,target):
+  if '-N '+target not in shell_command(binary,'-S').splitlines():shell_command(binary,'-N',target)
+  shell_command(binary,'-F',target)
+  shell_command(binary,'-A',target,'-o','lo','-j','ACCEPT')
+  if binary=='iptables' and not disconnected:shell_command(binary,'-A',target,'-d','10.0.2.2','-p','tcp','-m','multiport','--dports','8788,9099','-j','ACCEPT')
+  shell_command(binary,'-A',target,'-j','REJECT' if disconnected else 'DROP')
+  rules=[shlex.split(line) for line in shell_command(binary,'-S',target).splitlines()]
+  if rules!=expected_rules(binary,target):raise RuntimeError('commercial-outbound-chain-mismatch')
+ def output_rules(binary):
+  return [shlex.split(line) for line in shell_command(binary,'-S','OUTPUT').splitlines() if line.startswith('-A ')]
  for binary in ['iptables','ip6tables']:
-  if '-N '+chain not in shell_command(binary,'-S').splitlines():shell_command(binary,'-N',chain)
-  shell_command(binary,'-F',chain)
-  shell_command(binary,'-A',chain,'-o','lo','-j','ACCEPT')
-  if binary=='iptables':shell_command(binary,'-A',chain,'-d','10.0.2.2','-p','tcp','-m','multiport','--dports','8788,9099','-j','ACCEPT')
-  shell_command(binary,'-A',chain,'-j','DROP')
-  rules=[shlex.split(line) for line in shell_command(binary,'-S',chain).splitlines()]
-  expected=[['-N',chain],['-A',chain,'-o','lo','-j','ACCEPT']]
-  if binary=='iptables':expected.append(['-A',chain,'-d','10.0.2.2/32','-p','tcp','-m','multiport','--dports','8788,9099','-j','ACCEPT'])
-  expected.append(['-A',chain,'-j','DROP'])
-  if rules!=expected:raise RuntimeError('commercial-outbound-chain-mismatch')
   hook=['-A','OUTPUT','-j',chain]
-  output=[shlex.split(line) for line in shell_command(binary,'-S','OUTPUT').splitlines() if line.startswith('-A ')]
-  if not output or output[0]!=hook:shell_command(binary,'-I','OUTPUT','1','-j',chain)
-  output=[shlex.split(line) for line in shell_command(binary,'-S','OUTPUT').splitlines() if line.startswith('-A ')]
-  if not output or output[0]!=hook:raise RuntimeError('commercial-outbound-hook-missing')
+  stage_hook=['-A','OUTPUT','-j',stage]
+  output=output_rules(binary)
+  if stage_hook in output and output[:1]==[hook]:
+   for _ in range(output.count(stage_hook)):shell_command(binary,'-D','OUTPUT','-j',stage)
+   output=output_rules(binary)
+   if stage_hook in output:raise RuntimeError('commercial-outbound-hook-missing')
+  if stage_hook not in output:
+   populate(binary,stage)
+   shell_command(binary,'-I','OUTPUT','1','-j',stage)
+   output=output_rules(binary)
+   if not output or output[0]!=stage_hook:raise RuntimeError('commercial-outbound-hook-missing')
+  populate(binary,chain)
+  if output[:2]!=[stage_hook,hook]:
+   shell_command(binary,'-I','OUTPUT','1','-j',chain)
+   output=output_rules(binary)
+   if not output or output[0]!=hook:raise RuntimeError('commercial-outbound-hook-missing')
+  for _ in range(output.count(stage_hook)):shell_command(binary,'-D','OUTPUT','-j',stage)
+  output=output_rules(binary)
+  if not output or output[0]!=hook or stage_hook in output:raise RuntimeError('commercial-outbound-hook-missing')
+  shell_command(binary,'-F',stage)
+  shell_command(binary,'-X',stage)
 
 def prepare_commercial_network(shell_command,adb_command):
  # Keep the device offline even when adbd is restarted as root. A failed
@@ -136,6 +159,68 @@ def prepare_commercial_network(shell_command,adb_command):
  ensure_commercial_firewall(shell_command)
  shell_command('cmd','connectivity','airplane-mode','disable')
  shell_command('svc','data','enable');shell_command('svc','wifi','disable')
+
+
+COMMERCIAL_PROBE_PORTS=(8788,9099)
+BROKEN_PROBE_PATTERN=re.compile(
+ r'(?:unknown|invalid|bad|unrecognized)\s+(?:option|command|argument|flag)'
+ r'|usage:|not found|cannot execute|syntax error|no such file|applet not found',
+ re.I,
+)
+BLOCKED_TRANSPORT_PATTERN=re.compile(
+ r'\bnc\b[^:\n]*:\s*(?:connect|read|write|poll|timeout)?[^:\n]*:\s*'
+ r'(?:connection refused|network is unreachable|no route to host|connection timed out|timed out|connection reset|operation not permitted|permission denied|network unreachable|host is down|address not available|invalid argument)'
+ r'|\b(?:connection refused|network is unreachable|no route to host|connection timed out|connection reset by peer)\b',
+ re.I,
+)
+
+def commercial_transport_probe_command(port):
+ if port not in COMMERCIAL_PROBE_PORTS:raise RuntimeError('supported-commercial-probe-port-required')
+ path='/health' if port==8788 else '/'
+ return ("printf 'GET "+path+" HTTP/1.1\\r\\nHost: 10.0.2.2:"+str(port)+"\\r\\nConnection: close\\r\\n\\r\\n' "
+         "| toybox nc -w 2 10.0.2.2 "+str(port)+" 2>&1; status=$?; printf '\\nTRANSPORT_EXIT:%s\\n' \"$status\"")
+
+def run_commercial_transport_probe(adb_command,port):
+ probe=adb_command('shell',commercial_transport_probe_command(port),check=False,timeout=5)
+ if probe is None or getattr(probe,'returncode',1)!=0 or not isinstance(getattr(probe,'stdout',None),(bytes,bytearray)):
+  raise RuntimeError('transport-probe-adb-failed')
+ output=probe.stdout.decode(errors='replace').replace('\r\n','\n')
+ match=re.search(r'(?:^|\n)TRANSPORT_EXIT:(\d+)\s*$',output)
+ if not match:raise RuntimeError('transport-probe-broken')
+ exit_code=int(match.group(1))
+ body=output[:match.start()].strip()
+ if exit_code in {2,126,127} or exit_code>1 or BROKEN_PROBE_PATTERN.search(body):
+  raise RuntimeError('transport-probe-broken')
+ if exit_code==1 and ('HTTP/' not in body and 'strawberry-gateway-v1' not in body) and not BLOCKED_TRANSPORT_PATTERN.search(body):
+  raise RuntimeError('transport-probe-broken')
+ return exit_code,body
+
+def prove_commercial_transport_connected(adb_command,*,deadline_seconds=60,sleep=time.sleep,clock=time.monotonic):
+ deadline=clock()+deadline_seconds
+ proofs=[]
+ for port in COMMERCIAL_PROBE_PORTS:
+  expected_marker='strawberry-gateway-v1' if port==8788 else 'HTTP/'
+  while True:
+   exit_code,body=run_commercial_transport_probe(adb_command,port)
+   if exit_code==0 and 'HTTP/' in body and expected_marker in body:
+    proofs.append({'host':'10.0.2.2','port':port,'connectSucceeded':True,'exitCode':0,'expectedMarker':expected_marker})
+    break
+   if clock()>deadline:raise RuntimeError('local-services-not-reachable')
+   sleep(1)
+ return proofs
+
+def prove_commercial_transport_disconnected(adb_command):
+ proofs=[]
+ for port in COMMERCIAL_PROBE_PORTS:
+  # An explicit marker is required because exec-out can return zero for a
+  # failed remote command. Never infer disconnection from empty output.
+  exit_code,body=run_commercial_transport_probe(adb_command,port)
+  if exit_code==0 or 'HTTP/' in body or 'strawberry-gateway-v1' in body:
+   raise RuntimeError('offline-transport-remains-reachable')
+  if exit_code!=1 or not BLOCKED_TRANSPORT_PATTERN.search(body):
+   raise RuntimeError('transport-probe-broken')
+  proofs.append({'host':'10.0.2.2','port':port,'connectSucceeded':False,'exitCode':exit_code,'diagnostic':body[:240]})
+ return proofs
 
 
 def annual_result_target(fixture):
@@ -169,7 +254,11 @@ def main():
  def guard():
   guard_runtime(runtime,args.device)
  def adb(*command,data=None,check=True,timeout=45):
-  guard();p=subprocess.run([ADB,'-s',runtime['serial'],*command],input=data,capture_output=True,timeout=timeout)
+  guard()
+  try:p=subprocess.run([ADB,'-s',runtime['serial'],*command],input=data,capture_output=True,timeout=timeout)
+  except subprocess.TimeoutExpired:
+   # Command names only; never serialize input jobs, credentials or VM URLs.
+   raise RuntimeError('owned-device-command-timeout:'+('/'.join(command[:2]) if command and command[0]=='shell' else command[0])) from None
   if check and p.returncode:raise RuntimeError('owned-device-command-failed')
   return p
  def shell(*command,check=True):return adb('shell',*command,check=check).stdout.decode(errors='replace').strip()
@@ -190,15 +279,8 @@ def main():
    prepare_commercial_network(shell,adb)
    # svc returns before netd finishes creating the cellular route. Prove both
    # local services are reachable before declaring the disposable network ready.
-   deadline=time.monotonic()+60
-   for port in [8788,9099]:
-    while True:
-     request="printf 'GET /"+('health' if port==8788 else '')+" HTTP/1.1\\r\\nHost: 10.0.2.2:"+str(port)+"\\r\\nConnection: close\\r\\n\\r\\n' | toybox nc -w 2 10.0.2.2 "+str(port)
-     probe=adb('shell',request,check=False,timeout=5).stdout.decode(errors='replace')
-     if ('strawberry-gateway-v1' in probe if port==8788 else 'HTTP/' in probe):break
-     if time.monotonic()>deadline:raise RuntimeError('local-services-not-reachable')
-     time.sleep(1)
-   result.update(status='PASS',localServicesReachable=True,outboundAllowlist=['loopback','10.0.2.2 TCP8788','10.0.2.2 TCP9099'],otherIpv4AndIpv6='DROP')
+   proofs=prove_commercial_transport_connected(adb)
+   result.update(status='PASS',localServicesReachable=True,outboundAllowlist=['loopback','10.0.2.2 TCP8788','10.0.2.2 TCP9099'],otherIpv4AndIpv6='DROP',transportProbes=proofs)
   elif args.phase=='install':
    path=private_file();metadata=validated_fixture(args.signing_metadata)
    if str(path)!=metadata['artifact']:raise RuntimeError('verified-commercial-debug-artifact-required')
@@ -211,7 +293,7 @@ def main():
    path=private_file();data=path.read_bytes()
    if len(data)>24*1024*1024:raise RuntimeError('private-fixture-file-limit')
    if args.phase=='put-job':
-    job=json.loads(data);allowed={'identity','manager_seed','employee_submit','manager_review','employee_revoked','replacement','offline_reopen','offline_transport','resume_offline','legacy_seed_v9','legacy_unsupported_v9','legacy_resume_v11','legacy_resume_v12'}
+    job=json.loads(data);allowed={'identity','manager_seed','employee_submit','manager_review','employee_revoked','replacement','offline_reopen','offline_transport','offline_transport_resume','resume_offline','legacy_seed_v9','legacy_unsupported_v9','legacy_resume_v11','legacy_resume_v12'}
     if job.get('phase') not in allowed:raise RuntimeError('known-demo-phase-required')
    target='commercial-job.json' if args.phase=='put-job' else 'commercial-recovery.json'
    shell('am','force-stop',PACKAGE)
@@ -227,24 +309,33 @@ def main():
    # The app is intentionally left running so its real controller observes the
    # transport failure. Only an explicit synthetic test handshake enables this.
    ready=json.loads(adb('exec-out','run-as',PACKAGE,'cat','files/commercial-network-ready.json').stdout)
-   if ready.get('synthetic') is not True or ready.get('phase')!='offline_transport':raise RuntimeError('synthetic-network-handshake-required')
+   if ready.get('synthetic') is not True or ready.get('phase') not in {'offline_transport','offline_transport_resume'}:raise RuntimeError('synthetic-network-handshake-required')
    if not shell('pidof',PACKAGE,check=False):raise RuntimeError('running-fixture-required')
-   shell('settings','put','global','mobile_data','0');shell('cmd','connectivity','airplane-mode','enable');shell('svc','wifi','disable');shell('svc','data','disable')
+   ensure_commercial_firewall(shell,disconnected=True)
+   require_offline(shell)
+   proofs=prove_commercial_transport_disconnected(adb)
    state={key:shell('settings','get','global',key) for key in ['airplane_mode_on','wifi_on','mobile_data']}
    if state!={'airplane_mode_on':'1','wifi_on':'0','mobile_data':'0'}:raise RuntimeError('offline-required')
    adb('exec-in','run-as',PACKAGE,'sh','-c','cat > files/commercial-network-disconnected.flag',data=b'DISCONNECTED')
-   result.update(status='PASS',network=state,appKeptRunning=True)
+   result.update(status='PASS',network=state,appKeptRunning=True,nonLoopbackIpv4AndIpv6='REJECT',transportProbes=proofs)
   elif args.phase in ['offline','reboot']:
    shell('am','force-stop',PACKAGE);shell('settings','put','global','mobile_data','0');shell('cmd','connectivity','airplane-mode','enable');shell('svc','wifi','disable');shell('svc','data','disable')
    if args.phase=='reboot':
-    adb('reboot');adb('wait-for-device',timeout=120);deadline=time.monotonic()+180
-    while shell('getprop','sys.boot_completed')!='1':
+    adb('reboot',timeout=90);adb('wait-for-device',timeout=120);deadline=time.monotonic()+180
+    while True:
+     try:
+      boot=adb('shell','getprop','sys.boot_completed',check=False,timeout=10)
+      if boot.returncode==0 and boot.stdout.decode(errors='replace').strip()=='1':break
+     except RuntimeError as error:
+      if not str(error).startswith('owned-device-command-timeout:'):raise
      if time.monotonic()>deadline:raise RuntimeError('reboot-not-ready')
      time.sleep(2)
     shell('settings','put','global','mobile_data','0');shell('cmd','connectivity','airplane-mode','enable');shell('svc','wifi','disable');shell('svc','data','disable')
-   state={key:shell('settings','get','global',key) for key in ['airplane_mode_on','wifi_on','mobile_data']}
-   if state!={'airplane_mode_on':'1','wifi_on':'0','mobile_data':'0'}:raise RuntimeError('offline-required')
-   result.update(status='PASS',network=state)
+   adb('root');adb('wait-for-device',timeout=90)
+   ensure_commercial_firewall(shell,disconnected=True)
+   state=require_offline(shell)
+   proofs=prove_commercial_transport_disconnected(adb)
+   result.update(status='PASS',network=state,nonLoopbackIpv4AndIpv6='REJECT',transportProbes=proofs)
   elif args.phase in ['get-result','get-backup','get-annual-result']:
    path=private_file();target=annual_result_target(validated_fixture(args.signing_metadata)) if args.phase=='get-annual-result' else 'commercial-result.json' if args.phase=='get-result' else 'commercial-recovery.json'
    data=adb('exec-out','run-as',PACKAGE,'cat','files/'+target).stdout

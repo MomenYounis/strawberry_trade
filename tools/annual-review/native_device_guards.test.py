@@ -256,12 +256,52 @@ class DetachedLaunchGuardsTest(unittest.TestCase):
         fresh = launcher.per_device_lock(self.root, 'employee'); os.close(fresh)
 
 class SyntheticCommercialNetwork:
-    def __init__(self, corrupt=None, drop_hook=None, offline_unconfirmed=False):
+    def __init__(self, corrupt=None, drop_hook=None, offline_unconfirmed=False,
+                 reject_with=None):
         self.chain = 'STRAWBERRY_LOCAL_ACCEPTANCE'
-        self.rules = {b: [['-A', self.chain, '-j', 'ACCEPT']] for b in ['iptables', 'ip6tables']}
-        self.output = {b: [['-A', 'OUTPUT', '-j', 'ACCEPT'], ['-A', 'OUTPUT', '-j', self.chain]] for b in self.rules}
+        self.stage = 'STRAWBERRY_LOCAL_STAGE'
+        self.chains = {b: {self.chain: [['-A', self.chain, '-j', 'ACCEPT']]} for b in ['iptables', 'ip6tables']}
+        self.rules = {b: self.chains[b][self.chain] for b in self.chains}
+        self.output = {b: [['-A', 'OUTPUT', '-j', 'ACCEPT'], ['-A', 'OUTPUT', '-j', self.chain]] for b in self.chains}
         self.calls = []
         self.corrupt, self.drop_hook, self.offline_unconfirmed = corrupt, drop_hook, offline_unconfirmed
+        self.reject_with = reject_with or {}
+        self.ever_protected = {b: False for b in self.chains}
+        self.exposure_windows = []
+
+    def is_chain_protective(self, binary, target):
+        rules = self.chains[binary].get(target)
+        if not rules or rules[0] != ['-A', target, '-o', 'lo', '-j', 'ACCEPT']:
+            return False
+        terminal = rules[-1]
+        if terminal == ['-A', target, '-j', 'DROP']:
+            expected_reject = True
+        else:
+            default = 'icmp-port-unreachable' if binary == 'iptables' else 'icmp6-port-unreachable'
+            expected_reject = terminal == ['-A', target, '-j', 'REJECT', '--reject-with', default]
+        if not expected_reject:
+            return False
+        middle = rules[1:-1]
+        if not middle:
+            return True
+        return (binary == 'iptables' and middle == [
+            ['-A', target, '-d', '10.0.2.2/32', '-p', 'tcp', '-m', 'multiport', '--dports', '8788,9099', '-j', 'ACCEPT']
+        ])
+
+    def is_output_protected(self, binary):
+        if not self.output[binary]:
+            return False
+        first = self.output[binary][0]
+        if len(first) != 4 or first[:3] != ['-A', 'OUTPUT', '-j']:
+            return False
+        return self.is_chain_protective(binary, first[3])
+
+    def _record_protection_state(self, binary, arguments):
+        protected = self.is_output_protected(binary)
+        if protected:
+            self.ever_protected[binary] = True
+        elif self.ever_protected[binary]:
+            self.exposure_windows.append((binary, arguments, copy.deepcopy(self.output[binary]), copy.deepcopy(self.chains[binary])))
 
     def adb(self, *arguments, **options):
         self.calls.append(('adb', *arguments))
@@ -273,26 +313,62 @@ class SyntheticCommercialNetwork:
             return {'airplane_mode_on': '1', 'wifi_on': '0', 'mobile_data': '1' if self.offline_unconfirmed else '0'}[args[2]]
         if arguments == ('getprop', 'sys.boot_completed'):
             return '1'
-        if binary not in self.rules:
+        if binary not in self.chains:
             return ''
         if args == ['-S']:
-            return '-N ' + self.chain
-        if args == ['-F', self.chain]:
-            self.rules[binary] = []
-        elif args[:2] == ['-A', self.chain]:
-            if '-d' in args:
-                args[args.index('-d') + 1] += '/32'
-            self.rules[binary].append(args)
-        elif args == ['-S', self.chain]:
-            rules = [['-N', self.chain], *self.rules[binary]]
-            if self.corrupt == binary:
-                rules.insert(1, ['-A', self.chain, '-j', 'ACCEPT'])
+            return '\n'.join('-N ' + name for name in self.chains[binary])
+        if len(args) == 2 and args[0] == '-N':
+            target = args[1]
+            self.chains[binary].setdefault(target, [])
+            if target == self.chain:
+                self.rules[binary] = self.chains[binary][self.chain]
+            self._record_protection_state(binary, arguments)
+        elif len(args) == 2 and args[0] == '-F':
+            target = args[1]
+            self.chains[binary][target] = []
+            if target == self.chain:
+                self.rules[binary] = self.chains[binary][self.chain]
+            self._record_protection_state(binary, arguments)
+        elif len(args) >= 2 and args[0] == '-A' and args[1] in self.chains[binary]:
+            target = args[1]
+            rule = list(args)
+            if '-d' in rule:
+                rule[rule.index('-d') + 1] += '/32'
+            # Android's -S readback spells out the default rejection type,
+            # even though the original -A command omitted --reject-with.
+            if rule[-2:] == ['-j', 'REJECT']:
+                default = ('icmp-port-unreachable' if binary == 'iptables'
+                           else 'icmp6-port-unreachable')
+                rule += ['--reject-with', self.reject_with.get(binary, default)]
+            self.chains[binary][target].append(rule)
+            self._record_protection_state(binary, arguments)
+        elif len(args) == 2 and args[0] == '-S' and args[1] in self.chains[binary]:
+            target = args[1]
+            rules = [['-N', target], *self.chains[binary][target]]
+            if self.corrupt == binary and target == self.chain:
+                rules.insert(1, ['-A', target, '-j', 'ACCEPT'])
+            elif self.corrupt == (binary, target):
+                rules.insert(1, ['-A', target, '-j', 'ACCEPT'])
             return '\n'.join(' '.join(rule) for rule in rules)
         elif args == ['-S', 'OUTPUT']:
             return '-P OUTPUT ACCEPT\n' + '\n'.join(' '.join(rule) for rule in self.output[binary])
-        elif args == ['-I', 'OUTPUT', '1', '-j', self.chain]:
-            if self.drop_hook != binary:
-                self.output[binary].insert(0, ['-A', 'OUTPUT', '-j', self.chain])
+        elif len(args) == 5 and args[:4] == ['-I', 'OUTPUT', '1', '-j']:
+            target = args[4]
+            if self.drop_hook not in {binary, (binary, target)}:
+                self.output[binary].insert(0, ['-A', 'OUTPUT', '-j', target])
+            self._record_protection_state(binary, arguments)
+        elif len(args) == 4 and args[:3] == ['-D', 'OUTPUT', '-j']:
+            target = args[3]
+            hook = ['-A', 'OUTPUT', '-j', target]
+            if self.drop_hook != (binary, 'delete', target) and hook in self.output[binary]:
+                self.output[binary].remove(hook)
+            self._record_protection_state(binary, arguments)
+        elif len(args) == 2 and args[0] == '-X':
+            target = args[1]
+            if ['-A', 'OUTPUT', '-j', target] in self.output[binary]:
+                raise AssertionError('cannot delete referenced chain: ' + target)
+            self.chains[binary].pop(target, None)
+            self._record_protection_state(binary, arguments)
         else:
             raise AssertionError(arguments)
         return ''
@@ -305,6 +381,8 @@ class CommercialNetworkGuardsTest(unittest.TestCase):
         for binary in network.rules:
             self.assertEqual(network.output[binary][0], ['-A', 'OUTPUT', '-j', network.chain])
             self.assertNotIn(['-A', network.chain, '-j', 'ACCEPT'], network.rules[binary])
+            self.assertTrue(network.is_output_protected(binary))
+        self.assertEqual(network.exposure_windows, [])
         self.assertIn('8788,9099', ' '.join(map(str, network.calls)))
         self.assertNotIn('18788', ' '.join(map(str, network.calls)))
         root_index = network.calls.index(('adb', 'root'))
@@ -332,6 +410,132 @@ class CommercialNetworkGuardsTest(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, 'hook-missing'):
             device.prepare_commercial_network(network.shell, network.adb)
         self.assertNotIn(('shell', 'cmd', 'connectivity', 'airplane-mode', 'disable'), network.calls)
+
+    def test_disconnection_removes_connected_allowlist_and_rejects_both_families(self):
+        network = SyntheticCommercialNetwork()
+        device.ensure_commercial_firewall(network.shell)
+        self.assertTrue(any('8788,9099' in rule for rule in network.rules['iptables']))
+        network.calls.clear()
+        device.ensure_commercial_firewall(network.shell, disconnected=True)
+        for binary, reject in [('iptables', 'icmp-port-unreachable'),
+                               ('ip6tables', 'icmp6-port-unreachable')]:
+            self.assertEqual(network.rules[binary], [
+                ['-A', network.chain, '-o', 'lo', '-j', 'ACCEPT'],
+                ['-A', network.chain, '-j', 'REJECT', '--reject-with', reject],
+            ])
+            self.assertEqual(network.output[binary][0],
+                             ['-A', 'OUTPUT', '-j', network.chain])
+            self.assertIn(('shell', binary, '-S', network.chain), network.calls)
+            self.assertTrue(network.is_output_protected(binary))
+        self.assertEqual(network.exposure_windows, [])
+        self.assertFalse(any('10.0.2.2' in str(call) for call in network.calls))
+        self.assertFalse(any(call[0] == 'adb' for call in network.calls))
+        self.assertNotIn(('shell', 'cmd', 'connectivity', 'airplane-mode', 'disable'),
+                         network.calls)
+
+    def test_disconnected_reject_type_extra_rule_and_hook_must_read_back_exactly(self):
+        cases = [
+            {'reject_with': {'iptables': 'tcp-reset'}},
+            {'reject_with': {'ip6tables': 'icmp-port-unreachable'}},
+            {'corrupt': 'iptables'}, {'corrupt': 'ip6tables'},
+            {'drop_hook': 'iptables'}, {'drop_hook': 'ip6tables'},
+        ]
+        for changed in cases:
+            network = SyntheticCommercialNetwork(**changed)
+            with self.subTest(changed=changed), self.assertRaisesRegex(
+                    RuntimeError, 'chain-mismatch|hook-missing'):
+                device.ensure_commercial_firewall(network.shell, disconnected=True)
+            self.assertNotIn(('shell', 'cmd', 'connectivity', 'airplane-mode', 'disable'),
+                             network.calls)
+
+    def test_disconnected_repair_puts_both_family_hooks_before_existing_accept(self):
+        network = SyntheticCommercialNetwork()
+        device.ensure_commercial_firewall(network.shell, disconnected=True)
+        for binary in network.rules:
+            self.assertEqual(network.output[binary][0],
+                             ['-A', 'OUTPUT', '-j', network.chain])
+            insertion = ('shell', binary, '-I', 'OUTPUT', '1', '-j', network.chain)
+            self.assertIn(insertion, network.calls)
+            self.assertGreaterEqual(network.calls.count(('shell', binary, '-S', 'OUTPUT')), 2)
+        self.assertEqual(network.exposure_windows, [])
+
+    def test_firewall_transitions_and_mid_switch_failures_never_open_exposure_window(self):
+        network = SyntheticCommercialNetwork()
+        device.ensure_commercial_firewall(network.shell)
+        device.ensure_commercial_firewall(network.shell, disconnected=True)
+        device.ensure_commercial_firewall(network.shell, disconnected=False)
+        self.assertEqual(network.exposure_windows, [])
+        for failure in [
+            {'corrupt': ('iptables', network.stage)},
+            {'corrupt': 'iptables'},
+            {'drop_hook': ('iptables', network.stage)},
+            {'drop_hook': ('iptables', 'delete', network.stage)},
+        ]:
+            protected = SyntheticCommercialNetwork()
+            device.ensure_commercial_firewall(protected.shell)
+            protected.corrupt = failure.get('corrupt')
+            protected.drop_hook = failure.get('drop_hook')
+            with self.subTest(failure=failure), self.assertRaisesRegex(
+                    RuntimeError, 'chain-mismatch|hook-missing'):
+                device.ensure_commercial_firewall(protected.shell, disconnected=True)
+            self.assertEqual(protected.exposure_windows, [])
+            for binary in protected.chains:
+                self.assertTrue(protected.is_output_protected(binary))
+
+    def test_transport_probe_proves_online_backend_and_distinguishes_blocked_from_broken_or_adb_failure(self):
+        online_commands = []
+        def online_adb(*args, **kwargs):
+            self.assertEqual(args[0], 'shell')
+            self.assertFalse(kwargs.get('check', True))
+            online_commands.append(args[1])
+            if '8788' in args[1]:
+                body = b'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n{"service":"strawberry-gateway-v1"}\nTRANSPORT_EXIT:0\n'
+            else:
+                body = b'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n{"authEmulator":true}\nTRANSPORT_EXIT:0\n'
+            return SimpleNamespace(returncode=0, stdout=body)
+
+        connected = device.prove_commercial_transport_connected(online_adb, deadline_seconds=1, sleep=lambda _: None)
+        self.assertEqual([item['port'] for item in connected], [8788, 9099])
+        self.assertTrue(all(item['connectSucceeded'] and item['exitCode'] == 0 for item in connected))
+        self.assertEqual(online_commands, [device.commercial_transport_probe_command(8788),
+                                           device.commercial_transport_probe_command(9099)])
+
+        offline_commands = []
+        def blocked_adb(*args, **kwargs):
+            offline_commands.append(args[1])
+            return SimpleNamespace(returncode=0, stdout=b'nc: connect: Connection refused\nTRANSPORT_EXIT:1\n')
+
+        disconnected = device.prove_commercial_transport_disconnected(blocked_adb)
+        self.assertEqual([item['port'] for item in disconnected], [8788, 9099])
+        self.assertTrue(all(not item['connectSucceeded'] and item['exitCode'] == 1 for item in disconnected))
+        self.assertEqual(offline_commands, online_commands)
+
+        wrong_service = lambda *args, **kwargs: SimpleNamespace(
+            returncode=0, stdout=b'HTTP/1.1 200 OK\r\n\r\nunrelated-service\nTRANSPORT_EXIT:0\n'
+        )
+        with self.assertRaisesRegex(RuntimeError, 'local-services-not-reachable'):
+            device.prove_commercial_transport_connected(
+                wrong_service, deadline_seconds=0, sleep=lambda _: None, clock=iter([0.0, 0.0, 1.0]).__next__
+            )
+
+        for label, bad_probe, expected_error in [
+            ('exit-127', SimpleNamespace(returncode=0, stdout=b'/system/bin/sh: toybox: not found\nTRANSPORT_EXIT:127\n'), 'transport-probe-broken'),
+            ('exit-126', SimpleNamespace(returncode=0, stdout=b'/system/bin/sh: toybox: Permission denied\nTRANSPORT_EXIT:126\n'), 'transport-probe-broken'),
+            ('exit-2', SimpleNamespace(returncode=0, stdout=b'nc: Unknown option z\nTRANSPORT_EXIT:2\n'), 'transport-probe-broken'),
+            ('exit-1-usage', SimpleNamespace(returncode=0, stdout=b'usage: nc [-w SEC] HOST PORT\nTRANSPORT_EXIT:1\n'), 'transport-probe-broken'),
+            ('exit-1-empty', SimpleNamespace(returncode=0, stdout=b'TRANSPORT_EXIT:1\n'), 'transport-probe-broken'),
+            ('missing-marker', SimpleNamespace(returncode=0, stdout=b'nc: connect: Connection refused\n'), 'transport-probe-broken'),
+            ('adb-failure', SimpleNamespace(returncode=255, stdout=b'nc: connect: Connection refused\nTRANSPORT_EXIT:1\n'), 'transport-probe-adb-failed'),
+            ('still-reachable-exit-0', SimpleNamespace(returncode=0, stdout=b'nc: connect: Connection refused\nTRANSPORT_EXIT:0\n'), 'offline-transport-remains-reachable'),
+            ('still-reachable-http', SimpleNamespace(returncode=0, stdout=b'HTTP/1.1 200 OK\r\n\r\nstrawberry-gateway-v1\nTRANSPORT_EXIT:1\n'), 'offline-transport-remains-reachable'),
+        ]:
+            with self.subTest(label=label), self.assertRaisesRegex(RuntimeError, expected_error):
+                device.prove_commercial_transport_disconnected(lambda *a, **k: bad_probe)
+            if expected_error in {'transport-probe-broken', 'transport-probe-adb-failed'}:
+                with self.subTest(label=label + '-online'), self.assertRaisesRegex(RuntimeError, expected_error):
+                    device.prove_commercial_transport_connected(
+                        lambda *a, **k: bad_probe, deadline_seconds=0, sleep=lambda _: None
+                    )
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

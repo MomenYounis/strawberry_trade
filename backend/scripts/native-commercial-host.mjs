@@ -17,7 +17,11 @@ if(!['init','employee-job','manager-job','revoked-job','replacement-job','offlin
 const directory=await realpath(privateDirectory);
 if(!(directory.startsWith('/tmp/strawberry-native-private-')||/^\/home\/younis\/\.local\/share\/strawberry-trade-test-runtime\/private-[a-z0-9_-]+$/.test(directory))||(await stat(directory)).mode&0o077)throw Error('private-campaign-directory-required');
 const root=resolve(import.meta.dirname,'../..'),out=join(root,'verification/continuation-2026-11-02/native-durable');
-const log=await readFile(join(out,'local-backend-serve.log'),'utf8');let runtime;
+const backendLogName=process.env.STRAWBERRY_NATIVE_BACKEND_LOG??'local-backend-serve.log';
+if(!/^local-backend-serve(?:-[a-z0-9-]+)?\.log$/.test(backendLogName))throw Error('known-local-backend-log-name-required');
+const backendLogPath=join(out,backendLogName);
+if(await realpath(backendLogPath)!==backendLogPath||(await stat(backendLogPath)).size>32*1024*1024)throw Error('bounded-ordinary-backend-log-required');
+const log=await readFile(backendLogPath,'utf8');let runtime;
 for(const line of log.split('\n'))try{const value=JSON.parse(line);if(value.state==='ready')runtime=value;}catch{}
 if(!runtime||runtime.projectId!==DEMO_PROJECT_ID||!(runtime.runtimeRoot.startsWith('/tmp/strawberry-worker-http-')||/^\/home\/younis\/\.local\/share\/strawberry-trade-test-runtime\/backend-[a-z0-9_-]+$/.test(runtime.runtimeRoot))||runtime.ports.auth!==9099||runtime.ports.firestore!==8080||runtime.ports.worker!==8788)throw Error('owned-live-local-backend-required');
 process.kill(runtime.pid,0);
@@ -95,7 +99,7 @@ try{
     if(rows.filter(row=>row.id===operationId).length!==1||entry?.kind!=='sale'||entry.totalMinor!==2000||entry.paidMinor!==500||entry.creatorUid!==a.uid
       ||receipt?.result?.id!==operationId||receipt.result.status!=='accepted'||receipt.actorUid!==a.uid)throw Error('offline-original-operation-receipt-mismatch');
    }
-   const evidence={status:'PASS',synthetic:true,phase,campaign:manifest.campaign,customerMinor:customer,supplierMinor:supplier,recordedCashMinor:cash,secondTenantCustomerMinor:bDebt,acceptedEntries:rows.length,lostOnlyAbsent:true,returnCounterPreserved:true,productionDataUsed:false};
+   const evidence={status:'PASS',synthetic:true,phase,campaign:manifest.campaign,backendLog:backendLogName,customerMinor:customer,supplierMinor:supplier,recordedCashMinor:cash,secondTenantCustomerMinor:bDebt,acceptedEntries:rows.length,lostOnlyAbsent:true,returnCounterPreserved:true,productionDataUsed:false};
    if(phase==='oracle-offline')Object.assign(evidence,{offlineOriginalOperationAcceptedOnce:true,acceptedReceiptBoundToOriginalId:true});
    // Campaign-specific, create-only evidence keeps a later run from replacing
    // the independent financial oracle of an earlier accepted campaign.
