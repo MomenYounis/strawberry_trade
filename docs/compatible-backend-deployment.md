@@ -1,10 +1,6 @@
-# Compatible backend: prepared locally, deployment pending
+# Compatible backend: deployed to production Worker (2026-11-10)
 
-Rebuilt on 6 November 2026 after the dependency patch. **No production deployment, login, resource creation,
-secret change, billing change or production data operation was performed.** This
-document describes the exact locally verified gateway package and the separate
-approval required to deploy it. It does not approve the APK, annual scheduling,
-archive storage or destructive cleanup.
+Rebuilt on 6 November 2026 after the dependency patch and **deployed with explicit owner approval on 10 November 2026** ([`backend-production-deploy-nov10.json`](../verification/continuation-2026-11-02/final-review/backend-production-deploy-nov10.json)). **No resource creation, secret change, billing change, annual scheduling, archive storage activation, or destructive cleanup was performed.** This document describes the deployed gateway package and the preserved rollback version (`#5`, `f06328bf-1d81-4826-a994-4b175384ee2b`). It does not approve annual scheduling, archive storage or destructive cleanup.
 
 ## Defect and compatibility contract
 
@@ -77,7 +73,7 @@ This is a gateway deployment package, not a whole-application recovery backup.
 | Actual local workerd → SQLite Durable Object → Auth/Firestore emulators | **PASS 95 assertions** | [patched-lock actual HTTP receipt](../verification/continuation-2026-11-02/final-review/dependency-worker-http-java25.json) |
 | Exact production-config minified dry run | **PASS**, no upload | [production-config-dry-run.log](../verification/continuation-2026-11-02/backend-deployment-nov6-retry/production-config-dry-run.log) |
 | Prebuilt-payload production-config dry run | **PASS**, no upload, byte-identical `index.js` | [prebuilt-payload-dry-run.json](../verification/continuation-2026-11-02/backend-deployment-nov6-retry/prebuilt-payload-dry-run.json) |
-| Current production bindings, IAM, App Check and deployment startup CPU | **BLOCKED / NOT RUN** locally | Requires the approved existing production environment; emulator acceptance is narrower |
+| Current production deployment, bindings, `/health`, `/bootstrap` auth guard, and 64 KiB body guard | **PASS** (Version `#6` `923dbd71-323c-4071-91f0-c85e88e2405e`, deployed `2026-11-10T15:05:44.852385Z`) | [Production deploy receipt](../verification/continuation-2026-11-02/final-review/backend-production-deploy-nov10.json); authenticated `/bootstrap` and live sync remain to be verified from the physical phone with a test account |
 
 The 95 HTTP assertions include mixed omitted/v1/v2 clients, explicit null/invalid
 version refusal, zero receipt on unsupported requests, unchanged retained queued
@@ -120,7 +116,7 @@ Before approval, an operator must confirm the **existing** intended target:
   Firestore rules/indexes or grant permissions.
 - Record the current deployment/version, effective bindings and rollback version
   before changing anything. Choose a rollback version compatible with the
-  supported client fleet and preserve its configuration. A read-only query on 6 November was [BLOCKED by unavailable existing authentication](../verification/continuation-2026-11-02/final-review/backend-production-readonly-nov6.json); no login or production change was attempted.
+  supported client fleet and preserve its configuration. A read-only query on 6 November was [BLOCKED by unavailable existing authentication](../verification/continuation-2026-11-02/final-review/backend-production-readonly-nov6.json); on 8 November, read-only `wrangler deployments list` succeeded ([`backend-production-readonly-nov8.json`](../verification/continuation-2026-11-02/final-review/backend-production-readonly-nov8.json)), and on 10 November full read-only inspection (`deployments list`, `versions view`, `secret list`) succeeded ([`backend-production-readonly-nov10.json`](../verification/continuation-2026-11-02/final-review/backend-production-readonly-nov10.json)), confirming active deployment `6eb20e49-507a-4504-a162-0945070a0506` (`2026-10-28T12:06:44.46623Z`, active version `#5` `f06328bf-1d81-4826-a994-4b175384ee2b`, prior version `5a519a2a-bcfc-4d6a-b20d-6585e1a37bbc` from `2026-10-23`) and matching live bindings (`FIREBASE_PROJECT_ID=strawberry-trade-261017-6a49b`, `FIREBASE_ANDROID_APP_ID=1:713439663809:android:c0565e7ada543b0e2b6640`, `LICENSE_KEY_ID=issuer-v1`, Durable Object `GATEWAY`/`TradingGateway` tag `v1`, and secrets `FIREBASE_SERVICE_ACCOUNT_JSON`, `LICENSE_PRIVATE_KEY_PEM`, `LICENSE_PUBLIC_KEY_PEM`, with zero R2 bindings or cron triggers). No login or production change was attempted.
 - Keep the existing Durable Object binding/class `GATEWAY`/`TradingGateway` and
   migration tag `v1`. No new migration, R2 bucket/binding, cron trigger, tenant
   minimum protocol, annual close or deletion setting is included.

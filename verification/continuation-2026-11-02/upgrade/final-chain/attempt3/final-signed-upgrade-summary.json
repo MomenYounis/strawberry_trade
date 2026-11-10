@@ -1,0 +1,246 @@
+{
+  "status": "PASS",
+  "synthetic": true,
+  "applicationSourceRevision": "7058f24b2a85218fb96d88e435e0d3c5fce0e1c8",
+  "productionNetworkUsed": false,
+  "ownerDeviceTouched": false,
+  "uninstallOrDataClear": false,
+  "runtimeRoot": "/home/younis/.local/share/strawberry-trade-test-runtime/strawberry-commercial-native-i3mha9r1",
+  "gate": "verification/continuation-2026-11-02/upgrade/final-chain/attempt3/root-stop-handoff.json",
+  "startedAtUtc": "2026-11-07T14:02:52.247452+00:00",
+  "steps": [
+    {
+      "label": "confirm-root-owned-replacement-stopped",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:03:03.186983+00:00",
+      "rootStoppedReplacement": true,
+      "serialDisappearanceVerified": true,
+      "noReplacementAdbCommandsIssued": true,
+      "userdataPreserved": true
+    },
+    {
+      "label": "start-fresh-private-upgrade",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:03:04.293825+00:00",
+      "pid": 152978,
+      "serial": "emulator-5578",
+      "distinctFreshRuntime": true
+    },
+    {
+      "label": "fresh-package-absence",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:03:41.510412+00:00",
+      "applicationAbsent": true,
+      "offlineBeforeAnyApk": true
+    },
+    {
+      "label": "seed-v2-retained-install",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:03:57.511478+00:00",
+      "receipt": "verification/continuation-2026-11-02/upgrade/final-chain/attempt3/seed-v2-install.json",
+      "receiptSha256": "e49ea3179028ac4b84149920b2d599ab588d7c1a9b2fbf4f215ff17723ff42c8"
+    },
+    {
+      "label": "seed-v2-installed-identity",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:04:02.902143+00:00",
+      "package": "com.strawberrytrade.strawberry_trade",
+      "versionCode": 8,
+      "sha256": "dd6dd61c37abf9ef8c0af3a17faa47d55fb40b4e5b9ac98e704498828bff7d50",
+      "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+      "certificateProof": "Installed bytes match independently certificate-verified local APK",
+      "serial": "emulator-5578",
+      "synthetic": true,
+      "observedAtUtc": "2026-11-07T14:04:02.901866+00:00"
+    },
+    {
+      "label": "seed-schema2-native-assertions",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:04:23.162970+00:00",
+      "receipt": "verification/continuation-2026-11-02/upgrade/final-chain/attempt3/seed-schema2-native.json",
+      "receiptSha256": "14c1b20eb6370af89e99f3bde9028834d931c65f688b8fab706b66cd7b528990",
+      "substantiveNativeTests": 3
+    },
+    {
+      "label": "actual-v9-retained-install",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:04:32.050376+00:00",
+      "receipt": "verification/continuation-2026-11-02/upgrade/final-chain/attempt3/actual-v9-install.json",
+      "receiptSha256": "7322050bf7ecd397dece6cf7b8b1a61b1a9d45fef6b5ccf1f1faa221b73f1342"
+    },
+    {
+      "label": "actual-v9-installed-identity",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:04:32.753094+00:00",
+      "package": "com.strawberrytrade.strawberry_trade",
+      "versionCode": 9,
+      "sha256": "7bfaf821d141960a8a49e8ef88921406dca0dd684b5cb3b1a12bee38aae0ee83",
+      "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+      "certificateProof": "Installed bytes match independently certificate-verified local APK",
+      "serial": "emulator-5578",
+      "synthetic": true,
+      "observedAtUtc": "2026-11-07T14:04:32.752783+00:00"
+    },
+    {
+      "label": "actual-v11-retained-install",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:04:39.283567+00:00",
+      "receipt": "verification/continuation-2026-11-02/upgrade/final-chain/attempt3/actual-v11-install.json",
+      "receiptSha256": "53dc804603a7bdc908a5c2f6e3d298bec27a95dc16bde5bebc8ccaa347680895"
+    },
+    {
+      "label": "actual-v11-installed-identity",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:04:39.799612+00:00",
+      "package": "com.strawberrytrade.strawberry_trade",
+      "versionCode": 11,
+      "sha256": "5f597f42a4f4142fdf56b6b9c27ec34299361d260abea68cddec57e180fd7203",
+      "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+      "certificateProof": "Installed bytes match independently certificate-verified local APK",
+      "serial": "emulator-5578",
+      "synthetic": true,
+      "observedAtUtc": "2026-11-07T14:04:39.799241+00:00"
+    },
+    {
+      "label": "actual-final-v12-retained-install",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:04:45.527357+00:00",
+      "receipt": "verification/continuation-2026-11-02/upgrade/final-chain/attempt3/actual-final-v12-install.json",
+      "receiptSha256": "7657869dd4c5a8ee299ebc9d7ab91fa3648100b6cdc475bff7a436d7c2f1a80b"
+    },
+    {
+      "label": "actual-final-v12-installed-identity",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:04:46.088370+00:00",
+      "package": "com.strawberrytrade.strawberry_trade",
+      "versionCode": 12,
+      "sha256": "9595d4ea4e0f7afe484c7af79066353c421445e35e5023b4ee5dc79df0cf15a9",
+      "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+      "certificateProof": "Installed bytes match independently certificate-verified local APK",
+      "serial": "emulator-5578",
+      "synthetic": true,
+      "observedAtUtc": "2026-11-07T14:04:46.088076+00:00"
+    },
+    {
+      "label": "actual-final-release-offline-smoke",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:04:59.760329+00:00",
+      "arabicUiObservedInSemantics": true,
+      "screenshotSha256": "d9d8f54c54f50ea2c7840bdd3c8e538f3773ef8209d937a65d58d7af7cfadd74",
+      "setupOnlyNoAuthentication": true,
+      "visualReview": "NOT RUN; inspect captured image separately"
+    },
+    {
+      "label": "verify-final-v12-retained-install",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:05:09.305292+00:00",
+      "receipt": "verification/continuation-2026-11-02/upgrade/final-chain/attempt3/verify-final-v12-install.json",
+      "receiptSha256": "e4cc1bed63d32a1a1b6396bf4f1d7471517f62accc7213c8dbf2bb522a69bed7"
+    },
+    {
+      "label": "verify-final-v12-installed-identity",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:05:11.258675+00:00",
+      "package": "com.strawberrytrade.strawberry_trade",
+      "versionCode": 12,
+      "sha256": "013c02777fbdaf9e67ac1a1189a9997e65175d39894cc1a5b43c59e8e09f2531",
+      "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+      "certificateProof": "Installed bytes match independently certificate-verified local APK",
+      "serial": "emulator-5578",
+      "synthetic": true,
+      "observedAtUtc": "2026-11-07T14:05:11.258291+00:00"
+    },
+    {
+      "label": "final-schema2-to4-native-assertions",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:05:19.996798+00:00",
+      "receipt": "verification/continuation-2026-11-02/upgrade/final-chain/attempt3/verify-final-native.json",
+      "receiptSha256": "f3ffcfc05e22fdc28c942f43d0a104880ce4b9ee1fe4fbfcc95f964a7170b86e",
+      "substantiveNativeTests": 3
+    },
+    {
+      "label": "actual-android-reboot-and-native-assertions",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:06:17.252504+00:00",
+      "receipt": "verification/continuation-2026-11-02/upgrade/final-chain/attempt3/verify-final-after-reboot.json",
+      "receiptSha256": "ee905e62ed938573d683f4f67d5e8daf1d3b2241b927a5b6d0b15eef2cf7e302"
+    },
+    {
+      "label": "post-reboot-installed-identity",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:06:20.361140+00:00",
+      "package": "com.strawberrytrade.strawberry_trade",
+      "versionCode": 12,
+      "sha256": "013c02777fbdaf9e67ac1a1189a9997e65175d39894cc1a5b43c59e8e09f2531",
+      "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+      "certificateProof": "Installed bytes match independently certificate-verified local APK",
+      "serial": "emulator-5578",
+      "synthetic": true,
+      "observedAtUtc": "2026-11-07T14:06:20.360834+00:00"
+    },
+    {
+      "label": "final-owned-runtime-stop",
+      "status": "PASS",
+      "finishedAtUtc": "2026-11-07T14:06:20.365452+00:00",
+      "result": "OK: killing emulator, bye bye\nOK",
+      "userdataPreserved": true
+    }
+  ],
+  "artifacts": [
+    {
+      "label": "seed-v2",
+      "path": "/home/younis/strawberry-trade-annual-review/verification/continuation-2026-11-02/upgrade/persistence-seed-v2-signed-DEBUG.apk",
+      "sha256": "dd6dd61c37abf9ef8c0af3a17faa47d55fb40b4e5b9ac98e704498828bff7d50",
+      "bytes": 187103638,
+      "versionCode": 8,
+      "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+    },
+    {
+      "label": "actual-v9",
+      "path": "/mnt/data/LinuxHome/Downloads/strawberry_trade/delivery/strawberry-trade-employee-invitations-v9.apk",
+      "sha256": "7bfaf821d141960a8a49e8ef88921406dca0dd684b5cb3b1a12bee38aae0ee83",
+      "bytes": 77119012,
+      "versionCode": 9,
+      "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+    },
+    {
+      "label": "actual-v11",
+      "path": "/home/younis/strawberry-trade-annual-review/verification/annual-2026-11-02/flutter/strawberry-trade-annual-review-v11-final.apk",
+      "sha256": "5f597f42a4f4142fdf56b6b9c27ec34299361d260abea68cddec57e180fd7203",
+      "bytes": 78070020,
+      "versionCode": 11,
+      "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+    },
+    {
+      "label": "actual-final-v12",
+      "path": "/home/younis/strawberry-trade-annual-review/verification/continuation-2026-11-02/release-v12-bulk-nov6/strawberry-trade-annual-review-v12-final.apk",
+      "sha256": "9595d4ea4e0f7afe484c7af79066353c421445e35e5023b4ee5dc79df0cf15a9",
+      "bytes": 78430556,
+      "versionCode": 12,
+      "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+    },
+    {
+      "label": "verify-final-v12",
+      "path": "/home/younis/strawberry-trade-annual-review/verification/continuation-2026-11-02/upgrade/verify-bulk-nov6/persistence-verify-signed-DEBUG.apk",
+      "sha256": "013c02777fbdaf9e67ac1a1189a9997e65175d39894cc1a5b43c59e8e09f2531",
+      "bytes": 187525526,
+      "versionCode": 12,
+      "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b"
+    }
+  ],
+  "helperSha256": "241f06df00d6edea0d3cc6221957aa7218a1992c80b513a64fe974764d8d2f1a",
+  "canonicalUpgradeMetadataSha256Before": "1bdf874e7863957ceaa2ac24b0aae87a34c86145ee1dec954edbe7e3c51ba7da",
+  "gateSha256": "419f1593044e8ea58757c30c6a3622dfa6676a45ec87866d18c21cbb3505154e",
+  "currentStep": "final-owned-runtime-stop",
+  "finishedAtUtc": "2026-11-07T14:06:24.473209+00:00",
+  "bootCountBefore": 3,
+  "bootCountAfter": 4,
+  "canonicalUpgradeMetadataSha256After": "1bdf874e7863957ceaa2ac24b0aae87a34c86145ee1dec954edbe7e3c51ba7da",
+  "canonicalPriorUpgradeUntouched": true,
+  "preservedKeyQueueDraftSchemaAssertions": true,
+  "limitations": [
+    "Schema2 synthetic data was created by the explicit DEBUG seed, not authenticated actual v9 UI.",
+    "Actual release APK authentication/network migration under its fixed production endpoint was NOT RUN.",
+    "Physical ARM, release memory and16KiB runtime acceptance are not established."
+  ]
+}

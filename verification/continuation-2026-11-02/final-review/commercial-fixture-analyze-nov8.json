@@ -1,0 +1,35 @@
+{
+  "commands": [
+    {
+      "command": [
+        "/home/younis/flutter/bin/flutter",
+        "analyze",
+        "--no-pub",
+        "lib",
+        "test",
+        "integration_test"
+      ],
+      "exitCode": 0,
+      "issues": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/annual-review/native_device_guards.test.py"
+      ],
+      "exitCode": 0,
+      "failed": 0,
+      "passed": 22
+    }
+  ],
+  "compiledApplicationInputsUnchanged": true,
+  "files": {
+    "integration_test/commercial_business_test.dart": "e711141cf4fbeae179e22a5a44353e2699f9c3ec59febbd6033423a78c64e330",
+    "tools/annual-review/native-commercial-device.py": "84abd3909aed7bb8f6fce640ca131c87ebd48695ace34ced330dd45883e65169",
+    "tools/annual-review/native_device_guards.test.py": "8430e8ee3a955e3330e8f5374e016ebfd45f09a172c6cb3ab1a0fa23d2a44145"
+  },
+  "observedAtUtc": "2026-11-08T09:50:29.469699+00:00",
+  "signedReleaseApkPath": "/home/younis/strawberry-trade-annual-review/verification/continuation-2026-11-02/release-v12-bulk-nov6/strawberry-trade-annual-review-v12-final.apk",
+  "signedReleaseApkSha256": "9595d4ea4e0f7afe484c7af79066353c421445e35e5023b4ee5dc79df0cf15a9",
+  "status": "PASS"
+}

@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "synthetic": true,
+  "phase": "oracle-offline",
+  "campaign": "native_62c5d3612fb3",
+  "backendLog": "local-backend-serve-r4-final-nov8.log",
+  "customerMinor": 20000,
+  "supplierMinor": 8000,
+  "recordedCashMinor": -6700,
+  "secondTenantCustomerMinor": 4700,
+  "acceptedEntries": 13,
+  "lostOnlyAbsent": true,
+  "returnCounterPreserved": true,
+  "productionDataUsed": false,
+  "offlineOriginalOperationAcceptedOnce": true,
+  "acceptedReceiptBoundToOriginalId": true
+}

@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "synthetic": true,
+  "productionDataUsed": false,
+  "applicationSourceRevision": "7058f24b2a85218fb96d88e435e0d3c5fce0e1c8",
+  "fixtureSourceRevision": "eb5007ca17d091c535ff53ce343f9a0a6e7265c7",
+  "fixtureSha256": "5107ca4c3d8093f4cfe54f86501bd8ef9131cd5c7d59c24f9f892f4c134a67b6",
+  "startedAtUtc": "2026-11-08T09:23:25.843296+00:00",
+  "steps": [
+    {
+      "label": "r4-nov7-offline-complete-replacement-start",
+      "exitCode": 0,
+      "finishedAtUtc": "2026-11-08T09:23:26.059736+00:00"
+    },
+    {
+      "label": "r4-nov7-resume-complete-offline-put",
+      "exitCode": 0,
+      "finishedAtUtc": "2026-11-08T09:23:55.581473+00:00"
+    },
+    {
+      "label": "r4-nov7-resume-complete-online-isolate",
+      "exitCode": 0,
+      "finishedAtUtc": "2026-11-08T09:24:11.482263+00:00"
+    },
+    {
+      "label": "r4-nov7-resume-complete-offline-launch",
+      "exitCode": 0,
+      "finishedAtUtc": "2026-11-08T09:24:15.004835+00:00"
+    },
+    {
+      "label": "r4-nov7-resume-complete-offline",
+      "status": "PASS",
+      "fixturePhase": "resume_offline",
+      "receipt": "verification/continuation-2026-11-02/native-durable/replacement-r4-nov7-resume-complete-offline-drive.json",
+      "finishedAtUtc": "2026-11-08T09:24:39.007400+00:00"
+    },
+    {
+      "label": "r4-nov7-resume-complete-offline-result",
+      "exitCode": 0,
+      "finishedAtUtc": "2026-11-08T09:24:39.324133+00:00"
+    },
+    {
+      "label": "r4-nov7-oracle-final-offline",
+      "exitCode": 0,
+      "finishedAtUtc": "2026-11-08T09:24:41.546012+00:00"
+    },
+    {
+      "label": "r4-nov7-offline-final-checkpoint",
+      "exitCode": 0,
+      "finishedAtUtc": "2026-11-08T09:24:45.973353+00:00"
+    }
+  ],
+  "resumesEvidence": "verification/continuation-2026-11-02/native-durable/business-recovery-r4-offline-final-progress.json",
+  "resumeReason": "Continue from already verified offline transport failure and offline reboot persistence after put-job force-stop race; no financial replay or reset.",
+  "retainedRebootVerifiedPreflight": {
+    "status": "PASS",
+    "operationSha256": "6fd7827c8899b9b22c020e99e8634b7a082ccf8e123885aa239deb092b9583e4",
+    "draftSha256": "7670e3ef4f8ad128b790c60f71e5ef29cf2aced5f7ab9235054e84b5bd0a579c",
+    "offlineStateSha256": "b4280169045bb4a5335078c359f9bc32fecc607cb3f947a310dfdc8c2c5b6e24",
+    "transportFailureObserved": true,
+    "rebootVerified": true,
+    "noFinancialDataOrQueueReset": true
+  },
+  "campaign": "native_62c5d3612fb3",
+  "independentOracleDirectory": "verification/continuation-2026-11-02/native-durable/campaigns/native_62c5d3612fb3",
+  "finishedAtUtc": "2026-11-08T09:24:46.117145+00:00"
+}

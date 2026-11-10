@@ -1,0 +1,64 @@
+{
+  "activeDeployment": {
+    "activeVersionId": "f06328bf-1d81-4826-a994-4b175384ee2b",
+    "created_on": "2026-10-28T12:06:44.46623Z",
+    "id": "6eb20e49-507a-4504-a162-0945070a0506",
+    "percentage": 100,
+    "source": "wrangler",
+    "triggeredBy": "deployment"
+  },
+  "compatibilityAnalysis": {
+    "activeVersionPredatesNovSyncProtocolFix": true,
+    "activeVersionRejectsExplicitSyncProtocolField": [
+      "v10",
+      "v11"
+    ],
+    "activeVersionSupportsOmittedV1Clients": [
+      "v9",
+      "v12-before-v2-negotiation"
+    ],
+    "preparedCompatiblePackagePayloadSha256": "fe3eb536ed163b28a3fe77478cb31fd251f82765bf05b38d5a589436527f8815",
+    "preparedCompatiblePackageSourceSha256": "a4473a6284547ff5ccb8015afd88de0573dcf5f9a7e7890b77ef3dfbdc9703ab"
+  },
+  "configuredAccountId": "c9e7af798c5f97976ecdb07e3fc086f6",
+  "deploymentsListStatus": "PASS",
+  "observedAtUtc": "2026-11-08T09:55:02.490851+00:00",
+  "productionMutations": false,
+  "readOnly": true,
+  "recordedDeploymentHistory": [
+    {
+      "created_on": "2026-10-19T22:30:01.030979Z",
+      "id": "26d41d73-743a-49e4-bed9-94837a2dc4fd",
+      "triggered_by": "upload",
+      "version_id": "f717b5a0-bd98-456e-afaf-f0c170a409c9"
+    },
+    {
+      "created_on": "2026-10-19T22:37:50.434578Z",
+      "id": "eefde11f-65f3-4414-afa3-43410e263033",
+      "triggered_by": "secret",
+      "version_id": "8f094673-ca4c-4342-a729-ed6d100efd3c"
+    },
+    {
+      "created_on": "2026-10-20T17:37:16.049442Z",
+      "id": "468af599-c7d1-4b97-81cb-e7e7d8671f0f",
+      "triggered_by": "deployment",
+      "version_id": "c174a61b-1f27-46c1-beb0-624dc522b96d"
+    },
+    {
+      "created_on": "2026-10-23T09:12:51.14299Z",
+      "id": "4f311208-0d63-4938-89a3-39af96007368",
+      "triggered_by": "deployment",
+      "version_id": "5a519a2a-bcfc-4d6a-b20d-6585e1a37bbc"
+    },
+    {
+      "created_on": "2026-10-28T12:06:44.46623Z",
+      "id": "6eb20e49-507a-4504-a162-0945070a0506",
+      "triggered_by": "deployment",
+      "version_id": "f06328bf-1d81-4826-a994-4b175384ee2b"
+    }
+  ],
+  "status": "PARTIAL_PASS_BINDINGS_BLOCKED",
+  "versionsViewAndSecretsListReason": "wrangler-fetch-connectivity-failure",
+  "versionsViewAndSecretsListStatus": "BLOCKED",
+  "workerName": "strawberry-tenant-gateway"
+}

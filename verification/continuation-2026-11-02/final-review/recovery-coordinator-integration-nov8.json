@@ -1,0 +1,89 @@
+{
+  "commands": [
+    {
+      "command": "node --test backend/test/recovery-coordinator.test.mjs",
+      "failed": 0,
+      "passed": 4,
+      "status": "PASS"
+    },
+    {
+      "command": "npm --prefix backend run test:recovery-coordinator",
+      "coveredAssertions": [
+        "preflightZeroWrites",
+        "layerOrderingObjectThenFinancialThenAuthority",
+        "quarantineRecoveryEndToEnd",
+        "coordinatedDemoActivationToOperationalTenant",
+        "interruptedExecutionAndBoundedResumeAcrossAllPhases",
+        "targetTamperingRefusalObjectQuarantineLiveAuth",
+        "tenantIsolationAndCrossTenantQuarantinePreservation",
+        "duplicateRetryIdempotency"
+      ],
+      "failed": 0,
+      "passed": 4,
+      "status": "PASS"
+    },
+    {
+      "command": "npm --prefix backend run test:recovery-local",
+      "failed": 0,
+      "passed": 76,
+      "status": "PASS"
+    },
+    {
+      "command": "npm --prefix backend test",
+      "failed": 0,
+      "passed": 220,
+      "status": "PASS"
+    },
+    {
+      "command": "npm --prefix backend run test:archive",
+      "failed": 0,
+      "passed": 196,
+      "status": "PASS"
+    },
+    {
+      "command": "npm --prefix backend run test:annual-engine",
+      "failed": 0,
+      "passed": 3,
+      "status": "PASS"
+    },
+    {
+      "command": "npm --prefix backend run test:tenant-recovery",
+      "failed": 0,
+      "passed": 18,
+      "status": "PASS"
+    },
+    {
+      "command": "npm --prefix backend/worker test",
+      "failed": 0,
+      "passed": 9,
+      "status": "PASS"
+    },
+    {
+      "command": "npm --prefix backend run test:worker-http",
+      "failed": 0,
+      "passed": 95,
+      "status": "PASS"
+    }
+  ],
+  "files": {
+    "backend/package.json": "01d274375bb0b71137d9e9e8d79365f97e4621f935cb20d3f1be9aca8d9b650d",
+    "backend/scripts/test-recovery-coordinator-emulators.mjs": "15b2696e6221b04dd59f0396671ab1934848c9e0f39aa926918e3556eb312d24",
+    "backend/src/recovery-coordinator.mjs": "cb12258995b5f6375e02955e0e4dca040cc57fc0b492e134386e74dd6dbdaeff",
+    "backend/test/recovery-coordinator-fixture.mjs": "920d9b2cf34d257a2ba15b5da9ca29e8a2f9a55a8e9968aaa9da77a535076a83",
+    "backend/test/recovery-coordinator.integration.test.mjs": "1b6d22dc28668945cda91986463acacbfc41d0d071e53c57a32e52103bb76bfa",
+    "backend/test/recovery-coordinator.test.mjs": "d48ad80775976d0f2eea7bb274a4b87c9a803f60d6a30cd3a5a85924655e7477"
+  },
+  "observedAtUtc": "2026-11-08T09:50:29.467234+00:00",
+  "productionActivationAllowed": false,
+  "productionMutations": false,
+  "readonlyProductionDeploymentLookup": {
+    "activeDeploymentId": "6eb20e49-507a-4504-a162-0945070a0506",
+    "activeVersionCreatedOn": "2026-10-28T12:06:44.46623Z",
+    "activeVersionId": "f06328bf-1d81-4826-a994-4b175384ee2b",
+    "deploymentsListStatus": "PASS",
+    "receipt": "verification/continuation-2026-11-02/final-review/backend-production-readonly-nov8.json",
+    "versionsViewAndSecretsListStatus": "BLOCKED"
+  },
+  "status": "PASS",
+  "synthetic": true
+}

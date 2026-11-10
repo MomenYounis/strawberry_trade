@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "synthetic": true,
+  "device": "replacement",
+  "phase": "drive",
+  "label": "r4-nov7-offline-final-reopen",
+  "ownerDeviceTouched": false,
+  "uninstallOrDataClear": false,
+  "productionAuthenticationUsed": false,
+  "startedAtUtc": "2026-11-08T09:15:49.121741+00:00",
+  "fixture": {
+    "metadataPath": "/home/younis/strawberry-trade-annual-review/verification/continuation-2026-11-02/native-durable/commercial-offline-nov7/commercial-signing.json",
+    "metadataSha256": "a1c19be5d7f1d27ed727159ba80e460bd07c9b3744a9aec8a15a55b86a8bb94e",
+    "artifact": "/home/younis/strawberry-trade-annual-review/verification/continuation-2026-11-02/native-durable/commercial-offline-nov7/persistence-commercial-signed-DEBUG.apk",
+    "sha256": "5107ca4c3d8093f4cfe54f86501bd8ef9131cd5c7d59c24f9f892f4c134a67b6",
+    "bytes": 213453206,
+    "versionCode": 12,
+    "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+    "debugTestArtifact": true,
+    "sourceCommit": "eb5007ca17d091c535ff53ce343f9a0a6e7265c7",
+    "sourceOrigin": null,
+    "signatureAndPackageIndependentlyVerified": true
+  },
+  "installedFixtureBefore": {
+    "sha256": "5107ca4c3d8093f4cfe54f86501bd8ef9131cd5c7d59c24f9f892f4c134a67b6",
+    "versionCode": 12,
+    "singleBaseApk": true,
+    "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+    "certificateProof": "Exact installed SHA matches independently verified signed source APK",
+    "sourceCommit": "eb5007ca17d091c535ff53ce343f9a0a6e7265c7",
+    "metadataSha256": "a1c19be5d7f1d27ed727159ba80e460bd07c9b3744a9aec8a15a55b86a8bb94e"
+  },
+  "actualFixturePhase": "offline_reopen",
+  "installedFixtureAfter": {
+    "sha256": "5107ca4c3d8093f4cfe54f86501bd8ef9131cd5c7d59c24f9f892f4c134a67b6",
+    "versionCode": 12,
+    "singleBaseApk": true,
+    "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+    "certificateProof": "Exact installed SHA matches independently verified signed source APK",
+    "sourceCommit": "eb5007ca17d091c535ff53ce343f9a0a6e7265c7",
+    "metadataSha256": "a1c19be5d7f1d27ed727159ba80e460bd07c9b3744a9aec8a15a55b86a8bb94e"
+  },
+  "actualNativeAssertionsPassed": true,
+  "driverUsesAlreadyInstalledApp": true,
+  "finishedAtUtc": "2026-11-08T09:16:14.820958+00:00"
+}

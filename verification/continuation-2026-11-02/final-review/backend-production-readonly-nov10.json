@@ -1,0 +1,69 @@
+{
+  "activeDeployment": {
+    "activeVersionId": "f06328bf-1d81-4826-a994-4b175384ee2b",
+    "activeVersionNumber": 5,
+    "created_on": "2026-10-28T12:06:44.46623Z",
+    "id": "6eb20e49-507a-4504-a162-0945070a0506",
+    "percentage": 100
+  },
+  "configuredAccountId": "c9e7af798c5f97976ecdb07e3fc086f6",
+  "liveVersionInspection": {
+    "created_on": "2026-10-28T12:06:41.191095Z",
+    "cronTriggers": [],
+    "durableObjectBindings": [
+      {
+        "class_name": "TradingGateway",
+        "name": "GATEWAY"
+      }
+    ],
+    "id": "f06328bf-1d81-4826-a994-4b175384ee2b",
+    "number": 5,
+    "plainTextVars": {
+      "FIREBASE_ANDROID_APP_ID": "1:713439663809:android:c0565e7ada543b0e2b6640",
+      "FIREBASE_PROJECT_ID": "strawberry-trade-261017-6a49b",
+      "LICENSE_KEY_ID": "issuer-v1"
+    },
+    "r2Bindings": [],
+    "script_runtime": {
+      "compatibility_date": "2026-10-19",
+      "compatibility_flags": [
+        "nodejs_compat"
+      ],
+      "migration_tag": "v1",
+      "usage_model": "standard"
+    },
+    "secretNamesPresent": [
+      "FIREBASE_SERVICE_ACCOUNT_JSON",
+      "LICENSE_PRIVATE_KEY_PEM",
+      "LICENSE_PUBLIC_KEY_PEM"
+    ]
+  },
+  "needsCompatibleUpdate": true,
+  "observedAtUtc": "2026-11-10T15:00:39.512324+00:00",
+  "priorDeployment": {
+    "created_on": "2026-10-23T09:12:51.14299Z",
+    "id": "4f311208-0d63-4938-89a3-39af96007368",
+    "versionId": "5a519a2a-bcfc-4d6a-b20d-6585e1a37bbc"
+  },
+  "productionMutations": false,
+  "readOnly": true,
+  "reasonForUpdate": "Active live version #5 (f06328bf-1d81-4826-a994-4b175384ee2b) was uploaded 2026-10-28 before the syncProtocolVersion compatibility fix, bounded 64 KiB body forwarding fix, and guarded unavailable archive/snapshot routes.",
+  "rollbackTarget": {
+    "command": "./node_modules/.bin/wrangler rollback f06328bf-1d81-4826-a994-4b175384ee2b --env= --config ../../config/wrangler.production.json --message \"Restore recorded version #5 after rollout failure\"",
+    "compatibilityNote": "Version #5 supports v9 and v12 (when v12 omits syncProtocolVersion on v1), but rejects explicit syncProtocolVersion sent by v10/v11.",
+    "priorVersionId": "f06328bf-1d81-4826-a994-4b175384ee2b",
+    "priorVersionNumber": 5
+  },
+  "status": "PASS",
+  "verifiedPreparedPackage": {
+    "archivingAndCleanupDisabled": true,
+    "directory": "verification/continuation-2026-11-02/backend-deployment-nov6-retry",
+    "freePlanPreserved": true,
+    "freshPrebuiltDryRunByteIdentical": true,
+    "payloadTarballSha256": "fe3eb536ed163b28a3fe77478cb31fd251f82765bf05b38d5a589436527f8815",
+    "prebuiltIndexJsSha256": "bc5ac4cc9285b0ef175a13f3f3e84fb376a368b5c5e504f59094f8617848b1ac",
+    "sha256sumsCheck": "compatible-backend-source.tar.gz: OK\ncompatible-backend-dry-run-payload.tar.gz: OK",
+    "sourceTarballSha256": "a4473a6284547ff5ccb8015afd88de0573dcf5f9a7e7890b77ef3dfbdc9703ab"
+  },
+  "workerName": "strawberry-tenant-gateway"
+}

@@ -3,7 +3,8 @@ import {createHash} from 'node:crypto';
 import {canonical,id,integer} from './validation.mjs';
 import {freezeRecoveryValue,isFirestoreRecoveryProof} from './firestore-recovery-source.mjs';
 const hex=/^[a-f0-9]{64}$/,sha=value=>createHash('sha256').update(canonical(value)).digest('hex');
-const limits=Object.freeze({users:10_000,objects:40_000,keys:256,bytes:8_388_608});
+const limits=Object.freeze({users:10_000,objects:40_000,keys:256,serverPrincipals:10_000,bytes:8_388_608});
+export const RECOVERY_SERVER_AUDIT_POLICY_VERSION=1;
 const requirements=new WeakSet();
 const authorityPolicy='Do not import cached sessions, device authority or license packages as active authority. Re-enroll and verify using separately approved operator procedures.';
 const activationGates=['provider-backup-consistency-and-independent-restore-acceptance-required','fresh-auth-device-and-license-enrollment-required','production-activation-not-implemented'];
@@ -13,21 +14,43 @@ function artifact(value){object(value);if(typeof value.key!=='string'||!value.ke
 function context(value,proof){if(value.projectId!==proof.projectId||value.databaseId!==proof.databaseId||value.tenantId!==proof.tenantId||value.readTime!==proof.readTime)fail('context');}
 function bounded(value){if(Buffer.byteLength(canonical(value))>limits.bytes)fail('byte-limit');return value;}
 
+// These labels are produced by trusted server operators, not Firebase Auth.
+// Classification is per exact audit record, never a global UID exemption.
+function serverAuditPrincipal(row){
+ if(row.collection!=='audit'||!row.payload||Object.getPrototypeOf(row.payload)!==Object.prototype)return null;
+ const p=row.payload,fields=Object.keys(p).sort().join('|');
+ const shape=names=>fields===[...names].sort().join('|');
+ const safeId=value=>typeof value==='string'&&/^[A-Za-z0-9_-]{1,120}$/.test(value);
+ const time=Number.isSafeInteger(p.atMs)&&p.atMs>=0&&p.atMs<=8_640_000_000_000_000;
+ if(!time)return null;
+ let kind=null;
+ if(row.id==='tenant_created'&&p.action==='tenant-created'&&p.actorUid==='trusted-operator'&&
+   shape(['action','actorUid','ownerUid','atMs'])&&safeId(p.ownerUid))kind='trusted-tenant-enrollment';
+ const device=value=>typeof value==='string'&&/^[A-Za-z0-9_-]{43}$/.test(value);
+ if(p.action==='trusted-device-transfer'&&p.actorUid==='trusted-operator'&&
+   shape(['action','actorUid','uid','oldDeviceId','newDeviceId','atMs'])&&safeId(p.uid)&&device(p.newDeviceId)&&
+   row.id==='transfer_'+p.newDeviceId&&(p.oldDeviceId===null||device(p.oldDeviceId)&&p.oldDeviceId!==p.newDeviceId))kind='trusted-demo-device-transfer';
+ const ownerActions=['create-tenant','add-manager','set-tenant-enabled','set-member-active','activate-license'];
+ if(p.actorUid==='local-owner-admin'&&ownerActions.includes(p.action)&&shape(['action','actorUid','atMs','operationId'])&&
+   typeof p.operationId==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(p.operationId)&&row.id==='admin_'+p.operationId)kind='local-owner-administration';
+ return kind?{collection:'audit',id:row.id,actorUid:p.actorUid,kind,sourceRecordSha256:sha(row)}:null;
+}
+
 // Called on exactly the rows delivered by source.capture; finish compares their
 // stream hash to the branded source proof, so an omitted authority row cannot
 // produce an apparently complete dependency inventory.
-function dependencyCollector(branded){
- const users=new Set(),keys=new Set(),objects=new Map(),digest=createHash('sha256');let count=0,closed=false;
+function dependencyCollector(branded,{serverAuditPolicy=false}={}){
+ const users=new Set(),keys=new Set(),objects=new Map(),serverPrincipals=new Map(),digest=createHash('sha256');let count=0,closed=false;
  function addUser(value){if(value===null||value===undefined||value==='')return;if(typeof value!=='string')fail('user-schema');id(value);users.add(value);if(users.size>limits.users)fail('user-limit');}
  function addKey(value){if(value===null||value===undefined||value==='')return;if(typeof value!=='string')fail('key-schema');id(value);keys.add(value);if(keys.size>limits.keys)fail('key-limit');}
  function addObject(value){const ref=artifact(value),previous=objects.get(ref.key);if(previous&&previous.sha256!==ref.sha256)fail('object-hash-conflict');objects.set(ref.key,ref);if(objects.size>limits.objects)fail('object-limit');}
- function visit(value,depth=0){
+ function visit(value,depth=0,skipActor=false){
   if(depth>20)fail('depth');if(!value||typeof value!=='object')return;
   if(!Array.isArray(value)){
    if(typeof value.key==='string'&&(value.sha256!==undefined||value.cipherSha256!==undefined))addObject({key:value.key,sha256:value.cipherSha256??value.sha256});
    if(value.manifestKey!==undefined||value.manifestSha256!==undefined){if(value.manifestKey===undefined||value.manifestSha256===undefined)fail('incomplete-object-reference');addObject({key:value.manifestKey,sha256:value.manifestSha256});}
    for(const [name,child]of Object.entries(value)){
-    if(name==='uid'||/Uid$/.test(name))addUser(child);
+    if((name==='uid'||/Uid$/.test(name))&&!(skipActor&&depth===0&&name==='actorUid'))addUser(child);
     if(name==='keyId'||name==='kid')addKey(child);
     if(name==='keyIds'){if(!Array.isArray(child))fail('keys-schema');for(const key of child)addKey(key);}
    }
@@ -35,17 +58,22 @@ function dependencyCollector(branded){
   for(const child of Object.values(value))visit(child,depth+1);
  }
  return Object.freeze({
-  observe(row){if(closed)fail('collector-closed');if(row.collection==='members')addUser(row.id);visit(row.payload);digest.update(canonical(row)).update('\n');count++;},
+  observe(row){if(closed)fail('collector-closed');if(row.collection==='members')addUser(row.id);
+   const principal=serverAuditPolicy?serverAuditPrincipal(row):null;
+   if(principal){if(serverPrincipals.has(row.id))fail('server-principal-duplicate');serverPrincipals.set(row.id,principal);if(serverPrincipals.size>limits.serverPrincipals)fail('server-principal-limit');}
+   visit(row.payload,0,principal!==null);digest.update(canonical(row)).update('\n');count++;},
   finish({sourceProof,imageKeyId}){
    if(closed||branded&&!isFirestoreRecoveryProof(sourceProof))fail('source-proof');closed=true;addKey(imageKeyId);
    if(count!==sourceProof.records||digest.digest('hex')!==sourceProof.documentsSha256)fail('source-stream-mismatch');
    const value=freezeRecoveryValue(bounded({format:'strawberry-recovery-dependencies',version:1,
     source:{projectId:sourceProof.projectId,databaseId:sourceProof.databaseId,tenantId:sourceProof.tenantId,readTime:sourceProof.readTime,documentsSha256:sourceProof.documentsSha256},
-    authUids:[...users].sort(),objectRoots:[...objects.values()].sort((a,b)=>a.key<b.key?-1:a.key>b.key?1:0),keyIds:[...keys].sort()}));if(branded)requirements.add(value);return value;
+    authUids:[...users].sort(),objectRoots:[...objects.values()].sort((a,b)=>a.key<b.key?-1:a.key>b.key?1:0),keyIds:[...keys].sort(),
+    ...(serverPrincipals.size?{serverAuditPrincipalPolicyVersion:RECOVERY_SERVER_AUDIT_POLICY_VERSION,
+     serverAuditPrincipals:[...serverPrincipals.values()].sort((a,b)=>a.id<b.id?-1:a.id>b.id?1:0)}:{})}));if(branded)requirements.add(value);return value;
   },
  });
 }
-export function createRecoveryDependencyCollector(){return dependencyCollector(true);}
+export function createRecoveryDependencyCollector(){return dependencyCollector(true,{serverAuditPolicy:true});}
 
 // Used only after the image reader authenticates its manifest. Recompute the
 // dependency requirements from every decrypted row; this does not brand the
@@ -64,7 +92,11 @@ export function createRecoveryDependencyVerifier(plan){
   if(name==='objectClosure'){if(!Array.isArray(item.requiredKeyIds)||item.requiredKeyIds.length>limits.keys)fail('key-limit');for(const value of item.requiredKeyIds)id(value);}
  }
  if(plan.inventoryComplete&&Object.keys(plan.supplied).length!==Object.keys(shapes).length)fail('plan-incomplete');
- const collector=dependencyCollector(false);
+ object(plan.required);const hasPolicy=Object.hasOwn(plan.required,'serverAuditPrincipalPolicyVersion');
+ if(hasPolicy!==Object.hasOwn(plan.required,'serverAuditPrincipals')||hasPolicy&&(plan.required.serverAuditPrincipalPolicyVersion!==RECOVERY_SERVER_AUDIT_POLICY_VERSION||!Array.isArray(plan.required.serverAuditPrincipals)||!plan.required.serverAuditPrincipals.length||plan.required.serverAuditPrincipals.length>limits.serverPrincipals))fail('server-principal-policy');
+ // Absent policy retains the old all-UID interpretation for already captured
+ // images. A new policy is always re-derived from actual decrypted records.
+ const collector=dependencyCollector(false,{serverAuditPolicy:hasPolicy});
  return Object.freeze({observe:row=>collector.observe(row),finish(options){
   const required=collector.finish(options);
   if(plan.requirementsSha256!==sha(required)||canonical(plan.required)!==canonical(required)||canonical(plan.source)!==canonical(required.source))fail('plan-stream-mismatch');

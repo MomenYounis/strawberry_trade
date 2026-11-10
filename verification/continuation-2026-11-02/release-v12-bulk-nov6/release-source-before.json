@@ -1,0 +1,338 @@
+[
+  {
+    "path": ".metadata",
+    "sha256": "dc1e5872b7bb4b77c13680a160d80793810808e76cbce7c466e6d9ad9c731987",
+    "bytes": 968,
+    "mode": "0o755"
+  },
+  {
+    "path": "analysis_options.yaml",
+    "sha256": "a53e20c77eedab11cd33aae92a235cb953a18458cb3ae90badb4538e44c93174",
+    "bytes": 114,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/.gitignore",
+    "sha256": "b027c9de1011765c015e5819bf857c0d75bfcd0886fb01721c091159012e50f1",
+    "bytes": 253,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/build.gradle.kts",
+    "sha256": "5a20a1b8e3470d48d17da7600b4987cf07ebc7b6b540a304b86c163704c31c98",
+    "bytes": 2768,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/google-services.json",
+    "sha256": "bdd94f97460f37387ee28401e126278cce388cc501b84b15ca7bf60f2d9f780f",
+    "bytes": 724,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/proguard-rules.pro",
+    "sha256": "c2c3d731892ccc88869c82166254ba5250c17e5328972e4593ec5fcecfa32037",
+    "bytes": 89,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/src/debug/AndroidManifest.xml",
+    "sha256": "db0b21074e76abe16cfd560f93f77017909039df0c229665edf2af8962cddc4b",
+    "bytes": 611,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/src/main/AndroidManifest.xml",
+    "sha256": "59848401f4d2b3483247ac926c58005fca6d5cd269b79ca5d25dfc17f2e9bc53",
+    "bytes": 2470,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/src/main/kotlin/com/strawberrytrade/strawberry_trade/MainActivity.kt",
+    "sha256": "c45d282e8a68a163211999bae75bd2bd42f1cdfcd8c325966b1491c8abeca6e6",
+    "bytes": 7744,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/src/main/res/drawable-v21/launch_background.xml",
+    "sha256": "7ca6d5cec2169c5a98661a119db23a6f3399c8fef2256ff04f3a642831282478",
+    "bytes": 438,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/src/main/res/drawable/launch_background.xml",
+    "sha256": "94433756fe10005ddd6fc55cc5c0b1e9f3c10b66a08ceac795ece6713d34e28a",
+    "bytes": 434,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+    "sha256": "6a7c8f0d703e3682108f9662f813302236240d3f8f638bb391e32bfb96055fef",
+    "bytes": 544,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+    "sha256": "c7c0c0189145e4e32a401c61c9bdc615754b0264e7afae24e834bb81049eaf81",
+    "bytes": 442,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+    "sha256": "e14aa40904929bf313fded22cf7e7ffcbf1d1aac4263b5ef1be8bfce650397aa",
+    "bytes": 721,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+    "sha256": "4d470bf22d5c17d84edc5f82516d1ba8a1c09559cd761cefb792f86d9f52b540",
+    "bytes": 1031,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+    "sha256": "3c34e1f298d0c9ea3455d46db6b7759c8211a49e9ec6e44b635fc5c87dfb4180",
+    "bytes": 1443,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/src/main/res/values-night/styles.xml",
+    "sha256": "8c5bad5152f217e837519f9c15211d19f39bd45f5f67faf6dd81cb4b299e518f",
+    "bytes": 995,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/src/main/res/values/styles.xml",
+    "sha256": "937d7c82f539c72eb94fd3a3773f29b3d3fef1997213c92cb632298cedf4bda9",
+    "bytes": 996,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/src/main/res/xml/data_extraction_rules.xml",
+    "sha256": "55def4751a400c7be99c3e0247e7a280fb6c3179f319d0104c6b25ead401c3c7",
+    "bytes": 771,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/app/src/profile/AndroidManifest.xml",
+    "sha256": "30b0832ed8b92dfbd6ae2abfa939ccf26333d37600056b1572bd4a397a18a74b",
+    "bytes": 378,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/build.gradle.kts",
+    "sha256": "6a26dba2cb8dfba1e74f540b0d17a89d96c1301d3c3bfda14348bed257fddcba",
+    "bytes": 537,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/gradle.properties",
+    "sha256": "0f82b18017fba6bb5ce3aa4b2d1a00c9382fc8aae7b1d9326e44b18abd66d80b",
+    "bytes": 300,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/gradle/wrapper/gradle-wrapper.properties",
+    "sha256": "b690d26223576fe4e63889fad9a00df81945cb870b9476cc5a563152a1a88a74",
+    "bytes": 202,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/settings.gradle.kts",
+    "sha256": "016759283e88ade6eba92910583feeef88b962839b957aa414296afd2952d122",
+    "bytes": 770,
+    "mode": "0o755"
+  },
+  {
+    "path": "android/strawberry_trade_android.iml",
+    "sha256": "90d961bc4ccb4b0ae3f75ce495c273f08745a55c50bd213e259723fc341d0193",
+    "bytes": 1601,
+    "mode": "0o755"
+  },
+  {
+    "path": "assets/fonts/NotoNaskhArabic-Bold.ttf",
+    "sha256": "7432f2350487d9f784b47a24526d9fc48f2712bb6c2ff602898b104b0c26ee80",
+    "bytes": 184164,
+    "mode": "0o755"
+  },
+  {
+    "path": "assets/fonts/NotoNaskhArabic-Regular.ttf",
+    "sha256": "2f4b88e6ee50fa82c617e2d1d4ba18281cb1c6cd71c3af3ec64970c23995db4b",
+    "bytes": 178388,
+    "mode": "0o755"
+  },
+  {
+    "path": "assets/fonts/NotoSans-Regular.ttf",
+    "sha256": "b85c38ecea8a7cfb39c24e395a4007474fa5a4fc864f6ee33309eb4948d232d5",
+    "bytes": 569208,
+    "mode": "0o755"
+  },
+  {
+    "path": "assets/fonts/OFL.txt",
+    "sha256": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb",
+    "bytes": 4377,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/application/app_controller.dart",
+    "sha256": "43263d4d1446c652d51dd591d0b3611ad8e32a468079a7c1638b466c7198dc4a",
+    "bytes": 30807,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/data/SCHEMA.md",
+    "sha256": "d49f8e445033da57f8ebaa4ac3d288e3fd8d9a5b3fe2bc6f13ff77e0c282ef8d",
+    "bytes": 15386,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/data/ledger_store.dart",
+    "sha256": "cd8bb83e3abff2b00951011946b1be128eed2a8226328252740a4b3d97607b62",
+    "bytes": 121821,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/domain/ledger.dart",
+    "sha256": "4fe212cb825f67ced91302fcb791d30a27756e67b662d7fff5050baee8c4af10",
+    "bytes": 33052,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/main.dart",
+    "sha256": "990cf6041079ac12f27df907dfe8ebc7aa67ca3e0f240466f89399f659cc09b8",
+    "bytes": 2998,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/presentation/archive_screen.dart",
+    "sha256": "b95a757a12223ec0407b618bdab8e1eecda7613a44f95d2fd90cccc063045bad",
+    "bytes": 15425,
+    "mode": "0o644"
+  },
+  {
+    "path": "lib/presentation/enrollment.dart",
+    "sha256": "71ee02caae2e387030d6da2eff251bc0fdf9cd78e514387fc8d09fd0f1547a13",
+    "bytes": 13062,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/presentation/reports_extra.dart",
+    "sha256": "690a7fc50751ece072068f7fde659ff4cd355bcc14294c6fab59a604f3f9ac4c",
+    "bytes": 22581,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/presentation/screens.dart",
+    "sha256": "68e8c3380f748db2e815468e1cf1e092a2d0054ac392078a2484a1ff71d1e9a4",
+    "bytes": 167852,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/presentation/shipments.dart",
+    "sha256": "0431351e15fc6767748307706f4d8ac18ab9a998838a664c4d6177cb43a0c213",
+    "bytes": 12937,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/security/device_security.dart",
+    "sha256": "2cbcffae74ed7d1a690e494b5631366745e50323bb05faef92135cec45f132e9",
+    "bytes": 2793,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/security/license_sync.dart",
+    "sha256": "94601493580d24814c1b422e2d22b489304b9874bf8640f663ebbb9bda0bf41c",
+    "bytes": 2470,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/security/licensing.dart",
+    "sha256": "db9dc96f65d8cfe970e2906cb3e6d754e4a190eb48acd71aa71d17c27e313de4",
+    "bytes": 19619,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/security/trusted_clock.dart",
+    "sha256": "b8dac4464632d822163f3ac400b55629df1c60cd3b20b8107d375987cc0061bf",
+    "bytes": 4449,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/services/active_snapshot.dart",
+    "sha256": "a7ba1605ff9deeeb044f33fa6329a8b59e7ace16179965c95ef0ed0633cfd282",
+    "bytes": 13338,
+    "mode": "0o644"
+  },
+  {
+    "path": "lib/services/active_snapshot_gateway.dart",
+    "sha256": "c1608dcb63e1f4a0bbf413e80a8494acd5142fdd48d9cec5f53079c21d9946a7",
+    "bytes": 422,
+    "mode": "0o644"
+  },
+  {
+    "path": "lib/services/archive_reader.dart",
+    "sha256": "da563ade0354a3278caf47732a38bb38aa74ef49f2607815bf1f0fb978b3bedc",
+    "bytes": 4075,
+    "mode": "0o644"
+  },
+  {
+    "path": "lib/services/archive_statement.dart",
+    "sha256": "362bad39cd67effb36203a883d0f8cf91afd8c86aac9aba4c6f7461f30429d69",
+    "bytes": 20739,
+    "mode": "0o644"
+  },
+  {
+    "path": "lib/services/employee_registration.dart",
+    "sha256": "f103eb1c4ab252739cc6436ec8e10e90b6cf666d819d8ed8cb8162de171a1f10",
+    "bytes": 2400,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/services/exports.dart",
+    "sha256": "44f094f1e8df1f8f24fb9149339d9d27a8072ae9e238d72ba3945095b8b4eab9",
+    "bytes": 39664,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/services/gateway.dart",
+    "sha256": "fb20a36e248340f9f8226e1a33ca8240e26616e4c271afc35bfab3aca1004bd1",
+    "bytes": 23514,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/services/gateway_endpoint.dart",
+    "sha256": "69df76dc2050b82662ec93561164b71db8331c62105f870702c07671e84729c4",
+    "bytes": 3312,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/services/invitation_code.dart",
+    "sha256": "e9410863aae280e10e2a4db54feaa1b3b5fd3009636bd1b7daa038e37ce17c95",
+    "bytes": 2045,
+    "mode": "0o755"
+  },
+  {
+    "path": "lib/services/recovery_backup.dart",
+    "sha256": "daa12ee748d4804089e321b3db4bd242a6d631e7bc2fe2228daf141f9831c5d3",
+    "bytes": 4453,
+    "mode": "0o644"
+  },
+  {
+    "path": "lib/services/sync_protocol.dart",
+    "sha256": "8b89fc95d05d1e54a2c5c574f4115d41c447654b1c9d4a665c9f45a3c8aa28e8",
+    "bytes": 4415,
+    "mode": "0o644"
+  },
+  {
+    "path": "pubspec.lock",
+    "sha256": "f2c330af121e6784914350a25dce8e3f879a8fda1ca87c691a75d07f8e6f6235",
+    "bytes": 28723,
+    "mode": "0o755"
+  },
+  {
+    "path": "pubspec.yaml",
+    "sha256": "5f3ba5bb62e3335e783c3096c3ad5e99253eda242f2eca4fc4697d97f95edca6",
+    "bytes": 1152,
+    "mode": "0o755"
+  }
+]

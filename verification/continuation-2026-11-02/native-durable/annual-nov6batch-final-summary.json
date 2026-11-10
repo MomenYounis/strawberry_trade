@@ -1,0 +1,137 @@
+{
+  "status": "PASS",
+  "synthetic": true,
+  "completedAtUtc": "2026-11-07T05:09:12.040419+00:00",
+  "applicationSourceRevision": "7058f24b2a85218fb96d88e435e0d3c5fce0e1c8",
+  "debugFixtureSha256": "d80262ac07bfe9011e6ff2284c1afd36dd59e45fdf32e72c3cc52849cf09b96b",
+  "releaseCheckpointSha256": "9595d4ea4e0f7afe484c7af79066353c421445e35e5023b4ee5dc79df0cf15a9",
+  "campaign": "nov6batch",
+  "actualNativeSQLCipher": true,
+  "actualProcessSIGKILLAndRollback": true,
+  "nativeFreshRollbackProof": {
+    "kind": "observed_native_sqlcipher_rollback",
+    "cursor": null,
+    "records": 1,
+    "observedBootCount": 12,
+    "retainedQueueSha256": "50bf852098f07768566f6305d043a834c9a6532894681ec186fb17105c1562bc",
+    "retainedDraftSha256": "d05ebd59846dfe1ecd3d32e9c1d92a8a35a09dfcbdf5aaefef66898c18dd35a9",
+    "stagedHeaderSha256": "d101d5c9a2f5b93df3462aa0c76a2cd63bf14431ed888f1c01bf8ba33db3e8f2"
+  },
+  "annualServerEntries": 73000,
+  "growthServerEntries": 80300,
+  "retainedPendingEntries": 1,
+  "verifiedFinancialRecords": 80301,
+  "independentMerchantClosingMinor": 803015000,
+  "independentRecordedCashMinor": 803010000,
+  "retainedIdentityKeyQueueRetryDraftAndCursorAssertions": true,
+  "actualFullAppControllerAndFinancialReportsAndRTLHomeStatement": true,
+  "measurements": [
+    {
+      "name": "stage73000",
+      "elapsedMs": 719221,
+      "rssBeforeBytes": 393138176,
+      "rssPeakBytes": 424304640,
+      "incrementalRssBytes": 31166464
+    },
+    {
+      "name": "install73000",
+      "elapsedMs": 459395,
+      "rssBeforeBytes": 404328448,
+      "rssPeakBytes": 467349504,
+      "incrementalRssBytes": 63021056
+    },
+    {
+      "name": "stage80300",
+      "elapsedMs": 791866,
+      "rssBeforeBytes": 408612864,
+      "rssPeakBytes": 424759296,
+      "incrementalRssBytes": 16146432
+    },
+    {
+      "name": "install80300",
+      "elapsedMs": 447914,
+      "rssBeforeBytes": 423473152,
+      "rssPeakBytes": 477855744,
+      "incrementalRssBytes": 54382592
+    },
+    {
+      "name": "fullAppControllerRefresh",
+      "elapsedMs": 12514,
+      "rssBeforeBytes": 405667840,
+      "rssPeakBytes": 755232768,
+      "incrementalRssBytes": 349564928
+    },
+    {
+      "name": "fullDomainFinancialReports",
+      "elapsedMs": 644,
+      "rssBeforeBytes": 755494912,
+      "rssPeakBytes": 765775872,
+      "incrementalRssBytes": 10280960
+    },
+    {
+      "name": "homeScreenPump",
+      "elapsedMs": 1608,
+      "rssBeforeBytes": 765775872,
+      "rssPeakBytes": 765775872,
+      "incrementalRssBytes": 0
+    },
+    {
+      "name": "statementScreenPump",
+      "elapsedMs": 1340,
+      "rssBeforeBytes": 668303360,
+      "rssPeakBytes": 679931904,
+      "incrementalRssBytes": 11628544
+    }
+  ],
+  "interruption": "Growth install committed and passed. A later ADB reboot command timed out; owned AVD was stopped with userdata preserved, restarted on7November, and strict post-growth boot-counter + all financial/UI assertions passed. Earlier harnessFAIL/BLOCKED receipts remain unchanged.",
+  "deviceScope": {
+    "api": 35,
+    "abi": "x86_64",
+    "disposable": true,
+    "ownerDeviceTouched": false,
+    "requestedRamMiB": 1024,
+    "emulatorForcedRamMiB": 2560,
+    "oneGiBPhoneAcceptance": false,
+    "physicalARMOr16KiBPageRuntimeAcceptance": false
+  },
+  "limitations": [
+    "DEBUG runtime RSS is actual test process data; release/physical device memory is unmeasured.",
+    "No Firebase authentication or production deployment acceptance is implied.",
+    "500000-record/256MiB incoming and1000000-record/512MiB combined caps remain refusal ceilings, not tested phone capacities.",
+    "Earlier v12 dataset and all failed/interrupted evidence remain preserved."
+  ],
+  "evidence": [
+    {
+      "path": "verification/continuation-2026-11-02/native-durable/employee-annual-nov6batch-kill-drive.json",
+      "sha256": "1d416dc9bf0e8da2215e1ef3fd8138b1b1ef492bae23e44524139a447bd94e5d"
+    },
+    {
+      "path": "verification/continuation-2026-11-02/native-durable/employee-annual-nov6batch-base-drive.json",
+      "sha256": "1ef7e5254d85ef68247d9836f571c86da276afc15e63de02abfd6ce3148d16ad"
+    },
+    {
+      "path": "verification/continuation-2026-11-02/native-durable/employee-annual-nov6batch-growth-drive.json",
+      "sha256": "d20ba60132e963542799b0ccd29308c3bd2d62221dd9d57de9abd1fd643b5068"
+    },
+    {
+      "path": "verification/continuation-2026-11-02/native-durable/employee-annual-nov6batch-verify-drive.json",
+      "sha256": "ac6408afd1477e1a07eff5e3b2ddf01827cf4678ab3a53d2311fc892bfa56d49"
+    },
+    {
+      "path": "verification/continuation-2026-11-02/native-durable/employee-annual-nov6batch-verify-results.json",
+      "sha256": "ea1e4dc6c81f2fb185dd9f694e22ce3c58da480b2b3ab1593f3a203c16c918d6"
+    },
+    {
+      "path": "verification/continuation-2026-11-02/native-durable/employee-annual-nov6batch-final-boot-inspect-inspect-install.json",
+      "sha256": "406407c23a8ec4ebca3ad1ed17c6c6e5f607aa52b2fa6d6a619c1f94de4a206d"
+    },
+    {
+      "path": "verification/continuation-2026-11-02/native-durable/employee-annual-nov6batch-growth-reboot-reboot.json",
+      "sha256": "ad698cbc7fe34606f083771432069e90c6dbefb11efbf8174dacfe832b2ef4b8"
+    },
+    {
+      "path": "verification/continuation-2026-11-02/native-durable/employee-annual-nov6batch-campaign-resumed.json",
+      "sha256": "bb3b2dc699516fbe49c3c46fc3fcfd0667192f28adcf32db5da706c70d866716"
+    }
+  ]
+}

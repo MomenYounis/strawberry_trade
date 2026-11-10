@@ -8,17 +8,20 @@
     "node": "22"
   },
   "scripts": {
-    "test": "node --test test/validation.test.mjs test/seed-helper.test.mjs test/demo-operator.test.mjs test/http-gateway.test.mjs test/gateway-deletion-race.test.mjs test/invitation-token.test.mjs test/emulator-test-runner.test.mjs test/historical-view.test.mjs test/work-budget.test.mjs test/body-parser-security.test.mjs test/historical-statement.test.mjs test/active-snapshot*.test.mjs test/feed-pruner.test.mjs test/annual-scheduler.test.mjs test/opening-date-policy.test.mjs test/annual-engine.test.mjs test/firestore-recovery-source.test.mjs",
+    "test": "node --test test/validation.test.mjs test/seed-helper.test.mjs test/demo-operator.test.mjs test/http-gateway.test.mjs test/gateway-deletion-race.test.mjs test/invitation-token.test.mjs test/emulator-test-runner.test.mjs test/historical-view.test.mjs test/work-budget.test.mjs test/body-parser-security.test.mjs test/historical-statement.test.mjs test/active-snapshot*.test.mjs test/feed-pruner.test.mjs test/annual-scheduler.test.mjs test/opening-date-policy.test.mjs test/annual-engine.test.mjs test/firestore-recovery-source.test.mjs test/recovery-object-copy.test.mjs test/recovery-authority.test.mjs test/recovery-authority-binding.test.mjs test/recovery-server-principals.test.mjs test/recovery-coordinator.test.mjs",
     "test:integration": "node scripts/test-emulators.mjs",
     "emulators": "node scripts/start-emulators.mjs",
     "seed:emulator": "node scripts/seed-emulator.mjs",
     "test:invitations": "node scripts/test-invitation-emulators.mjs",
-    "test:archive": "node --test test/archive-*.test.mjs test/historical-view.test.mjs test/work-budget.test.mjs test/historical-statement.test.mjs test/active-snapshot*.test.mjs test/feed-pruner.test.mjs test/private-scratch.test.mjs test/annual-scheduler.test.mjs test/annual-engine.test.mjs test/opening-date-policy.test.mjs test/firestore-recovery-source.test.mjs",
+    "test:archive": "node --test test/archive-*.test.mjs test/historical-view.test.mjs test/work-budget.test.mjs test/historical-statement.test.mjs test/active-snapshot*.test.mjs test/feed-pruner.test.mjs test/private-scratch.test.mjs test/annual-scheduler.test.mjs test/annual-engine.test.mjs test/opening-date-policy.test.mjs test/firestore-recovery-source.test.mjs test/recovery-object-copy.test.mjs test/recovery-authority.test.mjs test/recovery-authority-binding.test.mjs test/recovery-server-principals.test.mjs test/recovery-coordinator.test.mjs",
     "test:annual-engine": "node scripts/test-annual-engine-emulators.mjs",
     "test:tenant-recovery": "node scripts/test-tenant-recovery-emulators.mjs",
     "test:node-r2": "npm --prefix private-archive-runtime test",
     "test:worker-http": "node scripts/worker-http-test-runner.mjs",
-    "test:recovery-capture": "node --test test/firestore-recovery-source.test.mjs"
+    "test:recovery-capture": "node --test test/firestore-recovery-source.test.mjs",
+    "test:recovery-local": "node --test test/firestore-recovery-source.test.mjs test/recovery-object-copy.test.mjs test/recovery-authority.test.mjs test/recovery-authority-binding.test.mjs test/recovery-server-principals.test.mjs test/recovery-coordinator.test.mjs",
+    "test:recovery-authority": "node scripts/test-recovery-authority-emulators.mjs",
+    "test:recovery-coordinator": "node scripts/test-recovery-coordinator-emulators.mjs"
   },
   "dependencies": {
     "firebase-admin": "14.5.0",

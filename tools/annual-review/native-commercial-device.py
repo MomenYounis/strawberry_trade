@@ -297,12 +297,22 @@ def main():
     if job.get('phase') not in allowed:raise RuntimeError('known-demo-phase-required')
    target='commercial-job.json' if args.phase=='put-job' else 'commercial-recovery.json'
    shell('am','force-stop',PACKAGE)
-   shell('run-as',PACKAGE,'mkdir','-p','files')
-   temporary='files/'+target+'.next'
-   adb('exec-in','run-as',PACKAGE,'sh','-c','cat > '+temporary,data=data)
-   shell('run-as',PACKAGE,'chmod','600',temporary)
-   shell('run-as',PACKAGE,'mv',temporary,'files/'+target)
-   copied=adb('exec-out','run-as',PACKAGE,'cat','files/'+target).stdout
+   stop_deadline=time.monotonic()+10
+   while shell('pidof',PACKAGE,check=False):
+    if time.monotonic()>stop_deadline:raise RuntimeError('package-stop-timeout')
+    time.sleep(0.1)
+   for attempt in range(3):
+    try:
+     shell('run-as',PACKAGE,'mkdir','-p','files')
+     temporary='files/'+target+'.next'
+     adb('exec-in','run-as',PACKAGE,'sh','-c','cat > '+temporary,data=data)
+     shell('run-as',PACKAGE,'chmod','600',temporary)
+     shell('run-as',PACKAGE,'mv',temporary,'files/'+target)
+     copied=adb('exec-out','run-as',PACKAGE,'cat','files/'+target).stdout
+     break
+    except RuntimeError as error:
+     if str(error)!='owned-device-command-failed' or attempt==2:raise
+     time.sleep(0.25)
    if hashlib.sha256(copied).digest()!=hashlib.sha256(data).digest():raise RuntimeError('private-fixture-copy-mismatch')
    result.update(status='PASS',privateBytes=len(data))
   elif args.phase=='disconnect-for-retry':

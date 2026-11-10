@@ -1,0 +1,150 @@
+{
+  "status": "PASS",
+  "artifact": "/home/younis/strawberry-trade-annual-review/verification/continuation-2026-11-02/release-v12-bulk-nov6/strawberry-trade-annual-review-v12-final.apk",
+  "sha256": "9595d4ea4e0f7afe484c7af79066353c421445e35e5023b4ee5dc79df0cf15a9",
+  "sourceCommit": "7058f24b2a85218fb96d88e435e0d3c5fce0e1c8",
+  "startedAtUtc": "2026-11-06T19:44:00.375149+00:00",
+  "productionNetworkUsed": false,
+  "physicalArmOr16KRuntimeTest": false,
+  "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+  "package": {
+    "applicationId": "com.strawberrytrade.strawberry_trade",
+    "versionName": "1.0.0",
+    "versionCode": 12,
+    "debuggable": false
+  },
+  "allowBackup": false,
+  "usesCleartextTraffic": false,
+  "permissions": [
+    "android.permission.INTERNET",
+    "android.permission.ACCESS_NETWORK_STATE",
+    "com.google.android.providers.gsf.permission.READ_GSERVICES",
+    "android.permission.WAKE_LOCK",
+    "com.google.android.c2dm.permission.RECEIVE",
+    "com.strawberrytrade.strawberry_trade.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+  ],
+  "nativeLibraries": [
+    {
+      "path": "lib/arm64-v8a/libapp.so",
+      "minLoadAlignment": 65536,
+      "zipOffsetMod16K": 0,
+      "compressed": false
+    },
+    {
+      "path": "lib/arm64-v8a/libdartjni.so",
+      "minLoadAlignment": 16384,
+      "zipOffsetMod16K": 0,
+      "compressed": false
+    },
+    {
+      "path": "lib/arm64-v8a/libdatastore_shared_counter.so",
+      "minLoadAlignment": 16384,
+      "zipOffsetMod16K": 0,
+      "compressed": false
+    },
+    {
+      "path": "lib/arm64-v8a/libflutter.so",
+      "minLoadAlignment": 65536,
+      "zipOffsetMod16K": 0,
+      "compressed": false
+    },
+    {
+      "path": "lib/arm64-v8a/libsqlcipher.so",
+      "minLoadAlignment": 16384,
+      "zipOffsetMod16K": 0,
+      "compressed": false
+    },
+    {
+      "path": "lib/armeabi-v7a/libapp.so",
+      "minLoadAlignment": 16384,
+      "zipOffsetMod16K": 0,
+      "compressed": false
+    },
+    {
+      "path": "lib/armeabi-v7a/libdartjni.so",
+      "minLoadAlignment": 16384,
+      "zipOffsetMod16K": 0,
+      "compressed": false
+    },
+    {
+      "path": "lib/armeabi-v7a/libdatastore_shared_counter.so",
+      "minLoadAlignment": 16384,
+      "zipOffsetMod16K": 0,
+      "compressed": false
+    },
+    {
+      "path": "lib/armeabi-v7a/libflutter.so",
+      "minLoadAlignment": 65536,
+      "zipOffsetMod16K": 0,
+      "compressed": false
+    },
+    {
+      "path": "lib/armeabi-v7a/libsqlcipher.so",
+      "minLoadAlignment": 16384,
+      "zipOffsetMod16K": 0,
+      "compressed": false
+    },
+    {
+      "path": "lib/x86_64/libapp.so",
+      "minLoadAlignment": 65536,
+      "zipOffsetMod16K": 0,
+      "compressed": false
+    },
+    {
+      "path": "lib/x86_64/libdartjni.so",
+      "minLoadAlignment": 16384,
+      "zipOffsetMod16K": 0,
+      "compressed": false
+    },
+    {
+      "path": "lib/x86_64/libdatastore_shared_counter.so",
+      "minLoadAlignment": 16384,
+      "zipOffsetMod16K": 0,
+      "compressed": false
+    },
+    {
+      "path": "lib/x86_64/libflutter.so",
+      "minLoadAlignment": 65536,
+      "zipOffsetMod16K": 0,
+      "compressed": false
+    },
+    {
+      "path": "lib/x86_64/libsqlcipher.so",
+      "minLoadAlignment": 16384,
+      "zipOffsetMod16K": 0,
+      "compressed": false
+    }
+  ],
+  "publicConfigurationByAbi": [
+    {
+      "path": "lib/arm64-v8a/libapp.so",
+      "approvedConfigFound": {
+        "FIREBASE_PROJECT_ID": true,
+        "FIREBASE_ANDROID_APP_ID": true,
+        "GATEWAY_BASE_URL": true
+      }
+    },
+    {
+      "path": "lib/armeabi-v7a/libapp.so",
+      "approvedConfigFound": {
+        "FIREBASE_PROJECT_ID": true,
+        "FIREBASE_ANDROID_APP_ID": true,
+        "GATEWAY_BASE_URL": true
+      }
+    },
+    {
+      "path": "lib/x86_64/libapp.so",
+      "approvedConfigFound": {
+        "FIREBASE_PROJECT_ID": true,
+        "FIREBASE_ANDROID_APP_ID": true,
+        "GATEWAY_BASE_URL": true
+      }
+    }
+  ],
+  "scannedBytes": 80251092,
+  "knownSecretAndPrivatePemMarkerMatches": 0,
+  "scanLimit": "Known signing password and PEM headers only; not exhaustive secret detection",
+  "static16KAlignment": "PASS",
+  "signatureV2Verified": true,
+  "finishedAtUtc": "2026-11-06T19:44:02.021890+00:00"
+}

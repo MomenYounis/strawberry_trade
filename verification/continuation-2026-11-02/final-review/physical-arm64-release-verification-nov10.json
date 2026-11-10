@@ -1,0 +1,65 @@
+{
+  "apkArtifact": {
+    "certificateSha256": "bf1cb6377be0c37cad31811b557ac32b686ffdc75730778edb8488d2bdb3d82b",
+    "path": "verification/continuation-2026-11-02/release-v12-bulk-nov6/strawberry-trade-annual-review-v12-final.apk",
+    "sha256": "9595d4ea4e0f7afe484c7af79066353c421445e35e5023b4ee5dc79df0cf15a9",
+    "upgradedInPlaceFromVersionCode": 10,
+    "versionCode": 12,
+    "versionName": "1.0.0"
+  },
+  "hardwareScope": {
+    "abi": "arm64-v8a",
+    "androidRelease": "17",
+    "memTotalKb": 11410156,
+    "pageSizeBytes": 4096,
+    "physicalDevice": true,
+    "sdkInt": 37
+  },
+  "liveBackendTarget": {
+    "activeDeploymentId": "741b54b4-6228-4b88-8b34-3a788e484094",
+    "activeVersionId": "923dbd71-323c-4071-91f0-c85e88e2405e",
+    "activeVersionNumber": 6,
+    "workerName": "strawberry-tenant-gateway"
+  },
+  "observedAtUtc": "2026-11-10T15:27:50.740177+00:00",
+  "releaseMemoryMeasurementsKb": {
+    "afterBootstrapAndPullChanges": {
+      "totalPssKb": 152724,
+      "totalRssKb": 312404
+    },
+    "afterColdProcessRestart": {
+      "totalPssKb": 138088,
+      "totalRssKb": 289148
+    },
+    "afterLiveSyncOperation": {
+      "totalPssKb": 150282,
+      "totalRssKb": 307408
+    },
+    "annualArchiveScreen": {
+      "totalPssKb": 148207,
+      "totalRssKb": 312280
+    },
+    "encryptedBackupScreen": {
+      "totalPssKb": 147897,
+      "totalRssKb": 310736
+    },
+    "initialLaunch": {
+      "totalPssKb": 134745,
+      "totalRssKb": 293896
+    },
+    "reportsAndExportScreenPeak": {
+      "totalPssKb": 177453,
+      "totalRssKb": 354644
+    }
+  },
+  "status": "PASS",
+  "verifiedFlows": {
+    "authenticatedBootstrapAndPullChanges": "PASS",
+    "coldProcessRestartSqlcipherAndLicensePersistence": "PASS",
+    "encryptedBackupAndRestoreScreen": "PASS",
+    "inPlaceRetainedDataUpgradeV10ToV12": "PASS",
+    "liveSyncOperationAcceptanceAndOutboxDrain": "PASS",
+    "readOnlyAnnualArchiveUnavailableGuard": "PASS",
+    "reportsAndMonthlyComparisonScreen": "PASS"
+  }
+}

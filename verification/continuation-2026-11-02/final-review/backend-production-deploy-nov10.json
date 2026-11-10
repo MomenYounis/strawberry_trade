@@ -1,0 +1,125 @@
+{
+  "activeDeployment": {
+    "annotations": {
+      "workers/message": "Reviewed compatible gateway 2026-11-06",
+      "workers/triggered_by": "deployment"
+    },
+    "created_on": "2026-11-10T15:05:44.852385Z",
+    "id": "741b54b4-6228-4b88-8b34-3a788e484094",
+    "versions": [
+      {
+        "percentage": 100,
+        "version_id": "923dbd71-323c-4071-91f0-c85e88e2405e"
+      }
+    ]
+  },
+  "activeVersion": {
+    "annotations": {
+      "workers/message": "Reviewed compatible gateway 2026-11-06",
+      "workers/triggered_by": "version_upload"
+    },
+    "id": "923dbd71-323c-4071-91f0-c85e88e2405e",
+    "metadata": {
+      "created_on": "2026-11-10T15:05:42.471931Z",
+      "source": "wrangler"
+    },
+    "number": 6,
+    "resources": {
+      "bindings": [
+        {
+          "class_name": null,
+          "name": "FIREBASE_ANDROID_APP_ID",
+          "text": "1:713439663809:android:c0565e7ada543b0e2b6640",
+          "type": "plain_text"
+        },
+        {
+          "class_name": null,
+          "name": "FIREBASE_PROJECT_ID",
+          "text": "strawberry-trade-261017-6a49b",
+          "type": "plain_text"
+        },
+        {
+          "class_name": null,
+          "name": "FIREBASE_SERVICE_ACCOUNT_JSON",
+          "text": null,
+          "type": "secret_text"
+        },
+        {
+          "class_name": "TradingGateway",
+          "name": "GATEWAY",
+          "text": null,
+          "type": "durable_object_namespace"
+        },
+        {
+          "class_name": null,
+          "name": "LICENSE_KEY_ID",
+          "text": "issuer-v1",
+          "type": "plain_text"
+        },
+        {
+          "class_name": null,
+          "name": "LICENSE_PRIVATE_KEY_PEM",
+          "text": null,
+          "type": "secret_text"
+        },
+        {
+          "class_name": null,
+          "name": "LICENSE_PUBLIC_KEY_PEM",
+          "text": null,
+          "type": "secret_text"
+        }
+      ],
+      "script_runtime": {
+        "compatibility_date": "2026-10-19",
+        "compatibility_flags": [
+          "nodejs_compat"
+        ],
+        "migration_tag": "v1",
+        "usage_model": "standard"
+      }
+    }
+  },
+  "bootstrapUnauthenticatedCheck": {
+    "body": {
+      "error": {
+        "details": {
+          "reason": "authentication-required"
+        },
+        "message": "authentication-required",
+        "status": "UNAUTHENTICATED"
+      }
+    },
+    "status": 401
+  },
+  "deployedArtifacts": {
+    "indexJsSha256": "bc5ac4cc9285b0ef175a13f3f3e84fb376a368b5c5e504f59094f8617848b1ac",
+    "payloadTarballSha256": "fe3eb536ed163b28a3fe77478cb31fd251f82765bf05b38d5a589436527f8815",
+    "sourceTarballSha256": "a4473a6284547ff5ccb8015afd88de0573dcf5f9a7e7890b77ef3dfbdc9703ab",
+    "wranglerProductionConfigSha256": "b309bf8d720db02c353ce639eacb10b5c06cdd77cc94706d6b4efdd7e0a53e99"
+  },
+  "deployedAtUtc": "2026-11-10T15:07:03.920599+00:00",
+  "healthCheck": {
+    "body": {
+      "protocol": "strawberry-gateway-v1",
+      "status": "ok"
+    },
+    "status": 200
+  },
+  "oversizeBodyGuardCheck": {
+    "body": {
+      "error": {
+        "details": {
+          "reason": "request-too-large"
+        },
+        "message": "request-too-large",
+        "status": "INVALID_ARGUMENT"
+      }
+    },
+    "status": 400
+  },
+  "priorDeploymentId": "6eb20e49-507a-4504-a162-0945070a0506",
+  "priorVersionId": "f06328bf-1d81-4826-a994-4b175384ee2b",
+  "status": "PASS",
+  "workerName": "strawberry-tenant-gateway",
+  "workerUrl": "https://strawberry-tenant-gateway.momenfarghaly4.workers.dev"
+}
